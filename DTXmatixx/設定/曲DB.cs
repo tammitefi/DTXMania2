@@ -10,6 +10,7 @@ using SSTFormatCurrent = SSTFormat.v3;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.データベース.曲;
 using DTXmatixx.ステージ.演奏;
+using Song = DTXmatixx.データベース.曲.Song03;
 
 namespace DTXmatixx.設定
 {
@@ -243,19 +244,6 @@ namespace DTXmatixx.設定
 						{
 							#region " (B-b) それ以外 "
 							//----------------
-							if( 4 == App.リリース番号 )
-							{
-								// Rel004だけの復旧コード; 003 には PreImage に相対パスを格納してしまうバグがあるので、それに対する対処。
-								if( record.PreImage.Nullでも空でもない() && !( File.Exists( record.PreImage ) ) )
-								{
-									var 絶対パス = Path.Combine( Path.GetDirectoryName( record.Path ), record.PreImage );
-									if( File.Exists( 絶対パス ) )
-									{
-										record.PreImage = 絶対パス; // 相対パスでは存在せず、絶対パスにすると存在するなら、そちらに更新する。
-										songdb.DataContext.SubmitChanges();
-									}
-								}
-							}
 							//----------------
 							#endregion
 						}

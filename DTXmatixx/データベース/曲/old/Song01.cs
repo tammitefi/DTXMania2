@@ -4,13 +4,14 @@ using System.Data.Linq.Mapping;
 using System.Diagnostics;
 using System.Linq;
 
-namespace DTXmatixx.データベース.曲
+namespace DTXmatixx.データベース.曲.old
 {
 	/// <summary>
-	///		曲テーブルのエンティティクラス。
+	///		Song テーブルのエンティティクラス。
+	///		バージョン 1。
 	/// </summary>
 	[Table( Name = "Songs" )]   // テーブル名は複数形
-	class Song : ICloneable
+	class Song01 : ICloneable
 	{
 		/// <summary>
 		///		曲譜面ファイルのハッシュ値。
@@ -58,8 +59,6 @@ namespace DTXmatixx.データベース.曲
 		[Column( DbType = "REAL", CanBeNull = true )]
 		public double? MaxBPM { get; set; }
 
-		#region " TotalNotes "
-		//----------------
 		/// <summary>
 		///		左シンバルの総ノーツ数。
 		/// </summary>
@@ -113,27 +112,12 @@ namespace DTXmatixx.データベース.曲
 		/// </summary>
 		[Column( DbType = "INT", CanBeNull = false )]
 		public int TotalNotes_RightCymbal { get; set; }
-		//----------------
-		#endregion
+
 
 		/// <summary>
-		///		曲のプレビュー画像。
+		///		コンストラクタ：既定値で初期化。
 		/// </summary>
-		[Column( DbType = "NVARCHAR" )]
-		public string PreImage { get; set; }
-
-		/// <summary>
-		///		曲のアーティスト名。
-		/// </summary>
-		[Column( DbType = "NVARCHAR" )]
-		public string Artist { get; set; }
-
-		///////////////////////////
-
-		/// <summary>
-		///		規定値で初期化。
-		/// </summary>
-		public Song()
+		public Song01()
 		{
 			this.HashId = "";
 			this.Title = "(no title)";
@@ -151,21 +135,17 @@ namespace DTXmatixx.データベース.曲
 			this.TotalNotes_LowTom = 0;
 			this.TotalNotes_FloorTom = 0;
 			this.TotalNotes_RightCymbal = 0;
-			this.PreImage = "";
-			this.Artist = "";
 		}
 
 		// ICloneable 実装
-		public Song Clone()
+		public Song01 Clone()
 		{
-			return (Song) this.MemberwiseClone();
+			return (Song01) this.MemberwiseClone();
 		}
 		object ICloneable.Clone()
 		{
 			return this.Clone();
 		}
-
-		///////////////////////////
 
 		/// <summary>
 		///		テーブルのカラム部分を列挙したSQL。
@@ -187,8 +167,6 @@ namespace DTXmatixx.データベース.曲
 			@", TotalNotes_LowTom INTEGER NOT NULL" +
 			@", TotalNotes_FloorTom INTEGER NOT NULL" +
 			@", TotalNotes_RightCymbal INTEGER NOT NULL" +
-			@", PreImage NVARCHAR" +
-			@", Artist NVARCHAR" +
 			@")";
 	}
 }
