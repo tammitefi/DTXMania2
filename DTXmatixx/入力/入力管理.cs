@@ -67,13 +67,13 @@ namespace DTXmatixx.入力
 			// MIDI入力デバイスの可変IDへの対応を行う。
 			if( 0 < this.MidiIn.DeviceName.Count )
 			{
-				var デバイスリスト = new List<string>();
+				var デバイスリスト = new Dictionary<int,string>();	// <デバイスID, デバイス名>
 				var キーバインディング = this.キーバインディングを取得する();
 
-				#region " (1) 先に列挙された実際のデバイスに合わせて、デバイスリストを作成する。"
+				#region " (1) 先に列挙された実際のデバイスに合わせて、デバイスリスト（配列番号がデバイス番号）を作成する。"
 				//----------------
-				foreach( var 列挙されたデバイス名 in this.MidiIn.DeviceName )
-					デバイスリスト.Add( 列挙されたデバイス名 );
+				for( int i = 0; i < this.MidiIn.DeviceName.Count; i++ )
+					デバイスリスト.Add( i, this.MidiIn.DeviceName[ i ] );
 				//----------------
 				#endregion
 
@@ -83,14 +83,14 @@ namespace DTXmatixx.入力
 				{
 					var キーバインディング側のデバイス名 = kvp.Value;
 
-					if( デバイスリスト.Contains( キーバインディング側のデバイス名 ) )
+					if( デバイスリスト.ContainsValue( キーバインディング側のデバイス名 ) )
 					{
 						// (A) 今回も存在しているデバイスなら、何もしない。
 					}
 					else
 					{
 						// (B) 今回は存在していないデバイスなら、末尾（＝未使用ID）に登録する。
-						デバイスリスト.Add( キーバインディング側のデバイス名 );
+						デバイスリスト.Add( デバイスリスト.Count, キーバインディング側のデバイス名 );
 					}
 				}
 				//----------------
@@ -102,15 +102,15 @@ namespace DTXmatixx.入力
 
 				foreach( var kvp in キーバインディング.MIDItoドラム )
 				{
-					var デバイスID = kvp.Key.deviceId;
+					var キーのデバイスID = kvp.Key.deviceId;
 
-					if( キーバインディング.MIDIデバイス番号toデバイス名.ContainsKey( デバイスID ) )
+					// キーバインディングのデバイス番号 から、デバイスリストのデバイス番号 へ付け替える。
+					if( キーバインディング.MIDIデバイス番号toデバイス名.TryGetValue( キーのデバイスID, out string キーのデバイス名 ) )
 					{
-						var デバイス名 = キーバインディング.MIDIデバイス番号toデバイス名[ デバイスID ];
-						デバイスID = デバイスリスト.IndexOf( デバイス名 );  // 必ず存在する。
+						キーのデバイスID = デバイスリスト.First( ( kvp2 ) => ( kvp2.Value == キーのデバイス名 ) ).Key;	// マージしたので、必ず存在する。
 					}
 
-					中間バッファ.Add( new キーバインディング.IdKey( デバイスID, kvp.Key.key ), kvp.Value );    // デバイスID以外は変更なし。
+					中間バッファ.Add( new キーバインディング.IdKey( キーのデバイスID, kvp.Key.key ), kvp.Value );    // デバイスID以外は変更なし。
 				}
 
 				キーバインディング.MIDItoドラム.Clear();
