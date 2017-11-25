@@ -32,7 +32,7 @@ namespace DTXmatixx.曲
 			[ 1 ] = new Color4( 0xff00aaeb ),   // ADVANCED 相当
 			[ 2 ] = new Color4( 0xff7d5cfe ),   // EXTREME 相当
 			[ 3 ] = new Color4( 0xfffe55c6 ),   // MASTER 相当
-			[ 4 ] = new Color4( 0xfffe55c6 ),   // ULTIMATE 相当
+			[ 4 ] = new Color4( 0xff2b28ff ),   // ULTIMATE 相当
 		};
 
 
