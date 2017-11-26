@@ -37,6 +37,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'RemoteDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\RemoteDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
       <HintPath>..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
@@ -161,6 +173,8 @@
     <Compile Include="ステージ\選曲\難易度と成績.cs" />
     <Compile Include="ステージ\選曲\青い線.cs" />
     <Compile Include="ステージ\選曲\選曲ステージ.cs" />
+    <Compile Include="データベース\曲\old\Song01.cs" />
+    <Compile Include="データベース\曲\old\Song02.cs" />
     <Compile Include="入力\ドラム入力イベント.cs" />
     <Compile Include="入力\ドラム入力種別.cs" />
     <Compile Include="入力\入力管理.cs" />
@@ -177,7 +191,6 @@
     <Compile Include="曲\曲ツリー.cs" />
     <Compile Include="曲\難易度種別.cs" />
     <Compile Include="設定\AutoPlay種別.cs" />
-    <Compile Include="データベース\曲\Song.cs" />
     <Compile Include="データベース\曲\SongDB.cs" />
     <Compile Include="データベース\SQLiteDBBase.cs" />
     <Compile Include="データベース\ユーザ\Record.cs" />
@@ -190,6 +203,7 @@
     <Compile Include="設定\ドラムとチップと入力の対応表.cs" />
     <Compile Include="設定\曲DB.cs" />
     <Compile Include="設定\表示レーンの左右.cs" />
+    <Compile Include="データベース\曲\Song03.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

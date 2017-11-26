@@ -166,7 +166,8 @@ namespace DTXmatixx.曲
 				{
 					var setNode = new SetNode( block, フォルダパス, 親ノード );
 
-					親ノード.子ノードリスト.Add( setNode );
+					if( 0 < setNode.子ノードリスト.Count )	// L1～L5のいずれかが有効であるときのみ登録する。
+						親ノード.子ノードリスト.Add( setNode );
 				}
 				//----------------
 				#endregion

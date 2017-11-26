@@ -60,6 +60,7 @@ namespace DTXmatixx.曲
 				if( null != song )
 				{
 					this.タイトル = song.Title;
+					this.サブタイトル = "";
 					this.サブタイトル = song.Artist;
 					this.曲ファイルハッシュ = song.HashId;
 					this.難易度[ 3 ] = ("FREE", (float) song.Level);       // [3]:MASTER相当。set.def 内にある MusicNode でも同じ。

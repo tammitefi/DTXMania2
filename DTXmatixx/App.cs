@@ -111,7 +111,7 @@ namespace DTXmatixx
 			//----------------
 			#endregion
 
-			this.Text = $"{Application.ProductName} {Application.ProductVersion}";
+			this.Text = Application.ProductName + " rel." + App.リリース番号.ToString("000");
 
 			var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
 			VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
