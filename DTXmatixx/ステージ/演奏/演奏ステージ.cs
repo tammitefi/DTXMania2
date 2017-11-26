@@ -316,14 +316,14 @@ namespace DTXmatixx.ステージ.演奏
 							if( AutoPlay && 対応表.AutoPlayON.自動ヒット )
 							{
 								// AutoPlay 時は Perfect 扱い
-								this._チップのヒット処理を行う( chip, 判定種別.PERFECT, 対応表.AutoPlayON.自動ヒット時処理, ヒット判定バーと描画との時間sec );
+								this._チップのヒット処理を行う( chip, 判定種別.PERFECT, 対応表.AutoPlayON.自動ヒット時処理, ヒット判定バーと発声との時間sec );
 								//this.成績.エキサイトゲージを加算する( 判定種別.PERFECT ); -> エキサイトゲージには反映しない。
 								return;
 							}
 							else if( !AutoPlay && 対応表.AutoPlayOFF.自動ヒット )
 							{
 								// AutoPlay OFF でも自動ヒットする場合は Perfect 扱い
-								this._チップのヒット処理を行う( chip, 判定種別.PERFECT, 対応表.AutoPlayOFF.自動ヒット時処理, ヒット判定バーと描画との時間sec );
+								this._チップのヒット処理を行う( chip, 判定種別.PERFECT, 対応表.AutoPlayOFF.自動ヒット時処理, ヒット判定バーと発声との時間sec );
 								//this.成績.エキサイトゲージを加算する( 判定種別.PERFECT ); -> エキサイトゲージには反映しない。
 								return;
 							}
