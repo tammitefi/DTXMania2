@@ -5,13 +5,14 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
 
-namespace DTXmatixx.データベース.ユーザ
+namespace DTXmatixx.データベース.ユーザ.old
 {
 	/// <summary>
 	///		成績テーブルのエンティティクラス。
+	///		バージョン 1。
 	/// </summary>
 	[Table( Name = "Records" )]   // テーブル名は複数形
-	public class Record : ICloneable
+	public class Record01 : ICloneable
 	{
 		/// <summary>
 		///		ユーザを一意に識別するID。
@@ -56,7 +57,7 @@ namespace DTXmatixx.データベース.ユーザ
 		/// <summary>
 		///		規定値で初期化。
 		/// </summary>
-		public Record()
+		public Record01()
 		{
 			this.UserId = "Anonymous";
 			this.SongHashId = "";
@@ -67,9 +68,9 @@ namespace DTXmatixx.データベース.ユーザ
 		}
 
 		// ICloneable 実装
-		public Record Clone()
+		public Record01 Clone()
 		{
-			return (Record) this.MemberwiseClone();
+			return (Record01) this.MemberwiseClone();
 		}
 		object ICloneable.Clone()
 		{
