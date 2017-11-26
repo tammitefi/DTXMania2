@@ -177,9 +177,10 @@ namespace DTXmatixx.ステージ.曲読み込み
 					throw new Exception( $"未対応のフォーマットファイルです。[{選択曲ファイルパス.変数付きパス}]" );
 				}
 
-				// 本体のサウンドデバイスの遅延とスコアの示す遅延とを取得し、全チップの発声時刻を修正する。
+				// 全チップの発声時刻を修正する。
 
-				long 早める時間ms = (long) ( App.サウンドデバイス.再生遅延sec * 1000 - App.演奏スコア.サウンドデバイス遅延ms );
+				//long 早める時間ms = (long) ( App.サウンドデバイス.再生遅延sec * 1000 - App.演奏スコア.サウンドデバイス遅延ms );
+				long 早める時間ms = (long) ( App.サウンドデバイス.再生遅延sec * 1000 );	// SoundDevice.Delay 不要論
 
 				foreach( var chip in App.演奏スコア.チップリスト )
 				{
