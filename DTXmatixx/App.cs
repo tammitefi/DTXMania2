@@ -35,6 +35,11 @@ namespace DTXmatixx
 			protected set;
 		}
 
+		public static App Instance
+		{
+			get;
+			protected set;
+		} = null;
 		/// <remarks>
 		///		SharpDX.Mathematics パッケージを参照し、かつ SharpDX 名前空間を using しておくと、
 		///		SharpDX で定義する追加の拡張メソッド（NextFloatなど）を使えるようになる。
@@ -111,7 +116,7 @@ namespace DTXmatixx
 			//----------------
 			#endregion
 
-			this.Text = Application.ProductName + " rel." + App.リリース番号.ToString("000");
+			this.Text = Application.ProductName + " " + App.リリース番号.ToString("000");
 
 			var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
 			VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
@@ -120,6 +125,8 @@ namespace DTXmatixx
 
 			if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
 				Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
+
+			App.Instance = this;
 
 			App.乱数 = new Random( DateTime.Now.Millisecond );
 
@@ -144,20 +151,8 @@ namespace DTXmatixx
 			App.ドラムサウンド = new ドラムサウンド();
 
 			App.ユーザ管理 = new ユーザ管理();
-#if DEBUG_
-			App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "Guest" ) );
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.LeftCrash ] = true;
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.HiHat ] = true;
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.Foot ] = true;
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.Snare ] = false;	// スネアと
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.Bass ] = false;	// バスだけ手動
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.Tom1 ] = true;
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.Tom2 ] = true;
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.Tom3 ] = true;
-			App.ユーザ管理.ログオン中のユーザ.AutoPlay[ AutoPlay種別.RightCrash ] = true;
-#else
 			App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
-#endif
+
 			this._活性化する();
 
 			base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
@@ -200,6 +195,8 @@ namespace DTXmatixx
 
 				App.システム設定.保存する();
 				App.システム設定 = null;
+
+				App.Instance = null;
 
 				base.Dispose();
 			}
@@ -361,7 +358,7 @@ namespace DTXmatixx
 					App.ステージ管理.現在のステージ.高速進行する();
 				}
 
-				Thread.Sleep( 3 );  // ウェイト。
+				Thread.Sleep( 2 );  // ウェイト。
 			}
 
 			this._高速進行ステータス.現在の状態 = TriStateEvent.状態種別.無効;
@@ -473,11 +470,31 @@ namespace DTXmatixx
 							}
 							//----------------
 							#endregion
-							#region " 確定 → 曲読み込みステージへ "
+							#region " 確定_選曲 → 曲読み込みステージへ "
 							//----------------
-							if( stage.現在のフェーズ == ステージ.選曲.選曲ステージ.フェーズ.確定 )
+							if( stage.現在のフェーズ == ステージ.選曲.選曲ステージ.フェーズ.確定_選曲 )
 							{
 								App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.曲読み込み.曲読み込みステージ ) );
+							}
+							//----------------
+							#endregion
+							#region " 確定_設定 → 設定ステージへ "
+							//----------------
+							if( stage.現在のフェーズ == ステージ.選曲.選曲ステージ.フェーズ.確定_設定 )
+							{
+								App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.設定.設定ステージ ) );
+							}
+							//----------------
+							#endregion
+							break;
+
+						case ステージ.設定.設定ステージ stage:
+							#region " キャンセル, 確定 → 選曲ステージへ "
+							//----------------
+							if( stage.現在のフェーズ == ステージ.設定.設定ステージ.フェーズ.キャンセル ||
+								stage.現在のフェーズ == ステージ.設定.設定ステージ.フェーズ.確定 )
+							{
+								App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.選曲.選曲ステージ ) );
 							}
 							//----------------
 							#endregion

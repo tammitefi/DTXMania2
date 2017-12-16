@@ -21,7 +21,8 @@ namespace DTXmatixx.ステージ.選曲
 			フェードイン,
 			表示,
 			フェードアウト,
-			確定,
+			確定_選曲,
+			確定_設定,
 			キャンセル,
 		}
 		public フェーズ 現在のフェーズ
@@ -132,7 +133,7 @@ namespace DTXmatixx.ステージ.選曲
 					break;
 
 				case フェーズ.表示:
-					if( App.入力管理.シンバルが入力された() )//|| App.入力管理.Keyboard.キーが押された( 0, Key.Return ) )	--> Return は既定でLeftCrashに割り当ててある。
+					if( App.入力管理.確定キーが入力された() )
 					{
 						if( App.曲ツリー.フォーカスノード is BoxNode boxNode )
 						{
@@ -149,11 +150,11 @@ namespace DTXmatixx.ステージ.選曲
 							this.現在のフェーズ = フェーズ.フェードアウト;
 						}
 					}
-					else if( App.入力管理.Keyboard.キーが押された( 0, Key.Escape ) )
+					else if( App.入力管理.キャンセルキーが入力された() )
 					{
 						this.現在のフェーズ = フェーズ.キャンセル;
 					}
-					else if( App.入力管理.ドラムが入力された( 入力.ドラム入力種別.Tom1 ) || App.入力管理.Keyboard.キーが押された( 0, Key.Up ) )
+					else if( App.入力管理.上移動キーが入力された() )
 					{
 						if( null != App.曲ツリー.フォーカスノード )
 						{
@@ -162,7 +163,7 @@ namespace DTXmatixx.ステージ.選曲
 							this._導線アニメをリセットする( gd );
 						}
 					}
-					else if( App.入力管理.ドラムが入力された( 入力.ドラム入力種別.Tom2 ) || App.入力管理.Keyboard.キーが押された( 0, Key.Down ) )
+					else if( App.入力管理.下移動キーが入力された() )
 					{
 						if( null != App.曲ツリー.フォーカスノード )
 						{
@@ -176,6 +177,10 @@ namespace DTXmatixx.ステージ.選曲
 						//App.曲ツリー.難易度アンカをひとつ増やす();	--> 曲リストへ委譲
 						this._曲リスト.難易度アンカをひとつ増やす();
 					}
+					else if( App.入力管理.シーケンスが入力された( new[] { レーン種別.Bass, レーン種別.Bass }, App.ユーザ管理.ログオン中のユーザ.ドラムとチップと入力の対応表 ) )
+					{
+						this.現在のフェーズ = フェーズ.確定_設定;
+					}
 					break;
 
 				case フェーズ.フェードアウト:
@@ -183,11 +188,11 @@ namespace DTXmatixx.ステージ.選曲
 
 					if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
 					{
-						this.現在のフェーズ = フェーズ.確定;
+						this.現在のフェーズ = フェーズ.確定_選曲;
 					}
 					break;
 
-				case フェーズ.確定:
+				case フェーズ.確定_選曲:
 				case フェーズ.キャンセル:
 					break;
 			}

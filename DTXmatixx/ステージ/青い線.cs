@@ -7,7 +7,7 @@ using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
-namespace DTXmatixx.ステージ.選曲
+namespace DTXmatixx.ステージ
 {
 	/// <summary>
 	///		枠を形成する青い「線」を一本描画する。

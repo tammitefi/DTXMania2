@@ -210,7 +210,6 @@ namespace DTXmatixx.入力
 				return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.Type == drumType ) ) );
 			}
 		}
-
 		/// <summary>
 		///		現在の<see cref="ポーリング結果"/>に、指定したドラム入力イベント集合のいずれか１つ以上が含まれているかを確認する。
 		/// </summary>
@@ -229,10 +228,10 @@ namespace DTXmatixx.入力
 		}
 
 		/// <summary>
-		///		現在の<see cref="ポーリング結果"/>に、シンバルとみなせるドラム入力イベントが含まれているかを確認する。
+		///		現在の<see cref="ポーリング結果"/>に、決定キーとみなせるドラム入力イベントが含まれているかを確認する。
 		/// </summary>
 		/// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
-		public bool シンバルが入力された()
+		public bool 確定キーが入力された()
 		{
 			return this.ドラムのいずれか１つが入力された(
 				new[] {
@@ -241,7 +240,69 @@ namespace DTXmatixx.入力
 					ドラム入力種別.China,
 					ドラム入力種別.Ride,
 					ドラム入力種別.Splash,
-				} );
+				} )
+				;// || this.Keyboard.キーが押された( 0, Key.Return );		Enter は、既定で LeftCrash に割り当てられている前提。
+		}
+		/// <summary>
+		///		現在の<see cref="ポーリング結果"/>に、キャンセルキーとみなせるドラム入力イベントが含まれているかを確認する。
+		/// </summary>
+		/// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
+		public bool キャンセルキーが入力された()
+		{
+			return this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Escape );
+		}
+		/// <summary>
+		///		現在の<see cref="ポーリング結果"/>に、上移動キーとみなせるドラム入力イベントが含まれているかを確認する。
+		/// </summary>
+		/// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
+		public bool 上移動キーが入力された()
+		{
+			return this.ドラムのいずれか１つが入力された(
+				new[] {
+					ドラム入力種別.Tom1,
+					ドラム入力種別.Tom1_Rim,
+				} )
+				|| this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Up );
+		}
+		/// <summary>
+		///		現在の<see cref="ポーリング結果"/>に、下移動キーとみなせるドラム入力イベントが含まれているかを確認する。
+		/// </summary>
+		/// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
+		public bool 下移動キーが入力された()
+		{
+			return this.ドラムのいずれか１つが入力された(
+				new[] {
+					ドラム入力種別.Tom2,
+					ドラム入力種別.Tom2_Rim,
+				} )
+				|| this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Down );
+		}
+		/// <summary>
+		///		現在の<see cref="ポーリング結果"/>に、左移動キーとみなせるドラム入力イベントが含まれているかを確認する。
+		/// </summary>
+		/// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
+		public bool 左移動キーが入力された()
+		{
+			return this.ドラムのいずれか１つが入力された(
+				new[] {
+					ドラム入力種別.Snare,
+					ドラム入力種別.Snare_ClosedRim,
+					ドラム入力種別.Snare_OpenRim,
+				} )
+				|| this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Left );
+		}
+		/// <summary>
+		///		現在の<see cref="ポーリング結果"/>に、右移動キーとみなせるドラム入力イベントが含まれているかを確認する。
+		/// </summary>
+		/// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
+		public bool 右移動キーが入力された()
+		{
+			return this.ドラムのいずれか１つが入力された(
+				new[] {
+					ドラム入力種別.Tom3,
+					ドラム入力種別.Tom3_Rim,
+				} )
+				|| this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Right );
 		}
 
 		/// <summary>
