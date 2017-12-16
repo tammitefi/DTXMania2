@@ -88,20 +88,20 @@ namespace DTXmatixx.ステージ.認証
 					}
 					else if( this.現在のフェーズ == フェーズ.ユーザ選択 )
 					{
-						if( App.入力管理.シンバルが入力された() || App.入力管理.Keyboard.キーが押された( 0, Key.Return ) )
+						if( App.入力管理.確定キーが入力された() )
 						{
 							App.ステージ管理.アイキャッチを選択しクローズする( gd, nameof( 回転幕 ) );
 							this.現在のフェーズ = フェーズ.フェードアウト;
 						}
-						else if( App.入力管理.Keyboard.キーが押された( 0, Key.Escape ) )
+						else if( App.入力管理.キャンセルキーが入力された() )
 						{
 							this.現在のフェーズ = フェーズ.キャンセル;
 						}
-						else if( App.入力管理.ドラムが入力された( 入力.ドラム入力種別.Tom1 ) || App.入力管理.Keyboard.キーが押された( 0, Key.Up ) )
+						else if( App.入力管理.上移動キーが入力された() )
 						{
 							this._ユーザリスト.前のユーザを選択する();
 						}
-						else if( App.入力管理.ドラムが入力された( 入力.ドラム入力種別.Tom2 ) || App.入力管理.Keyboard.キーが押された( 0, Key.Down ) )
+						else if( App.入力管理.下移動キーが入力された() )
 						{
 							this._ユーザリスト.次のユーザを選択する();
 						}

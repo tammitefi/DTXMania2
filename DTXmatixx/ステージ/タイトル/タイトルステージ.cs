@@ -63,12 +63,12 @@ namespace DTXmatixx.ステージ.タイトル
 					this._タイトルロゴ.描画する( gd, ( gd.設計画面サイズ.Width - this._タイトルロゴ.サイズ.Width ) / 2f, ( gd.設計画面サイズ.Height - this._タイトルロゴ.サイズ.Height ) / 2f - 100f );
 					this._帯メッセージを描画する( gd );
 
-					if( App.入力管理.シンバルが入力された() || App.入力管理.Keyboard.キーが押された( 0, Key.Return ) )
+					if( App.入力管理.確定キーが入力された() )
 					{
 						App.ステージ管理.アイキャッチを選択しクローズする( gd, nameof( シャッター ) );
 						this.現在のフェーズ = フェーズ.フェードアウト;
 					}
-					else if( App.入力管理.ドラムが入力された( 入力.ドラム入力種別.Tom3 ) || App.入力管理.Keyboard.キーが押された( 0, Key.Escape ) )
+					else if( App.入力管理.キャンセルキーが入力された() )
 					{
 						this.現在のフェーズ = フェーズ.キャンセル;
 					}

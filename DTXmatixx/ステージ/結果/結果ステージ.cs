@@ -120,7 +120,7 @@ namespace DTXmatixx.ステージ.結果
 			switch( this.現在のフェーズ )
 			{
 				case フェーズ.表示:
-					if( App.入力管理.シンバルが入力された() || App.入力管理.Keyboard.キーが押された( 0, Key.Return ) )
+					if( App.入力管理.確定キーが入力された() )
 					{
 						App.ステージ管理.アイキャッチを選択しクローズする( gd, nameof( シャッター ) );
 						this.現在のフェーズ = フェーズ.フェードアウト;
