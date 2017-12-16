@@ -131,6 +131,7 @@
     <Compile Include="アイキャッチ\回転幕.cs" />
     <Compile Include="ステージ\チップExtensions.cs" />
     <Compile Include="ステージ\ドラムサウンド.cs" />
+    <Compile Include="ステージ\パッド矢印.cs" />
     <Compile Include="ステージ\曲ツリー構築\曲ツリー構築ステージ.cs" />
     <Compile Include="ステージ\曲読み込み\プレビュー画像.cs" />
     <Compile Include="ステージ\曲読み込み\曲読み込みステージ.cs" />
@@ -580,7 +581,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="System\Images\パッド矢印矩形.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\パッド矢印.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

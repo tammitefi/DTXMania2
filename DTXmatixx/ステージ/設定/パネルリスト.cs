@@ -29,6 +29,7 @@ namespace DTXmatixx.ステージ.設定
 		public パネルリスト()
 		{
 			this.子リスト.Add( this._青い線 = new 青い線() );
+			this.子リスト.Add( this._パッド矢印 = new パッド矢印() );
 		}
 
 		public void フェードインを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
@@ -141,11 +142,16 @@ namespace DTXmatixx.ステージ.設定
 			this._青い線.描画する( gd, new Vector2( left, パネルの高さ * 3f ), 幅dpx: 幅 );
 			this._青い線.描画する( gd, new Vector2( left, パネルの高さ * 4f ), 幅dpx: 幅 );
 			this._青い線.描画する( gd, new Vector2( left + 幅, パネルの高さ * 3f ), 高さdpx: パネルの高さ );
+
+			// パッド矢印（上＆下）を描画。
+			this._パッド矢印.描画する( gd, パッド矢印.種類.上_Tom1, new Vector2( left, パネルの高さ * 3f ) );
+			this._パッド矢印.描画する( gd, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
 		}
 
 		private List<パネル> _パネルリスト = null;
 		private int _選択パネル番号 = 0;
 
 		private 青い線 _青い線 = null;
+		private パッド矢印 _パッド矢印 = null;
 	}
 }
