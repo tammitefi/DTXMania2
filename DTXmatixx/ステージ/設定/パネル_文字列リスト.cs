@@ -69,6 +69,8 @@ namespace DTXmatixx.ステージ.設定
 
 				this.子リスト.Add( image );
 			}
+
+			base.On活性化( gd );   //忘れないこと
 		}
 		protected override void On非活性化( グラフィックデバイス gd )
 		{
@@ -76,6 +78,8 @@ namespace DTXmatixx.ステージ.設定
 				this.子リスト.Remove( kvp.Value );
 
 			this._選択肢画像リスト = null;
+
+			base.On非活性化( gd );   //忘れないこと
 		}
 
 		public override void 進行描画する( グラフィックデバイス gd, float left, float top, bool 選択中 )

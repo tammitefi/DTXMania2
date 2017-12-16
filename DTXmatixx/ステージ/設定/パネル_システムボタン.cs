@@ -23,9 +23,11 @@ namespace DTXmatixx.ステージ.設定
 
 		protected override void On活性化( グラフィックデバイス gd )
 		{
+			base.On活性化( gd );	//忘れないこと
 		}
 		protected override void On非活性化( グラフィックデバイス gd )
 		{
+			base.On非活性化( gd );   //忘れないこと
 		}
 
 		public override void 進行描画する( グラフィックデバイス gd, float left, float top, bool 選択中 )

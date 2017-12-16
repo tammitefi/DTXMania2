@@ -31,6 +31,14 @@ namespace DTXmatixx.ステージ.設定
 			this.子リスト.Add( this._青い線 = new 青い線() );
 		}
 
+		public void フェードインを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
+		{
+			for( int i = 0; i < this._パネルリスト.Count; i++ )
+			{
+				this._パネルリスト[ i ].フェードインを開始する( gd, 遅延sec: 0.02, 速度倍率 );
+			}
+		}
+
 		public void 前のパネルを選択する()
 		{
 			this._選択パネル番号 = ( this._選択パネル番号 - 1 + this._パネルリスト.Count ) % this._パネルリスト.Count;
@@ -135,8 +143,9 @@ namespace DTXmatixx.ステージ.設定
 			this._青い線.描画する( gd, new Vector2( left + 幅, パネルの高さ * 3f ), 高さdpx: パネルの高さ );
 		}
 
-		private 青い線 _青い線 = null;
 		private List<パネル> _パネルリスト = null;
 		private int _選択パネル番号 = 0;
+
+		private 青い線 _青い線 = null;
 	}
 }
