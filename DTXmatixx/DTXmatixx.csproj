@@ -162,6 +162,7 @@
     <Compile Include="ステージ\結果\演奏パラメータ結果.cs" />
     <Compile Include="ステージ\結果\結果ステージ.cs" />
     <Compile Include="ステージ\舞台画像.cs" />
+    <Compile Include="ステージ\設定\設定ステージ.cs" />
     <Compile Include="ステージ\認証\ユーザリスト.cs" />
     <Compile Include="ステージ\認証\認証ステージ_タッチアイコンVer.cs" />
     <Compile Include="ステージ\認証\認証ステージ.cs" />
