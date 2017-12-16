@@ -275,7 +275,7 @@ namespace DTXmatixx
 		/// <param name="drumsSound">ドラムチップ音を発声させるなら true。</param>
 		public void ViewerPlay( string path, int startPart = 0, bool drumsSound = true )
 		{
-			// todo: ViewerPlay メソッドを実装する。
+			// TODO: ViewerPlay メソッドを実装する。
 			throw new NotImplementedException();
 		}
 
@@ -285,7 +285,7 @@ namespace DTXmatixx
 		/// </summary>
 		public void ViewerStop()
 		{
-			// todo: ViewerStop メソッドを実装する。
+			// TODO: ViewerStop メソッドを実装する。
 			throw new NotImplementedException();
 		}
 
@@ -306,7 +306,7 @@ namespace DTXmatixx
 
 		/// <summary>
 		///		進行タスクの状態。
-		///		OFF:タスク起動前、ON:タスク実行中、OFF:タスク終了済み
+		///		OFF:タスク起動前、ON:タスク実行中、無効:タスク終了済み
 		/// </summary>
 		private TriStateEvent _高速進行ステータス;
 
@@ -398,7 +398,7 @@ namespace DTXmatixx
 					//----------------
 					#endregion
 
-					// アニメーション全体を一括進行。
+					// Windows Animation を進行。
 					gd.Animation.進行する();
 
 					// 現在のステージを進行＆描画。

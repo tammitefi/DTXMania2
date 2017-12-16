@@ -54,7 +54,7 @@ namespace DTXmatixx.ステージ.演奏
 			foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
 				増加値.Add( judge, 判定toヒット数[ judge ] - this._最後にカウント値を設定したときの成績[ judge ] );
 
-			// todo: カウント値を算出する。
+			// HACK: カウント値を算出する。
 			int カウント値 = ( 増加値[ 判定種別.MISS ] > 0 ) ? 1 : 12;      // 暫定式。
 
 			// 最後にカウント値を設定した位置 から 現在位置 までの期間に対応するすべてのカウント値に反映する。

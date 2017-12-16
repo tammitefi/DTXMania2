@@ -81,7 +81,7 @@ namespace DTXmatixx.ステージ.認証
 
 			// ユーザリストを描画する。
 			
-			// hack: 現状は最大５人までとする。
+			// HACK: 現状は最大５人までとする。
 			int 表示人数 = Math.Min( 5, App.ユーザ管理.ユーザリスト.Count );
 
 			for( int i = 0; i < 表示人数; i++ )

@@ -75,7 +75,7 @@ namespace DTXmatixx.ステージ.演奏
 				this._最後にスコアを更新したときの判定toヒット数.Add( judge, 0 );
 			}
 
-			// todo: AutoPlay の状態から、達成率用のオプション補正を算出。
+			// TODO: AutoPlay の状態から、達成率用のオプション補正を算出。
 			this._オプション補正 = 1.0;
 
 			this._譜面レベル = 0.5;
@@ -164,7 +164,7 @@ namespace DTXmatixx.ステージ.演奏
 
 		private IReadOnlyDictionary<判定種別, int> _ヒット割合を算出して返す()
 		{
-			// hack: ヒット割合の計算式は、本家とは一致していない。
+			// HACK: ヒット割合の計算式は、本家とは一致していない。
 
 			int ヒット数の合計 = 0;
 			var ヒット割合_実数 = new Dictionary<判定種別, double>();  // 実値（0～100）

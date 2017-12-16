@@ -274,7 +274,7 @@ namespace DTXmatixx.設定
 						UserId = ユーザID,
 						SongHashId = 曲ファイルハッシュ,
 						Score = 今回の成績.Score,
-						// todo: CountMap を成績クラスに保存する。
+						// TODO: CountMap を成績クラスに保存する。
 						CountMap = "",
 						Skill = 今回の成績.Skill,
 						Achievement = 今回の成績.Achievement,
@@ -287,7 +287,7 @@ namespace DTXmatixx.設定
 					if( record.Score < 今回の成績.Score )
 						record.Score = 今回の成績.Score;
 
-					// todo: CountMap を成績クラスに保存する。
+					// TODO: CountMap を成績クラスに保存する。
 
 					if( record.Skill < 今回の成績.Skill )
 						record.Skill = 今回の成績.Skill;
