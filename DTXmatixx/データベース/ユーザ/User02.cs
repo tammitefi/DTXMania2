@@ -10,9 +10,10 @@ namespace DTXmatixx.データベース.ユーザ
 {
 	/// <summary>
 	///		ユーザテーブルのエンティティクラス。
+	///		バージョン 2。
 	/// </summary>
 	[Table( Name = "Users" )]   // テーブル名は複数形
-	class User : ICloneable
+	class User02 : ICloneable
 	{
 		/// <summary>
 		///		ユーザを一意に識別する文字列。主キー。
@@ -144,15 +145,12 @@ namespace DTXmatixx.データベース.ユーザ
 		public int CymbalFree { get; set; }
 
 		
-		// Column を追加したら、コンストラクタでの初期化コードも忘れず追加すること。
-
-
 		///////////////////////////
 
 		/// <summary>
 		///		既定値で初期化。
 		/// </summary>
-		public User()
+		public User02()
 		{
 			this.Id = "Anonymous";
 			this.Name = "Anonymous";
@@ -175,9 +173,9 @@ namespace DTXmatixx.データベース.ユーザ
 		}
 
 		// ICloneable 実装
-		public User Clone()
+		public User02 Clone()
 		{
-			return (User) this.MemberwiseClone();
+			return (User02) this.MemberwiseClone();
 		}
 		object ICloneable.Clone()
 		{

@@ -72,7 +72,7 @@ namespace DTXmatixx.ステージ.曲ツリー構築
 					break;
 			}
 
-			if( App.入力管理.Keyboard.キーが押された( 0, Key.Escape ) )
+			if( App.入力管理.キャンセルキーが入力された() )
 			{
 				this.現在のフェーズ = フェーズ.キャンセル;
 			}

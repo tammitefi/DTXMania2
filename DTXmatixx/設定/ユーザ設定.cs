@@ -5,6 +5,7 @@ using System.Linq;
 using FDK;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.ステージ.演奏;
+using User = DTXmatixx.データベース.ユーザ.User02;
 
 namespace DTXmatixx.設定
 {

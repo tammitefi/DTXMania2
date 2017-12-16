@@ -546,7 +546,7 @@ namespace DTXmatixx.ステージ.演奏
 					#endregion
 
 
-					// 入力(2) 演奏以外の操作
+					// 入力(2) 演奏以外の操作（※演奏中なのでドラム入力は無視。）
 
 					if( App.入力管理.Keyboard.キーが押された( 0, Key.Escape ) )
 					{
