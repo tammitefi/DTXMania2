@@ -36,7 +36,7 @@ namespace DTXmatixx.ステージ.設定
 		{
 			for( int i = 0; i < this._パネルリスト.Count; i++ )
 			{
-				this._パネルリスト[ i ].フェードインを開始する( gd, 遅延sec: 0.02, 速度倍率 );
+				this._パネルリスト[ i ].フェードインを開始する( gd, 0.02, 速度倍率 );
 			}
 		}
 
