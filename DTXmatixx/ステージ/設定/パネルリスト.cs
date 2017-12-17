@@ -5,56 +5,72 @@ using System.Linq;
 using SharpDX;
 using FDK;
 using FDK.メディア;
+using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ.設定
 {
 	class パネルリスト : Activity
 	{
 		/// <summary>
-		///		パネルの識別に <see cref="パネル.パネル名"/> を使うので、
+		///		パネルの識別に <see cref="パネル.パネル名"/> を使う も の だ け、
 		///		ここで一元的に定義しておく。
 		/// </summary>
 		public class 項目名
 		{
-			public static readonly string 画面モード = "画面モード";
-			public static readonly string 譜面スピード = "譜面スピード";
-			public static readonly string シンバルフリー = "シンバルフリー";
-			public static readonly string 自動演奏 = "自動演奏";
 			public static readonly string 設定完了 = "設定完了";
-			public static readonly string キー割り当て = "キー割り当て";
+			public static readonly string 設定完了_戻る = "設定完了（戻る）";
 		}
 
 		public パネル 現在選択中のパネル
-			=> this._パネルリスト[ this._選択パネル番号 ];
+			=> this._現在のパネルフォルダ.子パネルリスト.SelectedItem;
 
 		public パネルリスト()
 		{
 			this.子リスト.Add( this._青い線 = new 青い線() );
 			this.子リスト.Add( this._パッド矢印 = new パッド矢印() );
+			this.子リスト.Add( this._ルートパネルフォルダ = new パネル_フォルダ( "root", null, null ) );
+
+			this._現在のパネルフォルダ = this._ルートパネルフォルダ;
 		}
 
 		public void フェードインを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
 		{
-			for( int i = 0; i < this._パネルリスト.Count; i++ )
+			for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
 			{
-				this._パネルリスト[ i ].フェードインを開始する( gd, 0.02, 速度倍率 );
+				this._現在のパネルフォルダ.子パネルリスト[ i ].フェードインを開始する( gd, 0.02, 速度倍率 );
 			}
 		}
 		public void フェードアウトを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
 		{
-			for( int i = 0; i < this._パネルリスト.Count; i++ )
+			for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
 			{
-				this._パネルリスト[ i ].フェードアウトを開始する( gd, 0.02, 速度倍率 );
+				this._現在のパネルフォルダ.子パネルリスト[ i ].フェードアウトを開始する( gd, 0.02, 速度倍率 );
 			}
 		}
 
 		public void 前のパネルを選択する()
 		{
-			this._選択パネル番号 = ( this._選択パネル番号 - 1 + this._パネルリスト.Count ) % this._パネルリスト.Count;
+			Trace.Assert( null != this._現在のパネルフォルダ?.子パネルリスト );
+
+			this._現在のパネルフォルダ.子パネルリスト.SelectPrev( Loop: true );
 		}
 		public void 次のパネルを選択する()
 		{
-			this._選択パネル番号 = ( this._選択パネル番号 + 1 ) % this._パネルリスト.Count;
+			Trace.Assert( null != this._現在のパネルフォルダ?.子パネルリスト );
+
+			this._現在のパネルフォルダ.子パネルリスト.SelectNext( Loop: true );
+		}
+		public void 親のパネルを選択する()
+		{
+			Trace.Assert( null != this._現在のパネルフォルダ?.親パネル );
+
+			this._現在のパネルフォルダ = this._現在のパネルフォルダ.親パネル;
+		}
+		public void 子のパネルを選択する()
+		{
+			Trace.Assert( null != this._現在のパネルフォルダ?.子パネルリスト?.SelectedItem );
+
+			this._現在のパネルフォルダ = this._現在のパネルフォルダ.子パネルリスト.SelectedItem as パネル_フォルダ;
 		}
 
 		protected override void On活性化( グラフィックデバイス gd )
@@ -62,13 +78,14 @@ namespace DTXmatixx.ステージ.設定
 			using( Log.Block( FDKUtilities.現在のメソッド名 ) )
 			{
 				var user = App.ユーザ管理.ログオン中のユーザ;
+				var autoplay = (パネル_フォルダ) null;
 
-				this._パネルリスト = new List<パネル>() {
+				this._ルートパネルフォルダ.子パネルリスト = new SelectableList<パネル>() {
 
 					#region " 画面モード "
 					//----------------
 					new パネル_文字列リスト(
-						項目名.画面モード,
+						"画面モード",
 						( user.全画面モードである ) ? 1 : 0,
 						new[] { "ウィンドウ", "全画面" },
 						new Action<パネル>( ( panel ) => {
@@ -77,68 +94,71 @@ namespace DTXmatixx.ステージ.設定
 						} ) ),
 					//----------------
 					#endregion
-					
+
 					#region " 譜面スピード "
 					//----------------
-					new パネル_譜面スピード( 項目名.譜面スピード ),
+					new パネル_譜面スピード( "譜面スピード" ),
 					//----------------
 					#endregion
 
 					#region " シンバルフリー "
 					//----------------
-					new パネル_文字列リスト(
-						項目名.シンバルフリー,
-						( user.シンバルフリーモードである ) ? 1 : 0,
-						new[] { "OFF", "ON" },
-						new Action<パネル>( ( panel ) => {
-							user.シンバルフリーモードである = ( 1 == ( (パネル_文字列リスト)panel).現在選択されている選択肢の番号 );
+					new パネル_ONOFFトグル(
+						"シンバルフリー",
+						user.シンバルフリーモードである,
+						new Action<パネル>( (panel) => {
+							user.シンバルフリーモードである = ( (パネル_ONOFFトグル) panel ).ONである;
 						} ) ),
 					//----------------
 					#endregion
 
-					#region " 自動演奏 "
+					#region " 自動演奏（フォルダ）"
 					//----------------
-					new パネル_文字列リスト(
-						項目名.自動演奏,
-						( user.AutoPlayがすべてONである ) ? 1 : 0,
-						new[] { "All OFF", "All ON" },
-						new Action<パネル>( ( panel ) => {
-							bool on = ( 1 == ( (パネル_文字列リスト)panel).現在選択されている選択肢の番号 );
-							if( on )
-							{
-								foreach( DTXmatixx.設定.AutoPlay種別 play in Enum.GetValues( typeof( DTXmatixx.設定.AutoPlay種別 ) ) )
-									user.AutoPlay[ play ] = true;
-							}
-							else
-							{
-								foreach( DTXmatixx.設定.AutoPlay種別 play in Enum.GetValues( typeof( DTXmatixx.設定.AutoPlay種別 ) ) )
-									user.AutoPlay[ play ] = false;
-							}
-						} ) ),
+					( autoplay = new パネル_フォルダ( "自動演奏", this._ルートパネルフォルダ ) {	// 子パネルリストの設定は後で。
+						ヘッダ色 = パネル.ヘッダ色種別.赤,
+					} ),
 					//----------------
 					#endregion
 
-					#region " 設定完了 "
+					#region " 設定完了（システムボタン）"
 					//----------------
 					new パネル_システムボタン( 項目名.設定完了 ),
 					//----------------
 					#endregion
+
 				};
 
-				foreach( var panel in this._パネルリスト )
-					this.子リスト.Add( panel );
+				#region " 自動演奏フォルダの子の設定。"
+				//----------------
+				autoplay.子パネルリスト = new SelectableList<パネル>();
 
-				this._選択パネル番号 = 0;
+				foreach( AutoPlay種別 apType in Enum.GetValues( typeof( AutoPlay種別 ) ) )
+				{
+					if( apType == AutoPlay種別.Unknown )
+						continue;
+
+					autoplay.子パネルリスト.Add(
+						new パネル_ONOFFトグル(
+							apType.ToString(),
+							( user.AutoPlay[ apType ] ),
+							new Action<パネル>( ( panel ) => {
+								user.AutoPlay[ apType ] = ( (パネル_ONOFFトグル) panel ).ONである;
+							} ) ) );
+				}
+
+				autoplay.子パネルリスト.Add( new パネル_システムボタン( 項目名.設定完了_戻る ) );
+				autoplay.子パネルリスト.SelectFirst();
+				//----------------
+				#endregion
+
+				this._現在のパネルフォルダ = this._ルートパネルフォルダ;
 			}
 		}
 		protected override void On非活性化( グラフィックデバイス gd )
 		{
 			using( Log.Block( FDKUtilities.現在のメソッド名 ) )
 			{
-				foreach( var panel in this._パネルリスト )
-					this.子リスト.Remove( panel );
-
-				this._パネルリスト = null;
+				this._現在のパネルフォルダ = null;	// 他の実体を参照してるだけなので Dispose 不要。
 			}
 		}
 
@@ -151,10 +171,11 @@ namespace DTXmatixx.ステージ.設定
 			this._青い線.描画する( gd, new Vector2( left, 0f ), 高さdpx: gd.設計画面サイズ.Height );
 
 			// パネルを描画。（選択中のパネルの3つ上から7つ下まで、計11枚。）
+			var panels = this._現在のパネルフォルダ.子パネルリスト;
 			for( int i = 0; i < 11; i++ )
 			{
-				int 描画パネル番号 = ( ( this._選択パネル番号 - 3 + i ) + this._パネルリスト.Count ) % this._パネルリスト.Count;
-				var 描画パネル = this._パネルリスト[ 描画パネル番号 ];
+				int 描画パネル番号 = ( ( panels.SelectedIndex - 3 + i ) + panels.Count * 3 ) % panels.Count;		// panels の末尾に達したら先頭に戻る。
+				var 描画パネル = panels[ 描画パネル番号 ];
 
 				描画パネル.進行描画する(
 					gd,
@@ -174,8 +195,8 @@ namespace DTXmatixx.ステージ.設定
 			this._パッド矢印.描画する( gd, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
 		}
 
-		private List<パネル> _パネルリスト = null;
-		private int _選択パネル番号 = 0;
+		private パネル_フォルダ _ルートパネルフォルダ = null;
+		private パネル_フォルダ _現在のパネルフォルダ = null;
 
 		private 青い線 _青い線 = null;
 		private パッド矢印 _パッド矢印 = null;

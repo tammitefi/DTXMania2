@@ -27,7 +27,20 @@ namespace DTXmatixx.ステージ.設定
 		public static Size2F サイズ
 			=> new Size2F( 642f, 96f );
 
-		public パネル( string パネル名, Action<パネル> 値の変更処理 )
+		public class ヘッダ色種別
+		{
+			public static readonly Color4 青 = new Color4( 0xff725031 );   // ABGR
+			public static readonly Color4 赤 = new Color4( 0xff315072 );
+		}
+
+		public Color4 ヘッダ色
+		{
+			get;
+			set;
+		} = ヘッダ色種別.青;
+
+
+		public パネル( string パネル名, Action<パネル> 値の変更処理 = null )
 		{
 			this.パネル名 = パネル名;
 			this._値の変更処理 = 値の変更処理;
@@ -80,11 +93,13 @@ namespace DTXmatixx.ステージ.設定
 			this._パネルのストーリーボード.Schedule( gd.Animation.Timer.Time );
 		}
 
+		// ※派生クラスから呼び出すのを忘れないこと。
 		protected override void On活性化( グラフィックデバイス gd )
 		{
 			this._パネルの高さ割合 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
 			this._パネルのストーリーボード = null;
 		}
+		// ※派生クラスから呼び出すのを忘れないこと。
 		protected override void On非活性化( グラフィックデバイス gd )
 		{
 			this._パネルのストーリーボード?.Abandon();
@@ -131,7 +146,7 @@ namespace DTXmatixx.ステージ.設定
 			gd.D2DBatchDraw( ( dc ) => {
 
 				using( var パネル背景色 = new SolidColorBrush( dc, new Color4( Color3.Black, 0.5f ) ) )
-				using( var ヘッダ背景色 = new SolidColorBrush( dc, new Color4( 0xff725031 ) ) )   // ABGR
+				using( var ヘッダ背景色 = new SolidColorBrush( dc, this.ヘッダ色 ) )
 				using( var テキスト背景色 = new SolidColorBrush( dc, Color4.Black ) )
 				{
 					dc.FillRectangle( パネル矩形, パネル背景色 );

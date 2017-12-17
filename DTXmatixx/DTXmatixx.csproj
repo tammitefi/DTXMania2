@@ -165,6 +165,8 @@
     <Compile Include="ステージ\舞台画像.cs" />
     <Compile Include="ステージ\設定\パネル.cs" />
     <Compile Include="ステージ\設定\パネル_システムボタン.cs" />
+    <Compile Include="ステージ\設定\パネル_フォルダ.cs" />
+    <Compile Include="ステージ\設定\パネル_ONOFFトグルー.cs" />
     <Compile Include="ステージ\設定\パネル_文字列リスト.cs" />
     <Compile Include="ステージ\設定\パネル_譜面スピード.cs" />
     <Compile Include="ステージ\設定\パネルリスト.cs" />
