@@ -21,6 +21,7 @@ namespace DTXmatixx.ステージ.設定
 			public static readonly string シンバルフリー = "シンバルフリー";
 			public static readonly string 自動演奏 = "自動演奏";
 			public static readonly string 設定完了 = "設定完了";
+			public static readonly string キー割り当て = "キー割り当て";
 		}
 
 		public パネル 現在選択中のパネル
@@ -37,6 +38,13 @@ namespace DTXmatixx.ステージ.設定
 			for( int i = 0; i < this._パネルリスト.Count; i++ )
 			{
 				this._パネルリスト[ i ].フェードインを開始する( gd, 0.02, 速度倍率 );
+			}
+		}
+		public void フェードアウトを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
+		{
+			for( int i = 0; i < this._パネルリスト.Count; i++ )
+			{
+				this._パネルリスト[ i ].フェードアウトを開始する( gd, 0.02, 速度倍率 );
 			}
 		}
 
@@ -57,19 +65,27 @@ namespace DTXmatixx.ステージ.設定
 
 				this._パネルリスト = new List<パネル>() {
 
-					// from ユーザ設定
-
+					#region " 画面モード "
+					//----------------
 					new パネル_文字列リスト(
-						項目名.画面モード, 
+						項目名.画面モード,
 						( user.全画面モードである ) ? 1 : 0,
 						new[] { "ウィンドウ", "全画面" },
 						new Action<パネル>( ( panel ) => {
 							user.全画面モードである = ( 1 == ( (パネル_文字列リスト)panel).現在選択されている選択肢の番号 );
 							App.Instance.全画面モード = user.全画面モードである;
 						} ) ),
-
+					//----------------
+					#endregion
+					
+					#region " 譜面スピード "
+					//----------------
 					new パネル_譜面スピード( 項目名.譜面スピード ),
+					//----------------
+					#endregion
 
+					#region " シンバルフリー "
+					//----------------
 					new パネル_文字列リスト(
 						項目名.シンバルフリー,
 						( user.シンバルフリーモードである ) ? 1 : 0,
@@ -77,7 +93,11 @@ namespace DTXmatixx.ステージ.設定
 						new Action<パネル>( ( panel ) => {
 							user.シンバルフリーモードである = ( 1 == ( (パネル_文字列リスト)panel).現在選択されている選択肢の番号 );
 						} ) ),
+					//----------------
+					#endregion
 
+					#region " 自動演奏 "
+					//----------------
 					new パネル_文字列リスト(
 						項目名.自動演奏,
 						( user.AutoPlayがすべてONである ) ? 1 : 0,
@@ -95,8 +115,14 @@ namespace DTXmatixx.ステージ.設定
 									user.AutoPlay[ play ] = false;
 							}
 						} ) ),
+					//----------------
+					#endregion
 
+					#region " 設定完了 "
+					//----------------
 					new パネル_システムボタン( 項目名.設定完了 ),
+					//----------------
+					#endregion
 				};
 
 				foreach( var panel in this._パネルリスト )

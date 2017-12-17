@@ -58,6 +58,27 @@ namespace DTXmatixx.ステージ.設定
 			}
 			this._パネルのストーリーボード.Schedule( gd.Animation.Timer.Time );
 		}
+		public void フェードアウトを開始する( グラフィックデバイス gd, double 遅延sec, double 速度倍率 = 1.0 )
+		{
+			Trace.Assert( this.活性化している );
+
+			double 秒( double v ) => ( v / 速度倍率 );
+
+			if( null == this._パネルの高さ割合 )	// 未生成のときだけ生成。生成済みなら、その現状を引き継ぐ。
+				this._パネルの高さ割合 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
+
+			this._パネルのストーリーボード?.Abandon();
+			this._パネルのストーリーボード?.Dispose();
+			this._パネルのストーリーボード = new Storyboard( gd.Animation.Manager );
+
+			using( var 遅延遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
+			using( var 縮む遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+			{
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
+			}
+			this._パネルのストーリーボード.Schedule( gd.Animation.Timer.Time );
+		}
 
 		protected override void On活性化( グラフィックデバイス gd )
 		{
