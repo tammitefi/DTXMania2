@@ -401,9 +401,6 @@ namespace DTXmatixx
 					// 現在のステージを進行＆描画。
 					App.ステージ管理.現在のステージ.進行描画する( gd );
 
-					// UIFramework を描画。
-					gd.UIFramework.Render( gd );
-
 					// ステージの進行描画の結果（フェーズの状態など）を受けての後処理。
 					switch( App.ステージ管理.現在のステージ )
 					{
