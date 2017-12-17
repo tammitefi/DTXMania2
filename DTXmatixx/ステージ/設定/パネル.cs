@@ -143,7 +143,7 @@ namespace DTXmatixx.ステージ.設定
 		/// <summary>
 		///		0.0:ゼロ ～ 1.0:原寸
 		/// </summary>
-		private Variable _パネルの高さ割合 = null;
-		private Storyboard _パネルのストーリーボード = null;
+		protected Variable _パネルの高さ割合 = null;
+		protected Storyboard _パネルのストーリーボード = null;
 	}
 }
