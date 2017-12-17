@@ -48,13 +48,13 @@ namespace DTXmatixx.ステージ.設定
 			this._パネルのストーリーボード?.Dispose();
 			this._パネルのストーリーボード = new Storyboard( gd.Animation.Manager );
 
-			using( var 遅延繊維 = gd.Animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
-			using( var 縮む繊維 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
-			using( var 膨らむ繊維 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 1.0 ) )
+			using( var 遅延遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
+			using( var 縮む遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+			using( var 膨らむ遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 1.0 ) )
 			{
-				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延繊維 );
-				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む繊維 );
-				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 膨らむ繊維 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 膨らむ遷移 );
 			}
 			this._パネルのストーリーボード.Schedule( gd.Animation.Timer.Time );
 		}
