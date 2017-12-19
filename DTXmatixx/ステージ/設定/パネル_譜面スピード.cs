@@ -57,21 +57,25 @@ namespace DTXmatixx.ステージ.設定
 
 			// 項目部分の描画。
 			this._項目画像.表示文字列 = "×　" + App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度.ToString( "0.0" );
-			this._項目画像.ビットマップを生成または更新する( gd );		// このあと画像のサイズが必要になるので、先に生成/更新する。
+			this._項目画像.ビットマップを生成または更新する( gd );      // このあと画像のサイズが必要になるので、先に生成/更新する。
+
+			float 拡大率Y = (float) this._パネルの高さ割合.Value;
+			float 項目の上下マージン = this.項目領域.Height * ( 1f - 拡大率Y ) / 2f;
 
 			var 項目矩形 = new RectangleF(
 				x: this.項目領域.X + left,
-				y: this.項目領域.Y + top,
+				y: this.項目領域.Y + top + 項目の上下マージン,
 				width: this.項目領域.Width,
-				height: this.項目領域.Height );
+				height: this.項目領域.Height * 拡大率Y );
 
-			float 拡大X = Math.Min( 1f, ( 項目矩形.Width - 20f ) / this._項目画像.サイズ.Width );    // -20 は左右マージンの最低値[dpx]
+			float 拡大率X = Math.Min( 1f, ( 項目矩形.Width - 20f ) / this._項目画像.サイズ.Width );    // -20 は左右マージンの最低値[dpx]
 
 			this._項目画像.描画する(
 				gd,
-				項目矩形.Left + ( 項目矩形.Width - this._項目画像.サイズ.Width * 拡大X ) / 2f,
-				項目矩形.Top + ( 項目矩形.Height - this._項目画像.サイズ.Height ) / 2f,
-				X方向拡大率: 拡大X );
+				項目矩形.Left + ( 項目矩形.Width - this._項目画像.サイズ.Width * 拡大率X ) / 2f,
+				項目矩形.Top + ( 項目矩形.Height - this._項目画像.サイズ.Height * 拡大率Y ) / 2f,
+				X方向拡大率: 拡大率X,
+				Y方向拡大率: 拡大率Y );
 		}
 
 		private 文字列画像 _項目画像 = null;

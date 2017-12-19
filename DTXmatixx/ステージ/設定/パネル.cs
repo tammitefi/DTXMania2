@@ -27,7 +27,20 @@ namespace DTXmatixx.ステージ.設定
 		public static Size2F サイズ
 			=> new Size2F( 642f, 96f );
 
-		public パネル( string パネル名, Action<パネル> 値の変更処理 )
+		public class ヘッダ色種別
+		{
+			public static readonly Color4 青 = new Color4( 0xff725031 );   // ABGR
+			public static readonly Color4 赤 = new Color4( 0xff315072 );
+		}
+
+		public Color4 ヘッダ色
+		{
+			get;
+			set;
+		} = ヘッダ色種別.青;
+
+
+		public パネル( string パネル名, Action<パネル> 値の変更処理 = null )
 		{
 			this.パネル名 = パネル名;
 			this._値の変更処理 = 値の変更処理;
@@ -48,22 +61,45 @@ namespace DTXmatixx.ステージ.設定
 			this._パネルのストーリーボード?.Dispose();
 			this._パネルのストーリーボード = new Storyboard( gd.Animation.Manager );
 
-			using( var 遅延繊維 = gd.Animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
-			using( var 縮む繊維 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
-			using( var 膨らむ繊維 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 1.0 ) )
+			using( var 遅延遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
+			using( var 縮む遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+			using( var 膨らむ遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 1.0 ) )
 			{
-				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延繊維 );
-				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む繊維 );
-				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 膨らむ繊維 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 膨らむ遷移 );
+			}
+			this._パネルのストーリーボード.Schedule( gd.Animation.Timer.Time );
+		}
+		public void フェードアウトを開始する( グラフィックデバイス gd, double 遅延sec, double 速度倍率 = 1.0 )
+		{
+			Trace.Assert( this.活性化している );
+
+			double 秒( double v ) => ( v / 速度倍率 );
+
+			if( null == this._パネルの高さ割合 )	// 未生成のときだけ生成。生成済みなら、その現状を引き継ぐ。
+				this._パネルの高さ割合 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
+
+			this._パネルのストーリーボード?.Abandon();
+			this._パネルのストーリーボード?.Dispose();
+			this._パネルのストーリーボード = new Storyboard( gd.Animation.Manager );
+
+			using( var 遅延遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
+			using( var 縮む遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+			{
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
+				this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
 			}
 			this._パネルのストーリーボード.Schedule( gd.Animation.Timer.Time );
 		}
 
+		// ※派生クラスから呼び出すのを忘れないこと。
 		protected override void On活性化( グラフィックデバイス gd )
 		{
 			this._パネルの高さ割合 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
 			this._パネルのストーリーボード = null;
 		}
+		// ※派生クラスから呼び出すのを忘れないこと。
 		protected override void On非活性化( グラフィックデバイス gd )
 		{
 			this._パネルのストーリーボード?.Abandon();
@@ -110,7 +146,7 @@ namespace DTXmatixx.ステージ.設定
 			gd.D2DBatchDraw( ( dc ) => {
 
 				using( var パネル背景色 = new SolidColorBrush( dc, new Color4( Color3.Black, 0.5f ) ) )
-				using( var ヘッダ背景色 = new SolidColorBrush( dc, new Color4( 0xff725031 ) ) )   // ABGR
+				using( var ヘッダ背景色 = new SolidColorBrush( dc, this.ヘッダ色 ) )
 				using( var テキスト背景色 = new SolidColorBrush( dc, Color4.Black ) )
 				{
 					dc.FillRectangle( パネル矩形, パネル背景色 );
@@ -143,7 +179,7 @@ namespace DTXmatixx.ステージ.設定
 		/// <summary>
 		///		0.0:ゼロ ～ 1.0:原寸
 		/// </summary>
-		private Variable _パネルの高さ割合 = null;
-		private Storyboard _パネルのストーリーボード = null;
+		protected Variable _パネルの高さ割合 = null;
+		protected Storyboard _パネルのストーリーボード = null;
 	}
 }
