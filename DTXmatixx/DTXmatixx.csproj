@@ -166,7 +166,7 @@
     <Compile Include="ステージ\設定\パネル.cs" />
     <Compile Include="ステージ\設定\パネル_システムボタン.cs" />
     <Compile Include="ステージ\設定\パネル_フォルダ.cs" />
-    <Compile Include="ステージ\設定\パネル_ONOFFトグルー.cs" />
+    <Compile Include="ステージ\設定\パネル_ONOFFトグル.cs" />
     <Compile Include="ステージ\設定\パネル_文字列リスト.cs" />
     <Compile Include="ステージ\設定\パネル_譜面スピード.cs" />
     <Compile Include="ステージ\設定\パネルリスト.cs" />
@@ -588,6 +588,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\パッド矢印.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\UI\ウィンドウ16x16x3x3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

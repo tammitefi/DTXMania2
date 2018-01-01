@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace DTXmatixx.曲
 {
-	enum 難易度種別
-	{
-		MASTER,
-		EXTREME,
-		ADVANCED,
-		BASIC,
-	}
+    enum 難易度種別
+    {
+        MASTER,
+        EXTREME,
+        ADVANCED,
+        BASIC,
+    }
 }
