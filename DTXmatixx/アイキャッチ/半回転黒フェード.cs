@@ -163,7 +163,7 @@ namespace DTXmatixx.アイキャッチ
             this.現在のフェーズ = フェーズ.オープン;
         }
 
-        protected override void 進行描画する( グラフィックデバイス gd, StoryboardStatus 描画しないStatus )
+        protected override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 
@@ -177,7 +177,7 @@ namespace DTXmatixx.アイキャッチ
 
                     if( this._アニメ.ストーリーボード.Status != 描画しないStatus )
                     {
-                        gd.D2DBatchDraw( ( dc ) => {
+                        gd.D2DBatchDraw( dc, () => {
 
                             var pretrans = dc.Transform;
 
@@ -241,7 +241,6 @@ namespace DTXmatixx.アイキャッチ
                             #endregion
 
                         } );
-
                     }
                     //----------------
                     #endregion
@@ -258,7 +257,7 @@ namespace DTXmatixx.アイキャッチ
 
                     if( this._アニメ.ストーリーボード.Status != 描画しないStatus )
                     {
-                        gd.D2DBatchDraw( ( dc ) => {
+                        gd.D2DBatchDraw( dc, () => {
 
                             var pretrans = dc.Transform;
 

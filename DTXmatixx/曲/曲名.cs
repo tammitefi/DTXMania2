@@ -30,7 +30,6 @@ namespace DTXmatixx.曲
             set;
         } = null;
 
-
         public 曲名()
             : base( new Size2( (int) Node.全体サイズ.Width, (int) Node.全体サイズ.Height ) )
         {
@@ -62,7 +61,6 @@ namespace DTXmatixx.曲
             this._subtitleFontBrush = new SolidColorBrush( gd.D2DDeviceContext, this._subtitleFontColor );
             this._backBrush = new SolidColorBrush( gd.D2DDeviceContext, this._backColor );
         }
-
         protected override void On非活性化( グラフィックデバイス gd )
         {
             FDKUtilities.解放する( ref this._backBrush );
@@ -113,23 +111,23 @@ namespace DTXmatixx.曲
                         サブタイトル文字矩形.Width,
                         サブタイトル文字矩形.Height ) )
                     {
-                        this.テクスチャへ描画する( gd, ( dc ) => {
+                        this.テクスチャへ描画する( gd, ( dct ) => {
 
-                            // dc は最終的に bmp をテクスチャに描画するので、DPXとPXの拡大率を考慮する必要はない。よって、Transform は Identity に上書きする。
-                            dc.Transform = Matrix3x2.Identity;
+                            // dc は最終的に bmp をテクスチャに描画するので、DPX to DPX 。
+                            dct.Transform = Matrix3x2.Identity;
 
                             // 背景色で塗りつぶす。
-                            dc.FillRectangle( 全体矩形, this._backBrush );
+                            dct.FillRectangle( 全体矩形, this._backBrush );
 
                             // タイトルを描画。
-                            dc.DrawTextLayout(
+                            dct.DrawTextLayout(
                                 new Vector2( タイトル文字矩形.X, タイトル文字矩形.Y ),
                                 タイトルレイアウト,
                                 this._titleFontBrush,
                                 DrawTextOptions.Clip );
 
                             // サブタイトルを描画。
-                            dc.DrawTextLayout(
+                            dct.DrawTextLayout(
                                 new Vector2( サブタイトル文字矩形.X, サブタイトル文字矩形.Y ),
                                 サブタイトルレイアウト,
                                 this._subtitleFontBrush,
@@ -143,33 +141,19 @@ namespace DTXmatixx.曲
             base.描画する( gd, ワールド行列変換 );
         }
 
-
         private string _前回のタイトル = null;
-
         private string _前回のサブタイトル = null;
-
         private TextFormat _textFormat = null;
-
         private string _fontName;
-
         private Color4 _titleFontColor;
-
         private Color4 _subtitleFontColor;
-
         private Color4 _backColor;
-
         private FontWeight _fontWeight;
-
         private FontStyle _fontStyle;
-
         private float _fontSizePt;
-
         private TextAlignment _textAlignment;
-
         private Brush _titleFontBrush = null;
-
         private Brush _subtitleFontBrush = null;
-
         private Brush _backBrush = null;
-    }
+   }
 }

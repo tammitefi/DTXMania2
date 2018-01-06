@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -41,7 +42,7 @@ namespace DTXmatixx.ステージ.終了
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             switch( this.現在のフェーズ )
             {
@@ -51,7 +52,7 @@ namespace DTXmatixx.ステージ.終了
                     break;
 
                 case フェーズ.表示中:
-                    this._背景画像.描画する( gd );
+                    this._背景画像.描画する( gd, dc );
 
                     if( this._カウンタ.終了値に達した )
                     {

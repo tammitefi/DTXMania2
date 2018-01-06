@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SharpDX.DirectInput;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -39,7 +39,7 @@ namespace DTXmatixx.ステージ.曲ツリー構築
             {
             }
         }
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             App.入力管理.すべての入力デバイスをポーリングする();
 

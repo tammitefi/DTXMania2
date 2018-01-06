@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
-using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ.認証
 {
@@ -62,7 +62,7 @@ namespace DTXmatixx.ステージ.認証
             this._光彩アニメカウンタ = new LoopCounter( 0, 200, 5 );
         }
 
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 描画位置 = new Vector2( 569f, 188f );
             float リストの改行幅 = 160f;
@@ -76,7 +76,7 @@ namespace DTXmatixx.ステージ.認証
             }
             else
             {
-                不透明度 = ( 割合 - 0.5f ) * 2.0f;        // 0→1
+                不透明度 = ( 割合 - 0.5f ) * 2.0f;     // 0→1
             }
 
             // ユーザリストを描画する。
@@ -87,14 +87,14 @@ namespace DTXmatixx.ステージ.認証
             for( int i = 0; i < 表示人数; i++ )
             {
                 if( i == this.選択中のユーザ )
-                    this._ユーザパネル光彩付き.描画する( gd, 描画位置.X, 描画位置.Y + リストの改行幅 * i, 不透明度0to1: 不透明度 );
+                    this._ユーザパネル光彩付き.描画する( gd, dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i, 不透明度0to1: 不透明度 );
 
-                this._ユーザパネル.描画する( gd, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
+                this._ユーザパネル.描画する( gd, dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
 
                 this._ユーザ名.表示文字列 = App.ユーザ管理.ユーザリスト[ i ].ユーザ名;
-                this._ユーザ名.描画する( gd, 描画位置.X + 32f, 描画位置.Y + 40f + リストの改行幅 * i );
+                this._ユーザ名.描画する( gd, dc, 描画位置.X + 32f, 描画位置.Y + 40f + リストの改行幅 * i );
 
-                this._ユーザ肩書きパネル.描画する( gd, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
+                this._ユーザ肩書きパネル.描画する( gd, dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
             }
         }
 

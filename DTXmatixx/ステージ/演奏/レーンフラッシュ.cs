@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -48,16 +49,16 @@ namespace DTXmatixx.ステージ.演奏
         {
             this._レーンtoレーンContext[ lane ].アニメカウンタ.開始する( 0, 250, 1 );
         }
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
                 var laneContext = this._レーンtoレーンContext[ lane ];
-
                 if( laneContext.アニメカウンタ.動作中である && laneContext.アニメカウンタ.終了値に達していない )
                 {
                     this._レーンフラッシュ画像.描画する(
                         gd,
+                        dc,
                         laneContext.開始位置dpx.X,
                         laneContext.開始位置dpx.Y - laneContext.アニメカウンタ.現在値の割合 * レーンフレーム.領域.Height,
                         不透明度0to1: 1f - laneContext.アニメカウンタ.現在値の割合,

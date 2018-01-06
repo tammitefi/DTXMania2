@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using DTXmatixx.曲;
@@ -26,7 +27,7 @@ namespace DTXmatixx.ステージ.選曲
         {
         }
 
-        public void 描画する( グラフィックデバイス gd )
+        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 領域 = new RectangleF( 78f, 455f, 357f, 55f );
 
@@ -58,19 +59,19 @@ namespace DTXmatixx.ステージ.選曲
 
             bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
 
-            this._BPMパネル.描画する( gd, 領域.X - 5f, 領域.Y - 4f );
+            this._BPMパネル.描画する( gd, dc, 領域.X - 5f, 領域.Y - 4f );
 
             if( 表示可能ノードである )
             {
                 if( 10.0 >= Math.Abs( this._最大BPM - this._最小BPM ) )
                 {
                     // (A) 「最小値」だけ描画。差が10以下なら同一値とみなす。
-                    this._パラメータ文字.描画する( gd, 領域.X + 120f, 領域.Y, this._最小BPM.ToString( "0" ).PadLeft( 3 ) );
+                    this._パラメータ文字.描画する( gd, dc, 領域.X + 120f, 領域.Y, this._最小BPM.ToString( "0" ).PadLeft( 3 ) );
                 }
                 else
                 {
                     // (B) 「最小～最大」を描画。
-                    this._パラメータ文字.描画する( gd, 領域.X + 80f, 領域.Y, this._最小BPM.ToString( "0" ) + "~" + this._最大BPM.ToString( "0" ) );
+                    this._パラメータ文字.描画する( gd, dc, 領域.X + 80f, 領域.Y, this._最小BPM.ToString( "0" ) + "~" + this._最大BPM.ToString( "0" ) );
                 }
             }
         }

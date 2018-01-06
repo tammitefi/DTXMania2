@@ -39,14 +39,15 @@ namespace DTXmatixx.ステージ.演奏
         /// <summary>
         ///		クリアパネルに初期背景を上書きすることで、それまで描かれていた内容を消去する。
         /// </summary>
-        public void クリアする( グラフィックデバイス gd )
+        public void クリアする( グラフィックデバイス gd, DeviceContext1 dc )
         {
-            this.クリアパネル.テクスチャへ描画する( gd, ( dc ) => {
-                dc.PrimitiveBlend = PrimitiveBlend.Copy;
-                dc.DrawBitmap( this._背景.Bitmap, opacity: 1f, interpolationMode: InterpolationMode.Linear );
+            this.クリアパネル.テクスチャへ描画する( gd, ( dcp ) => {
+                dcp.Transform = Matrix3x2.Identity;  // 等倍描画(DPXtoDPX)
+                dcp.PrimitiveBlend = PrimitiveBlend.Copy;
+                dcp.DrawBitmap( this._背景.Bitmap, opacity: 1f, interpolationMode: InterpolationMode.Linear );
             } );
         }
-        public void 描画する( グラフィックデバイス gd )
+        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 

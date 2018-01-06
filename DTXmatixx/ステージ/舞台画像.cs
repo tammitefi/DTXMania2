@@ -18,7 +18,6 @@ namespace DTXmatixx.ステージ
             get
                 => this._背景画像.サイズ;
         }
-
         public bool ぼかしと縮小を適用中
         {
             get;
@@ -124,7 +123,7 @@ namespace DTXmatixx.ステージ
             FDKUtilities.解放する( ref this._ガウスぼかしエフェクト );
         }
 
-        public void 進行描画する( グラフィックデバイス gd, bool 黒幕付き = false, Vector4? 表示領域 = null, LayerParameters1? layerParameters1 = null )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, bool 黒幕付き = false, Vector4? 表示領域 = null, LayerParameters1? layerParameters1 = null )
         {
             #region " 初めての進行描画 "
             //----------------
@@ -156,7 +155,7 @@ namespace DTXmatixx.ステージ
                 this._ガウスぼかしエフェクト黒幕付き用.StandardDeviation = (float) ( 割合 * 10.0 );       // 0～10
                 this._切り取りエフェクト黒幕付き用.Rectangle = ( null != 表示領域 ) ? ( (Vector4) 表示領域 ) : new Vector4( 0f, 0f, this._背景黒幕付き画像.サイズ.Width, this._背景黒幕付き画像.サイズ.Height );
 
-                gd.D2DBatchDraw( ( dc ) => {
+                gd.D2DBatchDraw( dc, () => {
 
                     if( null == layerParameters1 )
                     {
@@ -180,7 +179,7 @@ namespace DTXmatixx.ステージ
                 this._ガウスぼかしエフェクト.StandardDeviation = (float) ( 割合 * 10.0 );       // 0～10
                 this._切り取りエフェクト.Rectangle = ( null != 表示領域 ) ? ( (Vector4) 表示領域 ) : new Vector4( 0f, 0f, this._背景画像.サイズ.Width, this._背景画像.サイズ.Height );
 
-                gd.D2DBatchDraw( ( dc ) => {
+                gd.D2DBatchDraw( dc, () => {
 
                     if( null == layerParameters1 )
                     {

@@ -19,7 +19,6 @@ namespace DTXmatixx.ステージ
             get;
             protected set;
         } = 26f;
-
         public 青い線()
         {
         }
@@ -65,7 +64,7 @@ namespace DTXmatixx.ステージ
         /// </summary>
         /// <param name="幅dpx">横方向（左→右）の長さ。<paramref name="高さdpx"/>と同時に指定してはならない。</param>
         /// <param name="高さdpx">縦方向（上→下）の長さ。<paramref name="幅dpx"/>と同時に指定してはならない。</param>
-        public void 描画する( グラフィックデバイス gd, Vector2 開始位置dpx, float 幅dpx = -1f, float 高さdpx = -1f )
+        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc, Vector2 開始位置dpx, float 幅dpx = -1f, float 高さdpx = -1f )
         {
             var check = ( 幅dpx * 高さdpx );
 
@@ -74,7 +73,7 @@ namespace DTXmatixx.ステージ
             if( 0f == check )
                 return; // 面積ゼロ
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 dc.PrimitiveBlend = PrimitiveBlend.Add; // 加算合成
 

@@ -83,14 +83,14 @@ namespace DTXmatixx.ステージ.選曲
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             // 進行
 
             if( this._初めての進行描画 )
             {
                 this._スクロール用カウンタ = new 定間隔進行();     // 生成と同時にカウント開始。
-                this._選択ノードのオフセットアニメをリセットする( gd );
+                this._選択ノードのオフセットアニメをリセットする( gd.Animation );
                 this._初めての進行描画 = false;
             }
 
@@ -164,7 +164,7 @@ namespace DTXmatixx.ステージ.選曲
             // 10行描画。
             for( int i = 0; i < 10; i++ )
             {
-                this._ノードを描画する( gd, i, 描画するノード );
+                this._ノードを描画する( gd, dc, i, 描画するノード );
                 描画するノード = 描画するノード.次のノード;
             }
         }
@@ -173,13 +173,13 @@ namespace DTXmatixx.ステージ.選曲
         {
             this._カーソル位置--;     // 下限なし
             App.曲ツリー.前のノードをフォーカスする();
-            this._選択ノードのオフセットアニメをリセットする( gd );
+            this._選択ノードのオフセットアニメをリセットする( gd.Animation );
         }
         public void 次のノードを選択する( グラフィックデバイス gd )
         {
             this._カーソル位置++;     // 上限なし
             App.曲ツリー.次のノードをフォーカスする();
-            this._選択ノードのオフセットアニメをリセットする( gd );
+            this._選択ノードのオフセットアニメをリセットする( gd.Animation );
         }
         public void BOXに入る( グラフィックデバイス gd )
         {
@@ -203,7 +203,7 @@ namespace DTXmatixx.ステージ.選曲
         ///		「静止時の」可視範囲は 1～8。
         ///		4 がフォーカスノード。
         ///	</param>
-        private void _ノードを描画する( グラフィックデバイス gd, int 行番号, Node ノード )
+        private void _ノードを描画する( グラフィックデバイス gd, DeviceContext1 dc, int 行番号, Node ノード )
         {
             Debug.Assert( 0 <= 行番号 && 9 >= 行番号 );
             Debug.Assert( null != ノード );
@@ -231,7 +231,7 @@ namespace DTXmatixx.ステージ.選曲
 
             #region " 背景 "
             //----------------
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 if( ノード is BoxNode )
                 {
@@ -326,7 +326,7 @@ namespace DTXmatixx.ステージ.選曲
                     Matrix.Scaling( this._サムネイル表示サイズdpx * 0.9f ) *  // ちょっと小さく
                     Matrix.Translation( サムネイル表示中央dpx - 4f );            // ちょっと下へ
 
-                ノード.進行描画する( gd, 変換行列, キャプション表示: false );
+                ノード.進行描画する( gd, dc, 変換行列, キャプション表示: false );
                 //----------------
                 #endregion
             }
@@ -349,7 +349,7 @@ namespace DTXmatixx.ステージ.選曲
                     Matrix.Scaling( this._サムネイル表示サイズdpx ) *
                     Matrix.Translation( サムネイル表示中央dpx );
 
-                ノード.進行描画する( gd, 変換行列, キャプション表示: false );
+                ノード.進行描画する( gd, dc, 変換行列, キャプション表示: false );
                 //----------------
                 #endregion
             }
@@ -388,6 +388,7 @@ namespace DTXmatixx.ステージ.選曲
                 float 最大幅dpx = gd.設計画面サイズ.Width - ノード左上dpx.X - 170f;
                 曲名画像.描画する(
                     gd,
+                    dc,
                     ノード左上dpx.X + 170f,
                     ノード左上dpx.Y + 30f,
                     X方向拡大率: ( 曲名画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / 曲名画像.サイズ.Width );
@@ -444,6 +445,7 @@ namespace DTXmatixx.ステージ.選曲
 
                     サブタイトル画像.描画する(
                         gd,
+                        dc,
                         ノード左上dpx.X + 190f,
                         ノード左上dpx.Y + 80f,
                         X方向拡大率: ( サブタイトル画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / サブタイトル画像.サイズ.Width );
@@ -484,23 +486,23 @@ namespace DTXmatixx.ステージ.選曲
         private Variable _選択ノードの表示オフセットdpx = null;
         private Storyboard _選択ノードの表示オフセットのストーリーボード = null;
 
-        private void _選択ノードのオフセットアニメをリセットする( グラフィックデバイス gd )
+        private void _選択ノードのオフセットアニメをリセットする( アニメーション管理 am )
         {
             this._選択ノードの表示オフセットdpx?.Dispose();
-            this._選択ノードの表示オフセットdpx = new Variable( gd.Animation.Manager, initialValue: 0.0 );
+            this._選択ノードの表示オフセットdpx = new Variable( am.Manager, initialValue: 0.0 );
 
             this._選択ノードの表示オフセットのストーリーボード?.Abandon();
             this._選択ノードの表示オフセットのストーリーボード?.Dispose();
-            this._選択ノードの表示オフセットのストーリーボード = new Storyboard( gd.Animation.Manager );
+            this._選択ノードの表示オフセットのストーリーボード = new Storyboard( am.Manager );
 
-            using( var 維持 = gd.Animation.TrasitionLibrary.Constant( 0.15 ) )
-            using( var 左へ移動 = gd.Animation.TrasitionLibrary.Linear( 0.07, finalValue: -50f ) )
+            using( var 維持 = am.TrasitionLibrary.Constant( 0.15 ) )
+            using( var 左へ移動 = am.TrasitionLibrary.Linear( 0.07, finalValue: -50f ) )
             {
                 this._選択ノードの表示オフセットのストーリーボード.AddTransition( this._選択ノードの表示オフセットdpx, 維持 );
                 this._選択ノードの表示オフセットのストーリーボード.AddTransition( this._選択ノードの表示オフセットdpx, 左へ移動 );
             }
 
-            this._選択ノードの表示オフセットのストーリーボード.Schedule( gd.Animation.Timer.Time );
+            this._選択ノードの表示オフセットのストーリーボード.Schedule( am.Timer.Time );
         }
     }
 }

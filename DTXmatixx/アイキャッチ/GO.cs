@@ -802,11 +802,11 @@ namespace DTXmatixx.アイキャッチ
             this._フェードイン.ストーリーボード.Schedule( start );
         }
 
-        protected override void 進行描画する( グラフィックデバイス gd, StoryboardStatus 描画しないStatus )
+        protected override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -826,9 +826,9 @@ namespace DTXmatixx.アイキャッチ
                         continue;
 
                     dc.Transform =
-                        Matrix3x2.Rotation( (float) context.回転角rad.Value )
-                        * Matrix3x2.Translation( (float) context.中心位置X, (float) context.中心位置Y )
-                        * pretrans;
+                        Matrix3x2.Rotation( (float) context.回転角rad.Value ) *
+                        Matrix3x2.Translation( (float) context.中心位置X, (float) context.中心位置Y ) *
+                        pretrans;
 
                     float contextの幅 = 2800.0f;
                     float contextの高さ = (float) context.太さ.Value;
@@ -858,9 +858,9 @@ namespace DTXmatixx.アイキャッチ
                         continue;
 
                     dc.Transform =
-                        Matrix3x2.Rotation( (float) context.回転角rad )
-                        * Matrix3x2.Translation( (float) context.中心位置X, (float) context.中心位置Y )
-                        * pretrans;
+                        Matrix3x2.Rotation( (float) context.回転角rad ) *
+                        Matrix3x2.Translation( (float) context.中心位置X, (float) context.中心位置Y ) *
+                        pretrans;
 
                     float contextの幅 = 2800.0f;
                     float contextの高さ = (float) context.太さ.Value;
@@ -890,15 +890,15 @@ namespace DTXmatixx.アイキャッチ
                     continue;
 
                 var 変換行列2D =
-                    Matrix3x2.Scaling( (float) context.拡大率.Value )
-                    * Matrix3x2.Translation( (float) context.中心位置X.Value, (float) context.中心位置Y.Value );
+                    Matrix3x2.Scaling( (float) context.拡大率.Value ) *
+                    Matrix3x2.Translation( (float) context.中心位置X.Value, (float) context.中心位置Y.Value );
 
-                context.画像.描画する( gd, 変換行列2D );
+                context.画像.描画する( gd, dc, 変換行列2D );
             }
             //----------------
             #endregion
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -913,9 +913,9 @@ namespace DTXmatixx.アイキャッチ
                             すべて完了 = false;
 
                         dc.Transform =
-                            Matrix3x2.Rotation( (float) context.回転角rad )
-                            * Matrix3x2.Translation( (float) context.中心位置X, (float) context.中心位置Y )
-                            * pretrans;
+                            Matrix3x2.Rotation( (float) context.回転角rad ) *
+                            Matrix3x2.Translation( (float) context.中心位置X, (float) context.中心位置Y ) *
+                            pretrans;
 
                         float contextの幅 = 2800.0f;
                         float contextの高さ = (float) context.太さ.Value;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SharpDX.Direct2D1;
 using SharpDX.Animation;
 using FDK;
 using FDK.メディア;
@@ -44,7 +45,7 @@ namespace DTXmatixx.アイキャッチ
             this.現在のフェーズ = フェーズ.オープン;
         }
 
-        public virtual void 進行描画する( グラフィックデバイス gd )
+        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             switch( this.現在のフェーズ )
             {
@@ -53,17 +54,17 @@ namespace DTXmatixx.アイキャッチ
 
                 case フェーズ.クローズ:
                 case フェーズ.クローズ完了:
-                    this.進行描画する( gd, StoryboardStatus.Scheduled );
+                    this.進行描画する( gd, dc, StoryboardStatus.Scheduled );
                     break;
 
                 case フェーズ.オープン:
                 case フェーズ.オープン完了:
-                    this.進行描画する( gd, StoryboardStatus.Ready );
+                    this.進行描画する( gd, dc, StoryboardStatus.Ready );
                     break;
             }
         }
 
-        protected virtual void 進行描画する( グラフィックデバイス gd, StoryboardStatus 描画しないStatus )
+        protected virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 

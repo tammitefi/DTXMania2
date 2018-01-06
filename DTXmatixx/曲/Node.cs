@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
-using SharpDX.DirectWrite;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -209,7 +209,7 @@ namespace DTXmatixx.曲
             }
         }
 
-        public virtual void 進行描画する( グラフィックデバイス gd, Matrix ワールド変換行列, bool キャプション表示 = true )
+        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, Matrix ワールド変換行列, bool キャプション表示 = true )
         {
             // (1) ノード画像を描画する。
             if( null != this.ノード画像 )

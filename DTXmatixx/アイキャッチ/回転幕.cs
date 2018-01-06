@@ -424,7 +424,7 @@ namespace DTXmatixx.アイキャッチ
             this._初めての進行描画 = true;
         }
 
-        protected override void 進行描画する( グラフィックデバイス gd, StoryboardStatus 描画しないStatus )
+        protected override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 
@@ -456,10 +456,10 @@ namespace DTXmatixx.アイキャッチ
                                 float 画面B表示縦幅 = (float) ( 画面Bサイズ.Height * 割合 / 2.0 );    // 0 → height/2
 
                                 // 上から
-                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, false, new Vector4( 0f, 0f, 画面Bサイズ.Width, 画面B表示縦幅 ) );
+                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc, false, new Vector4( 0f, 0f, 画面Bサイズ.Width, 画面B表示縦幅 ) );
 
                                 // 下から
-                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, false, new Vector4( 0f, 画面Bサイズ.Height - 画面B表示縦幅, 画面Bサイズ.Width, 画面Bサイズ.Height ) );
+                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc, false, new Vector4( 0f, 画面Bサイズ.Height - 画面B表示縦幅, 画面Bサイズ.Width, 画面Bサイズ.Height ) );
                                 //----------------
                                 #endregion
                                 break;
@@ -467,7 +467,7 @@ namespace DTXmatixx.アイキャッチ
                             case double 割合 when( 2.0 > 割合 ):
                                 #region " シーン2. 画面Bを全表示。（黒帯は回転中）"
                                 //----------------
-                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd );
+                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc );
                                 //----------------
                                 #endregion
                                 break;
@@ -475,7 +475,7 @@ namespace DTXmatixx.アイキャッチ
                             case double 割合: // default
                                 #region " シーン3. 画面Bを下絵に、中央から左右に向かって（黒帯の移動に従って）、画面Cの描画領域が広くなっていく。"
                                 //----------------
-                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd );    // 下絵の画面B、全表示。
+                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc );    // 下絵の画面B、全表示。
 
                                 // 以下、画面Cを上に重ねて描画。
 
@@ -489,8 +489,8 @@ namespace DTXmatixx.アイキャッチ
                                     ) *
                                     Matrix3x2.Translation( gd.設計画面サイズ.Width / 2.0f, gd.設計画面サイズ.Height / 2.0f ); // 画面中央固定。
 
-                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, layerParameters1: this._斜めレイヤーパラメータ );
-                                this._ロゴを描画する( gd );
+                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc, layerParameters1: this._斜めレイヤーパラメータ );
+                                this._ロゴを描画する( gd, dc );
                                 //----------------
                                 #endregion
                                 break;
@@ -501,8 +501,8 @@ namespace DTXmatixx.アイキャッチ
                 case フェーズ.クローズ完了:
                     {
                         // 画面C（アイキャッチ画面（背景＋ロゴ））
-                        this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd );
-                        this._ロゴを描画する( gd );
+                        this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc );
+                        this._ロゴを描画する( gd, dc );
                     }
                     break;
 
@@ -528,7 +528,7 @@ namespace DTXmatixx.アイキャッチ
                             case double 割合 when( 2.0 < 割合 ):
                                 #region " シーン3. 画面Cを下絵に、左右から中央に向かって（黒帯の移動に従って）、画面Dの描画領域が広くなっていく。"
                                 //----------------
-                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd );    // 画面D、全表示。（画面Cじゃないので注意）
+                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd, dc );    // 画面D、全表示。（画面Cじゃないので注意）
 
                                 // 以下、画面C（画面Dじゃないので注意）を左右の黒帯の間に描画。
 
@@ -542,8 +542,8 @@ namespace DTXmatixx.アイキャッチ
                                     ) *
                                     Matrix3x2.Translation( gd.設計画面サイズ.Width / 2.0f, gd.設計画面サイズ.Height / 2.0f ); // 画面中央固定。
 
-                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, layerParameters1: this._斜めレイヤーパラメータ );
-                                this._ロゴを描画する( gd );
+                                this._画面BC_アイキャッチ遷移画面1_回転中.進行描画する( gd, dc, layerParameters1: this._斜めレイヤーパラメータ );
+                                this._ロゴを描画する( gd, dc );
                                 //----------------
                                 #endregion
                                 break;
@@ -551,7 +551,7 @@ namespace DTXmatixx.アイキャッチ
                             case double 割合 when( 1.0 < 割合 ):
                                 #region " シーン2. 画面Dを全表示。（黒帯は逆回転中）"
                                 //----------------
-                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd );
+                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd, dc );
                                 //----------------
                                 #endregion
                                 break;
@@ -563,10 +563,10 @@ namespace DTXmatixx.アイキャッチ
                                 float 画面D表示縦幅 = (float) ( 画面Dサイズ.Height * 割合 / 2.0 );    // height/2 → 0
 
                                 // 上から
-                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd, false, new Vector4( 0f, 0f, 画面Dサイズ.Width, 画面D表示縦幅 ) );
+                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd, dc, false, new Vector4( 0f, 0f, 画面Dサイズ.Width, 画面D表示縦幅 ) );
 
                                 // 下から
-                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd, false, new Vector4( 0f, 画面Dサイズ.Height - 画面D表示縦幅, 画面Dサイズ.Width, 画面Dサイズ.Height ) );
+                                this._画面D_アイキャッチ遷移画面2_逆回転中.進行描画する( gd, dc, false, new Vector4( 0f, 画面Dサイズ.Height - 画面D表示縦幅, 画面Dサイズ.Width, 画面Dサイズ.Height ) );
                                 //----------------
                                 #endregion
                                 break;
@@ -585,7 +585,7 @@ namespace DTXmatixx.アイキャッチ
 
             #region " 黒帯（全シーンで共通）"
             //----------------
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -600,9 +600,9 @@ namespace DTXmatixx.アイキャッチ
                         continue;
 
                     dc.Transform =
-                        Matrix3x2.Rotation( (float) context.回転角rad.Value )
-                        * Matrix3x2.Translation( (float) context.中心位置X.Value, (float) context.中心位置Y.Value )
-                        * pretrans;
+                        Matrix3x2.Rotation( (float) context.回転角rad.Value ) *
+                        Matrix3x2.Translation( (float) context.中心位置X.Value, (float) context.中心位置Y.Value ) *
+                        pretrans;
 
                     using( var brush = new SolidColorBrush( dc, new Color4( 0f, 0f, 0f, (float) context.不透明度.Value ) ) )
                     {
@@ -670,10 +670,11 @@ namespace DTXmatixx.アイキャッチ
         private const double _シーン2期間 = 0.4;
         private const double _シーン3期間 = 0.2;
 
-        private void _ロゴを描画する( グラフィックデバイス gd )
+        private void _ロゴを描画する( グラフィックデバイス gd, DeviceContext1 dc ) 
         {
             this._ロゴ.描画する(
                 gd,
+                dc,
                 this._ロゴ表示領域.Left,
                 this._ロゴ表示領域.Top,
                 1.0f,

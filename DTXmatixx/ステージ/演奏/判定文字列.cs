@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -54,7 +55,7 @@ namespace DTXmatixx.ステージ.演奏
             status.判定種別 = judge;
             status.現在の状態 = 表示レーンステータス.状態.表示開始;  // 描画スレッドへ通知。
         }
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             foreach( 表示レーン種別 レーン in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -256,7 +257,7 @@ namespace DTXmatixx.ステージ.演奏
                                         status.表示中央位置dpx.X - 転送元矩形.Width / 2f,
                                         status.表示中央位置dpx.Y - 転送元矩形.Height / 2f );
 
-                                this._判定文字列画像.描画する( gd, 変換行列2D, 転送元矩形: 転送元矩形 );
+                                this._判定文字列画像.描画する( gd, dc, 変換行列2D, 転送元矩形: 転送元矩形 );
                             }
                             //----------------
                             #endregion
@@ -274,6 +275,7 @@ namespace DTXmatixx.ステージ.演奏
 
                                 this._判定文字列画像.描画する(
                                     gd,
+                                    dc,
                                     変換行列2D,
                                     転送元矩形: 転送元矩形,
                                     不透明度0to1: (float) status.文字列影の不透明度.Value );
@@ -298,6 +300,7 @@ namespace DTXmatixx.ステージ.演奏
 
                                 this._判定文字列画像.描画する(
                                     gd,
+                                    dc,
                                     変換行列2D,
                                     転送元矩形: 転送元矩形,
                                     不透明度0to1: (float) status.文字列本体の不透明度.Value );

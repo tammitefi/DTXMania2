@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -49,7 +50,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             this._レーンtoパッドContext[ lane ].アニメカウンタ.開始する( 0, 100, 1 );
         }
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -66,10 +67,22 @@ namespace DTXmatixx.ステージ.演奏
                 }
 
                 // ドラムパッド本体表示
-                this._パッド絵.描画する( gd, drumContext.左上位置dpx.X, drumContext.左上位置dpx.Y + Yオフセットdpx, 1f, 転送元矩形: drumContext.転送元矩形 );
+                this._パッド絵.描画する( 
+                    gd, 
+                    dc,
+                    drumContext.左上位置dpx.X, 
+                    drumContext.左上位置dpx.Y + Yオフセットdpx,
+                    不透明度0to1: 1.0f, 
+                    転送元矩形: drumContext.転送元矩形 );
 
                 // ドラムフラッシュ表示
-                this._パッド絵.描画する( gd, drumContext.左上位置dpx.X, drumContext.左上位置dpx.Y + Yオフセットdpx, フラッシュ画像の不透明度, 転送元矩形: drumContext.転送元矩形Flush );
+                this._パッド絵.描画する(
+                    gd,
+                    dc,
+                    drumContext.左上位置dpx.X,
+                    drumContext.左上位置dpx.Y + Yオフセットdpx, 
+                    フラッシュ画像の不透明度,
+                    転送元矩形: drumContext.転送元矩形Flush );
             }
         }
 

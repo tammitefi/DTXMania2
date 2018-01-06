@@ -33,7 +33,7 @@ namespace DTXmatixx.ステージ.曲読み込み
             }
         }
 
-        public void 描画する( グラフィックデバイス gd )
+        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 見出し描画領域 = new RectangleF( 783f, 117f, 414f, 63f );
             var 数値描画領域 = new RectangleF( 783f, 180f, 414f, 213f );
@@ -52,7 +52,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                 難易度 = node.難易度[ anker ];
             }
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -61,8 +61,6 @@ namespace DTXmatixx.ステージ.曲読み込み
                 using( var 黒透過ブラシ = new SolidColorBrush( dc, new Color4( Color3.Black, 0.5f ) ) )
                 using( var 白ブラシ = new SolidColorBrush( dc, Color4.White ) )
                 {
-                    dc.Transform = pretrans;
-
                     // 背景領域を塗りつぶす。
                     dc.FillRectangle( 見出し描画領域, 見出し背景ブラシ );
                     dc.FillRectangle( 数値描画領域, 黒ブラシ );
@@ -79,14 +77,16 @@ namespace DTXmatixx.ステージ.曲読み込み
                         Matrix3x2.Scaling( 2.2f, 2.2f ) *
                         Matrix3x2.Translation( 数値描画領域.X + 175f, 数値描画領域.Y ) *
                         pretrans;
-                    this._数字画像.描画する( dc, 0f, 0f, 数値文字列.Substring( 2 ) );
+
+                    this._数字画像.描画する( gd, dc, 0f, 0f, 数値文字列.Substring( 2 ) );
 
                     // 整数部と小数点を描画する。
                     dc.Transform =
                         Matrix3x2.Scaling( 2.2f, 2.2f ) *
                         Matrix3x2.Translation( 数値描画領域.X + 15f, 数値描画領域.Y ) *
                         pretrans;
-                    this._数字画像.描画する( dc, 0f, 0f, 数値文字列.Substring( 0, 2 ) );
+
+                    this._数字画像.描画する( gd, dc, 0f, 0f, 数値文字列.Substring( 0, 2 ) );
                 }
 
             } );

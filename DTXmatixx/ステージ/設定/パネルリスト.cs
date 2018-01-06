@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using DTXmatixx.設定;
@@ -162,13 +163,13 @@ namespace DTXmatixx.ステージ.設定
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, float left, float top )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top )
         {
             const float パネルの下マージン = 4f;
             float パネルの高さ = パネル.サイズ.Height + パネルの下マージン;
 
             // フレーム１（たて線）を描画。
-            this._青い線.描画する( gd, new Vector2( left, 0f ), 高さdpx: gd.設計画面サイズ.Height );
+            this._青い線.描画する( gd, dc, new Vector2( left, 0f ), 高さdpx: gd.設計画面サイズ.Height );
 
             // パネルを描画。（選択中のパネルの3つ上から7つ下まで、計11枚。）
             var panels = this._現在のパネルフォルダ.子パネルリスト;
@@ -179,6 +180,7 @@ namespace DTXmatixx.ステージ.設定
 
                 描画パネル.進行描画する(
                     gd,
+                    dc,
                     left + 22f,
                     top + i * パネルの高さ,
                     選択中: ( i == 3 ) );
@@ -186,13 +188,13 @@ namespace DTXmatixx.ステージ.設定
 
             // フレーム２（選択パネル周囲）を描画。
             float 幅 = パネル.サイズ.Width + 22f * 2f;
-            this._青い線.描画する( gd, new Vector2( left, パネルの高さ * 3f ), 幅dpx: 幅 );
-            this._青い線.描画する( gd, new Vector2( left, パネルの高さ * 4f ), 幅dpx: 幅 );
-            this._青い線.描画する( gd, new Vector2( left + 幅, パネルの高さ * 3f ), 高さdpx: パネルの高さ );
+            this._青い線.描画する( gd, dc, new Vector2( left, パネルの高さ * 3f ), 幅dpx: 幅 );
+            this._青い線.描画する( gd, dc, new Vector2( left, パネルの高さ * 4f ), 幅dpx: 幅 );
+            this._青い線.描画する( gd, dc, new Vector2( left + 幅, パネルの高さ * 3f ), 高さdpx: パネルの高さ );
 
             // パッド矢印（上＆下）を描画。
-            this._パッド矢印.描画する( gd, パッド矢印.種類.上_Tom1, new Vector2( left, パネルの高さ * 3f ) );
-            this._パッド矢印.描画する( gd, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
+            this._パッド矢印.描画する( gd, dc, パッド矢印.種類.上_Tom1, new Vector2( left, パネルの高さ * 3f ) );
+            this._パッド矢印.描画する( gd, dc, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
         }
 
         private パネル_フォルダ _ルートパネルフォルダ = null;

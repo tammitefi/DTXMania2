@@ -93,10 +93,9 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
-
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 using( var 水色ブラシ = new SolidColorBrush( dc, new Color4( 0xffdd8e69 ) ) )
                 using( var 黄色ブラシ = new SolidColorBrush( dc, new Color4( 0xff17fffe ) ) )

@@ -51,7 +51,7 @@ namespace DTXmatixx.ステージ.タイトル
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             App.入力管理.すべての入力デバイスをポーリングする();
 
@@ -59,9 +59,9 @@ namespace DTXmatixx.ステージ.タイトル
             {
                 case フェーズ.表示:
 
-                    this._舞台画像.進行描画する( gd );
-                    this._タイトルロゴ.描画する( gd, ( gd.設計画面サイズ.Width - this._タイトルロゴ.サイズ.Width ) / 2f, ( gd.設計画面サイズ.Height - this._タイトルロゴ.サイズ.Height ) / 2f - 100f );
-                    this._帯メッセージを描画する( gd );
+                    this._舞台画像.進行描画する( gd, dc );
+                    this._タイトルロゴ.描画する( gd, dc, ( gd.設計画面サイズ.Width - this._タイトルロゴ.サイズ.Width ) / 2f, ( gd.設計画面サイズ.Height - this._タイトルロゴ.サイズ.Height ) / 2f - 100f );
+                    this._帯メッセージを描画する( gd, dc );
 
                     if( App.入力管理.確定キーが入力された() )
                     {
@@ -76,11 +76,11 @@ namespace DTXmatixx.ステージ.タイトル
 
                 case フェーズ.フェードアウト:
 
-                    this._舞台画像.進行描画する( gd );
-                    this._タイトルロゴ.描画する( gd, ( gd.設計画面サイズ.Width - this._タイトルロゴ.サイズ.Width ) / 2f, ( gd.設計画面サイズ.Height - this._タイトルロゴ.サイズ.Height ) / 2f - 100f );
-                    this._帯メッセージを描画する( gd );
+                    this._舞台画像.進行描画する( gd, dc );
+                    this._タイトルロゴ.描画する( gd, dc, ( gd.設計画面サイズ.Width - this._タイトルロゴ.サイズ.Width ) / 2f, ( gd.設計画面サイズ.Height - this._タイトルロゴ.サイズ.Height ) / 2f - 100f );
+                    this._帯メッセージを描画する( gd, dc );
 
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
@@ -99,15 +99,15 @@ namespace DTXmatixx.ステージ.タイトル
         private Brush _帯ブラシ = null;
         private 文字列画像 _パッドを叩いてください = null;
 
-        private void _帯メッセージを描画する( グラフィックデバイス gd )
+        private void _帯メッセージを描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 領域 = new RectangleF( 0f, 800f, gd.設計画面サイズ.Width, 80f );
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
                 dc.FillRectangle( 領域, this._帯ブラシ );
             } );
 
-            this._パッドを叩いてください.描画する( gd, 720f, 810f );
+            this._パッドを叩いてください.描画する( gd, dc, 720f, 810f );
         }
     }
 }

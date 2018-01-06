@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -32,7 +33,7 @@ namespace DTXmatixx.ステージ.選曲
         {
             this._カウンタ = new LoopCounter( 0, 2300, 1 ); // 2秒ごとに300ms のループ
         }
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             if( null == this._カウンタ )
                 return;
@@ -44,12 +45,14 @@ namespace DTXmatixx.ステージ.選曲
                 // 上
                 this._ランナー画像.描画する(
                     gd,
+                    dc,
                     左位置: 1920f - 割合 * ( 1920f - 1044f ),
                     上位置: 485f - this._ランナー画像.サイズ.Height / 2f );
 
                 // 下
                 this._ランナー画像.描画する(
                     gd,
+                    dc,
                     左位置: 1920f - 割合 * ( 1920f - 1044f ),
                     上位置: 598f - this._ランナー画像.サイズ.Height / 2f );
             }

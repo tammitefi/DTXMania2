@@ -381,17 +381,20 @@ namespace DTXmatixx
 
                 gd.D3DDeviceを取得する( ( d3dDevice ) => {
 
-                    #region " D3Dレンダリングの前処理を行う。"
+                    #region " D2D, D3Dレンダリングの前処理を行う。"
                     //----------------
+                    gd.D2DDeviceContext.Transform = gd.拡大行列DPXtoPX;
+                    gd.D2DDeviceContext.PrimitiveBlend = SharpDX.Direct2D1.PrimitiveBlend.SourceOver;
+
                     // 既定のD3Dレンダーターゲットビューを黒でクリアする。
                     d3dDevice.ImmediateContext.ClearRenderTargetView( gd.D3DRenderTargetView, Color4.Black );
 
                     // 深度バッファを 1.0f でクリアする。
                     d3dDevice.ImmediateContext.ClearDepthStencilView(
-                            gd.D3DDepthStencilView,
-                            SharpDX.Direct3D11.DepthStencilClearFlags.Depth,
-                            depth: 1.0f,
-                            stencil: 0 );
+                        gd.D3DDepthStencilView,
+                        SharpDX.Direct3D11.DepthStencilClearFlags.Depth,
+                        depth: 1.0f,
+                        stencil: 0 );
                     //----------------
                     #endregion
 
@@ -399,10 +402,10 @@ namespace DTXmatixx
                     gd.Animation.進行する();
 
                     // 現在のステージを進行＆描画。
-                    App.ステージ管理.現在のステージ.進行描画する( gd );
+                    App.ステージ管理.現在のステージ.進行描画する( gd, gd.D2DDeviceContext );
 
                     // 現在のUIツリーを描画する。
-                    gd.UIFramework.描画する( gd );
+                    gd.UIFramework.描画する( gd, gd.D2DDeviceContext );
 
                     // ステージの進行描画の結果（フェーズの状態など）を受けての後処理。
                     switch( App.ステージ管理.現在のステージ )
@@ -412,12 +415,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.曲ツリー構築.曲ツリー構築ステージ.フェーズ.確定 )
                             {
-#if DEBUG_
-								// hack: テストコード: タイトルを飛ばして選曲ステージへ遷移する。
-								App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.選曲.選曲ステージ ) );
-#else
                                 App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.タイトル.タイトルステージ ) );
-#endif
                             }
                             //----------------
                             #endregion

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -25,7 +26,7 @@ namespace DTXmatixx.ステージ
         /// <summary>
         ///		ステージの通常速度での進行と描画を行う。
         /// </summary>
-        public virtual void 進行描画する( グラフィックデバイス gd )
+        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
         }
     }

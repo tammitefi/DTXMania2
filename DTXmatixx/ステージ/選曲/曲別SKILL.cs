@@ -34,7 +34,7 @@ namespace DTXmatixx.ステージ.選曲
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 描画領域 = new RectangleF( 10f, 340f, 275f, 98f );
 
@@ -67,7 +67,7 @@ namespace DTXmatixx.ステージ.選曲
 
             if( 表示可能ノードである )
             {
-                gd.D2DBatchDraw( ( dc ) => {
+                gd.D2DBatchDraw( dc, () => {
 
                     var pretrans = dc.Transform;
 
@@ -76,21 +76,24 @@ namespace DTXmatixx.ステージ.選曲
                         Matrix3x2.Scaling( 0.5f, 0.4f ) *
                         Matrix3x2.Translation( 描画領域.X, 描画領域.Y + 10f ) *
                         pretrans;
-                    this._ロゴ画像.描画する( dc, 0f, 0f );
+
+                    this._ロゴ画像.描画する( gd, dc, 0f, 0f );
 
                     // 小数部を描画する
                     dc.Transform =
                         Matrix3x2.Scaling( 0.8f, 0.8f ) *
                         Matrix3x2.Translation( 描画領域.X + 130f + 175f, 描画領域.Y + ( 描画領域.Height * 0.2f ) ) *
                         pretrans;
-                    this._数字画像.描画する( dc, 0f, 0f, _スキル値文字列.Substring( 4 ) );
+
+                    this._数字画像.描画する( gd, dc, 0f, 0f, _スキル値文字列.Substring( 4 ) );
 
                     // 整数部を描画する（'.'含む）
                     dc.Transform =
                         Matrix3x2.Scaling( 1f, 1.0f ) *
                         Matrix3x2.Translation( 描画領域.X + 130f, 描画領域.Y ) *
                         pretrans;
-                    this._数字画像.描画する( dc, 0f, 0f, _スキル値文字列.Substring( 0, 4 ) );
+
+                    this._数字画像.描画する( gd, dc, 0f, 0f, _スキル値文字列.Substring( 0, 4 ) );
 
                 } );
             }

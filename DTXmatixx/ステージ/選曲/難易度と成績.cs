@@ -42,7 +42,7 @@ namespace DTXmatixx.ステージ.選曲
         /// <param name="選択している難易度">
         ///		0:BASIC～4:ULTIMATE
         ///	</param>
-        public void 描画する( グラフィックデバイス gd, int 選択している難易度 )
+        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc, int 選択している難易度 )
         {
             #region " ノードが変更されていたら、情報を更新する。"
             //----------------
@@ -57,7 +57,7 @@ namespace DTXmatixx.ステージ.選曲
 
             bool 表示可能ノードである = ( node is MusicNode ) || ( node is SetNode );
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -80,19 +80,19 @@ namespace DTXmatixx.ステージ.選曲
                     if( 表示可能ノードである )
                     {
                         // ULTIMATE 相当
-                        this._難易度パネルを１つ描画する( dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 13f, node.難易度[ 4 ].label, node.難易度[ 4 ].level, 白ブラシ, ULTIMATE色ブラシ, 黒ブラシ );
+                        this._難易度パネルを１つ描画する( gd, dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 13f, node.難易度[ 4 ].label, node.難易度[ 4 ].level, 白ブラシ, ULTIMATE色ブラシ, 黒ブラシ );
 
                         // MASTER 相当
-                        this._難易度パネルを１つ描画する( dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 114f, node.難易度[ 3 ].label, node.難易度[ 3 ].level, 白ブラシ, MASTER色ブラシ, 黒ブラシ );
+                        this._難易度パネルを１つ描画する( gd, dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 114f, node.難易度[ 3 ].label, node.難易度[ 3 ].level, 白ブラシ, MASTER色ブラシ, 黒ブラシ );
 
                         // EXTREME 相当
-                        this._難易度パネルを１つ描画する( dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 215f, node.難易度[ 2 ].label, node.難易度[ 2 ].level, 白ブラシ, EXTREME色ブラシ, 黒ブラシ );
+                        this._難易度パネルを１つ描画する( gd, dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 215f, node.難易度[ 2 ].label, node.難易度[ 2 ].level, 白ブラシ, EXTREME色ブラシ, 黒ブラシ );
 
                         // ADVANCED 相当
-                        this._難易度パネルを１つ描画する( dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 316f, node.難易度[ 1 ].label, node.難易度[ 1 ].level, 白ブラシ, ADVANCED色ブラシ, 黒ブラシ );
+                        this._難易度パネルを１つ描画する( gd, dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 316f, node.難易度[ 1 ].label, node.難易度[ 1 ].level, 白ブラシ, ADVANCED色ブラシ, 黒ブラシ );
 
                         // BASIC 相当
-                        this._難易度パネルを１つ描画する( dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 417f, node.難易度[ 0 ].label, node.難易度[ 0 ].level, 白ブラシ, BASIC色ブラシ, 黒ブラシ );
+                        this._難易度パネルを１つ描画する( gd, dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 417f, node.難易度[ 0 ].label, node.難易度[ 0 ].level, 白ブラシ, BASIC色ブラシ, 黒ブラシ );
                     }
                 }
 
@@ -107,10 +107,10 @@ namespace DTXmatixx.ステージ.選曲
                     var 領域dpx = new RectangleF( 642f + 10f, 529f + 5f + ( 4 - 選択している難易度 ) * 101f, 338f - 20f, 100f );
                     var 太さdpx = 青い線.太さdpx;
 
-                    青い線.描画する( gd, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Top ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );      // 上辺
-                    青い線.描画する( gd, new Vector2( 領域dpx.Left, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );        // 左辺
-                    青い線.描画する( gd, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Bottom ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );       // 下辺
-                    青い線.描画する( gd, new Vector2( 領域dpx.Right, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );   // 右辺
+                    青い線.描画する( gd, dc, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Top ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );      // 上辺
+                    青い線.描画する( gd, dc, new Vector2( 領域dpx.Left, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );        // 左辺
+                    青い線.描画する( gd, dc, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Bottom ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );       // 下辺
+                    青い線.描画する( gd, dc, new Vector2( 領域dpx.Right, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );   // 右辺
                 }
             }
         }
@@ -119,9 +119,9 @@ namespace DTXmatixx.ステージ.選曲
         private Node _現在表示しているノード = null;
         private TextFormat _見出し用TextFormat = null;
 
-        private void _難易度パネルを１つ描画する( DeviceContext dc, Matrix3x2 pretrans, float 基点X, float 基点Y, string 難易度ラベル, float 難易度値, Brush 文字ブラシ, Brush 見出し背景ブラシ, Brush 数値背景ブラシ )
+        private void _難易度パネルを１つ描画する( グラフィックデバイス gd, DeviceContext1 dc, Matrix3x2 trans, float 基点X, float 基点Y, string 難易度ラベル, float 難易度値, Brush 文字ブラシ, Brush 見出し背景ブラシ, Brush 数値背景ブラシ )
         {
-            dc.Transform = pretrans;
+            dc.Transform = trans;
 
             dc.FillRectangle( new RectangleF( 基点X, 基点Y, 157f, 20f ), 見出し背景ブラシ );
             dc.FillRectangle( new RectangleF( 基点X, 基点Y + 20f, 157f, 66f ), 数値背景ブラシ );
@@ -133,19 +133,21 @@ namespace DTXmatixx.ステージ.選曲
             {
                 var 難易度値文字列 = 難易度値.ToString( "0.00" ).PadLeft( 1 ); // 整数部は２桁を保証（１桁なら十の位は空白文字）
 
-                //// 小数部を描画する
+                // 小数部を描画する
                 dc.Transform =
                     Matrix3x2.Scaling( 0.5f, 0.5f ) *
                     Matrix3x2.Translation( 基点X + 84f, 基点Y + 36f ) *
-                    pretrans;
-                this._数字画像.描画する( dc, 0f, 0f, 難易度値文字列.Substring( 2 ) );
+                    trans;
+
+                this._数字画像.描画する( gd, dc, 0f, 0f, 難易度値文字列.Substring( 2 ) );
 
                 // 整数部を描画する（'.'含む）
                 dc.Transform =
                     Matrix3x2.Scaling( 0.7f, 0.7f ) *
                     Matrix3x2.Translation( 基点X + 20f, 基点Y + 20f ) *
-                    pretrans;
-                this._数字画像.描画する( dc, 0f, 0f, 難易度値文字列.Substring( 0, 2 ) );
+                    trans;
+
+                this._数字画像.描画する( gd, dc, 0f, 0f, 難易度値文字列.Substring( 0, 2 ) );
             }
         }
     }

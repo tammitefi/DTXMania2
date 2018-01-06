@@ -30,26 +30,23 @@ namespace DTXmatixx.ステージ.設定
             base.On非活性化( gd );   //忘れないこと
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, float left, float top, bool 選択中 )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             float 拡大率Y = (float) this._パネルの高さ割合.Value;
 
             float テキストの上下マージン = 72f * ( 1f - 拡大率Y ) / 2f;
             var テキスト矩形 = new RectangleF( left + 32f, top + 12f + テキストの上下マージン, 294f, 72f * 拡大率Y );
 
-            gd.D2DBatchDraw( ( dc ) => {
-
+            gd.D2DBatchDraw( dc, () => {
                 using( var テキスト背景色 = new SolidColorBrush( dc, Color.LightGray ) )
-                {
                     dc.FillRectangle( テキスト矩形, テキスト背景色 );
-                }
-
             } );
 
             float 拡大率X = Math.Min( 1f, ( テキスト矩形.Width - 20f ) / this._パネル名画像.サイズ.Width );    // -20 は左右マージンの最低値[dpx]
 
             this._パネル名画像.描画する(
                 gd,
+                dc,
                 テキスト矩形.Left + ( テキスト矩形.Width - this._パネル名画像.サイズ.Width * 拡大率X ) / 2f,
                 テキスト矩形.Top + ( テキスト矩形.Height - this._パネル名画像.サイズ.Height * 拡大率Y ) / 2f,
                 X方向拡大率: 拡大率X,

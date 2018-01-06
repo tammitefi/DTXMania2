@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
-using SharpDX.Direct2D1.Effects;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -51,7 +51,7 @@ namespace DTXmatixx.ステージ.認証
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
@@ -64,9 +64,9 @@ namespace DTXmatixx.ステージ.認証
             switch( this.現在のフェーズ )
             {
                 case フェーズ.フェードイン:
-                    this._舞台画像.進行描画する( gd, true );
-                    this._タッチアイコン.描画する( gd, this._タッチアイコン表示行列 );
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    this._舞台画像.進行描画する( gd, dc, true );
+                    this._タッチアイコン.描画する( gd, dc, this._タッチアイコン表示行列 );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.オープン完了 )
                     {
@@ -76,10 +76,10 @@ namespace DTXmatixx.ステージ.認証
                     break;
 
                 case フェーズ.表示:
-                    this._舞台画像.進行描画する( gd, true );
-                    this._タッチアイコン.描画する( gd, this._タッチアイコン表示行列 );
+                    this._舞台画像.進行描画する( gd, dc, true );
+                    this._タッチアイコン.描画する( gd, dc, this._タッチアイコン表示行列 );
                     if( 1000 < this._表示フェーズカウンタ.現在値 )
-                        this._確認できませんでした.描画する( gd, this._確認できませんでした表示行列 );
+                        this._確認できませんでした.描画する( gd, dc, this._確認できませんでした表示行列 );
 
                     if( 2000 < this._表示フェーズカウンタ.現在値 )
                     {
@@ -89,8 +89,8 @@ namespace DTXmatixx.ステージ.認証
                     break;
 
                 case フェーズ.フェードアウト:
-                    this._舞台画像.進行描画する( gd, true );
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    this._舞台画像.進行描画する( gd, dc, true );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
@@ -100,7 +100,7 @@ namespace DTXmatixx.ステージ.認証
                     break;
 
                 case フェーズ.時間つぶし:
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     if( this._待機フェーズカウンタ.終了値に達した )
                     {

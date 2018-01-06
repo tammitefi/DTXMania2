@@ -45,7 +45,7 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
-        public void 進行描画する( DeviceContext dc )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext dc )
         {
             var 描画矩形 = new RectangleF( 122f, 313f, 240f, 30f );
 
@@ -61,10 +61,18 @@ namespace DTXmatixx.ステージ.演奏
                 this._拡大率X = ( 文字列幅dpx <= 描画矩形.Width ) ? 1.0f : ( 描画矩形.Width / 文字列幅dpx );
             }
 
-            dc.Transform =
-                Matrix3x2.Scaling( this._拡大率X, 1.0f ) *     // 拡大縮小
-                Matrix3x2.Translation( 描画矩形.X, 描画矩形.Y );    // 平行移動
-            dc.DrawTextLayout( Vector2.Zero, this._TextLayout, this._文字色 ); // 座標（描画矩形）は拡大率の影響をうけるので、このメソッドではなく、Matrix3x2.Translation() で設定するほうが楽。
+            gd.D2DBatchDraw( dc, () => {
+
+                var pretrans = dc.Transform;
+
+                dc.Transform =
+                    Matrix3x2.Scaling( this._拡大率X, 1.0f ) *          // 拡大縮小
+                    Matrix3x2.Translation( 描画矩形.X, 描画矩形.Y ) *    // 平行移動
+                    pretrans;
+
+                dc.DrawTextLayout( Vector2.Zero, this._TextLayout, this._文字色 ); // 座標（描画矩形）は拡大率の影響をうけるので、このメソッドではなく、Matrix3x2.Translation() で設定するほうが楽。
+
+            } );
 
             this._前回表示した名前 = this.名前;
         }

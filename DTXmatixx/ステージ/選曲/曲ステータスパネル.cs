@@ -48,7 +48,7 @@ namespace DTXmatixx.ステージ.選曲
             }
         }
 
-        public void 描画する( グラフィックデバイス gd )
+        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 領域dpx = new RectangleF( 320f, 532f, 239f, 505f );
 
@@ -90,14 +90,14 @@ namespace DTXmatixx.ステージ.選曲
             bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
 
             // 背景を表示。
-            this._背景画像.描画する( gd, 左位置: 領域dpx.X, 上位置: 領域dpx.Y );
+            this._背景画像.描画する( gd, dc, 左位置: 領域dpx.X, 上位置: 領域dpx.Y );
 
             // Total Notes を表示。
             if( 表示可能ノードである )
             {
                 if( null != this._ノーツ数 )
                 {
-                    gd.D2DBatchDraw( ( dc ) => {
+                    gd.D2DBatchDraw( dc, () => {
 
                         var Xオフセット = new Dictionary<表示レーン種別, float>() {
                             { 表示レーン種別.LeftCrash, +70f },

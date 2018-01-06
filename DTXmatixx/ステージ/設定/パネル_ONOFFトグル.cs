@@ -15,7 +15,6 @@ namespace DTXmatixx.ステージ.設定
     {
         public bool ONである
             => !( this.OFFである );
-
         public bool OFFである
             => ( 0 == this.現在選択されている選択肢の番号 );
 

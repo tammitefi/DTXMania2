@@ -42,7 +42,7 @@ namespace DTXmatixx.ステージ.演奏
         /// <param name="ゲージ量">
         ///		0.0で0%、1.0で100%。
         /// </param>
-        public void 進行描画する( グラフィックデバイス gd, double ゲージ量 )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, double ゲージ量 )
         {
             ゲージ量 = Math.Max( Math.Min( ゲージ量, 1f ), 0f );
 
@@ -58,11 +58,11 @@ namespace DTXmatixx.ステージ.演奏
             // 枠を描画。
             if( 0.25 > this._ゲージ量.Value )
             {
-                this._ゲージ枠DANGER.描画する( gd, 540f, 955f );
+                this._ゲージ枠DANGER.描画する( gd, dc, 540f, 955f );
             }
             else
             {
-                this._ゲージ枠通常.描画する( gd, 540f, 955f );
+                this._ゲージ枠通常.描画する( gd, dc, 540f, 955f );
             }
 
             // ゲージ量のゴールが動くたび、新しいアニメーションで追従する。
@@ -81,7 +81,7 @@ namespace DTXmatixx.ステージ.演奏
             }
 
             // ゲージを描画。
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var ゲージ領域 = MAXゲージ領域;
                 ゲージ領域.Width *= Math.Min( (float) this._ゲージ量.Value, 1.0f );

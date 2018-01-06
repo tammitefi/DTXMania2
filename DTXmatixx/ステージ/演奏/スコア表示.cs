@@ -55,7 +55,7 @@ namespace DTXmatixx.ステージ.演奏
         /// <param name="全体の中央位置">
         ///		パネル(dc)の左上を原点とする座標。
         /// </param>
-        public void 進行描画する( DeviceContext dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
         {
             // 追っかけ
             if( this._現在表示中のスコア < 現在の成績.Score )
@@ -76,26 +76,33 @@ namespace DTXmatixx.ステージ.演奏
             var 文字間隔補正 = -10f;
             var 文字の位置 = new Vector2( -( 全体のサイズ.X / 2f ), 0f );
 
-            for( int i = 0; i < 数字.Length; i++ )
-            {
-                // 前回の文字と違うなら、桁アニメーション開始。
-                if( 数字[ i ] != this._前回表示した数字[ i ] )
+            gd.D2DBatchDraw( dc, () => {
+
+                var pretrans = dc.Transform;
+
+                for( int i = 0; i < 数字.Length; i++ )
                 {
-                    this._各桁のアニメ[ i ].跳ね開始( am, 0.0 );
+                    // 前回の文字と違うなら、桁アニメーション開始。
+                    if( 数字[ i ] != this._前回表示した数字[ i ] )
+                    {
+                        this._各桁のアニメ[ i ].跳ね開始( am, 0.0 );
+                    }
+
+                    var 転送元矩形 = (RectangleF) this._スコア数字画像の矩形リスト[ 数字[ i ].ToString() ];
+
+                    dc.Transform =
+                        //Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
+                        Matrix3x2.Translation( 文字の位置.X, 文字の位置.Y + (float) ( this._各桁のアニメ[ i ].Yオフセット?.Value ?? 0.0f ) ) *
+                        //Matrix3x2.Scaling( 全体の拡大率.X, 全体の拡大率.Y, center: new Vector2( 0f, 全体のサイズ.Y / 2f ) ) *
+                        Matrix3x2.Translation( 全体の中央位置 ) *
+                        pretrans;
+
+                    dc.DrawBitmap( this._スコア数字画像.Bitmap, 1f, BitmapInterpolationMode.Linear, 転送元矩形 );
+
+                    文字の位置.X += ( 転送元矩形.Width + 文字間隔補正 ) * 1f;// 画像矩形から表示矩形への拡大率.X;
                 }
 
-                var 転送元矩形 = (RectangleF) this._スコア数字画像の矩形リスト[ 数字[ i ].ToString() ];
-
-                dc.Transform =
-                    //Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
-                    Matrix3x2.Translation( 文字の位置.X, 文字の位置.Y + (float) ( this._各桁のアニメ[ i ].Yオフセット?.Value ?? 0.0f ) ) *
-                    //Matrix3x2.Scaling( 全体の拡大率.X, 全体の拡大率.Y, center: new Vector2( 0f, 全体のサイズ.Y / 2f ) ) *
-                    Matrix3x2.Translation( 全体の中央位置 );
-
-                dc.DrawBitmap( this._スコア数字画像.Bitmap, 1f, BitmapInterpolationMode.Linear, 転送元矩形 );
-
-                文字の位置.X += ( 転送元矩形.Width + 文字間隔補正 ) * 1f;// 画像矩形から表示矩形への拡大率.X;
-            }
+            } );
 
             // 更新。
             this._前回表示したスコア = this._現在表示中のスコア;

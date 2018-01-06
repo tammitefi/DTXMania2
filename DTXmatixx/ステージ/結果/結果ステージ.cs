@@ -97,7 +97,7 @@ namespace DTXmatixx.ステージ.結果
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
@@ -105,15 +105,15 @@ namespace DTXmatixx.ステージ.結果
                 this._初めての進行描画 = false;
             }
 
-            this._背景.進行描画する( gd );
-            gd.D2DBatchDraw( ( dc ) => {
+            this._背景.進行描画する( gd, dc );
+            gd.D2DBatchDraw( dc, () => {
                 dc.FillRectangle( new RectangleF( 0f, 36f, gd.設計画面サイズ.Width, gd.設計画面サイズ.Height - 72f ), this._黒マスクブラシ );
             } );
-            this._プレビュー画像を描画する( gd );
-            this._曲名パネル.描画する( gd, 660f, 796f );
-            this._曲名を描画する( gd );
-            this._サブタイトルを描画する( gd );
-            this._演奏パラメータ結果.描画する( gd, 1317f, 716f, this._結果 );
+            this._プレビュー画像を描画する( gd, dc );
+            this._曲名パネル.描画する( gd, dc, 660f, 796f );
+            this._曲名を描画する( gd, dc );
+            this._サブタイトルを描画する( gd, dc );
+            this._演奏パラメータ結果.描画する( gd, dc, 1317f, 716f, this._結果 );
 
             App.入力管理.すべての入力デバイスをポーリングする();
 
@@ -128,7 +128,7 @@ namespace DTXmatixx.ステージ.結果
                     break;
 
                 case フェーズ.フェードアウト:
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
@@ -155,17 +155,17 @@ namespace DTXmatixx.ステージ.結果
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 668f, 194f, 0f );
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 574f, 574f, 0f );
 
-        private void _プレビュー画像を描画する( グラフィックデバイス gd )
+        private void _プレビュー画像を描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 選択曲 = App.曲ツリー.フォーカス曲ノード;
             Debug.Assert( null != 選択曲 );
 
-            var プレビュー画像 = 選択曲.ノード画像 ?? Node.既定のノード画像;
-            Debug.Assert( null != プレビュー画像 );
+            var preimage = 選択曲.ノード画像 ?? Node.既定のノード画像;
+            Debug.Assert( null != preimage );
 
             // 枠
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
                 const float 枠の太さdpx = 5f;
                 dc.FillRectangle(
                     new RectangleF(
@@ -190,9 +190,9 @@ namespace DTXmatixx.ステージ.結果
                     画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,
                     0f );
 
-            プレビュー画像.描画する( gd, 変換行列 );
+            preimage.描画する( gd, 変換行列 );
         }
-        private void _曲名を描画する( グラフィックデバイス gd )
+        private void _曲名を描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 表示位置dpx = new Vector2( 690f, 820f );
 
@@ -201,11 +201,12 @@ namespace DTXmatixx.ステージ.結果
 
             this._曲名画像.描画する(
                 gd,
+                dc,
                 表示位置dpx.X,
                 表示位置dpx.Y,
                 X方向拡大率: ( this._曲名画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._曲名画像.サイズ.Width );
         }
-        private void _サブタイトルを描画する( グラフィックデバイス gd )
+        private void _サブタイトルを描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             var 表示位置dpx = new Vector2( 690f, 820f + 60f );
 
@@ -214,6 +215,7 @@ namespace DTXmatixx.ステージ.結果
 
             this._サブタイトル画像.描画する(
                 gd,
+                dc,
                 表示位置dpx.X,
                 表示位置dpx.Y,
                 X方向拡大率: ( this._サブタイトル画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._サブタイトル画像.サイズ.Width );

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -82,10 +83,10 @@ namespace DTXmatixx.ステージ.設定
             base.On非活性化( gd );   //忘れないこと
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, float left, float top, bool 選択中 )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。
-            base.進行描画する( gd, left, top, 選択中 );
+            base.進行描画する( gd, dc, left, top, 選択中 );
 
             // 以下、項目部分の描画。
 
@@ -104,6 +105,7 @@ namespace DTXmatixx.ステージ.設定
 
             項目画像.描画する(
                 gd,
+                dc,
                 項目矩形.Left + ( 項目矩形.Width - 項目画像.サイズ.Width * 拡大率X ) / 2f,
                 項目矩形.Top + ( 項目矩形.Height - 項目画像.サイズ.Height * 拡大率Y ) / 2f,
                 X方向拡大率: 拡大率X,

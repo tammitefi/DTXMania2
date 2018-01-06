@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
-using SharpDX.DirectInput;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -54,7 +54,7 @@ namespace DTXmatixx.ステージ.認証
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
@@ -72,15 +72,15 @@ namespace DTXmatixx.ステージ.認証
                 case フェーズ.ユーザ選択:
                     #region " *** "
                     //----------------
-                    this._舞台画像.進行描画する( gd, 黒幕付き: true );
-                    this._ウィンドウ画像.描画する( gd, 描画領域.X, 描画領域.Y );
-                    this._プレイヤーを選択してください.描画する( gd, 描画領域.X + 28f, 描画領域.Y + 45f );
-                    this._ユーザリスト.進行描画する( gd );
+                    this._舞台画像.進行描画する( gd, dc, 黒幕付き: true );
+                    this._ウィンドウ画像.描画する( gd, dc, 描画領域.X, 描画領域.Y );
+                    this._プレイヤーを選択してください.描画する( gd, dc, 描画領域.X + 28f, 描画領域.Y + 45f );
+                    this._ユーザリスト.進行描画する( gd, dc );
 
                     // 以下、フェーズ別に処理分岐。
                     if( this.現在のフェーズ == フェーズ.フェードイン )
                     {
-                        App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                        App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
                         if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.オープン完了 )
                         {
                             this.現在のフェーズ = フェーズ.ユーザ選択;
@@ -113,9 +113,9 @@ namespace DTXmatixx.ステージ.認証
                 case フェーズ.フェードアウト:
                     #region " *** "
                     //----------------
-                    this._舞台画像.進行描画する( gd, true );
+                    this._舞台画像.進行描画する( gd, dc, true );
 
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
                         this.現在のフェーズ = フェーズ.ユーザ切り替え;
@@ -127,7 +127,7 @@ namespace DTXmatixx.ステージ.認証
                 case フェーズ.ユーザ切り替え:
                     #region " *** "
                     //----------------
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     // ログオフ
                     if( null != App.ユーザ管理.ログオン中のユーザ )

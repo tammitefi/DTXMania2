@@ -126,7 +126,7 @@ namespace DTXmatixx.ステージ.設定
             this._値の変更処理?.Invoke( this );
         }
 
-        public virtual void 進行描画する( グラフィックデバイス gd, float left, float top, bool 選択中 )
+        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             float 拡大率Y = (float) this._パネルの高さ割合.Value;
 
@@ -143,7 +143,7 @@ namespace DTXmatixx.ステージ.設定
                 パネル矩形.Width += 38f * 2f;
             }
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 using( var パネル背景色 = new SolidColorBrush( dc, new Color4( Color3.Black, 0.5f ) ) )
                 using( var ヘッダ背景色 = new SolidColorBrush( dc, this.ヘッダ色 ) )
@@ -160,6 +160,7 @@ namespace DTXmatixx.ステージ.設定
 
             this._パネル名画像.描画する(
                 gd,
+                dc,
                 テキスト矩形.Left + ( テキスト矩形.Width - this._パネル名画像.サイズ.Width * 拡大率X ) / 2f,
                 テキスト矩形.Top + ( テキスト矩形.Height - this._パネル名画像.サイズ.Height * 拡大率Y ) / 2f,
                 X方向拡大率: 拡大率X,

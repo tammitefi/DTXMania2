@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -28,11 +29,11 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, double 速度 )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, double 速度 )
         {
             var 表示領域 = new RectangleF( 482, 985f, 48f, 24f );
 
-            this._文字画像.描画する( gd, 表示領域.X, 表示領域.Y, 速度.ToString( "0.0" ) );
+            this._文字画像.描画する( gd, dc, 表示領域.X, 表示領域.Y, 速度.ToString( "0.0" ) );
         }
 
         private 画像フォント _文字画像 = null;

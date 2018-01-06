@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -54,7 +55,7 @@ namespace DTXmatixx.ステージ.演奏
 
             status.現在の状態 = 表示レーンステータス.状態.表示開始;  // 描画スレッドへ通知。
         }
-        public void 進行描画する( グラフィックデバイス gd )
+        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             foreach( 表示レーン種別 レーン in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -136,38 +137,31 @@ namespace DTXmatixx.ステージ.演奏
                     case 表示レーンステータス.状態.表示中:
                         #region " 表示中 "
                         //----------------
+
+                        // (1) 放射光
                         {
-                            #region " (1) 放射光 "
-                            //----------------
-                            {
-                                var 転送元矩形dpx = (RectangleF) this._放射光の矩形リスト[ レーン.ToString() ].Value;
-                                var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
+                            var 転送元矩形dpx = (RectangleF) this._放射光の矩形リスト[ レーン.ToString() ].Value;
+                            var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
 
-                                var 変換行列2D =
-                                    Matrix3x2.Scaling( (float) status.放射光の拡大率.Value, (float) status.放射光の拡大率.Value, center: 転送元矩形の中心dpx ) *
-                                    Matrix3x2.Rotation( MathUtil.DegreesToRadians( (float) status.放射光の回転角.Value ), center: 転送元矩形の中心dpx ) *
-                                    Matrix3x2.Translation( status.表示中央位置dpx.X - 転送元矩形の中心dpx.X, status.表示中央位置dpx.Y - 転送元矩形の中心dpx.Y );
+                            var 変換行列2D =
+                                Matrix3x2.Scaling( (float) status.放射光の拡大率.Value, (float) status.放射光の拡大率.Value, center: 転送元矩形の中心dpx ) *
+                                Matrix3x2.Rotation( MathUtil.DegreesToRadians( (float) status.放射光の回転角.Value ), center: 転送元矩形の中心dpx ) *
+                                Matrix3x2.Translation( status.表示中央位置dpx.X - 転送元矩形の中心dpx.X, status.表示中央位置dpx.Y - 転送元矩形の中心dpx.Y );
 
-                                const float 不透明度 = 0.3f;    // 眩しいので減光
-                                this._放射光.描画する( gd, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: 不透明度 );
-                            }
-                            //----------------
-                            #endregion
+                            const float 不透明度 = 0.3f;    // 眩しいので減光
+                            this._放射光.描画する( gd, dc, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: 不透明度 );
+                        }
 
-                            #region " (2) 光輪 "
-                            //----------------
-                            {
-                                var 転送元矩形dpx = (RectangleF) this._放射光の矩形リスト[ レーン.ToString() ].Value;
-                                var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
+                        // (2) 光輪
+                        {
+                            var 転送元矩形dpx = (RectangleF) this._放射光の矩形リスト[ レーン.ToString() ].Value;
+                            var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
 
-                                var 変換行列2D =
-                                    Matrix3x2.Scaling( (float) status.光輪の拡大率.Value, (float) status.光輪の拡大率.Value, center: 転送元矩形の中心dpx ) *
-                                    Matrix3x2.Translation( status.表示中央位置dpx.X - 転送元矩形の中心dpx.X, status.表示中央位置dpx.Y - 転送元矩形の中心dpx.Y );
+                            var 変換行列2D =
+                                Matrix3x2.Scaling( (float) status.光輪の拡大率.Value, (float) status.光輪の拡大率.Value, center: 転送元矩形の中心dpx ) *
+                                Matrix3x2.Translation( status.表示中央位置dpx.X - 転送元矩形の中心dpx.X, status.表示中央位置dpx.Y - 転送元矩形の中心dpx.Y );
 
-                                this._光輪.描画する( gd, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: (float) status.光輪の不透明度.Value );
-                            }
-                            //----------------
-                            #endregion
+                            this._光輪.描画する( gd, dc, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: (float) status.光輪の不透明度.Value );
                         }
 
                         // 全部終わったら非表示へ。

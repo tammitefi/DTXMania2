@@ -253,11 +253,11 @@ namespace DTXmatixx.アイキャッチ
             this.現在のフェーズ = フェーズ.オープン;
         }
 
-        protected override void 進行描画する( グラフィックデバイス gd, StoryboardStatus 描画しないStatus )
+        protected override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 
-            gd.D2DBatchDraw( ( dc ) => {
+            gd.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -272,9 +272,9 @@ namespace DTXmatixx.アイキャッチ
                         continue;
 
                     dc.Transform =
-                        Matrix3x2.Rotation( context.角度rad )
-                        * Matrix3x2.Translation( context.開き中心位置 + ( context.閉じ中心位置 - context.開き中心位置 ) * new Vector2( (float) context.開to閉割合.Value ) )
-                        * pretrans;
+                        Matrix3x2.Rotation( context.角度rad ) *
+                        Matrix3x2.Translation( context.開き中心位置 + ( context.閉じ中心位置 - context.開き中心位置 ) * new Vector2( (float) context.開to閉割合.Value ) ) *
+                        pretrans;
                     float w = context.矩形サイズ.Width;
                     float h = context.矩形サイズ.Height;
                     var rc = new RectangleF( -w / 2f, -h / 2f, w, h );
@@ -291,6 +291,7 @@ namespace DTXmatixx.アイキャッチ
 
                 this._ロゴ.描画する(
                     gd,
+                    dc,
                     this._ロゴ表示領域.Left,
                     this._ロゴ表示領域.Top,
                     不透明度0to1: (float) this._ロゴ不透明度.Value,

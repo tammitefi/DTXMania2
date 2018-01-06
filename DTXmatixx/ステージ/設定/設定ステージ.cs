@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SharpDX;
-using SharpDX.DirectInput;
+using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
@@ -46,7 +45,7 @@ namespace DTXmatixx.ステージ.設定
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd )
+        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
         {
             // 進行描画。
 
@@ -56,8 +55,8 @@ namespace DTXmatixx.ステージ.設定
                 this._初めての進行描画 = false;
             }
 
-            this._舞台画像.進行描画する( gd );
-            this._パネルリスト.進行描画する( gd, 613f, 0f );
+            this._舞台画像.進行描画する( gd, dc );
+            this._パネルリスト.進行描画する( gd, dc, 613f, 0f );
 
             switch( this.現在のフェーズ )
             {
@@ -71,7 +70,7 @@ namespace DTXmatixx.ステージ.設定
 
                 case フェーズ.フェードアウト:
 
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
