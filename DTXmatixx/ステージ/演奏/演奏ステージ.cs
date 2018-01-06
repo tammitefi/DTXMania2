@@ -599,7 +599,7 @@ namespace DTXmatixx.ステージ.演奏
                 case フェーズ.フェードイン:
                     {
                         this._左サイドクリアパネル.クリアする( gd );
-                        this._左サイドクリアパネル.クリアパネル.ビットマップへ描画する( gd, ( dc, bmp ) => {
+                        this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( gd, ( dc ) => {
                             this._プレイヤー名表示.進行描画する( dc );
                             this._スコア表示.進行描画する( dc, gd.Animation, new Vector2( +280f, +120f ), this.成績 );
                             this._達成率表示.描画する( dc, (float) this.成績.Achievement );
@@ -690,7 +690,7 @@ namespace DTXmatixx.ステージ.演奏
                         }
 
                         this._左サイドクリアパネル.クリアする( gd );
-                        this._左サイドクリアパネル.クリアパネル.ビットマップへ描画する( gd, ( dc, bmp ) => {
+                        this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( gd, ( dc ) => {
                             this._プレイヤー名表示.進行描画する( dc );
                             this._スコア表示.進行描画する( dc, gd.Animation, new Vector2( +280f, +120f ), this.成績 );
                             this._達成率表示.描画する( dc, (float) this.成績.Achievement );
@@ -700,7 +700,7 @@ namespace DTXmatixx.ステージ.演奏
                         this._左サイドクリアパネル.描画する( gd );
 
                         this._右サイドクリアパネル.クリアする( gd );
-                        this._右サイドクリアパネル.クリアパネル.ビットマップへ描画する( gd, ( dc, bmp ) => {
+                        this._右サイドクリアパネル.クリアパネル.テクスチャへ描画する( gd, ( dc ) => {
                             this._コンボ表示.進行描画する( dc, gd.Animation, new Vector2( +228f + 264f / 2f, +234f ), this.成績 );
                         } );
                         this._右サイドクリアパネル.描画する( gd );

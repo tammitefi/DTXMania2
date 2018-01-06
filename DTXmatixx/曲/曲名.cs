@@ -10,7 +10,7 @@ using FDK.メディア;
 
 namespace DTXmatixx.曲
 {
-    class 曲名 : ビットマップ付きテクスチャ
+    class 曲名 : 描画可能テクスチャ
     {
         /// <summary>
         ///		このメンバを set すれば、次回の進行描画時に画像が更新される。
@@ -113,7 +113,7 @@ namespace DTXmatixx.曲
                         サブタイトル文字矩形.Width,
                         サブタイトル文字矩形.Height ) )
                     {
-                        this.ビットマップへ描画する( gd, ( dc, bmp ) => {
+                        this.テクスチャへ描画する( gd, ( dc ) => {
 
                             // dc は最終的に bmp をテクスチャに描画するので、DPXとPXの拡大率を考慮する必要はない。よって、Transform は Identity に上書きする。
                             dc.Transform = Matrix3x2.Identity;

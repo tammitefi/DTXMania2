@@ -11,7 +11,7 @@ namespace DTXmatixx.ステージ.演奏
 {
     class 右サイドクリアパネル : Activity
     {
-        public ビットマップ付きテクスチャ クリアパネル
+        public 描画可能テクスチャ クリアパネル
         {
             get;
             protected set;
@@ -20,7 +20,7 @@ namespace DTXmatixx.ステージ.演奏
         public 右サイドクリアパネル()
         {
             this.子リスト.Add( this._背景 = new 画像( @"$(System)images\右サイドクリアパネル.png" ) );
-            this.子リスト.Add( this.クリアパネル = new ビットマップ付きテクスチャ( new Size2( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
+            this.子リスト.Add( this.クリアパネル = new 描画可能テクスチャ( new Size2( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
         }
 
         protected override void On活性化( グラフィックデバイス gd )
@@ -41,7 +41,7 @@ namespace DTXmatixx.ステージ.演奏
         /// </summary>
         public void クリアする( グラフィックデバイス gd )
         {
-            this.クリアパネル.ビットマップへ描画する( gd, ( dc, bmp ) => {
+            this.クリアパネル.テクスチャへ描画する( gd, ( dc ) => {
                 dc.PrimitiveBlend = PrimitiveBlend.Copy;
                 dc.DrawBitmap( this._背景.Bitmap, opacity: 1f, interpolationMode: InterpolationMode.Linear );
             } );
