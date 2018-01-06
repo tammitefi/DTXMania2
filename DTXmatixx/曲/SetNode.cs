@@ -65,7 +65,7 @@ namespace DTXmatixx.曲
                     {
                         try
                         {
-                            this.MusicNodes[ i ] = new MusicNode( Path.Combine( 基点フォルダパス.変数なしパス, block.File[ i ] ).ToVariablePath(), this );
+                            this.MusicNodes[ i ] = new MusicNode( Path.Combine( 基点フォルダパス.変数なしパス, block.File[ i ] ), this );
                             this.難易度[ i ].label = block.Label[ i ];
                             this.子ノードリスト.Add( this.MusicNodes[ i ] );
 

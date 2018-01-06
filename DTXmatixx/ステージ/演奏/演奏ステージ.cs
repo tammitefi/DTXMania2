@@ -163,7 +163,7 @@ namespace DTXmatixx.ステージ.演奏
                     foreach( var kvp in App.演奏スコア.dicWAV )
                     {
                         var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value.ファイルパス );
-                        App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path.ToVariablePath(), kvp.Value.多重再生する );
+                        App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, kvp.Value.多重再生する );
                     }
                     //----------------
                     #endregion

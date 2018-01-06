@@ -50,7 +50,7 @@ namespace DTXmatixx.設定
 
             // パスの指定がなければ、とりあえず exe のあるフォルダを検索対象にする。
             if( 0 == this.曲検索フォルダ.Count )
-                this.曲検索フォルダ.Add( @"$(Exe)".ToVariablePath() );
+                this.曲検索フォルダ.Add( @"$(Exe)" );
         }
 
         public static システム設定 復元する()
@@ -94,11 +94,11 @@ namespace DTXmatixx.設定
         {
             // Proxy から曲検索フォルダを復元。
             foreach( var path in this._曲検索フォルダProxy )
-                this.曲検索フォルダ.Add( path.ToVariablePath() );
+                this.曲検索フォルダ.Add( path );
 
             // パスの指定がなければ、とりあえず exe のあるフォルダを検索対象にする。
             if( 0 == this.曲検索フォルダ.Count )
-                this.曲検索フォルダ.Add( @"$(Exe)".ToVariablePath() );
+                this.曲検索フォルダ.Add( @"$(Exe)" );
         }
 
         /// <summary>

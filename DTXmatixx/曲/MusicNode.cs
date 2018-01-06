@@ -88,10 +88,10 @@ namespace DTXmatixx.曲
             }
 
             // 曲ファイルと同じ場所に（対応する拡張子を持った）動画ファイルがあるなら、それを背景動画として採用する。
-            this.動画ファイルパス =
+            this.動画ファイルパス = new VariablePath(
                 ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルパス.変数なしパス ) )
                   where _対応する動画の拡張子.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
-                  select ファイル名 ).FirstOrDefault()?.ToVariablePath();
+                  select ファイル名 ).FirstOrDefault() );
         }
 
 

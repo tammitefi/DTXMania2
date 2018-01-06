@@ -113,8 +113,6 @@ namespace DTXmatixx.ステージ
                 Log.ERROR( $"サウンドファイルが存在しません。[{サウンドファイルパス.変数付きパス}]" );
             }
         }
-        public void 登録する( チップ種別 chipType, int subChipId, string サウンドファイルパス )
-            => this.登録する( chipType, subChipId, サウンドファイルパス?.ToVariablePath() );
 
         public void 発声する( チップ種別 chipType, int subChipId, float 音量0to1 = 1f )
         {

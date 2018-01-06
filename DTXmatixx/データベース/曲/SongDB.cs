@@ -74,21 +74,22 @@ namespace DTXmatixx.データベース.曲
                             foreach( var song03 in song03s )
                             {
                                 var score = (SSTFormatCurrent.スコア) null;
+                                var vpath = new VariablePath( song03.Path );
 
                                 #region " スコアを読み込む "
                                 //----------------
-                                var 拡張子名 = Path.GetExtension( song03.Path );
+                                var 拡張子名 = Path.GetExtension( vpath.変数なしパス );
                                 if( ".sstf" == 拡張子名 )
                                 {
-                                    score = new SSTFormatCurrent.スコア( song03.Path );
+                                    score = new SSTFormatCurrent.スコア( vpath.変数なしパス );
                                 }
                                 else if( ".dtx" == 拡張子名 )
                                 {
-                                    score = SSTFormatCurrent.DTXReader.ReadFromFile( song03.Path );
+                                    score = SSTFormatCurrent.DTXReader.ReadFromFile( vpath.変数なしパス );
                                 }
                                 else
                                 {
-                                    throw new Exception( $"未対応のフォーマットファイルです。[{song03.Path.ToVariablePath().変数付きパス}]" );
+                                    throw new Exception( $"未対応のフォーマットファイルです。[{vpath.変数付きパス}]" );
                                 }
                                 //----------------
                                 #endregion
@@ -144,22 +145,23 @@ namespace DTXmatixx.データベース.曲
                             var song02s = base.DataContext.GetTable<Song02>();
                             foreach( var song02 in song02s )
                             {
-                                var 拡張子名 = Path.GetExtension( song02.Path );
                                 var score = (SSTFormatCurrent.スコア) null;
+                                var vpath = new VariablePath( song02.Path );
 
                                 #region " スコアを読み込む "
                                 //----------------
+                                var 拡張子名 = Path.GetExtension( vpath.変数なしパス );
                                 if( ".sstf" == 拡張子名 )
                                 {
-                                    score = new SSTFormatCurrent.スコア( song02.Path );
+                                    score = new SSTFormatCurrent.スコア( vpath.変数なしパス );
                                 }
                                 else if( ".dtx" == 拡張子名 )
                                 {
-                                    score = SSTFormatCurrent.DTXReader.ReadFromFile( song02.Path );
+                                    score = SSTFormatCurrent.DTXReader.ReadFromFile( vpath.変数なしパス );
                                 }
                                 else
                                 {
-                                    throw new Exception( $"未対応のフォーマットファイルです。[{song02.Path.ToVariablePath().変数付きパス}]" );
+                                    throw new Exception( $"未対応のフォーマットファイルです。[{vpath.変数付きパス}]" );
                                 }
                                 //----------------
                                 #endregion
@@ -170,12 +172,12 @@ namespace DTXmatixx.データベース.曲
                                     if( score.プレビュー画像.Nullでも空でもない() )
                                     {
                                         // プレビュー画像は、曲ファイルからの相対パス。
-                                        song02.PreImage = Path.Combine( Path.GetDirectoryName( song02.Path ), score.プレビュー画像 );
+                                        song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビュー画像 );
                                     }
                                     else
                                     {
                                         song02.PreImage =
-                                            ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( song02.Path ) )
+                                            ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( vpath.変数なしパス ) )
                                               where _対応するサムネイル画像名.Any( thumbファイル名 => ( Path.GetFileName( ファイル名 ).ToLower() == thumbファイル名 ) )
                                               select ファイル名 ).FirstOrDefault();
                                     }

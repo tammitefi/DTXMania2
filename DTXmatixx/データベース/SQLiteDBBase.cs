@@ -77,10 +77,6 @@ namespace DTXmatixx.データベース
                 throw new Exception( $"データベースが未知のバージョン({実DBのバージョン})です。" );
             }
         }
-        public SQLiteDBBase( string DBファイルパス, long Version )
-            : this( DBファイルパス?.ToVariablePath(), Version )
-        {
-        }
         public void Dispose()
         {
             //this.DataContext?.SubmitChanges();	--> Submit していいとは限らない。

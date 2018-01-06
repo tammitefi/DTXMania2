@@ -160,7 +160,7 @@ namespace DTXmatixx.曲
             {
                 #region " (A) このフォルダに set.def がある → その内容でSetノード（任意個）を作成する。"
                 //----------------
-                var setDef = SetDef.復元する( setDefPath.ToVariablePath() );
+                var setDef = SetDef.復元する( setDefPath );
 
                 foreach( var block in setDef.Blocks )
                 {
@@ -181,14 +181,15 @@ namespace DTXmatixx.曲
 
                 foreach( var fileInfo in fileInfos )
                 {
+                    var vpath = new VariablePath( fileInfo.FullName );
                     try
                     {
-                        var music = new MusicNode( fileInfo.FullName.ToVariablePath(), 親ノード );
+                        var music = new MusicNode( vpath, 親ノード );
                         親ノード.子ノードリスト.Add( music );
                     }
                     catch
                     {
-                        Log.ERROR( $"MusicNode の生成に失敗しました。[{fileInfo.FullName.ToVariablePath().変数付きパス}]" );
+                        Log.ERROR( $"MusicNode の生成に失敗しました。[{vpath.変数付きパス}]" );
                     }
                 }
                 //----------------
@@ -213,7 +214,7 @@ namespace DTXmatixx.曲
                     boxNode.子ノードリスト.Add( backNode );
 
                     // BOXノードを親として、サブフォルダへ再帰。
-                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName.ToVariablePath() );
+                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName );
                     //----------------
                     #endregion
                 }
@@ -221,14 +222,14 @@ namespace DTXmatixx.曲
                 {
                     #region " (B) box.def を含むフォルダの場合 → BOXノードとして扱う。 "
                     //----------------
-                    var boxNode = new BoxNode( boxDefPath.ToVariablePath(), 親ノード );
+                    var boxNode = new BoxNode( boxDefPath, 親ノード );
                     親ノード.子ノードリスト.Add( boxNode );
 
                     var backNode = new BackNode( boxNode );
                     boxNode.子ノードリスト.Add( backNode );
 
                     // BOXノードを親として、サブフォルダへ再帰。
-                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName.ToVariablePath() );
+                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName );
                     //----------------
                     #endregion
                 }
@@ -236,7 +237,7 @@ namespace DTXmatixx.曲
                 {
                     #region " (C) その他のフォルダの場合 → そのままサブフォルダへ再帰。"
                     //----------------
-                    this.曲を検索して親ノードに追加する( 親ノード, subDirInfo.FullName.ToVariablePath() );
+                    this.曲を検索して親ノードに追加する( 親ノード, subDirInfo.FullName );
                     //----------------
                     #endregion
                 }
