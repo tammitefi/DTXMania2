@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "DTXMania matixx" )]
-[assembly: AssemblyCopyright( "2017 ＦＲＯＭ／Kenji Yamazaki" )]
+[assembly: AssemblyCopyright( "2009 2018 ＦＲＯＭ／Kenji Yamazaki" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
