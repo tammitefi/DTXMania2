@@ -29,4 +29,8 @@
 
   <!-- 右下: ウィンドウの右下隅に原寸で１枚だけ描画される。-->
   <SubImage Name="RightBottom" Rectangle="32,32,16,16" />
+
+  <!-- 上下左右のマージン: クライアント領域から（画像デザイン上の）枠のふちまでの距離。-->
+  <SubImage Name="Margin" Rectangle="8,8,8,8" />
+
 </Root>

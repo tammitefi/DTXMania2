@@ -199,19 +199,19 @@
     <Compile Include="曲\曲名.cs" />
     <Compile Include="曲\曲ツリー.cs" />
     <Compile Include="曲\難易度種別.cs" />
-    <Compile Include="設定\AutoPlay種別.cs" />
+    <Compile Include="入力\設定\AutoPlay種別.cs" />
     <Compile Include="データベース\曲\SongDB.cs" />
     <Compile Include="データベース\SQLiteDBBase.cs" />
     <Compile Include="データベース\ユーザ\Record02.cs" />
     <Compile Include="データベース\ユーザ\User02.cs" />
     <Compile Include="データベース\ユーザ\UserDB.cs" />
-    <Compile Include="設定\キーバインディング.cs" />
-    <Compile Include="設定\ユーザ管理.cs" />
-    <Compile Include="設定\ユーザ設定.cs" />
-    <Compile Include="設定\システム設定.cs" />
-    <Compile Include="設定\ドラムとチップと入力の対応表.cs" />
-    <Compile Include="設定\曲DB.cs" />
-    <Compile Include="設定\表示レーンの左右.cs" />
+    <Compile Include="入力\設定\キーバインディング.cs" />
+    <Compile Include="入力\設定\ユーザ管理.cs" />
+    <Compile Include="入力\設定\ユーザ設定.cs" />
+    <Compile Include="入力\設定\システム設定.cs" />
+    <Compile Include="入力\設定\ドラムとチップと入力の対応表.cs" />
+    <Compile Include="入力\設定\曲DB.cs" />
+    <Compile Include="入力\設定\表示レーンの左右.cs" />
     <Compile Include="データベース\曲\Song03.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
