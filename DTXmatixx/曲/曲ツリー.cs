@@ -105,7 +105,7 @@ namespace DTXmatixx.曲
         public 曲ツリー()
         {
         }
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             Debug.Assert( this.活性化していない );
 
@@ -113,12 +113,12 @@ namespace DTXmatixx.曲
             if( null != this.フォーカスリスト )
             {
                 foreach( var node in this.フォーカスリスト )
-                    node.活性化する( gd );
+                    node.活性化する();
             }
 
             //this._難易度アンカ = 3;		-> 初期化せず、前回の値を継承する。
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             Debug.Assert( this.活性化している );
 
@@ -126,7 +126,7 @@ namespace DTXmatixx.曲
             if( null != this.フォーカスリスト )
             {
                 foreach( var node in this.フォーカスリスト )
-                    node.非活性化する( gd );
+                    node.非活性化する();
             }
         }
         public void Dispose()
@@ -288,7 +288,7 @@ namespace DTXmatixx.曲
         ///		<see cref="フォーカスリスト"/>もそのノードのあるリストへ変更される。
         ///		現在活性化中である場合、移動前のフォーカスリストは非活性化され、新しいフォーカスリストが活性化される。
         /// </summary>
-        public void フォーカスする( グラフィックデバイス gd, Node ノード )
+        public void フォーカスする( Node ノード )
         {
             //Debug.Assert( this.活性化している );	--> どちらの状態で呼び出してもよい。
 
@@ -320,11 +320,11 @@ namespace DTXmatixx.曲
                         if( null != 旧フォーカスリスト ) // 初回は null 。
                         {
                             foreach( var node in 旧フォーカスリスト )
-                                node.非活性化する( gd );
+                                node.非活性化する();
                         }
 
                         foreach( var node in this.フォーカスリスト )
-                            node.活性化する( gd );
+                            node.活性化する();
                     }
                 }
             }

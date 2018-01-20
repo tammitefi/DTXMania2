@@ -31,7 +31,7 @@ namespace DTXmatixx.曲
         } = null;
 
         public 曲名()
-            : base( new Size2( (int) Node.全体サイズ.Width, (int) Node.全体サイズ.Height ) )
+            : base( Node.全体サイズ )
         {
             this._fontName = "Arial";
             this._titleFontColor = Color4.White;
@@ -43,35 +43,35 @@ namespace DTXmatixx.曲
             this._textAlignment = TextAlignment.Leading;
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
-            base.On活性化( gd );  // 忘れずに。サイズメンバを確定させるために、先に呼び出す。
+            base.On活性化();  // 忘れずに。サイズメンバを確定させるために、先に呼び出す。
 
             this._前回のタイトル = null;
 
             this._textFormat = new TextFormat(
-                gd.DWriteFactory,
+                グラフィックデバイス.Instance.DWriteFactory,
                 this._fontName,
                 this._fontWeight,
                 this._fontStyle,
                 this._fontSizePt ) {
                 TextAlignment = this._textAlignment
             };
-            this._titleFontBrush = new SolidColorBrush( gd.D2DDeviceContext, this._titleFontColor );
-            this._subtitleFontBrush = new SolidColorBrush( gd.D2DDeviceContext, this._subtitleFontColor );
-            this._backBrush = new SolidColorBrush( gd.D2DDeviceContext, this._backColor );
+            this._titleFontBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, this._titleFontColor );
+            this._subtitleFontBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, this._subtitleFontColor );
+            this._backBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, this._backColor );
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             FDKUtilities.解放する( ref this._backBrush );
             FDKUtilities.解放する( ref this._subtitleFontBrush );
             FDKUtilities.解放する( ref this._titleFontBrush );
             FDKUtilities.解放する( ref this._textFormat );
 
-            base.On非活性化( gd ); // 忘れずに。
+            base.On非活性化(); // 忘れずに。
         }
 
-        public new void 描画する( グラフィックデバイス gd, Matrix ワールド行列変換, RectangleF? レイアウト矩形 = null )
+        public new void 描画する( Matrix ワールド行列変換, RectangleF? レイアウト矩形 = null )
         {
             Debug.Assert( this.活性化している );
 
@@ -91,7 +91,7 @@ namespace DTXmatixx.曲
                 this._前回のサブタイトル = this.サブタイトル;
 
                 using( var タイトルレイアウト = new TextLayout(
-                    gd.DWriteFactory,
+                    グラフィックデバイス.Instance.DWriteFactory,
                     this.タイトル,
                     this._textFormat,
                     タイトル文字矩形.Width,
@@ -105,13 +105,13 @@ namespace DTXmatixx.曲
                     サブタイトル文字矩形.Y += タイトルサイズ.Height; // サブタイトルの位置は、タイトルの縦幅分だけ下へ移動。
 
                     using( var サブタイトルレイアウト = new TextLayout(
-                        gd.DWriteFactory,
+                        グラフィックデバイス.Instance.DWriteFactory,
                         this.サブタイトル,
                         this._textFormat,
                         サブタイトル文字矩形.Width,
                         サブタイトル文字矩形.Height ) )
                     {
-                        this.テクスチャへ描画する( gd, ( dct ) => {
+                        this.テクスチャへ描画する( ( dct ) => {
 
                             // dc は最終的に bmp をテクスチャに描画するので、DPX to DPX 。
                             dct.Transform = Matrix3x2.Identity;
@@ -138,7 +138,7 @@ namespace DTXmatixx.曲
             }
 
             // テクスチャを描画する。
-            base.描画する( gd, ワールド行列変換 );
+            base.描画する( ワールド行列変換 );
         }
 
         private string _前回のタイトル = null;

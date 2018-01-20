@@ -26,7 +26,7 @@ namespace DTXmatixx.ステージ
         /// <summary>
         ///		ステージの通常速度での進行と描画を行う。
         /// </summary>
-        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public virtual void 進行描画する( DeviceContext1 dc )
         {
         }
     }

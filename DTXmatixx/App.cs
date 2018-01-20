@@ -158,7 +158,7 @@ namespace DTXmatixx
             base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
 
             // 最初のステージへ遷移する。
-            App.ステージ管理.ステージを遷移する( App.グラフィックデバイス, App.ステージ管理.最初のステージ名 );
+            App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
         }
         public new void Dispose()
         {
@@ -187,7 +187,7 @@ namespace DTXmatixx
                 App.曲ツリー.Dispose();
                 App.曲ツリー = null;
 
-                App.ステージ管理.Dispose( App.グラフィックデバイス );
+                App.ステージ管理.Dispose();
                 App.ステージ管理 = null;
 
                 App.入力管理.Dispose();
@@ -312,12 +312,10 @@ namespace DTXmatixx
         /// </summary>
         private void _活性化する()
         {
-            var gd = App.グラフィックデバイス;
-
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                App.ステージ管理.活性化する( gd );
-                App.曲ツリー.活性化する( gd );
+                App.ステージ管理.活性化する();
+                App.曲ツリー.活性化する();
             }
         }
 
@@ -326,12 +324,10 @@ namespace DTXmatixx
         /// </summary>
         private void _非活性化する()
         {
-            var gd = App.グラフィックデバイス;
-
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                App.ステージ管理.非活性化する( gd );
-                App.曲ツリー.非活性化する( gd );
+                App.ステージ管理.非活性化する();
+                App.曲ツリー.非活性化する();
             }
         }
 
@@ -371,7 +367,6 @@ namespace DTXmatixx
         /// </summary>
         private void _進行と描画を行う()
         {
-            var gd = App.グラフィックデバイス;
             bool vsync = true;
 
             lock( this._高速進行と描画の同期 )
@@ -379,19 +374,19 @@ namespace DTXmatixx
                 if( this._AppStatus != AppStatus.実行中 )  // 上記lock中に終了されている場合があればそれをはじく。
                     return;
 
-                gd.D3DDeviceを取得する( ( d3dDevice ) => {
+                グラフィックデバイス.Instance.D3DDeviceを取得する( ( d3dDevice ) => {
 
                     #region " D2D, D3Dレンダリングの前処理を行う。"
                     //----------------
-                    gd.D2DDeviceContext.Transform = gd.拡大行列DPXtoPX;
-                    gd.D2DDeviceContext.PrimitiveBlend = SharpDX.Direct2D1.PrimitiveBlend.SourceOver;
+                    グラフィックデバイス.Instance.D2DDeviceContext.Transform = グラフィックデバイス.Instance.拡大行列DPXtoPX;
+                    グラフィックデバイス.Instance.D2DDeviceContext.PrimitiveBlend = SharpDX.Direct2D1.PrimitiveBlend.SourceOver;
 
                     // 既定のD3Dレンダーターゲットビューを黒でクリアする。
-                    d3dDevice.ImmediateContext.ClearRenderTargetView( gd.D3DRenderTargetView, Color4.Black );
+                    d3dDevice.ImmediateContext.ClearRenderTargetView( グラフィックデバイス.Instance.D3DRenderTargetView, Color4.Black );
 
                     // 深度バッファを 1.0f でクリアする。
                     d3dDevice.ImmediateContext.ClearDepthStencilView(
-                        gd.D3DDepthStencilView,
+                        グラフィックデバイス.Instance.D3DDepthStencilView,
                         SharpDX.Direct3D11.DepthStencilClearFlags.Depth,
                         depth: 1.0f,
                         stencil: 0 );
@@ -399,13 +394,13 @@ namespace DTXmatixx
                     #endregion
 
                     // Windows Animation を進行。
-                    gd.Animation.進行する();
+                    グラフィックデバイス.Instance.Animation.進行する();
 
                     // 現在のステージを進行＆描画。
-                    App.ステージ管理.現在のステージ.進行描画する( gd, gd.D2DDeviceContext );
+                    App.ステージ管理.現在のステージ.進行描画する( グラフィックデバイス.Instance.D2DDeviceContext );
 
                     // 現在のUIツリーを描画する。
-                    gd.UIFramework.描画する( gd, gd.D2DDeviceContext );
+                    グラフィックデバイス.Instance.UIFramework.描画する( グラフィックデバイス.Instance.D2DDeviceContext );
 
                     // ステージの進行描画の結果（フェーズの状態など）を受けての後処理。
                     switch( App.ステージ管理.現在のステージ )
@@ -415,7 +410,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.曲ツリー構築.曲ツリー構築ステージ.フェーズ.確定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.タイトル.タイトルステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.タイトル.タイトルステージ ) );
                             }
                             //----------------
                             #endregion
@@ -426,7 +421,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.タイトル.タイトルステージ.フェーズ.キャンセル )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.終了.終了ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.終了.終了ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -434,7 +429,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.タイトル.タイトルステージ.フェーズ.確定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.認証.認証ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.認証.認証ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -445,7 +440,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.認証.認証ステージ.フェーズ.キャンセル )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.終了.終了ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.終了.終了ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -453,7 +448,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.認証.認証ステージ.フェーズ.確定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.選曲.選曲ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.選曲.選曲ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -464,7 +459,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.選曲.選曲ステージ.フェーズ.キャンセル )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.タイトル.タイトルステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.タイトル.タイトルステージ ) );
                             }
                             //----------------
                             #endregion
@@ -472,7 +467,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.選曲.選曲ステージ.フェーズ.確定_選曲 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.曲読み込み.曲読み込みステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.曲読み込み.曲読み込みステージ ) );
                             }
                             //----------------
                             #endregion
@@ -480,7 +475,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.選曲.選曲ステージ.フェーズ.確定_設定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.設定.設定ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.設定.設定ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -492,7 +487,7 @@ namespace DTXmatixx
                             if( stage.現在のフェーズ == ステージ.設定.設定ステージ.フェーズ.キャンセル ||
                                 stage.現在のフェーズ == ステージ.設定.設定ステージ.フェーズ.確定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.選曲.選曲ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.選曲.選曲ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -503,11 +498,11 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.曲読み込み.曲読み込みステージ.フェーズ.完了 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.演奏.演奏ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.演奏.演奏ステージ ) );
 
                                 // 曲読み込みステージ画面をキャプチャする（演奏ステージのクロスフェードで使う）
                                 var 演奏ステージ = App.ステージ管理.ステージリスト[ nameof( ステージ.演奏.演奏ステージ ) ] as ステージ.演奏.演奏ステージ;
-                                演奏ステージ.キャプチャ画面 = 画面キャプチャ.取得する( gd );
+                                演奏ステージ.キャプチャ画面 = 画面キャプチャ.取得する();
                             }
                             //----------------
                             #endregion
@@ -518,7 +513,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.演奏.演奏ステージ.フェーズ.キャンセル完了 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.選曲.選曲ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.選曲.選曲ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -526,7 +521,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.演奏.演奏ステージ.フェーズ.クリア )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.結果.結果ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.結果.結果ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -537,7 +532,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.結果.結果ステージ.フェーズ.確定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, nameof( ステージ.選曲.選曲ステージ ) );
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.選曲.選曲ステージ ) );
                             }
                             //----------------
                             #endregion
@@ -548,7 +543,7 @@ namespace DTXmatixx
                             //----------------
                             if( stage.現在のフェーズ == ステージ.終了.終了ステージ.フェーズ.確定 )
                             {
-                                App.ステージ管理.ステージを遷移する( gd, null );
+                                App.ステージ管理.ステージを遷移する( null );
                                 this._アプリを終了する();
                             }
                             //----------------
@@ -563,7 +558,7 @@ namespace DTXmatixx
             }
 
             // スワップチェーン表示。
-            gd.SwapChain.Present( ( vsync ) ? 1 : 0, SharpDX.DXGI.PresentFlags.None );
+            グラフィックデバイス.Instance.SwapChain.Present( ( vsync ) ? 1 : 0, SharpDX.DXGI.PresentFlags.None );
         }
 
         /// <summary>

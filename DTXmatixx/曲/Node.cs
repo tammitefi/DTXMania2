@@ -186,39 +186,39 @@ namespace DTXmatixx.曲
                 ( "", 0.00f ),
             };
 
-            //this.子リスト.Add( this._ノード画像 );	--> 派生クラスのコンストラクタで追加することができる。
-            this.子リスト.Add( this._曲名テクスチャ = new 曲名() );
+            //this.子を追加する( this._ノード画像 );	--> 派生クラスのコンストラクタで追加することができる。
+            this.子を追加する( this._曲名テクスチャ = new 曲名() );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             // 全インスタンスで共有する static メンバが未生成なら生成する。
             if( null == Node.既定のノード画像 )
             {
                 Node.既定のノード画像 = new テクスチャ( @"$(System)images\既定のプレビュー画像.png" );
-                Node.既定のノード画像.活性化する( gd );
+                Node.既定のノード画像.活性化する();
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             // 全インスタンスで共有する static メンバが生成な済みなら解放する。
             if( null != Node.既定のノード画像 )
             {
-                Node.既定のノード画像.非活性化する( gd );
+                Node.既定のノード画像.非活性化する();
                 Node.既定のノード画像 = null;
             }
         }
 
-        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, Matrix ワールド変換行列, bool キャプション表示 = true )
+        public virtual void 進行描画する( DeviceContext1 dc, Matrix ワールド変換行列, bool キャプション表示 = true )
         {
             // (1) ノード画像を描画する。
             if( null != this.ノード画像 )
             {
-                this.ノード画像.描画する( gd, ワールド変換行列 );
+                this.ノード画像.描画する( ワールド変換行列 );
             }
             else
             {
-                Node.既定のノード画像.描画する( gd, ワールド変換行列 );
+                Node.既定のノード画像.描画する( ワールド変換行列 );
             }
 
             // (2) キャプションを描画する。
@@ -227,7 +227,7 @@ namespace DTXmatixx.曲
                 ワールド変換行列 *= Matrix.Translation( 0f, 0f, 1f );    // ノード画像よりZ方向手前にほんのり移動
                 this._曲名テクスチャ.タイトル = this.タイトル;
                 this._曲名テクスチャ.サブタイトル = this.サブタイトル;
-                this._曲名テクスチャ.描画する( gd, ワールド変換行列, new RectangleF( 0f, 138f, Node.全体サイズ.Width, Node.全体サイズ.Height - 138f + 27f ) );
+                this._曲名テクスチャ.描画する( ワールド変換行列, new RectangleF( 0f, 138f, Node.全体サイズ.Width, Node.全体サイズ.Height - 138f + 27f ) );
             }
         }
 

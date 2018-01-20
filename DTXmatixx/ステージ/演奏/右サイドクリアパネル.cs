@@ -19,17 +19,17 @@ namespace DTXmatixx.ステージ.演奏
 
         public 右サイドクリアパネル()
         {
-            this.子リスト.Add( this._背景 = new 画像( @"$(System)images\右サイドクリアパネル.png" ) );
-            this.子リスト.Add( this.クリアパネル = new 描画可能テクスチャ( new Size2( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
+            this.子を追加する( this._背景 = new 画像( @"$(System)images\右サイドクリアパネル.png" ) );
+            this.子を追加する( this.クリアパネル = new 描画可能テクスチャ( new Size2F( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -39,21 +39,21 @@ namespace DTXmatixx.ステージ.演奏
         /// <summary>
         ///		クリアパネルに初期背景を上書きすることで、それまで描かれていた内容を消去する。
         /// </summary>
-        public void クリアする( グラフィックデバイス gd, DeviceContext1 dc )
+        public void クリアする()
         {
-            this.クリアパネル.テクスチャへ描画する( gd, ( dcp ) => {
+            this.クリアパネル.テクスチャへ描画する( ( dcp ) => {
                 dcp.Transform = Matrix3x2.Identity;  // 等倍描画(DPXtoDPX)
                 dcp.PrimitiveBlend = PrimitiveBlend.Copy;
                 dcp.DrawBitmap( this._背景.Bitmap, opacity: 1f, interpolationMode: InterpolationMode.Linear );
             } );
         }
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc )
         {
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
             var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -gd.設計画面サイズ.Width / 2f,
-                +gd.設計画面サイズ.Height / 2f,
+                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
+                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
                 0f );
 
             var 変換行列 =
@@ -61,7 +61,7 @@ namespace DTXmatixx.ステージ.演奏
                 Matrix.RotationY( MathUtil.DegreesToRadians( +48f ) ) *
                 Matrix.Translation( 画面左上dpx.X + 1630f, 画面左上dpx.Y - 530f, 0f );
 
-            this.クリアパネル.描画する( gd, 変換行列 );
+            this.クリアパネル.描画する( 変換行列 );
         }
 
         private 画像 _背景 = null;

@@ -16,18 +16,20 @@ namespace DTXmatixx.ステージ.選曲
     {
         public BPMパネル()
         {
-            this.子リスト.Add( this._BPMパネル = new 画像( @"$(System)images\選曲画面_BPMパネル.png" ) );
-            this.子リスト.Add( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小矩形.xml", 文字幅補正dpx: 0f ) );
+            this.子を追加する( this._BPMパネル = new 画像( @"$(System)images\選曲画面_BPMパネル.png" ) );
+            this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小矩形.xml", 文字幅補正dpx: 0f ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
+            base.On活性化();
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
+            base.On非活性化();
         }
 
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc )
         {
             var 領域 = new RectangleF( 78f, 455f, 357f, 55f );
 
@@ -59,19 +61,19 @@ namespace DTXmatixx.ステージ.選曲
 
             bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
 
-            this._BPMパネル.描画する( gd, dc, 領域.X - 5f, 領域.Y - 4f );
+            this._BPMパネル.描画する( dc, 領域.X - 5f, 領域.Y - 4f );
 
             if( 表示可能ノードである )
             {
                 if( 10.0 >= Math.Abs( this._最大BPM - this._最小BPM ) )
                 {
                     // (A) 「最小値」だけ描画。差が10以下なら同一値とみなす。
-                    this._パラメータ文字.描画する( gd, dc, 領域.X + 120f, 領域.Y, this._最小BPM.ToString( "0" ).PadLeft( 3 ) );
+                    this._パラメータ文字.描画する( dc, 領域.X + 120f, 領域.Y, this._最小BPM.ToString( "0" ).PadLeft( 3 ) );
                 }
                 else
                 {
                     // (B) 「最小～最大」を描画。
-                    this._パラメータ文字.描画する( gd, dc, 領域.X + 80f, 領域.Y, this._最小BPM.ToString( "0" ) + "~" + this._最大BPM.ToString( "0" ) );
+                    this._パラメータ文字.描画する( dc, 領域.X + 80f, 領域.Y, this._最小BPM.ToString( "0" ) + "~" + this._最大BPM.ToString( "0" ) );
                 }
             }
         }

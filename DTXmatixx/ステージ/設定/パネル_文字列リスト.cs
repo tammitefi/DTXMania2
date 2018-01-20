@@ -52,7 +52,7 @@ namespace DTXmatixx.ステージ.設定
         public override void 確定キーが入力された()
             => this.右移動キーが入力された();
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             Trace.Assert( 0 < this.選択肢リスト.Count, "リストが空です。活性化するより先に設定してください。" );
 
@@ -68,25 +68,25 @@ namespace DTXmatixx.ステージ.設定
 
                 this._選択肢画像リスト.Add( this.選択肢リスト[ i ], image );
 
-                this.子リスト.Add( image );
+                this.子を追加する( image );
             }
 
-            base.On活性化( gd );   //忘れないこと
+            base.On活性化();   //忘れないこと
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             foreach( var kvp in this._選択肢画像リスト )
-                this.子リスト.Remove( kvp.Value );
+                this.子を削除する( kvp.Value );
 
             this._選択肢画像リスト = null;
 
-            base.On非活性化( gd );   //忘れないこと
+            base.On非活性化();   //忘れないこと
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top, bool 選択中 )
+        public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。
-            base.進行描画する( gd, dc, left, top, 選択中 );
+            base.進行描画する( dc, left, top, 選択中 );
 
             // 以下、項目部分の描画。
 
@@ -101,13 +101,12 @@ namespace DTXmatixx.ステージ.設定
 
             var 項目画像 = this._選択肢画像リスト[ this.選択肢リスト[ this.現在選択されている選択肢の番号 ] ];
 
-            float 拡大率X = Math.Min( 1f, ( 項目矩形.Width - 20f ) / 項目画像.サイズ.Width );    // -20 は左右マージンの最低値[dpx]
+            float 拡大率X = Math.Min( 1f, ( 項目矩形.Width - 20f ) / 項目画像.画像サイズdpx.Width );    // -20 は左右マージンの最低値[dpx]
 
             項目画像.描画する(
-                gd,
                 dc,
-                項目矩形.Left + ( 項目矩形.Width - 項目画像.サイズ.Width * 拡大率X ) / 2f,
-                項目矩形.Top + ( 項目矩形.Height - 項目画像.サイズ.Height * 拡大率Y ) / 2f,
+                項目矩形.Left + ( 項目矩形.Width - 項目画像.画像サイズdpx.Width * 拡大率X ) / 2f,
+                項目矩形.Top + ( 項目矩形.Height - 項目画像.画像サイズdpx.Height * 拡大率Y ) / 2f,
                 X方向拡大率: 拡大率X,
                 Y方向拡大率: 拡大率Y );
         }

@@ -15,8 +15,8 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 曲名パネル()
         {
-            this.子リスト.Add( this._パネル = new 画像( @"$(System)images\演奏画面_曲名パネル.png" ) );
-            this.子リスト.Add( this._曲名画像 = new 文字列画像() {
+            this.子を追加する( this._パネル = new 画像( @"$(System)images\演奏画面_曲名パネル.png" ) );
+            this.子を追加する( this._曲名画像 = new 文字列画像() {
                 フォント名 = "HGMaruGothicMPRO",
                 フォントサイズpt = 26f,
                 フォント幅 = FontWeight.Regular,
@@ -26,7 +26,7 @@ namespace DTXmatixx.ステージ.演奏
                 前景色 = Color4.Black,
                 背景色 = Color4.White,
             } );
-            this.子リスト.Add( this._サブタイトル画像 = new 文字列画像() {
+            this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
                 フォント名 = "HGMaruGothicMPRO",
                 フォントサイズpt = 18f,
                 フォント幅 = FontWeight.Regular,
@@ -38,7 +38,7 @@ namespace DTXmatixx.ステージ.演奏
             } );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -49,19 +49,19 @@ namespace DTXmatixx.ステージ.演奏
                 this._サブタイトル画像.表示文字列 = 選択曲.サブタイトル;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc )
         {
-            this._パネル.描画する( gd, dc, 1458f, 3f );
-            this._サムネイルを描画する( gd, dc );
-            this._曲名を描画する( gd, dc );
-            this._サブタイトルを描画する( gd, dc );
+            this._パネル.描画する( dc, 1458f, 3f );
+            this._サムネイルを描画する( dc );
+            this._曲名を描画する( dc );
+            this._サブタイトルを描画する( dc );
         }
 
         private 画像 _パネル = null;
@@ -73,7 +73,7 @@ namespace DTXmatixx.ステージ.演奏
         private readonly Vector2 _曲名表示位置dpx = new Vector2( 1576f + 4f, 43f + 10f );
         private readonly Vector2 _曲名表示サイズdpx = new Vector2( 331f - 8f - 4f, 70f - 10f );
 
-        private void _サムネイルを描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _サムネイルを描画する( DeviceContext1 dc )
         {
             var 選択曲 = App.曲ツリー.フォーカス曲ノード;
             Debug.Assert( null != 選択曲 );
@@ -84,8 +84,8 @@ namespace DTXmatixx.ステージ.演奏
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
             var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -gd.設計画面サイズ.Width / 2f,
-                +gd.設計画面サイズ.Height / 2f,
+                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
+                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
                 0f );
 
             var 変換行列 =
@@ -95,29 +95,27 @@ namespace DTXmatixx.ステージ.演奏
                     画面左上dpx.Y - this._サムネイル画像表示位置dpx.Y - this._サムネイル画像表示サイズdpx.Y / 2f,
                     0f );
 
-            サムネイル画像.描画する( gd, 変換行列 );
+            サムネイル画像.描画する( 変換行列 );
         }
-        private void _曲名を描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _曲名を描画する( DeviceContext1 dc )
         {
             // 拡大率を計算して描画する。
 
             this._曲名画像.描画する(
-                gd,
                 dc,
                 this._曲名表示位置dpx.X,
                 this._曲名表示位置dpx.Y,
-                X方向拡大率: ( this._曲名画像.サイズ.Width <= this._曲名表示サイズdpx.X ) ? 1f : this._曲名表示サイズdpx.X / this._曲名画像.サイズ.Width );
+                X方向拡大率: ( this._曲名画像.画像サイズdpx.Width <= this._曲名表示サイズdpx.X ) ? 1f : this._曲名表示サイズdpx.X / this._曲名画像.画像サイズdpx.Width );
         }
-        private void _サブタイトルを描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _サブタイトルを描画する( DeviceContext1 dc )
         {
             // 拡大率を計算して描画する。
 
             this._サブタイトル画像.描画する(
-                gd,
                 dc,
                 this._曲名表示位置dpx.X,
                 this._曲名表示位置dpx.Y + 30f,
-                X方向拡大率: ( this._サブタイトル画像.サイズ.Width <= this._曲名表示サイズdpx.X ) ? 1f : this._曲名表示サイズdpx.X / this._サブタイトル画像.サイズ.Width );
+                X方向拡大率: ( this._サブタイトル画像.画像サイズdpx.Width <= this._曲名表示サイズdpx.X ) ? 1f : this._曲名表示サイズdpx.X / this._サブタイトル画像.画像サイズdpx.Width );
         }
     }
 }

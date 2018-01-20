@@ -50,25 +50,25 @@ namespace DTXmatixx.ステージ.設定
             }
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
-            base.On活性化( gd );   // 忘れないこと
+            base.On活性化();   // 忘れないこと
 
             foreach( var panel in this.子パネルリスト )
-                panel.活性化する( gd );
+                panel.活性化する();
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             foreach( var panel in this.子パネルリスト )
-                panel.非活性化する( gd );
+                panel.非活性化する();
 
-            base.On非活性化( gd );  // 忘れないこと
+            base.On非活性化();  // 忘れないこと
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top, bool 選択中 )
+        public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。
-            base.進行描画する( gd, dc, left, top, 選択中 );
+            base.進行描画する( dc, left, top, 選択中 );
 
             // 項目部分はなし。
         }

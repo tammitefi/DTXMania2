@@ -25,24 +25,24 @@ namespace DTXmatixx.ステージ.終了
 
         public 終了ステージ()
         {
-            this.子リスト.Add( this._背景画像 = new 画像( @"$(System)images\終了画面.jpg" ) );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\終了画面.jpg" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.現在のフェーズ = フェーズ.開始;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public override void 進行描画する( DeviceContext1 dc )
         {
             switch( this.現在のフェーズ )
             {
@@ -52,7 +52,7 @@ namespace DTXmatixx.ステージ.終了
                     break;
 
                 case フェーズ.表示中:
-                    this._背景画像.描画する( gd, dc );
+                    this._背景画像.描画する( dc );
 
                     if( this._カウンタ.終了値に達した )
                     {

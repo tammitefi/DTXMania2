@@ -88,29 +88,29 @@ namespace DTXmatixx.曲
 
             if( null != サムネイル画像ファイルパス )
             {
-                this.子リスト.Add( this._ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
+                this.子を追加する( this._ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
             }
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             foreach( var node in this.MusicNodes )
             {
                 if( null != node )
-                    node.活性化する( gd );
+                    node.活性化する();
             }
 
-            base.On活性化( gd );
+            base.On活性化();
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             foreach( var node in this.MusicNodes )
             {
                 if( null != node )
-                    node.非活性化する( gd );
+                    node.非活性化する();
             }
 
-            base.On非活性化( gd );
+            base.On非活性化();
         }
 
         private テクスチャ _ノード画像 = null;

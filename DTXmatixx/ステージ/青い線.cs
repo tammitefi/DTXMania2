@@ -23,7 +23,7 @@ namespace DTXmatixx.ステージ
         {
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -32,7 +32,7 @@ namespace DTXmatixx.ステージ
                 int 白色 = 0xffffff;
 
                 this._線グラ頂点集合 = new GradientStopCollection(
-                    gd.D2DDeviceContext,
+                    グラフィックデバイス.Instance.D2DDeviceContext,
                     new GradientStop[] {
                         new GradientStop() { Position = 0.00f, Color = new Color4( new Color3( 青色 ), 0f ) },		// 完全透明
 						new GradientStop() { Position = 0.35f, Color = new Color4( new Color3( 水色 ), 1f ) },
@@ -47,7 +47,7 @@ namespace DTXmatixx.ステージ
 					} );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -64,7 +64,7 @@ namespace DTXmatixx.ステージ
         /// </summary>
         /// <param name="幅dpx">横方向（左→右）の長さ。<paramref name="高さdpx"/>と同時に指定してはならない。</param>
         /// <param name="高さdpx">縦方向（上→下）の長さ。<paramref name="幅dpx"/>と同時に指定してはならない。</param>
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc, Vector2 開始位置dpx, float 幅dpx = -1f, float 高さdpx = -1f )
+        public void 描画する( DeviceContext1 dc, Vector2 開始位置dpx, float 幅dpx = -1f, float 高さdpx = -1f )
         {
             var check = ( 幅dpx * 高さdpx );
 
@@ -73,7 +73,7 @@ namespace DTXmatixx.ステージ
             if( 0f == check )
                 return; // 面積ゼロ
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 dc.PrimitiveBlend = PrimitiveBlend.Add; // 加算合成
 

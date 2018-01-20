@@ -19,27 +19,29 @@ namespace DTXmatixx.ステージ.選曲
     {
         public 曲ステータスパネル()
         {
-            this.子リスト.Add( this._背景画像 = new 画像( @"$(System)images\選曲画面_曲ステータスパネル.png" ) );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\選曲画面_曲ステータスパネル.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                var dc = グラフィックデバイス.Instance.D2DDeviceContext;
+
                 this._色 = new Dictionary<表示レーン種別, SolidColorBrush>() {
-                    { 表示レーン種別.LeftCrash, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xff7b1fff ) ) },
-                    { 表示レーン種別.HiHat, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xffffc06a ) ) },
-                    { 表示レーン種別.Foot, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xffed4bff ) ) },
-                    { 表示レーン種別.Snare, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xff16fefc ) ) },
-                    { 表示レーン種別.Tom1, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xff00ff02 ) ) },
-                    { 表示レーン種別.Bass, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xffff819b ) ) },
-                    { 表示レーン種別.Tom2, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xff0000ff  ) ) },
-                    { 表示レーン種別.Tom3, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xff19a9ff ) ) },
-                    { 表示レーン種別.RightCrash, new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xffffb55e ) ) },
+                    { 表示レーン種別.LeftCrash, new SolidColorBrush( dc, new Color4( 0xff7b1fff ) ) },
+                    { 表示レーン種別.HiHat, new SolidColorBrush( dc, new Color4( 0xffffc06a ) ) },
+                    { 表示レーン種別.Foot, new SolidColorBrush( dc, new Color4( 0xffed4bff ) ) },
+                    { 表示レーン種別.Snare, new SolidColorBrush( dc, new Color4( 0xff16fefc ) ) },
+                    { 表示レーン種別.Tom1, new SolidColorBrush( dc, new Color4( 0xff00ff02 ) ) },
+                    { 表示レーン種別.Bass, new SolidColorBrush( dc, new Color4( 0xffff819b ) ) },
+                    { 表示レーン種別.Tom2, new SolidColorBrush( dc, new Color4( 0xff0000ff  ) ) },
+                    { 表示レーン種別.Tom3, new SolidColorBrush( dc, new Color4( 0xff19a9ff ) ) },
+                    { 表示レーン種別.RightCrash, new SolidColorBrush( dc, new Color4( 0xffffb55e ) ) },
                 };
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -48,7 +50,7 @@ namespace DTXmatixx.ステージ.選曲
             }
         }
 
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc )
         {
             var 領域dpx = new RectangleF( 320f, 532f, 239f, 505f );
 
@@ -90,14 +92,14 @@ namespace DTXmatixx.ステージ.選曲
             bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
 
             // 背景を表示。
-            this._背景画像.描画する( gd, dc, 左位置: 領域dpx.X, 上位置: 領域dpx.Y );
+            this._背景画像.描画する( dc, 左位置: 領域dpx.X, 上位置: 領域dpx.Y );
 
             // Total Notes を表示。
             if( 表示可能ノードである )
             {
                 if( null != this._ノーツ数 )
                 {
-                    gd.D2DBatchDraw( dc, () => {
+                    グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                         var Xオフセット = new Dictionary<表示レーン種別, float>() {
                             { 表示レーン種別.LeftCrash, +70f },

@@ -14,10 +14,7 @@ namespace DTXmatixx.ステージ
     class 舞台画像 : Activity
     {
         public Size2F サイズ
-        {
-            get
-                => this._背景画像.サイズ;
-        }
+            => this._背景画像.サイズ;
         public bool ぼかしと縮小を適用中
         {
             get;
@@ -26,13 +23,15 @@ namespace DTXmatixx.ステージ
 
         public 舞台画像( string 背景画像ファイル名 = null, string 背景黒幕付き画像ファイル名 = null )
         {
-            this.子リスト.Add( this._背景画像 = new 画像( 背景画像ファイル名 ?? @"$(System)images\舞台.jpg" ) );
-            this.子リスト.Add( this._背景黒幕付き画像 = new 画像( 背景黒幕付き画像ファイル名 ?? @"$(System)images\舞台黒幕付き.jpg" ) );
+            this.子を追加する( this._背景画像 = new 画像( 背景画像ファイル名 ?? @"$(System)images\舞台.jpg" ) );
+            this.子を追加する( this._背景黒幕付き画像 = new 画像( 背景黒幕付き画像ファイル名 ?? @"$(System)images\舞台黒幕付き.jpg" ) );
         }
 
-        public void ぼかしと縮小を適用する( グラフィックデバイス gd, double 完了までの最大時間sec = 1.0 )
+        public void ぼかしと縮小を適用する( double 完了までの最大時間sec = 1.0 )
         {
             Debug.Assert( this.活性化している );
+
+            var animation = グラフィックデバイス.Instance.Animation;
 
             if( !( this.ぼかしと縮小を適用中 ) )
             {
@@ -42,25 +41,27 @@ namespace DTXmatixx.ステージ
                     this._ストーリーボード?.Dispose();
                     this._ストーリーボード = null;
                     this._ぼかしと縮小割合?.Dispose();
-                    this._ぼかしと縮小割合 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
+                    this._ぼかしと縮小割合 = new Variable( animation.Manager, initialValue: 1.0 );
                 }
                 else
                 {
-                    using( var 割合遷移 = gd.Animation.TrasitionLibrary.SmoothStop( 完了までの最大時間sec, finalValue: 1.0 ) )
+                    using( var 割合遷移 = animation.TrasitionLibrary.SmoothStop( 完了までの最大時間sec, finalValue: 1.0 ) )
                     {
                         this._ストーリーボード?.Abandon();
                         this._ストーリーボード?.Dispose();
-                        this._ストーリーボード = new Storyboard( gd.Animation.Manager );
+                        this._ストーリーボード = new Storyboard( animation.Manager );
                         this._ストーリーボード.AddTransition( this._ぼかしと縮小割合, 割合遷移 );
-                        this._ストーリーボード.Schedule( gd.Animation.Timer.Time ); // 今すぐ開始
+                        this._ストーリーボード.Schedule( animation.Timer.Time ); // 今すぐ開始
                     }
                 }
                 this.ぼかしと縮小を適用中 = true;
             }
         }
-        public void ぼかしと縮小を解除する( グラフィックデバイス gd, double 完了までの最大時間sec = 1.0 )
+        public void ぼかしと縮小を解除する( double 完了までの最大時間sec = 1.0 )
         {
             Debug.Assert( this.活性化している );
+
+            var animation = グラフィックデバイス.Instance.Animation;
 
             if( this.ぼかしと縮小を適用中 )
             {
@@ -70,46 +71,48 @@ namespace DTXmatixx.ステージ
                     this._ストーリーボード?.Dispose();
                     this._ストーリーボード = null;
                     this._ぼかしと縮小割合?.Dispose();
-                    this._ぼかしと縮小割合 = new Variable( gd.Animation.Manager, initialValue: 0.0 );
+                    this._ぼかしと縮小割合 = new Variable( animation.Manager, initialValue: 0.0 );
                 }
                 else
                 {
-                    using( var 割合遷移 = gd.Animation.TrasitionLibrary.SmoothStop( 完了までの最大時間sec, finalValue: 0.0 ) )
+                    using( var 割合遷移 = animation.TrasitionLibrary.SmoothStop( 完了までの最大時間sec, finalValue: 0.0 ) )
                     {
                         this._ストーリーボード?.Abandon();
                         this._ストーリーボード?.Dispose();
-                        this._ストーリーボード = new Storyboard( gd.Animation.Manager );
+                        this._ストーリーボード = new Storyboard( animation.Manager );
                         this._ストーリーボード.AddTransition( this._ぼかしと縮小割合, 割合遷移 );
-                        this._ストーリーボード.Schedule( gd.Animation.Timer.Time );    // 今すぐ開始
+                        this._ストーリーボード.Schedule( animation.Timer.Time );    // 今すぐ開始
                     }
                 }
                 this.ぼかしと縮小を適用中 = false;
             }
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
-            this._ガウスぼかしエフェクト = new GaussianBlur( gd.D2DDeviceContext );
-            this._ガウスぼかしエフェクト黒幕付き用 = new GaussianBlur( gd.D2DDeviceContext );
+            var dc = グラフィックデバイス.Instance.D2DDeviceContext;
 
-            this._拡大エフェクト = new Scale( gd.D2DDeviceContext ) {
-                CenterPoint = new Vector2( gd.設計画面サイズ.Width / 2.0f, gd.設計画面サイズ.Height / 2.0f ),
+            this._ガウスぼかしエフェクト = new GaussianBlur( dc );
+            this._ガウスぼかしエフェクト黒幕付き用 = new GaussianBlur( dc );
+
+            this._拡大エフェクト = new Scale( dc ) {
+                CenterPoint = new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0f, グラフィックデバイス.Instance.設計画面サイズ.Height / 2.0f ),
             };
-            this._拡大エフェクト黒幕付き用 = new Scale( gd.D2DDeviceContext ) {
-                CenterPoint = new Vector2( gd.設計画面サイズ.Width / 2.0f, gd.設計画面サイズ.Height / 2.0f ),
+            this._拡大エフェクト黒幕付き用 = new Scale( dc ) {
+                CenterPoint = new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0f, グラフィックデバイス.Instance.設計画面サイズ.Height / 2.0f ),
             };
 
-            this._切り取りエフェクト = new Crop( gd.D2DDeviceContext );
-            this._切り取りエフェクト黒幕付き用 = new Crop( gd.D2DDeviceContext );
+            this._切り取りエフェクト = new Crop( dc );
+            this._切り取りエフェクト黒幕付き用 = new Crop( dc );
 
-            this._ぼかしと縮小割合 = new Variable( gd.Animation.Manager, initialValue: 0.0 );
+            this._ぼかしと縮小割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 0.0 );
             this.ぼかしと縮小を適用中 = false;
 
             this._ストーリーボード = null;
 
             this._初めての進行描画 = true;
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             this._ストーリーボード?.Abandon();
 
@@ -123,7 +126,7 @@ namespace DTXmatixx.ステージ
             FDKUtilities.解放する( ref this._ガウスぼかしエフェクト );
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, bool 黒幕付き = false, Vector4? 表示領域 = null, LayerParameters1? layerParameters1 = null )
+        public void 進行描画する( DeviceContext1 dc, bool 黒幕付き = false, Vector4? 表示領域 = null, LayerParameters1? layerParameters1 = null )
         {
             #region " 初めての進行描画 "
             //----------------
@@ -155,7 +158,7 @@ namespace DTXmatixx.ステージ
                 this._ガウスぼかしエフェクト黒幕付き用.StandardDeviation = (float) ( 割合 * 10.0 );       // 0～10
                 this._切り取りエフェクト黒幕付き用.Rectangle = ( null != 表示領域 ) ? ( (Vector4) 表示領域 ) : new Vector4( 0f, 0f, this._背景黒幕付き画像.サイズ.Width, this._背景黒幕付き画像.サイズ.Height );
 
-                gd.D2DBatchDraw( dc, () => {
+                グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                     if( null == layerParameters1 )
                     {
@@ -179,7 +182,7 @@ namespace DTXmatixx.ステージ
                 this._ガウスぼかしエフェクト.StandardDeviation = (float) ( 割合 * 10.0 );       // 0～10
                 this._切り取りエフェクト.Rectangle = ( null != 表示領域 ) ? ( (Vector4) 表示領域 ) : new Vector4( 0f, 0f, this._背景画像.サイズ.Width, this._背景画像.サイズ.Height );
 
-                gd.D2DBatchDraw( dc, () => {
+                グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                     if( null == layerParameters1 )
                     {

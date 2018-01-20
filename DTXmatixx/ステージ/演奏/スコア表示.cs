@@ -19,10 +19,10 @@ namespace DTXmatixx.ステージ.演奏
     {
         public スコア表示()
         {
-            this.子リスト.Add( this._スコア数字画像 = new 画像( @"$(System)images\スコア数字.png" ) );
+            this.子を追加する( this._スコア数字画像 = new 画像( @"$(System)images\スコア数字.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -42,7 +42,7 @@ namespace DTXmatixx.ステージ.演奏
                     this._判定toヒット数.Add( judge, 0 );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -55,7 +55,7 @@ namespace DTXmatixx.ステージ.演奏
         /// <param name="全体の中央位置">
         ///		パネル(dc)の左上を原点とする座標。
         /// </param>
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
+        public void 進行描画する( DeviceContext1 dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
         {
             // 追っかけ
             if( this._現在表示中のスコア < 現在の成績.Score )
@@ -76,7 +76,7 @@ namespace DTXmatixx.ステージ.演奏
             var 文字間隔補正 = -10f;
             var 文字の位置 = new Vector2( -( 全体のサイズ.X / 2f ), 0f );
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 

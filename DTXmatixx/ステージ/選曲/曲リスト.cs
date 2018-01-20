@@ -25,7 +25,7 @@ namespace DTXmatixx.ステージ.選曲
         {
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -39,7 +39,7 @@ namespace DTXmatixx.ステージ.選曲
                         // (A) 未選択なら、ルートノードの先頭ノードをフォーカスする。
                         if( 0 < tree.ルートノード.子ノードリスト.Count )
                         {
-                            tree.フォーカスする( gd, tree.ルートノード.子ノードリスト[ 0 ] );
+                            tree.フォーカスする( tree.ルートノード.子ノードリスト[ 0 ] );
                         }
                         else
                         {
@@ -65,16 +65,16 @@ namespace DTXmatixx.ステージ.選曲
                 this._初めての進行描画 = true;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 foreach( var kvp in this._ノードto曲名画像 )
-                    kvp.Value.非活性化する( gd );
+                    kvp.Value.非活性化する();
                 this._ノードto曲名画像.Clear();
 
                 foreach( var kvp in this._ノードtoサブタイトル画像 )
-                    kvp.Value.非活性化する( gd );
+                    kvp.Value.非活性化する();
                 this._ノードtoサブタイトル画像.Clear();
 
                 this._選択ノードの表示オフセットのストーリーボード?.Abandon();
@@ -83,14 +83,14 @@ namespace DTXmatixx.ステージ.選曲
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             // 進行
 
             if( this._初めての進行描画 )
             {
                 this._スクロール用カウンタ = new 定間隔進行();     // 生成と同時にカウント開始。
-                this._選択ノードのオフセットアニメをリセットする( gd.Animation );
+                this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
                 this._初めての進行描画 = false;
             }
 
@@ -164,34 +164,34 @@ namespace DTXmatixx.ステージ.選曲
             // 10行描画。
             for( int i = 0; i < 10; i++ )
             {
-                this._ノードを描画する( gd, dc, i, 描画するノード );
+                this._ノードを描画する( dc, i, 描画するノード );
                 描画するノード = 描画するノード.次のノード;
             }
         }
 
-        public void 前のノードを選択する( グラフィックデバイス gd )
+        public void 前のノードを選択する()
         {
             this._カーソル位置--;     // 下限なし
             App.曲ツリー.前のノードをフォーカスする();
-            this._選択ノードのオフセットアニメをリセットする( gd.Animation );
+            this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
         }
-        public void 次のノードを選択する( グラフィックデバイス gd )
+        public void 次のノードを選択する()
         {
             this._カーソル位置++;     // 上限なし
             App.曲ツリー.次のノードをフォーカスする();
-            this._選択ノードのオフセットアニメをリセットする( gd.Animation );
+            this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
         }
-        public void BOXに入る( グラフィックデバイス gd )
+        public void BOXに入る()
         {
             this._カーソル位置 = 4;
             this._曲リスト全体のY軸移動オフセット = 0;
-            App.曲ツリー.フォーカスする( gd, App.曲ツリー.フォーカスノード.子ノードリスト[ 0 ] );
+            App.曲ツリー.フォーカスする( App.曲ツリー.フォーカスノード.子ノードリスト[ 0 ] );
         }
-        public void BOXから出る( グラフィックデバイス gd )
+        public void BOXから出る()
         {
             this._カーソル位置 = 4;
             this._曲リスト全体のY軸移動オフセット = 0;
-            App.曲ツリー.フォーカスする( gd, App.曲ツリー.フォーカスノード.親ノード );
+            App.曲ツリー.フォーカスする( App.曲ツリー.フォーカスノード.親ノード );
         }
         public void 難易度アンカをひとつ増やす()
         {
@@ -203,7 +203,7 @@ namespace DTXmatixx.ステージ.選曲
         ///		「静止時の」可視範囲は 1～8。
         ///		4 がフォーカスノード。
         ///	</param>
-        private void _ノードを描画する( グラフィックデバイス gd, DeviceContext1 dc, int 行番号, Node ノード )
+        private void _ノードを描画する( DeviceContext1 dc, int 行番号, Node ノード )
         {
             Debug.Assert( 0 <= 行番号 && 9 >= 行番号 );
             Debug.Assert( null != ノード );
@@ -218,8 +218,8 @@ namespace DTXmatixx.ステージ.選曲
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
             var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -gd.設計画面サイズ.Width / 2f,
-                +gd.設計画面サイズ.Height / 2f,
+                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
+                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
                 0f );
 
             var 実数行番号 = 行番号 + ( this._曲リスト全体のY軸移動オフセット / 100f );
@@ -231,7 +231,7 @@ namespace DTXmatixx.ステージ.選曲
 
             #region " 背景 "
             //----------------
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 if( ノード is BoxNode )
                 {
@@ -239,7 +239,7 @@ namespace DTXmatixx.ステージ.選曲
                     //----------------
                     using( var brush = new SolidColorBrush( dc, new Color4( 0xffa3647c ) ) )
                     {
-                        using( var pathGeometry = new PathGeometry( gd.D2DFactory ) )
+                        using( var pathGeometry = new PathGeometry( グラフィックデバイス.Instance.D2DFactory ) )
                         {
                             using( var sink = pathGeometry.Open() )
                             {
@@ -248,8 +248,8 @@ namespace DTXmatixx.ステージ.選曲
                                 var points = new SharpDX.Mathematics.Interop.RawVector2[] {
                                         new Vector2( ノード左上dpx.X + 150f, ノード左上dpx.Y + 8f ),	// 2
 										new Vector2( ノード左上dpx.X + 170f, ノード左上dpx.Y + 18f ),	// 3
-										new Vector2( gd.設計画面サイズ.Width, ノード左上dpx.Y + 18f ),	// 4
-										new Vector2( gd.設計画面サイズ.Width, ノード左上dpx.Y + _ノードの高さdpx ),	// 5
+										new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width, ノード左上dpx.Y + 18f ),	// 4
+										new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width, ノード左上dpx.Y + _ノードの高さdpx ),	// 5
 										new Vector2( ノード左上dpx.X, ノード左上dpx.Y + _ノードの高さdpx ),	// 6
 										new Vector2( ノード左上dpx.X, ノード左上dpx.Y + 8f ),	// 1
 									};
@@ -270,7 +270,7 @@ namespace DTXmatixx.ステージ.選曲
                     //----------------
                     using( var brush = new SolidColorBrush( dc, Color4.Black ) )
                     {
-                        using( var pathGeometry = new PathGeometry( gd.D2DFactory ) )
+                        using( var pathGeometry = new PathGeometry( グラフィックデバイス.Instance.D2DFactory ) )
                         {
                             using( var sink = pathGeometry.Open() )
                             {
@@ -279,8 +279,8 @@ namespace DTXmatixx.ステージ.選曲
                                 var points = new SharpDX.Mathematics.Interop.RawVector2[] {
                                         new Vector2( ノード左上dpx.X + 150f, ノード左上dpx.Y + 8f ),	// 2
 										new Vector2( ノード左上dpx.X + 170f, ノード左上dpx.Y + 18f ),	// 3
-										new Vector2( gd.設計画面サイズ.Width, ノード左上dpx.Y + 18f ),	// 4
-										new Vector2( gd.設計画面サイズ.Width, ノード左上dpx.Y + _ノードの高さdpx ),	// 5
+										new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width, ノード左上dpx.Y + 18f ),	// 4
+										new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width, ノード左上dpx.Y + _ノードの高さdpx ),	// 5
 										new Vector2( ノード左上dpx.X, ノード左上dpx.Y + _ノードの高さdpx ),	// 6
 										new Vector2( ノード左上dpx.X, ノード左上dpx.Y + 8f ),	// 1
 									};
@@ -300,7 +300,7 @@ namespace DTXmatixx.ステージ.選曲
                     #region " 既定の背景（半透明の黒）"
                     //----------------
                     using( var brush = new SolidColorBrush( dc, new Color4( 0f, 0f, 0f, 0.25f ) ) )
-                        dc.FillRectangle( new RectangleF( ノード左上dpx.X, ノード左上dpx.Y, gd.設計画面サイズ.Width - ノード左上dpx.X, _ノードの高さdpx ), brush );
+                        dc.FillRectangle( new RectangleF( ノード左上dpx.X, ノード左上dpx.Y, グラフィックデバイス.Instance.設計画面サイズ.Width - ノード左上dpx.X, _ノードの高さdpx ), brush );
                     //----------------
                     #endregion
                 }
@@ -326,7 +326,7 @@ namespace DTXmatixx.ステージ.選曲
                     Matrix.Scaling( this._サムネイル表示サイズdpx * 0.9f ) *  // ちょっと小さく
                     Matrix.Translation( サムネイル表示中央dpx - 4f );            // ちょっと下へ
 
-                ノード.進行描画する( gd, dc, 変換行列, キャプション表示: false );
+                ノード.進行描画する( dc, 変換行列, キャプション表示: false );
                 //----------------
                 #endregion
             }
@@ -349,7 +349,7 @@ namespace DTXmatixx.ステージ.選曲
                     Matrix.Scaling( this._サムネイル表示サイズdpx ) *
                     Matrix.Translation( サムネイル表示中央dpx );
 
-                ノード.進行描画する( gd, dc, 変換行列, キャプション表示: false );
+                ノード.進行描画する( dc, 変換行列, キャプション表示: false );
                 //----------------
                 #endregion
             }
@@ -375,7 +375,7 @@ namespace DTXmatixx.ステージ.選曲
                         前景色 = Color4.Black,
                         背景色 = Color4.White,
                     };
-                    曲名画像.活性化する( gd );
+                    曲名画像.活性化する();
 
                     this._ノードto曲名画像.Add( ノード, 曲名画像 );
                 }
@@ -385,13 +385,12 @@ namespace DTXmatixx.ステージ.選曲
                 }
 
                 // 拡大率を計算して描画する。
-                float 最大幅dpx = gd.設計画面サイズ.Width - ノード左上dpx.X - 170f;
+                float 最大幅dpx = グラフィックデバイス.Instance.設計画面サイズ.Width - ノード左上dpx.X - 170f;
                 曲名画像.描画する(
-                    gd,
                     dc,
                     ノード左上dpx.X + 170f,
                     ノード左上dpx.Y + 30f,
-                    X方向拡大率: ( 曲名画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / 曲名画像.サイズ.Width );
+                    X方向拡大率: ( 曲名画像.画像サイズdpx.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / 曲名画像.画像サイズdpx.Width );
             }
             //----------------
             #endregion
@@ -423,7 +422,7 @@ namespace DTXmatixx.ステージ.選曲
                             前景色 = Color4.Black,
                             背景色 = Color4.White,
                         };
-                        サブタイトル画像.活性化する( gd );
+                        サブタイトル画像.活性化する();
 
                         this._ノードtoサブタイトル画像.Add( ノード, サブタイトル画像 );
                     }
@@ -441,14 +440,13 @@ namespace DTXmatixx.ステージ.選曲
                 // 拡大率を計算して描画する。
                 if( null != サブタイトル画像 )
                 {
-                    float 最大幅dpx = gd.設計画面サイズ.Width - ノード左上dpx.X - 170f;
+                    float 最大幅dpx = グラフィックデバイス.Instance.設計画面サイズ.Width - ノード左上dpx.X - 170f;
 
                     サブタイトル画像.描画する(
-                        gd,
                         dc,
                         ノード左上dpx.X + 190f,
                         ノード左上dpx.Y + 80f,
-                        X方向拡大率: ( サブタイトル画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / サブタイトル画像.サイズ.Width );
+                        X方向拡大率: ( サブタイトル画像.画像サイズdpx.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / サブタイトル画像.画像サイズdpx.Width );
                 }
             }
             //----------------

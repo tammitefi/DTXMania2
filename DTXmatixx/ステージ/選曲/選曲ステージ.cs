@@ -33,16 +33,16 @@ namespace DTXmatixx.ステージ.選曲
 
         public 選曲ステージ()
         {
-            this.子リスト.Add( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
-            this.子リスト.Add( this._曲リスト = new 曲リスト() );
-            this.子リスト.Add( this._難易度と成績 = new 難易度と成績() );
-            this.子リスト.Add( this._曲ステータスパネル = new 曲ステータスパネル() );
-            this.子リスト.Add( this._ステージタイマー = new 画像( @"$(System)images\ステージタイマー.png" ) );
-            this.子リスト.Add( this._青い線 = new 青い線() );
-            this.子リスト.Add( this._選択曲枠ランナー = new 選択曲枠ランナー() );
-            this.子リスト.Add( this._BPMパネル = new BPMパネル() );
-            this.子リスト.Add( this._曲別SKILL = new 曲別SKILL() );
-            this.子リスト.Add( this._SongNotFound = new 文字列画像() {
+            this.子を追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
+            this.子を追加する( this._曲リスト = new 曲リスト() );
+            this.子を追加する( this._難易度と成績 = new 難易度と成績() );
+            this.子を追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
+            this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\ステージタイマー.png" ) );
+            this.子を追加する( this._青い線 = new 青い線() );
+            this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
+            this.子を追加する( this._BPMパネル = new BPMパネル() );
+            this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
+            this.子を追加する( this._SongNotFound = new 文字列画像() {
                 表示文字列 = "Song not found...",
             } );
 
@@ -50,14 +50,16 @@ namespace DTXmatixx.ステージ.選曲
             this._難易度と成績.青い線を取得する = () => this._青い線;
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._白 = new SolidColorBrush( gd.D2DDeviceContext, Color4.White );
-                this._黒 = new SolidColorBrush( gd.D2DDeviceContext, Color4.Black );
-                this._黒透過 = new SolidColorBrush( gd.D2DDeviceContext, new Color4( Color3.Black, 0.5f ) );
-                this._灰透過 = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0x80535353 ) );
+                var dc = グラフィックデバイス.Instance.D2DDeviceContext;
+
+                this._白 = new SolidColorBrush( dc, Color4.White );
+                this._黒 = new SolidColorBrush( dc, Color4.Black );
+                this._黒透過 = new SolidColorBrush( dc, new Color4( Color3.Black, 0.5f ) );
+                this._灰透過 = new SolidColorBrush( dc, new Color4( 0x80535353 ) );
 
                 this._上に伸びる導線の長さdpx = null;
                 this._左に伸びる導線の長さdpx = null;
@@ -68,7 +70,7 @@ namespace DTXmatixx.ステージ.選曲
                 this._初めての進行描画 = true;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -83,12 +85,12 @@ namespace DTXmatixx.ステージ.選曲
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
-                App.ステージ管理.現在のアイキャッチ.オープンする( gd );
-                this._導線アニメをリセットする( gd );
+                App.ステージ管理.現在のアイキャッチ.オープンする();
+                this._導線アニメをリセットする();
                 this._初めての進行描画 = false;
             }
 
@@ -96,25 +98,25 @@ namespace DTXmatixx.ステージ.選曲
 
             if( null != App.曲ツリー.フォーカスノード )
             {
-                this._舞台画像.進行描画する( gd, dc );
-                this._曲リスト.進行描画する( gd, dc );
-                this._その他パネルを描画する( gd, dc );
-                this._難易度と成績.描画する( gd, dc, App.曲ツリー.フォーカス難易度 );
-                this._曲ステータスパネル.描画する( gd, dc );
-                this._プレビュー画像を描画する( gd, dc, App.曲ツリー.フォーカスノード );
-                this._BPMパネル.描画する( gd, dc );
-                this._曲別SKILL.進行描画する( gd, dc );
-                this._選択曲を囲む枠を描画する( gd, dc );
-                this._選択曲枠ランナー.進行描画する( gd, dc );
-                this._導線を描画する( gd, dc );
-                this._ステージタイマー.描画する( gd, dc, 1689f, 37f );
+                this._舞台画像.進行描画する( dc );
+                this._曲リスト.進行描画する( dc );
+                this._その他パネルを描画する( dc );
+                this._難易度と成績.描画する( dc, App.曲ツリー.フォーカス難易度 );
+                this._曲ステータスパネル.描画する( dc );
+                this._プレビュー画像を描画する( dc, App.曲ツリー.フォーカスノード );
+                this._BPMパネル.描画する( dc );
+                this._曲別SKILL.進行描画する( dc );
+                this._選択曲を囲む枠を描画する( dc );
+                this._選択曲枠ランナー.進行描画する( dc );
+                this._導線を描画する( dc );
+                this._ステージタイマー.描画する( dc, 1689f, 37f );
             }
             else
             {
                 // 曲が１つもない
-                this._舞台画像.進行描画する( gd, dc );
-                this._ステージタイマー.描画する( gd, dc, 1689f, 37f );
-                this._SongNotFound.描画する( gd, dc, 1150f, 400f );
+                this._舞台画像.進行描画する( dc );
+                this._ステージタイマー.描画する( dc, 1689f, 37f );
+                this._SongNotFound.描画する( dc, 1150f, 400f );
             }
 
             // 入力
@@ -124,7 +126,7 @@ namespace DTXmatixx.ステージ.選曲
             switch( this.現在のフェーズ )
             {
                 case フェーズ.フェードイン:
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.オープン完了 )
                     {
@@ -137,16 +139,16 @@ namespace DTXmatixx.ステージ.選曲
                     {
                         if( App.曲ツリー.フォーカスノード is BoxNode boxNode )
                         {
-                            this._曲リスト.BOXに入る( gd );
+                            this._曲リスト.BOXに入る();
                         }
                         else if( App.曲ツリー.フォーカスノード is BackNode backNode )
                         {
-                            this._曲リスト.BOXから出る( gd );
+                            this._曲リスト.BOXから出る();
                         }
                         else if( null != App.曲ツリー.フォーカスノード )
                         {
                             // 選曲する
-                            App.ステージ管理.アイキャッチを選択しクローズする( gd, nameof( GO ) );
+                            App.ステージ管理.アイキャッチを選択しクローズする( nameof( GO ) );
                             this.現在のフェーズ = フェーズ.フェードアウト;
                         }
                     }
@@ -159,8 +161,8 @@ namespace DTXmatixx.ステージ.選曲
                         if( null != App.曲ツリー.フォーカスノード )
                         {
                             //App.曲ツリー.前のノードをフォーカスする();	--> 曲リストへ委譲
-                            this._曲リスト.前のノードを選択する( gd );
-                            this._導線アニメをリセットする( gd );
+                            this._曲リスト.前のノードを選択する();
+                            this._導線アニメをリセットする();
                         }
                     }
                     else if( App.入力管理.下移動キーが入力された() )
@@ -168,8 +170,8 @@ namespace DTXmatixx.ステージ.選曲
                         if( null != App.曲ツリー.フォーカスノード )
                         {
                             //App.曲ツリー.次のノードをフォーカスする();	--> 曲リストへ委譲
-                            this._曲リスト.次のノードを選択する( gd );
-                            this._導線アニメをリセットする( gd );
+                            this._曲リスト.次のノードを選択する();
+                            this._導線アニメをリセットする();
                         }
                     }
                     else if( App.入力管理.シーケンスが入力された( new[] { レーン種別.HiHat, レーン種別.HiHat }, App.ユーザ管理.ログオン中のユーザ.ドラムとチップと入力の対応表 ) )
@@ -184,7 +186,7 @@ namespace DTXmatixx.ステージ.選曲
                     break;
 
                 case フェーズ.フェードアウト:
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
@@ -217,12 +219,12 @@ namespace DTXmatixx.ステージ.選曲
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 471f, 61f, 0f );
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 444f, 444f, 0f );
 
-        private void _その他パネルを描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _その他パネルを描画する( DeviceContext1 dc )
         {
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
-                using( var ソートタブ上色 = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xFF121212 ) ) )
-                using( var ソートタブ下色 = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xFF1f1f1f ) ) )
+                using( var ソートタブ上色 = new SolidColorBrush( dc, new Color4( 0xFF121212 ) ) )
+                using( var ソートタブ下色 = new SolidColorBrush( dc, new Color4( 0xFF1f1f1f ) ) )
                 {
                     // 曲リストソートタブ
                     dc.FillRectangle( new RectangleF( 927f, 50f, 993f, 138f ), ソートタブ上色 );
@@ -243,15 +245,15 @@ namespace DTXmatixx.ステージ.選曲
 
             } );
         }
-        private void _プレビュー画像を描画する( グラフィックデバイス gd, DeviceContext1 dc, Node ノード )
+        private void _プレビュー画像を描画する( DeviceContext1 dc, Node ノード )
         {
             var 画像 = ノード.ノード画像 ?? Node.既定のノード画像;
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
             var 画面左上dpx = new Vector3(
-                -gd.設計画面サイズ.Width / 2f,
-                +gd.設計画面サイズ.Height / 2f,
+                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
+                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
                 0f );
 
             var 変換行列 =
@@ -261,15 +263,15 @@ namespace DTXmatixx.ステージ.選曲
                     画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,
                     0f );
 
-            画像.描画する( gd, 変換行列 );
+            画像.描画する( 変換行列 );
         }
-        private void _選択曲を囲む枠を描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _選択曲を囲む枠を描画する( DeviceContext1 dc )
         {
             var 矩形 = new RectangleF( 1015f, 485f, 905f, 113f );
 
-            this._青い線.描画する( gd, dc, new Vector2( 矩形.Left - this._青枠のマージンdpx, 矩形.Top ), 幅dpx: 矩形.Width + this._青枠のマージンdpx * 2f );
-            this._青い線.描画する( gd, dc, new Vector2( 矩形.Left - this._青枠のマージンdpx, 矩形.Bottom ), 幅dpx: 矩形.Width + this._青枠のマージンdpx * 2f );
-            this._青い線.描画する( gd, dc, new Vector2( 矩形.Left, 矩形.Top - this._青枠のマージンdpx ), 高さdpx: 矩形.Height + this._青枠のマージンdpx * 2f );
+            this._青い線.描画する( dc, new Vector2( 矩形.Left - this._青枠のマージンdpx, 矩形.Top ), 幅dpx: 矩形.Width + this._青枠のマージンdpx * 2f );
+            this._青い線.描画する( dc, new Vector2( 矩形.Left - this._青枠のマージンdpx, 矩形.Bottom ), 幅dpx: 矩形.Width + this._青枠のマージンdpx * 2f );
+            this._青い線.描画する( dc, new Vector2( 矩形.Left, 矩形.Top - this._青枠のマージンdpx ), 高さdpx: 矩形.Height + this._青枠のマージンdpx * 2f );
         }
 
         private Variable _上に伸びる導線の長さdpx = null;
@@ -278,27 +280,29 @@ namespace DTXmatixx.ステージ.選曲
         private Storyboard _導線のストーリーボード = null;
         private readonly float _青枠のマージンdpx = 8f;
 
-        private void _導線アニメをリセットする( グラフィックデバイス gd )
+        private void _導線アニメをリセットする()
         {
+            var animation = グラフィックデバイス.Instance.Animation;
+
             this._選択曲枠ランナー.リセットする();
 
             this._上に伸びる導線の長さdpx?.Dispose();
-            this._上に伸びる導線の長さdpx = new Variable( gd.Animation.Manager, initialValue: 0.0 );
+            this._上に伸びる導線の長さdpx = new Variable( animation.Manager, initialValue: 0.0 );
 
             this._左に伸びる導線の長さdpx?.Dispose();
-            this._左に伸びる導線の長さdpx = new Variable( gd.Animation.Manager, initialValue: 0.0 );
+            this._左に伸びる導線の長さdpx = new Variable( animation.Manager, initialValue: 0.0 );
 
             this._プレビュー枠の長さdpx?.Dispose();
-            this._プレビュー枠の長さdpx = new Variable( gd.Animation.Manager, initialValue: 0.0 );
+            this._プレビュー枠の長さdpx = new Variable( animation.Manager, initialValue: 0.0 );
 
             this._導線のストーリーボード?.Abandon();
             this._導線のストーリーボード?.Dispose();
-            this._導線のストーリーボード = new Storyboard( gd.Animation.Manager );
+            this._導線のストーリーボード = new Storyboard( animation.Manager );
 
             double 期間 = 0.3;
-            using( var 上に伸びる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 左に伸びる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 枠が広がる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 上に伸びる = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 左に伸びる = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 枠が広がる = animation.TrasitionLibrary.Constant( 期間 ) )
             {
                 this._導線のストーリーボード.AddTransition( this._上に伸びる導線の長さdpx, 上に伸びる );
                 this._導線のストーリーボード.AddTransition( this._左に伸びる導線の長さdpx, 左に伸びる );
@@ -306,9 +310,9 @@ namespace DTXmatixx.ステージ.選曲
             }
 
             期間 = 0.07;
-            using( var 上に伸びる = gd.Animation.TrasitionLibrary.Linear( 期間, finalValue: 209.0 ) )
-            using( var 左に伸びる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 枠が広がる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 上に伸びる = animation.TrasitionLibrary.Linear( 期間, finalValue: 209.0 ) )
+            using( var 左に伸びる = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 枠が広がる = animation.TrasitionLibrary.Constant( 期間 ) )
             {
                 this._導線のストーリーボード.AddTransition( this._上に伸びる導線の長さdpx, 上に伸びる );
                 this._導線のストーリーボード.AddTransition( this._左に伸びる導線の長さdpx, 左に伸びる );
@@ -316,9 +320,9 @@ namespace DTXmatixx.ステージ.選曲
             }
 
             期間 = 0.06;
-            using( var 上に伸びる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 左に伸びる = gd.Animation.TrasitionLibrary.Linear( 期間, finalValue: 129.0 ) )
-            using( var 枠が広がる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 上に伸びる = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 左に伸びる = animation.TrasitionLibrary.Linear( 期間, finalValue: 129.0 ) )
+            using( var 枠が広がる = animation.TrasitionLibrary.Constant( 期間 ) )
             {
                 this._導線のストーリーボード.AddTransition( this._上に伸びる導線の長さdpx, 上に伸びる );
                 this._導線のストーリーボード.AddTransition( this._左に伸びる導線の長さdpx, 左に伸びる );
@@ -326,35 +330,35 @@ namespace DTXmatixx.ステージ.選曲
             }
 
             期間 = 0.07;
-            using( var 維持 = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 上に伸びる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 左に伸びる = gd.Animation.TrasitionLibrary.Constant( 期間 ) )
-            using( var 枠が広がる = gd.Animation.TrasitionLibrary.Linear( 期間, finalValue: 444.0 + this._青枠のマージンdpx * 2f ) )
+            using( var 維持 = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 上に伸びる = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 左に伸びる = animation.TrasitionLibrary.Constant( 期間 ) )
+            using( var 枠が広がる = animation.TrasitionLibrary.Linear( 期間, finalValue: 444.0 + this._青枠のマージンdpx * 2f ) )
             {
                 this._導線のストーリーボード.AddTransition( this._上に伸びる導線の長さdpx, 上に伸びる );
                 this._導線のストーリーボード.AddTransition( this._左に伸びる導線の長さdpx, 左に伸びる );
                 this._導線のストーリーボード.AddTransition( this._プレビュー枠の長さdpx, 枠が広がる );
             }
 
-            this._導線のストーリーボード.Schedule( gd.Animation.Timer.Time );
+            this._導線のストーリーボード.Schedule( animation.Timer.Time );
         }
-        private void _導線を描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _導線を描画する( DeviceContext1 dc )
         {
             var h = (float) this._上に伸びる導線の長さdpx.Value;
-            this._青い線.描画する( gd, dc, new Vector2( 1044f, 485f - h ), 高さdpx: h );
+            this._青い線.描画する( dc, new Vector2( 1044f, 485f - h ), 高さdpx: h );
 
             var w = (float) this._左に伸びる導線の長さdpx.Value;
-            this._青い線.描画する( gd, dc, new Vector2( 1046f - w, 278f ), 幅dpx: w );
+            this._青い線.描画する( dc, new Vector2( 1046f - w, 278f ), 幅dpx: w );
 
             var z = (float) this._プレビュー枠の長さdpx.Value;   // マージン×2 込み
             var 上 = this._プレビュー画像表示位置dpx.Y;
             var 下 = this._プレビュー画像表示位置dpx.Y + this._プレビュー画像表示サイズdpx.Y;
             var 左 = this._プレビュー画像表示位置dpx.X;
             var 右 = this._プレビュー画像表示位置dpx.X + this._プレビュー画像表示サイズdpx.X;
-            this._青い線.描画する( gd, dc, new Vector2( 右 + this._青枠のマージンdpx - z, 上 ), 幅dpx: z ); // 上辺
-            this._青い線.描画する( gd, dc, new Vector2( 右 + this._青枠のマージンdpx - z, 下 ), 幅dpx: z ); // 下辺
-            this._青い線.描画する( gd, dc, new Vector2( 左, 下 + this._青枠のマージンdpx - z ), 高さdpx: z ); // 左辺
-            this._青い線.描画する( gd, dc, new Vector2( 右, 下 + this._青枠のマージンdpx - z ), 高さdpx: z ); // 右辺
+            this._青い線.描画する( dc, new Vector2( 右 + this._青枠のマージンdpx - z, 上 ), 幅dpx: z ); // 上辺
+            this._青い線.描画する( dc, new Vector2( 右 + this._青枠のマージンdpx - z, 下 ), 幅dpx: z ); // 下辺
+            this._青い線.描画する( dc, new Vector2( 左, 下 + this._青枠のマージンdpx - z ), 高さdpx: z ); // 左辺
+            this._青い線.描画する( dc, new Vector2( 右, 下 + this._青枠のマージンdpx - z ), 高さdpx: z ); // 右辺
         }
     }
 }

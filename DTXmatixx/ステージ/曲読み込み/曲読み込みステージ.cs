@@ -30,9 +30,9 @@ namespace DTXmatixx.ステージ.曲読み込み
 
         public 曲読み込みステージ()
         {
-            this.子リスト.Add( this._舞台画像 = new 舞台画像() );
-            this.子リスト.Add( this._注意文 = new 画像( @"$(System)images\ご注意ください.png" ) );
-            this.子リスト.Add( this._曲名画像 = new 文字列画像() {
+            this.子を追加する( this._舞台画像 = new 舞台画像() );
+            this.子を追加する( this._注意文 = new 画像( @"$(System)images\ご注意ください.png" ) );
+            this.子を追加する( this._曲名画像 = new 文字列画像() {
                 フォント名 = "HGMaruGothicMPRO",
                 フォントサイズpt = 70f,
                 フォント幅 = FontWeight.Regular,
@@ -42,7 +42,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                 前景色 = Color4.Black,
                 背景色 = Color4.White,
             } );
-            this.子リスト.Add( this._サブタイトル画像 = new 文字列画像() {
+            this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
                 フォント名 = "HGMaruGothicMPRO",
                 フォントサイズpt = 45f,
                 フォント幅 = FontWeight.Regular,
@@ -52,11 +52,11 @@ namespace DTXmatixx.ステージ.曲読み込み
                 前景色 = Color4.Black,
                 背景色 = Color4.White,
             } );
-            this.子リスト.Add( this._プレビュー画像 = new プレビュー画像() );
-            this.子リスト.Add( this._難易度 = new 難易度() );
+            this.子を追加する( this._プレビュー画像 = new プレビュー画像() );
+            this.子を追加する( this._難易度 = new 難易度() );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -70,33 +70,33 @@ namespace DTXmatixx.ステージ.曲読み込み
                 this._初めての進行描画 = true;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
-                this._舞台画像.ぼかしと縮小を適用する( gd, 0.0 );
-                App.ステージ管理.現在のアイキャッチ.オープンする( gd );
+                this._舞台画像.ぼかしと縮小を適用する( 0.0 );
+                App.ステージ管理.現在のアイキャッチ.オープンする();
                 this._初めての進行描画 = false;
             }
 
-            this._舞台画像.進行描画する( gd, dc );
-            this._注意文.描画する( gd, dc, 0f, 760f );
-            this._プレビュー画像.描画する( gd, dc );
-            this._難易度.描画する( gd, dc );
-            this._曲名を描画する( gd, dc );
-            this._サブタイトルを描画する( gd, dc );
+            this._舞台画像.進行描画する( dc );
+            this._注意文.描画する( dc, 0f, 760f );
+            this._プレビュー画像.描画する( dc );
+            this._難易度.描画する( dc );
+            this._曲名を描画する( dc );
+            this._サブタイトルを描画する( dc );
 
             switch( this.現在のフェーズ )
             {
                 case フェーズ.フェードイン:
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.オープン完了 )
                     {
@@ -124,33 +124,31 @@ namespace DTXmatixx.ステージ.曲読み込み
         private プレビュー画像 _プレビュー画像 = null;
         private 難易度 _難易度 = null;
 
-        private void _曲名を描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _曲名を描画する( DeviceContext1 dc )
         {
             var 表示位置dpx = new Vector2( 782f, 409f );
 
             // 拡大率を計算して描画する。
-            float 最大幅dpx = gd.設計画面サイズ.Width - 表示位置dpx.X;
+            float 最大幅dpx = グラフィックデバイス.Instance.設計画面サイズ.Width - 表示位置dpx.X;
 
             this._曲名画像.描画する(
-                gd,
                 dc,
                 表示位置dpx.X,
                 表示位置dpx.Y,
-                X方向拡大率: ( this._曲名画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._曲名画像.サイズ.Width );
+                X方向拡大率: ( this._曲名画像.画像サイズdpx.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._曲名画像.画像サイズdpx.Width );
         }
-        private void _サブタイトルを描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _サブタイトルを描画する( DeviceContext1 dc )
         {
             var 表示位置dpx = new Vector2( 782f, 520f );
 
             // 拡大率を計算して描画する。
-            float 最大幅dpx = gd.設計画面サイズ.Width - 表示位置dpx.X;
+            float 最大幅dpx = グラフィックデバイス.Instance.設計画面サイズ.Width - 表示位置dpx.X;
 
             this._サブタイトル画像.描画する(
-                gd,
                 dc,
                 表示位置dpx.X,
                 表示位置dpx.Y,
-                X方向拡大率: ( this._サブタイトル画像.サイズ.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._サブタイトル画像.サイズ.Width );
+                X方向拡大率: ( this._サブタイトル画像.画像サイズdpx.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._サブタイトル画像.画像サイズdpx.Width );
         }
         private void _スコアを読み込む()
         {

@@ -27,25 +27,25 @@ namespace DTXmatixx.ステージ.設定
 
         public パネルリスト()
         {
-            this.子リスト.Add( this._青い線 = new 青い線() );
-            this.子リスト.Add( this._パッド矢印 = new パッド矢印() );
-            this.子リスト.Add( this._ルートパネルフォルダ = new パネル_フォルダ( "root", null, null ) );
+            this.子を追加する( this._青い線 = new 青い線() );
+            this.子を追加する( this._パッド矢印 = new パッド矢印() );
+            this.子を追加する( this._ルートパネルフォルダ = new パネル_フォルダ( "root", null, null ) );
 
             this._現在のパネルフォルダ = this._ルートパネルフォルダ;
         }
 
-        public void フェードインを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
+        public void フェードインを開始する( double 速度倍率 = 1.0 )
         {
             for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
             {
-                this._現在のパネルフォルダ.子パネルリスト[ i ].フェードインを開始する( gd, 0.02, 速度倍率 );
+                this._現在のパネルフォルダ.子パネルリスト[ i ].フェードインを開始する( 0.02, 速度倍率 );
             }
         }
-        public void フェードアウトを開始する( グラフィックデバイス gd, double 速度倍率 = 1.0 )
+        public void フェードアウトを開始する( double 速度倍率 = 1.0 )
         {
             for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
             {
-                this._現在のパネルフォルダ.子パネルリスト[ i ].フェードアウトを開始する( gd, 0.02, 速度倍率 );
+                this._現在のパネルフォルダ.子パネルリスト[ i ].フェードアウトを開始する( 0.02, 速度倍率 );
             }
         }
 
@@ -74,7 +74,7 @@ namespace DTXmatixx.ステージ.設定
             this._現在のパネルフォルダ = this._現在のパネルフォルダ.子パネルリスト.SelectedItem as パネル_フォルダ;
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -155,7 +155,7 @@ namespace DTXmatixx.ステージ.設定
                 this._現在のパネルフォルダ = this._ルートパネルフォルダ;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -163,13 +163,13 @@ namespace DTXmatixx.ステージ.設定
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, float left, float top )
+        public void 進行描画する( DeviceContext1 dc, float left, float top )
         {
             const float パネルの下マージン = 4f;
             float パネルの高さ = パネル.サイズ.Height + パネルの下マージン;
 
             // フレーム１（たて線）を描画。
-            this._青い線.描画する( gd, dc, new Vector2( left, 0f ), 高さdpx: gd.設計画面サイズ.Height );
+            this._青い線.描画する( dc, new Vector2( left, 0f ), 高さdpx: グラフィックデバイス.Instance.設計画面サイズ.Height );
 
             // パネルを描画。（選択中のパネルの3つ上から7つ下まで、計11枚。）
             var panels = this._現在のパネルフォルダ.子パネルリスト;
@@ -179,7 +179,6 @@ namespace DTXmatixx.ステージ.設定
                 var 描画パネル = panels[ 描画パネル番号 ];
 
                 描画パネル.進行描画する(
-                    gd,
                     dc,
                     left + 22f,
                     top + i * パネルの高さ,
@@ -188,13 +187,13 @@ namespace DTXmatixx.ステージ.設定
 
             // フレーム２（選択パネル周囲）を描画。
             float 幅 = パネル.サイズ.Width + 22f * 2f;
-            this._青い線.描画する( gd, dc, new Vector2( left, パネルの高さ * 3f ), 幅dpx: 幅 );
-            this._青い線.描画する( gd, dc, new Vector2( left, パネルの高さ * 4f ), 幅dpx: 幅 );
-            this._青い線.描画する( gd, dc, new Vector2( left + 幅, パネルの高さ * 3f ), 高さdpx: パネルの高さ );
+            this._青い線.描画する( dc, new Vector2( left, パネルの高さ * 3f ), 幅dpx: 幅 );
+            this._青い線.描画する( dc, new Vector2( left, パネルの高さ * 4f ), 幅dpx: 幅 );
+            this._青い線.描画する( dc, new Vector2( left + 幅, パネルの高さ * 3f ), 高さdpx: パネルの高さ );
 
             // パッド矢印（上＆下）を描画。
-            this._パッド矢印.描画する( gd, dc, パッド矢印.種類.上_Tom1, new Vector2( left, パネルの高さ * 3f ) );
-            this._パッド矢印.描画する( gd, dc, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
+            this._パッド矢印.描画する( dc, パッド矢印.種類.上_Tom1, new Vector2( left, パネルの高さ * 3f ) );
+            this._パッド矢印.描画する( dc, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
         }
 
         private パネル_フォルダ _ルートパネルフォルダ = null;

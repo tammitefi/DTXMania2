@@ -26,20 +26,20 @@ namespace DTXmatixx.ステージ.曲ツリー構築
         public 曲ツリー構築ステージ()
         {
         }
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.現在のフェーズ = フェーズ.開始;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public override void 進行描画する( DeviceContext1 dc )
         {
             App.入力管理.すべての入力デバイスをポーリングする();
 
@@ -57,12 +57,12 @@ namespace DTXmatixx.ステージ.曲ツリー構築
                     break;
 
                 case フェーズ.構築中:
-                    App.曲ツリー.非活性化する( gd );
+                    App.曲ツリー.非活性化する();
 
                     foreach( var varpath in App.システム設定.曲検索フォルダ )
                         App.曲ツリー.曲を検索して親ノードに追加する( App.曲ツリー.ルートノード, varpath );
 
-                    App.曲ツリー.活性化する( gd );
+                    App.曲ツリー.活性化する();
 
                     this.現在のフェーズ = フェーズ.確定;
                     break;

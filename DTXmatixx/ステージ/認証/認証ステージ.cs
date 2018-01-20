@@ -33,13 +33,13 @@ namespace DTXmatixx.ステージ.認証
 
         public 認証ステージ()
         {
-            this.子リスト.Add( this._舞台画像 = new 舞台画像() );
-            this.子リスト.Add( this._ウィンドウ画像 = new 画像( @"$(System)images\認証画面_ユーザ選択ウィンドウ.png" ) );
-            this.子リスト.Add( this._プレイヤーを選択してください = new 文字列画像() { 表示文字列 = "プレイヤーを選択してください。", フォントサイズpt = 30f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
-            this.子リスト.Add( this._ユーザリスト = new ユーザリスト() );
+            this.子を追加する( this._舞台画像 = new 舞台画像() );
+            this.子を追加する( this._ウィンドウ画像 = new 画像( @"$(System)images\認証画面_ユーザ選択ウィンドウ.png" ) );
+            this.子を追加する( this._プレイヤーを選択してください = new 文字列画像() { 表示文字列 = "プレイヤーを選択してください。", フォントサイズpt = 30f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
+            this.子を追加する( this._ユーザリスト = new ユーザリスト() );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -47,18 +47,18 @@ namespace DTXmatixx.ステージ.認証
                 this._初めての進行描画 = true;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
-                App.ステージ管理.現在のアイキャッチ.オープンする( gd );
+                App.ステージ管理.現在のアイキャッチ.オープンする();
                 this._初めての進行描画 = false;
             }
 
@@ -72,15 +72,15 @@ namespace DTXmatixx.ステージ.認証
                 case フェーズ.ユーザ選択:
                     #region " *** "
                     //----------------
-                    this._舞台画像.進行描画する( gd, dc, 黒幕付き: true );
-                    this._ウィンドウ画像.描画する( gd, dc, 描画領域.X, 描画領域.Y );
-                    this._プレイヤーを選択してください.描画する( gd, dc, 描画領域.X + 28f, 描画領域.Y + 45f );
-                    this._ユーザリスト.進行描画する( gd, dc );
+                    this._舞台画像.進行描画する( dc, 黒幕付き: true );
+                    this._ウィンドウ画像.描画する( dc, 描画領域.X, 描画領域.Y );
+                    this._プレイヤーを選択してください.描画する( dc, 描画領域.X + 28f, 描画領域.Y + 45f );
+                    this._ユーザリスト.進行描画する( dc );
 
                     // 以下、フェーズ別に処理分岐。
                     if( this.現在のフェーズ == フェーズ.フェードイン )
                     {
-                        App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                        App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
                         if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.オープン完了 )
                         {
                             this.現在のフェーズ = フェーズ.ユーザ選択;
@@ -90,7 +90,7 @@ namespace DTXmatixx.ステージ.認証
                     {
                         if( App.入力管理.確定キーが入力された() )
                         {
-                            App.ステージ管理.アイキャッチを選択しクローズする( gd, nameof( 回転幕 ) );
+                            App.ステージ管理.アイキャッチを選択しクローズする( nameof( 回転幕 ) );
                             this.現在のフェーズ = フェーズ.フェードアウト;
                         }
                         else if( App.入力管理.キャンセルキーが入力された() )
@@ -113,9 +113,9 @@ namespace DTXmatixx.ステージ.認証
                 case フェーズ.フェードアウト:
                     #region " *** "
                     //----------------
-                    this._舞台画像.進行描画する( gd, dc, true );
+                    this._舞台画像.進行描画する( dc, true );
 
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
                         this.現在のフェーズ = フェーズ.ユーザ切り替え;
@@ -127,7 +127,7 @@ namespace DTXmatixx.ステージ.認証
                 case フェーズ.ユーザ切り替え:
                     #region " *** "
                     //----------------
-                    App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                    App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                     // ログオフ
                     if( null != App.ユーザ管理.ログオン中のユーザ )

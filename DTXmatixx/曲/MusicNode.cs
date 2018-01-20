@@ -83,7 +83,7 @@ namespace DTXmatixx.曲
                 }
                 if( null != サムネイル画像ファイルパス )
                 {
-                    this.子リスト.Add( this.ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
+                    this.子を追加する( this.ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
                 }
             }
 

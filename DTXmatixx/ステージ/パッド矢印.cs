@@ -15,24 +15,24 @@ namespace DTXmatixx.ステージ
 
         public パッド矢印()
         {
-            this.子リスト.Add( this._矢印画像 = new 画像( @"$(System)images\パッド矢印.png" ) );
+            this.子を追加する( this._矢印画像 = new 画像( @"$(System)images\パッド矢印.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this._矢印の矩形リスト = new 矩形リスト( @"$(System)images\パッド矢印矩形.xml" );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc, 種類 type, Vector2 中央位置dpx, float 拡大率 = 1f )
+        public void 描画する( DeviceContext1 dc, 種類 type, Vector2 中央位置dpx, float 拡大率 = 1f )
         {
             var 矩形 = new RectangleF();
 
@@ -50,7 +50,7 @@ namespace DTXmatixx.ステージ
                 Matrix3x2.Scaling( 拡大率 ) *
                 Matrix3x2.Translation( 左上位置dpx );
 
-            this._矢印画像.描画する( gd, dc, 変換行列, 転送元矩形: 矩形 );
+            this._矢印画像.描画する( dc, 変換行列, 転送元矩形: 矩形 );
         }
 
         private 画像 _矢印画像 = null;

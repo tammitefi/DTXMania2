@@ -13,24 +13,24 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 曲別SKILL()
         {
-            this.子リスト.Add( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜矩形.xml", 文字幅補正dpx: -6f ) );
-            this.子リスト.Add( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン.png" ) );
+            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜矩形.xml", 文字幅補正dpx: -6f ) );
+            this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, double? スキル値 )
+        public void 進行描画する( DeviceContext1 dc, double? スキル値 )
         {
             if( null == スキル値 )
                 return;
@@ -40,7 +40,7 @@ namespace DTXmatixx.ステージ.演奏
 
             string スキル値文字列 = skill.ToString( "0.00" ).PadLeft( 6 ).Replace( ' ', 'o' );  // 右詰め、余白は'o'。
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -50,7 +50,7 @@ namespace DTXmatixx.ステージ.演奏
                     Matrix3x2.Translation( 描画領域.X, 描画領域.Y ) *
                     pretrans;
 
-                this._ロゴ画像.描画する( gd, dc, 0f, 0f );
+                this._ロゴ画像.描画する( dc, 0f, 0f );
 
                 // 小数部を描画する
                 dc.Transform =
@@ -58,7 +58,7 @@ namespace DTXmatixx.ステージ.演奏
                     Matrix3x2.Translation( 描画領域.X + 90f + 105f, 描画領域.Y + ( 描画領域.Height * 0.2f ) ) *
                     pretrans;
 
-                this._数字画像.描画する( gd, dc, 0f, 0f, スキル値文字列.Substring( 4 ) );
+                this._数字画像.描画する( dc, 0f, 0f, スキル値文字列.Substring( 4 ) );
 
                 // 整数部を描画する（'.'含む）
                 dc.Transform =
@@ -66,7 +66,7 @@ namespace DTXmatixx.ステージ.演奏
                     Matrix3x2.Translation( 描画領域.X + 90f, 描画領域.Y ) *
                     pretrans;
 
-                this._数字画像.描画する( gd, dc, 0f, 0f, スキル値文字列.Substring( 0, 4 ) );
+                this._数字画像.描画する( dc, 0f, 0f, スキル値文字列.Substring( 0, 4 ) );
 
             } );
         }

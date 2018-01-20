@@ -72,7 +72,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._最後にカウント値を設定したときの成績[ judge ] = 判定toヒット数[ judge ];
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -86,16 +86,16 @@ namespace DTXmatixx.ステージ.演奏
                     this._最後にカウント値を設定したときの成績.Add( judge, 0 );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 using( var 水色ブラシ = new SolidColorBrush( dc, new Color4( 0xffdd8e69 ) ) )
                 using( var 黄色ブラシ = new SolidColorBrush( dc, new Color4( 0xff17fffe ) ) )

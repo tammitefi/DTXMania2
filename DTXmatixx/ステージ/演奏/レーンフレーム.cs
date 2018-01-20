@@ -63,15 +63,15 @@ namespace DTXmatixx.ステージ.演奏
             { 表示レーン種別.RightCrash, 96f },
         };
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._レーン色ブラシ = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0xff5d5d5d ) );
-                this._レーンエリア色ブラシ = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0f, 0f, 0f, 0.5f ) );
+                this._レーン色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( 0xff5d5d5d ) );
+                this._レーンエリア色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( 0f, 0f, 0f, 0.5f ) );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -80,9 +80,9 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc )
         {
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
                 dc.FillRectangle( new RectangleF( 445f, 0f, 778f, 938f ), this._レーンエリア色ブラシ );

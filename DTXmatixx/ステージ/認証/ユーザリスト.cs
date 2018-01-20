@@ -24,10 +24,10 @@ namespace DTXmatixx.ステージ.認証
 
         public ユーザリスト()
         {
-            this.子リスト.Add( this._ユーザパネル = new 画像( @"$(System)images\認証画面_パネル.png" ) );
-            this.子リスト.Add( this._ユーザパネル光彩付き = new 画像( @"$(System)images\認証画面_パネル光彩あり.png" ) );
-            this.子リスト.Add( this._ユーザ肩書きパネル = new 画像( @"$(System)images\認証画面_肩書きパネル.png" ) );
-            this.子リスト.Add( this._ユーザ名 = new 文字列画像() {
+            this.子を追加する( this._ユーザパネル = new 画像( @"$(System)images\認証画面_パネル.png" ) );
+            this.子を追加する( this._ユーザパネル光彩付き = new 画像( @"$(System)images\認証画面_パネル光彩あり.png" ) );
+            this.子を追加する( this._ユーザ肩書きパネル = new 画像( @"$(System)images\認証画面_肩書きパネル.png" ) );
+            this.子を追加する( this._ユーザ名 = new 文字列画像() {
                 表示文字列 = "",
                 フォントサイズpt = 46f,
                 描画効果 = 文字列画像.効果.縁取り,
@@ -37,14 +37,14 @@ namespace DTXmatixx.ステージ.認証
             } );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this._光彩アニメカウンタ = new LoopCounter( 0, 200, 5 );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -62,7 +62,7 @@ namespace DTXmatixx.ステージ.認証
             this._光彩アニメカウンタ = new LoopCounter( 0, 200, 5 );
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             var 描画位置 = new Vector2( 569f, 188f );
             float リストの改行幅 = 160f;
@@ -87,14 +87,14 @@ namespace DTXmatixx.ステージ.認証
             for( int i = 0; i < 表示人数; i++ )
             {
                 if( i == this.選択中のユーザ )
-                    this._ユーザパネル光彩付き.描画する( gd, dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i, 不透明度0to1: 不透明度 );
+                    this._ユーザパネル光彩付き.描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i, 不透明度0to1: 不透明度 );
 
-                this._ユーザパネル.描画する( gd, dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
+                this._ユーザパネル.描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
 
                 this._ユーザ名.表示文字列 = App.ユーザ管理.ユーザリスト[ i ].ユーザ名;
-                this._ユーザ名.描画する( gd, dc, 描画位置.X + 32f, 描画位置.Y + 40f + リストの改行幅 * i );
+                this._ユーザ名.描画する( dc, 描画位置.X + 32f, 描画位置.Y + 40f + リストの改行幅 * i );
 
-                this._ユーザ肩書きパネル.描画する( gd, dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
+                this._ユーザ肩書きパネル.描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
             }
         }
 

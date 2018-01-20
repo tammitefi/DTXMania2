@@ -14,10 +14,10 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 判定文字列()
         {
-            this.子リスト.Add( this._判定文字列画像 = new 画像( @"$(System)images\判定文字列.png" ) );
+            this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\判定文字列.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -37,7 +37,7 @@ namespace DTXmatixx.ステージ.演奏
                 };
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -55,7 +55,7 @@ namespace DTXmatixx.ステージ.演奏
             status.判定種別 = judge;
             status.現在の状態 = 表示レーンステータス.状態.表示開始;  // 描画スレッドへ通知。
         }
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             foreach( 表示レーン種別 レーン in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -69,23 +69,25 @@ namespace DTXmatixx.ステージ.演奏
                         {
                             status.アニメ用メンバを解放する();
 
+                            var animation = グラフィックデバイス.Instance.Animation;
+
                             #region " (1) 光 "
                             //----------------
                             if( status.判定種別 == 判定種別.PERFECT )   // 今のところ、光はPERFECT時のみ表示。
                             {
                                 // 初期状態
-                                status.光の回転角 = new Variable( gd.Animation.Manager, initialValue: 0 );
-                                status.光のX方向拡大率 = new Variable( gd.Animation.Manager, initialValue: 1.2 );
-                                status.光のY方向拡大率 = new Variable( gd.Animation.Manager, initialValue: 0.25 );
-                                status.光のストーリーボード = new Storyboard( gd.Animation.Manager );
+                                status.光の回転角 = new Variable( animation.Manager, initialValue: 0 );
+                                status.光のX方向拡大率 = new Variable( animation.Manager, initialValue: 1.2 );
+                                status.光のY方向拡大率 = new Variable( animation.Manager, initialValue: 0.25 );
+                                status.光のストーリーボード = new Storyboard( animation.Manager );
 
                                 double 期間sec;
 
                                 // シーン1. 小さい状態からすばやく展開
                                 期間sec = 0.03;
-                                using( var 回転角の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -100.0 ) )       // [degree]
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 1.0 ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 1.0 ) )
+                                using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -100.0 ) )       // [degree]
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 1.0 ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 1.0 ) )
                                 {
                                     status.光のストーリーボード.AddTransition( status.光の回転角, 回転角の遷移 );
                                     status.光のストーリーボード.AddTransition( status.光のX方向拡大率, X方向拡大率の遷移 );
@@ -94,9 +96,9 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // シーン2. 大きい状態でゆっくり消える
                                 期間sec = 0.29;
-                                using( var 回転角の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -140.0 ) )       // [degree]
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -140.0 ) )       // [degree]
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
                                 {
                                     status.光のストーリーボード.AddTransition( status.光の回転角, 回転角の遷移 );
                                     status.光のストーリーボード.AddTransition( status.光のX方向拡大率, X方向拡大率の遷移 );
@@ -104,7 +106,7 @@ namespace DTXmatixx.ステージ.演奏
                                 }
 
                                 // 開始
-                                status.光のストーリーボード.Schedule( gd.Animation.Timer.Time );
+                                status.光のストーリーボード.Schedule( animation.Timer.Time );
                             }
                             //----------------
                             #endregion
@@ -113,16 +115,16 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             {
                                 // 初期状態
-                                status.文字列影の相対Y位置dpx = new Variable( gd.Animation.Manager, initialValue: +40.0 );
-                                status.文字列影の不透明度 = new Variable( gd.Animation.Manager, initialValue: 0.0 );
-                                status.文字列影のストーリーボード = new Storyboard( gd.Animation.Manager );
+                                status.文字列影の相対Y位置dpx = new Variable( animation.Manager, initialValue: +40.0 );
+                                status.文字列影の不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                                status.文字列影のストーリーボード = new Storyboard( animation.Manager );
 
                                 double 期間sec;
 
                                 // シーン1. 完全透明のまま下から上に移動。
                                 期間sec = 0.05;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -5.0 ) )
-                                using( var 透明度の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -5.0 ) )
+                                using( var 透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
                                 {
                                     status.文字列影のストーリーボード.AddTransition( status.文字列影の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列影のストーリーボード.AddTransition( status.文字列影の不透明度, 透明度の遷移 );
@@ -130,9 +132,9 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // シーン2. 透明になりつつ上に消える
                                 期間sec = 0.15;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -10.0 ) )
-                                using( var 透明度の遷移1 = gd.Animation.TrasitionLibrary.Linear( duration: 0.0, finalValue: 0.5 ) )
-                                using( var 透明度の遷移2 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -10.0 ) )
+                                using( var 透明度の遷移1 = animation.TrasitionLibrary.Linear( duration: 0.0, finalValue: 0.5 ) )
+                                using( var 透明度の遷移2 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
                                 {
                                     status.文字列影のストーリーボード.AddTransition( status.文字列影の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列影のストーリーボード.AddTransition( status.文字列影の不透明度, 透明度の遷移1 );
@@ -140,7 +142,7 @@ namespace DTXmatixx.ステージ.演奏
                                 }
 
                                 // 開始
-                                status.文字列影のストーリーボード.Schedule( gd.Animation.Timer.Time );
+                                status.文字列影のストーリーボード.Schedule( animation.Timer.Time );
                             }
                             //----------------
                             #endregion
@@ -149,20 +151,20 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             {
                                 // 初期状態
-                                status.文字列本体の相対Y位置dpx = new Variable( gd.Animation.Manager, initialValue: +40.0 );
-                                status.文字列本体のX方向拡大率 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
-                                status.文字列本体のY方向拡大率 = new Variable( gd.Animation.Manager, initialValue: 1.0 );
-                                status.文字列本体の不透明度 = new Variable( gd.Animation.Manager, initialValue: 0.0 );
-                                status.文字列本体のストーリーボード = new Storyboard( gd.Animation.Manager );
+                                status.文字列本体の相対Y位置dpx = new Variable( animation.Manager, initialValue: +40.0 );
+                                status.文字列本体のX方向拡大率 = new Variable( animation.Manager, initialValue: 1.0 );
+                                status.文字列本体のY方向拡大率 = new Variable( animation.Manager, initialValue: 1.0 );
+                                status.文字列本体の不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                                status.文字列本体のストーリーボード = new Storyboard( animation.Manager );
 
                                 double 期間sec;
 
                                 // シーン1. 透明から不透明になりつつ下から上に移動。
                                 期間sec = 0.05;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -5.0 ) )
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var 不透明度の遷移 = gd.Animation.TrasitionLibrary.AccelerateDecelerate( duration: 期間sec, finalValue: 1.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: -5.0 ) )
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 期間sec, finalValue: 1.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
                                 {
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体のX方向拡大率, X方向拡大率の遷移 );
@@ -172,10 +174,10 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // シーン2. ちょっと下に跳ね返る
                                 期間sec = 0.05;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: +5.0 ) )
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var 不透明度の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: +5.0 ) )
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
                                 {
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体のX方向拡大率, X方向拡大率の遷移 );
@@ -185,10 +187,10 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // シーン3. また上に戻る
                                 期間sec = 0.05;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: +0.0 ) )
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var 不透明度の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: +0.0 ) )
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
                                 {
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体のX方向拡大率, X方向拡大率の遷移 );
@@ -198,10 +200,10 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // シーン4. 静止
                                 期間sec = 0.15;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var 不透明度の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
                                 {
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体のX方向拡大率, X方向拡大率の遷移 );
@@ -211,10 +213,10 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // シーン5. 横に広がり縦につぶれつつ消える
                                 期間sec = 0.05;
-                                using( var 相対Y位置の遷移 = gd.Animation.TrasitionLibrary.Constant( duration: 期間sec ) )
-                                using( var X方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 2.0 ) )
-                                using( var Y方向拡大率の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
-                                using( var 不透明度の遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
+                                using( var 相対Y位置の遷移 = animation.TrasitionLibrary.Constant( duration: 期間sec ) )
+                                using( var X方向拡大率の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 2.0 ) )
+                                using( var Y方向拡大率の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
+                                using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 期間sec, finalValue: 0.0 ) )
                                 {
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体の相対Y位置dpx, 相対Y位置の遷移 );
                                     status.文字列本体のストーリーボード.AddTransition( status.文字列本体のX方向拡大率, X方向拡大率の遷移 );
@@ -223,7 +225,7 @@ namespace DTXmatixx.ステージ.演奏
                                 }
 
                                 // 開始
-                                status.文字列本体のストーリーボード.Schedule( gd.Animation.Timer.Time );
+                                status.文字列本体のストーリーボード.Schedule( animation.Timer.Time );
                             }
                             //----------------
                             #endregion
@@ -257,7 +259,7 @@ namespace DTXmatixx.ステージ.演奏
                                         status.表示中央位置dpx.X - 転送元矩形.Width / 2f,
                                         status.表示中央位置dpx.Y - 転送元矩形.Height / 2f );
 
-                                this._判定文字列画像.描画する( gd, dc, 変換行列2D, 転送元矩形: 転送元矩形 );
+                                this._判定文字列画像.描画する( dc, 変換行列2D, 転送元矩形: 転送元矩形 );
                             }
                             //----------------
                             #endregion
@@ -274,7 +276,6 @@ namespace DTXmatixx.ステージ.演奏
                                         status.表示中央位置dpx.Y - 転送元矩形.Height / 2f + (float) status.文字列影の相対Y位置dpx.Value );
 
                                 this._判定文字列画像.描画する(
-                                    gd,
                                     dc,
                                     変換行列2D,
                                     転送元矩形: 転送元矩形,
@@ -299,7 +300,6 @@ namespace DTXmatixx.ステージ.演奏
                                         status.表示中央位置dpx.Y - sy * 転送元矩形.Height / 2f + (float) status.文字列本体の相対Y位置dpx.Value );
 
                                 this._判定文字列画像.描画する(
-                                    gd,
                                     dc,
                                     変換行列2D,
                                     転送元矩形: 転送元矩形,

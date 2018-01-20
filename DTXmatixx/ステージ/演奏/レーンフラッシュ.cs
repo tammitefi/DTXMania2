@@ -14,10 +14,10 @@ namespace DTXmatixx.ステージ.演奏
     {
         public レーンフラッシュ()
         {
-            this.子リスト.Add( this._レーンフラッシュ画像 = new 画像( @"$(System)images\レーンフラッシュ.png" ) { 加算合成 = true } );
+            this.子を追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\レーンフラッシュ.png" ) { 加算合成 = true } );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -37,7 +37,7 @@ namespace DTXmatixx.ステージ.演奏
                 }
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -49,7 +49,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             this._レーンtoレーンContext[ lane ].アニメカウンタ.開始する( 0, 250, 1 );
         }
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -57,7 +57,6 @@ namespace DTXmatixx.ステージ.演奏
                 if( laneContext.アニメカウンタ.動作中である && laneContext.アニメカウンタ.終了値に達していない )
                 {
                     this._レーンフラッシュ画像.描画する(
-                        gd,
                         dc,
                         laneContext.開始位置dpx.X,
                         laneContext.開始位置dpx.Y - laneContext.アニメカウンタ.現在値の割合 * レーンフレーム.領域.Height,

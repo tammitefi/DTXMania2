@@ -15,10 +15,10 @@ namespace DTXmatixx.ステージ.演奏
     {
         public コンボ表示()
         {
-            this.子リスト.Add( this._コンボ文字画像 = new 画像( @"$(System)images\コンボ文字.png" ) );
+            this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\コンボ文字.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -33,7 +33,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._百ごとのアニメ = new 百ごとのアニメ();
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -48,7 +48,7 @@ namespace DTXmatixx.ステージ.演奏
         /// <param name="全体の中央位置">
         ///		パネル(dc)の左上を原点とする座標。
         /// </param>
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
+        public void 進行描画する( DeviceContext1 dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
         {
             int Combo値 = Math.Min( Math.Max( 現在の成績.Combo, 0 ), 9999 );  // 表示は9999でカンスト。
 
@@ -89,7 +89,7 @@ namespace DTXmatixx.ステージ.演奏
 
             // １桁ずつ表示。
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 

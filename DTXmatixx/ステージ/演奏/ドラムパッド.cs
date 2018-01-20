@@ -14,10 +14,10 @@ namespace DTXmatixx.ステージ.演奏
     {
         public ドラムパッド()
         {
-            this.子リスト.Add( this._パッド絵 = new 画像( @"$(System)images\ドラムパッド.png" ) );
+            this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\ドラムパッド.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -38,7 +38,7 @@ namespace DTXmatixx.ステージ.演奏
                 }
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -50,7 +50,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             this._レーンtoパッドContext[ lane ].アニメカウンタ.開始する( 0, 100, 1 );
         }
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -68,8 +68,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 // ドラムパッド本体表示
                 this._パッド絵.描画する( 
-                    gd, 
-                    dc,
+                    dc, 
                     drumContext.左上位置dpx.X, 
                     drumContext.左上位置dpx.Y + Yオフセットdpx,
                     不透明度0to1: 1.0f, 
@@ -77,7 +76,6 @@ namespace DTXmatixx.ステージ.演奏
 
                 // ドラムフラッシュ表示
                 this._パッド絵.描画する(
-                    gd,
                     dc,
                     drumContext.左上位置dpx.X,
                     drumContext.左上位置dpx.Y + Yオフセットdpx, 

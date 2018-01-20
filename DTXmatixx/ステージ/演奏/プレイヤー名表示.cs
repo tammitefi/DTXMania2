@@ -21,38 +21,36 @@ namespace DTXmatixx.ステージ.演奏
         {
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 //this.名前 = "(no name)";	更新しない。親Activityで設定済みのため。
                 this._前回表示した名前 = "";
-                this._TextFormat = new TextFormat( gd.DWriteFactory, "メイリオ", FontWeight.Regular, FontStyle.Normal, 22f );
+                this._TextFormat = new TextFormat( グラフィックデバイス.Instance.DWriteFactory, "メイリオ", FontWeight.Regular, FontStyle.Normal, 22f );
                 this._TextLayout = null;
-                this._文字色 = new SolidColorBrush( gd.D2DDeviceContext, Color4.White );
+                this._文字色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color4.White );
                 this._拡大率X = 1.0f;
-                this._factory = gd.DWriteFactory;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._factory = null;   // Disposeはしない
                 FDKUtilities.解放する( ref this._文字色 );
                 FDKUtilities.解放する( ref this._TextLayout );
                 FDKUtilities.解放する( ref this._TextFormat );
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             var 描画矩形 = new RectangleF( 122f, 313f, 240f, 30f );
 
             // 初回または名前が変更された場合に TextLayout を再構築する。
             if( ( null == this._TextLayout ) || ( this._前回表示した名前 != this.名前 ) )
             {
-                this._TextLayout = new TextLayout( this._factory, this.名前, this._TextFormat, 1000f, 30f ) { // 最大1000dpxまで
+                this._TextLayout = new TextLayout( グラフィックデバイス.Instance.DWriteFactory, this.名前, this._TextFormat, 1000f, 30f ) { // 最大1000dpxまで
                     TextAlignment = TextAlignment.Leading,
                     WordWrapping = WordWrapping.NoWrap, // 1000dpxを超えても改行しない（はみ出し分は切り捨て）
                 };
@@ -61,7 +59,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._拡大率X = ( 文字列幅dpx <= 描画矩形.Width ) ? 1.0f : ( 描画矩形.Width / 文字列幅dpx );
             }
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -82,6 +80,5 @@ namespace DTXmatixx.ステージ.演奏
         private TextLayout _TextLayout;
         private SolidColorBrush _文字色;
         private float _拡大率X = 1.0f;
-        private SharpDX.DirectWrite.Factory _factory = null;
     }
 }

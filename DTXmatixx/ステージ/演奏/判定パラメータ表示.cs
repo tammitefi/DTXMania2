@@ -12,10 +12,10 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 判定パラメータ表示()
         {
-            this.子リスト.Add( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小矩形.xml" ) );
-            this.子リスト.Add( this._判定種別文字 = new 画像( @"$(System)images\パラメータ用判定種別文字.png" ) );
+            this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小矩形.xml" ) );
+            this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\パラメータ用判定種別文字.png" ) );
         }
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -23,7 +23,7 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
-        public virtual void 描画する( グラフィックデバイス gd, DeviceContext1 dc, float x, float y, 成績 現在の成績 )
+        public virtual void 描画する( DeviceContext1 dc, float x, float y, 成績 現在の成績 )
         {
             var scaling = Matrix3x2.Scaling( 1.0f, 1.4f );
 
@@ -32,7 +32,7 @@ namespace DTXmatixx.ステージ.演奏
             int MaxCombo = 現在の成績.MaxCombo;
             int 合計 = 0;
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -40,7 +40,7 @@ namespace DTXmatixx.ステージ.演奏
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this.パラメータを一行描画する( gd, dc, 0f, 0f, 判定種別.PERFECT, 判定toヒット数[ 判定種別.PERFECT ], 割合表[ 判定種別.PERFECT ] );
+                this.パラメータを一行描画する( dc, 0f, 0f, 判定種別.PERFECT, 判定toヒット数[ 判定種別.PERFECT ], 割合表[ 判定種別.PERFECT ] );
                 合計 += 判定toヒット数[ 判定種別.PERFECT ];
                 y += _改行幅dpx;
 
@@ -48,7 +48,7 @@ namespace DTXmatixx.ステージ.演奏
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this.パラメータを一行描画する( gd, dc, 0f, 0f, 判定種別.GREAT, 判定toヒット数[ 判定種別.GREAT ], 割合表[ 判定種別.GREAT ] );
+                this.パラメータを一行描画する( dc, 0f, 0f, 判定種別.GREAT, 判定toヒット数[ 判定種別.GREAT ], 割合表[ 判定種別.GREAT ] );
                 合計 += 判定toヒット数[ 判定種別.GREAT ];
                 y += _改行幅dpx;
 
@@ -56,7 +56,7 @@ namespace DTXmatixx.ステージ.演奏
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this.パラメータを一行描画する( gd, dc, 0f, 0f, 判定種別.GOOD, 判定toヒット数[ 判定種別.GOOD ], 割合表[ 判定種別.GOOD ] );
+                this.パラメータを一行描画する( dc, 0f, 0f, 判定種別.GOOD, 判定toヒット数[ 判定種別.GOOD ], 割合表[ 判定種別.GOOD ] );
                 合計 += 判定toヒット数[ 判定種別.GOOD ];
                 y += _改行幅dpx;
 
@@ -64,7 +64,7 @@ namespace DTXmatixx.ステージ.演奏
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this.パラメータを一行描画する( gd, dc, 0f, 0f, 判定種別.OK, 判定toヒット数[ 判定種別.OK ], 割合表[ 判定種別.OK ] );
+                this.パラメータを一行描画する( dc, 0f, 0f, 判定種別.OK, 判定toヒット数[ 判定種別.OK ], 割合表[ 判定種別.OK ] );
                 合計 += 判定toヒット数[ 判定種別.OK ];
                 y += _改行幅dpx;
 
@@ -72,7 +72,7 @@ namespace DTXmatixx.ステージ.演奏
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this.パラメータを一行描画する( gd, dc, 0f, 0f, 判定種別.MISS, 判定toヒット数[ 判定種別.MISS ], 割合表[ 判定種別.MISS ] );
+                this.パラメータを一行描画する( dc, 0f, 0f, 判定種別.MISS, 判定toヒット数[ 判定種別.MISS ], 割合表[ 判定種別.MISS ] );
                 合計 += 判定toヒット数[ 判定種別.MISS ];
                 y += _改行幅dpx;
 
@@ -83,30 +83,30 @@ namespace DTXmatixx.ステージ.演奏
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this._判定種別文字.描画する( gd, dc, 0f, 0f, 転送元矩形: 矩形 );
+                this._判定種別文字.描画する( dc, 0f, 0f, 転送元矩形: 矩形 );
                 x += 矩形.Width + 16f;
 
                 dc.Transform =
                     scaling *
                     Matrix3x2.Translation( x, y ) *
                     pretrans;
-                this.数値を描画する( gd, dc, 0f, 0f, MaxCombo, 桁数: 4 );
-                this.数値を描画する( gd, dc, _dr, 0f, (int) Math.Floor( 100.0 * MaxCombo / 合計 ), 桁数: 3 );    // 切り捨てでいいやもう
+                this.数値を描画する( dc, 0f, 0f, MaxCombo, 桁数: 4 );
+                this.数値を描画する( dc, _dr, 0f, (int) Math.Floor( 100.0 * MaxCombo / 合計 ), 桁数: 3 );    // 切り捨てでいいやもう
 
             } );
 
-            this._パラメータ文字.描画する( gd, dc, _dp, 0f, "%" );
+            this._パラメータ文字.描画する( dc, _dp, 0f, "%" );
         }
-        public void パラメータを一行描画する( グラフィックデバイス gd, DeviceContext1 dc, float x, float y, 判定種別 judge, int ヒット数, int ヒット割合, float 不透明度 = 1.0f )
+        public void パラメータを一行描画する( DeviceContext1 dc, float x, float y, 判定種別 judge, int ヒット数, int ヒット割合, float 不透明度 = 1.0f )
         {
             var 矩形 = (RectangleF) this._判定種別文字の矩形リスト[ judge.ToString() ];
-            this._判定種別文字.描画する( gd, dc, x, y - 4f, 不透明度, 転送元矩形: 矩形 );
+            this._判定種別文字.描画する( dc, x, y - 4f, 不透明度, 転送元矩形: 矩形 );
             x += 矩形.Width + 16f;
 
-            this.数値を描画する( gd, dc, x, y, ヒット数, 4, 不透明度 );
-            this.数値を描画する( gd, dc, x + _dr, y, ヒット割合, 3, 不透明度 );
+            this.数値を描画する( dc, x, y, ヒット数, 4, 不透明度 );
+            this.数値を描画する( dc, x + _dr, y, ヒット割合, 3, 不透明度 );
             this._パラメータ文字.不透明度 = 不透明度;
-            this._パラメータ文字.描画する( gd, dc, x + _dp, y, "%" );
+            this._パラメータ文字.描画する( dc, x + _dp, y, "%" );
         }
 
         protected const float _dr = 78f;       // 割合(%)までのXオフセット[dpx]
@@ -117,7 +117,7 @@ namespace DTXmatixx.ステージ.演奏
         protected 画像 _判定種別文字 = null;
         protected 矩形リスト _判定種別文字の矩形リスト = null;
 
-        protected void 数値を描画する( グラフィックデバイス gd, DeviceContext1 dc, float x, float y, int 描画する数値, int 桁数, float 不透明度 = 1.0f )
+        protected void 数値を描画する( DeviceContext1 dc, float x, float y, int 描画する数値, int 桁数, float 不透明度 = 1.0f )
         {
             Debug.Assert( 1 <= 桁数 && 10 >= 桁数 );    // 最大10桁まで
 
@@ -126,7 +126,7 @@ namespace DTXmatixx.ステージ.演奏
             var 判定数文字列 = 判定数.ToString().PadLeft( 桁数 ).Replace( ' ', 'o' );  // グレーの '0' は 'o' で描画できる（矩形リスト参照）。
 
             this._パラメータ文字.不透明度 = 不透明度;
-            this._パラメータ文字.描画する( gd, dc, x, y, 判定数文字列 );
+            this._パラメータ文字.描画する( dc, x, y, 判定数文字列 );
         }
     }
 }

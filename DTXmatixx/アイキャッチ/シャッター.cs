@@ -14,16 +14,18 @@ namespace DTXmatixx.アイキャッチ
     {
         public シャッター()
         {
-            this.子リスト.Add( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
+            this.子を追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
-            this._明るいブラシ = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 83f / 255f, 210f / 255f, 255f / 255f, 1f ) );
-            this._ふつうのブラシ = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 46f / 255f, 117f / 255f, 182f / 255f, 1f ) );
-            this._濃いブラシ = new SolidColorBrush( gd.D2DDeviceContext, new Color4( 0f / 255f, 32f / 255f, 96f / 255f, 1f ) );
-            this._黒ブラシ = new SolidColorBrush( gd.D2DDeviceContext, Color4.Black );
-            this._白ブラシ = new SolidColorBrush( gd.D2DDeviceContext, Color4.White );
+            var dc = グラフィックデバイス.Instance.D2DDeviceContext;
+
+            this._明るいブラシ = new SolidColorBrush( dc, new Color4( 83f / 255f, 210f / 255f, 255f / 255f, 1f ) );
+            this._ふつうのブラシ = new SolidColorBrush( dc, new Color4( 46f / 255f, 117f / 255f, 182f / 255f, 1f ) );
+            this._濃いブラシ = new SolidColorBrush( dc, new Color4( 0f / 255f, 32f / 255f, 96f / 255f, 1f ) );
+            this._黒ブラシ = new SolidColorBrush( dc, Color4.Black );
+            this._白ブラシ = new SolidColorBrush( dc, Color4.White );
 
             this._シャッター情報 = new シャッター情報[ シャッター枚数 ] {
 				#region " *** "
@@ -166,7 +168,7 @@ namespace DTXmatixx.アイキャッチ
 
             this.現在のフェーズ = フェーズ.未定;
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             FDKUtilities.解放する( ref this._白ブラシ );
             FDKUtilities.解放する( ref this._黒ブラシ );
@@ -184,39 +186,43 @@ namespace DTXmatixx.アイキャッチ
             FDKUtilities.解放する( ref this._ロゴ不透明度 );
         }
 
-        public override void クローズする( グラフィックデバイス gd, float 速度倍率 = 1.0f )
+        public override void クローズする( float 速度倍率 = 1.0f )
         {
             double 秒( double v ) => ( v / 速度倍率 );
-            var start = gd.Animation.Timer.Time;
+
+            var animation = グラフィックデバイス.Instance.Animation;
+            var start = animation.Timer.Time;
 
             for( int i = 0; i < シャッター枚数; i++ )
             {
-                using( var 開閉遷移 = gd.Animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッター情報[ i ].開閉時間sec ), finalValue: 1.0 ) )   // 終了値 1.0(完全閉じ)
+                using( var 開閉遷移 = animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッター情報[ i ].開閉時間sec ), finalValue: 1.0 ) )   // 終了値 1.0(完全閉じ)
                 {
                     this._シャッター情報[ i ].開to閉割合?.Dispose();
-                    this._シャッター情報[ i ].開to閉割合 = new Variable( gd.Animation.Manager, initialValue: 0.0 );    // 初期値 0.0(完全開き)
+                    this._シャッター情報[ i ].開to閉割合 = new Variable( animation.Manager, initialValue: 0.0 );    // 初期値 0.0(完全開き)
                     this._シャッター情報[ i ].ストーリーボード?.Abandon();
                     this._シャッター情報[ i ].ストーリーボード?.Dispose();
-                    this._シャッター情報[ i ].ストーリーボード = new Storyboard( gd.Animation.Manager );
+                    this._シャッター情報[ i ].ストーリーボード = new Storyboard( animation.Manager );
                     this._シャッター情報[ i ].ストーリーボード.AddTransition( this._シャッター情報[ i ].開to閉割合, 開閉遷移 );
                     this._シャッター情報[ i ].ストーリーボード.Schedule( start + 秒( this._シャッター情報[ i ].完全開き時刻sec ) );    // 開始時刻: 完全開き時刻
                 }
             }
 
-            using( var _不透明度遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.75f ), finalValue: 1.0 ) )    // 終了値 1.0(完全不透明)
+            using( var _不透明度遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.75f ), finalValue: 1.0 ) )    // 終了値 1.0(完全不透明)
             {
                 this._ロゴ不透明度?.Dispose();
-                this._ロゴ不透明度 = new Variable( gd.Animation.Manager, initialValue: 0.0 ); // 初期値 0.0(完全透明)
-                this._ロゴボード = new Storyboard( gd.Animation.Manager );
+                this._ロゴ不透明度 = new Variable( animation.Manager, initialValue: 0.0 ); // 初期値 0.0(完全透明)
+                this._ロゴボード = new Storyboard( animation.Manager );
                 this._ロゴボード.AddTransition( this._ロゴ不透明度, _不透明度遷移 );
                 this._ロゴボード.Schedule( start );
             }
 
             this.現在のフェーズ = フェーズ.クローズ;
         }
-        public override void オープンする( グラフィックデバイス gd, float 速度倍率 = 1.0f )
+        public override void オープンする( float 速度倍率 = 1.0f )
         {
             double 秒( double v ) => ( v / 速度倍率 );
+
+            var animation = グラフィックデバイス.Instance.Animation;
 
             double 最も遅い時刻sec = 0.0;
             foreach( var s in this._シャッター情報 )
@@ -224,28 +230,28 @@ namespace DTXmatixx.アイキャッチ
                 if( 最も遅い時刻sec < s.完全閉じ時刻sec )
                     最も遅い時刻sec = s.完全閉じ時刻sec;
             }
-            var start = gd.Animation.Timer.Time;
+            var start = animation.Timer.Time;
             var end = start + 秒( 最も遅い時刻sec );
 
             for( int i = 0; i < シャッター枚数; i++ )
             {
-                using( var 開閉遷移 = gd.Animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッター情報[ i ].開閉時間sec ), finalValue: 0.0 ) )  // 終了値: 0.0(完全開き)
+                using( var 開閉遷移 = animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッター情報[ i ].開閉時間sec ), finalValue: 0.0 ) )  // 終了値: 0.0(完全開き)
                 {
                     this._シャッター情報[ i ].開to閉割合?.Dispose();
-                    this._シャッター情報[ i ].開to閉割合 = new Variable( gd.Animation.Manager, initialValue: 1.0 );    // 初期値 1.0(完全閉じ)
+                    this._シャッター情報[ i ].開to閉割合 = new Variable( animation.Manager, initialValue: 1.0 );    // 初期値 1.0(完全閉じ)
                     this._シャッター情報[ i ].ストーリーボード?.Abandon();
                     this._シャッター情報[ i ].ストーリーボード?.Dispose();
-                    this._シャッター情報[ i ].ストーリーボード = new Storyboard( gd.Animation.Manager );
+                    this._シャッター情報[ i ].ストーリーボード = new Storyboard( animation.Manager );
                     this._シャッター情報[ i ].ストーリーボード.AddTransition( this._シャッター情報[ i ].開to閉割合, 開閉遷移 );
                     this._シャッター情報[ i ].ストーリーボード.Schedule( end - 秒( this._シャッター情報[ i ].完全閉じ時刻sec ) );   // 開始時刻: 完全閉じ時刻
                 }
             }
 
             this._ロゴ不透明度?.Dispose();
-            this._ロゴ不透明度 = new Variable( gd.Animation.Manager, initialValue: 1.0 ); // 初期値 0.0(完全不透明)
-            using( var _不透明度遷移 = gd.Animation.TrasitionLibrary.Linear( duration: 秒( 0.75 ), finalValue: 0.0 ) )    // 終了値 0.0(完全透明)
+            this._ロゴ不透明度 = new Variable( animation.Manager, initialValue: 1.0 ); // 初期値 0.0(完全不透明)
+            using( var _不透明度遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.75 ), finalValue: 0.0 ) )    // 終了値 0.0(完全透明)
             {
-                this._ロゴボード = new Storyboard( gd.Animation.Manager );
+                this._ロゴボード = new Storyboard( animation.Manager );
                 this._ロゴボード.AddTransition( this._ロゴ不透明度, _不透明度遷移 );
                 this._ロゴボード.Schedule( start );
             }
@@ -253,11 +259,11 @@ namespace DTXmatixx.アイキャッチ
             this.現在のフェーズ = フェーズ.オープン;
         }
 
-        protected override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
+        protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -290,7 +296,6 @@ namespace DTXmatixx.アイキャッチ
                     すべて完了 = false;
 
                 this._ロゴ.描画する(
-                    gd,
                     dc,
                     this._ロゴ表示領域.Left,
                     this._ロゴ表示領域.Top,

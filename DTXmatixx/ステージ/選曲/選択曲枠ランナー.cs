@@ -13,16 +13,16 @@ namespace DTXmatixx.ステージ.選曲
     {
         public 選択曲枠ランナー()
         {
-            this.子リスト.Add( this._ランナー画像 = new 画像( @"$(System)images\選曲画面_枠ランナー.png" ) );
+            this.子を追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲画面_枠ランナー.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -33,7 +33,7 @@ namespace DTXmatixx.ステージ.選曲
         {
             this._カウンタ = new LoopCounter( 0, 2300, 1 ); // 2秒ごとに300ms のループ
         }
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             if( null == this._カウンタ )
                 return;
@@ -44,14 +44,12 @@ namespace DTXmatixx.ステージ.選曲
 
                 // 上
                 this._ランナー画像.描画する(
-                    gd,
                     dc,
                     左位置: 1920f - 割合 * ( 1920f - 1044f ),
                     上位置: 485f - this._ランナー画像.サイズ.Height / 2f );
 
                 // 下
                 this._ランナー画像.描画する(
-                    gd,
                     dc,
                     左位置: 1920f - 割合 * ( 1920f - 1044f ),
                     上位置: 598f - this._ランナー画像.サイズ.Height / 2f );

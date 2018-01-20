@@ -50,30 +50,31 @@ namespace DTXmatixx.ステージ.演奏
 
         public 演奏ステージ()
         {
-            this.子リスト.Add( this._背景画像 = new 画像( @"$(System)images\演奏画面.png" ) );
-            this.子リスト.Add( this._レーンフレーム = new レーンフレーム() );
-            this.子リスト.Add( this._曲名パネル = new 曲名パネル() );
-            this.子リスト.Add( this._ヒットバー画像 = new 画像( @"$(System)images\演奏画面_ヒットバー.png" ) );
-            this.子リスト.Add( this._ドラムパッド = new ドラムパッド() );
-            this.子リスト.Add( this._レーンフラッシュ = new レーンフラッシュ() );
-            this.子リスト.Add( this._ドラムチップ画像 = new 画像( @"$(System)images\ドラムチップ.png" ) );
-            this.子リスト.Add( this._判定文字列 = new 判定文字列() );
-            this.子リスト.Add( this._チップ光 = new チップ光() );
-            this.子リスト.Add( this._左サイドクリアパネル = new 左サイドクリアパネル() );
-            this.子リスト.Add( this._右サイドクリアパネル = new 右サイドクリアパネル() );
-            this.子リスト.Add( this._判定パラメータ表示 = new 判定パラメータ表示() );
-            this.子リスト.Add( this._フェーズパネル = new フェーズパネル() );
-            this.子リスト.Add( this._コンボ表示 = new コンボ表示() );
-            this.子リスト.Add( this._カウントマップライン = new カウントマップライン() );
-            this.子リスト.Add( this._スコア表示 = new スコア表示() );
-            this.子リスト.Add( this._プレイヤー名表示 = new プレイヤー名表示() );
-            this.子リスト.Add( this._譜面スクロール速度表示 = new 譜面スクロール速度表示() );
-            this.子リスト.Add( this._達成率表示 = new 達成率表示() );
-            this.子リスト.Add( this._曲別SKILL = new 曲別SKILL() );
-            this.子リスト.Add( this._エキサイトゲージ = new エキサイトゲージ() );
-            this.子リスト.Add( this._FPS = new FPS() );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏画面.png" ) );
+            this.子を追加する( this._レーンフレーム = new レーンフレーム() );
+            this.子を追加する( this._曲名パネル = new 曲名パネル() );
+            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏画面_ヒットバー.png" ) );
+            this.子を追加する( this._ドラムパッド = new ドラムパッド() );
+            this.子を追加する( this._レーンフラッシュ = new レーンフラッシュ() );
+            this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\ドラムチップ.png" ) );
+            this.子を追加する( this._判定文字列 = new 判定文字列() );
+            this.子を追加する( this._チップ光 = new チップ光() );
+            this.子を追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
+            this.子を追加する( this._右サイドクリアパネル = new 右サイドクリアパネル() );
+            this.子を追加する( this._判定パラメータ表示 = new 判定パラメータ表示() );
+            this.子を追加する( this._フェーズパネル = new フェーズパネル() );
+            this.子を追加する( this._コンボ表示 = new コンボ表示() );
+            this.子を追加する( this._カウントマップライン = new カウントマップライン() );
+            this.子を追加する( this._スコア表示 = new スコア表示() );
+            this.子を追加する( this._プレイヤー名表示 = new プレイヤー名表示() );
+            this.子を追加する( this._譜面スクロール速度表示 = new 譜面スクロール速度表示() );
+            this.子を追加する( this._達成率表示 = new 達成率表示() );
+            this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
+            this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
+            this.子を追加する( this._FPS = new FPS() );
         }
-        protected override void On活性化( グラフィックデバイス gd )
+
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -85,8 +86,8 @@ namespace DTXmatixx.ステージ.演奏
                 this.成績.スコアと設定を反映する( App.演奏スコア, App.ユーザ管理.ログオン中のユーザ );
 
                 this._描画開始チップ番号 = -1;
-                this._小節線色 = new SolidColorBrush( gd.D2DDeviceContext, Color.White );
-                this._拍線色 = new SolidColorBrush( gd.D2DDeviceContext, Color.LightGray );
+                this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
+                this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
                 this._ドラムチップ画像の矩形リスト = new 矩形リスト( @"$(System)images\ドラムチップ矩形.xml" );      // デバイスリソースは持たないので、子Activityではない。
                 this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
@@ -112,7 +113,7 @@ namespace DTXmatixx.ステージ.演奏
                         Log.Info( "背景動画とBGMを読み込みます。" );
 
                         // 動画を子リストに追加。
-                        this.子リスト.Add( this._背景動画 = new 動画( App.演奏スコア.背景動画ファイル名 ) );
+                        this.子を追加する( this._背景動画 = new 動画( App.演奏スコア.背景動画ファイル名 ) );
 
                         // 動画から音声パートを抽出して BGM を作成。
                         try
@@ -142,7 +143,7 @@ namespace DTXmatixx.ステージ.演奏
                         var path = Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value );
 
                         // 動画を子リストに追加。
-                        this.子リスト.Add( this._背景動画 = new 動画( path ) );
+                        this.子を追加する( this._背景動画 = new 動画( path ) );
 
                         // BGM パートは使わない。
                         this._BGM = null;
@@ -173,7 +174,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._初めての進行描画 = true;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -194,7 +195,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 // 背景動画を生成した場合は子リストから削除。
                 if( null != this._背景動画 )
-                    this.子リスト.Remove( this._背景動画 );
+                    this.子を削除する( this._背景動画 );
 
                 //App.WAV管理?.Dispose();	--> ここではまだ解放しない。結果ステージの非活性化時に解放する。
                 //App.WAV管理 = null;
@@ -587,7 +588,7 @@ namespace DTXmatixx.ステージ.演奏
         ///		描画。
         /// </summary>
         /// <param name="gd"></param>
-        public override void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public override void 進行描画する( DeviceContext1 dc )
         {
             // 進行描画
 
@@ -598,37 +599,37 @@ namespace DTXmatixx.ステージ.演奏
             {
                 case フェーズ.フェードイン:
                     {
-                        this._左サイドクリアパネル.クリアする( gd, dc );
-                        this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( gd, ( dcp ) => {
-                            this._プレイヤー名表示.進行描画する( gd, dcp );
-                            this._スコア表示.進行描画する( gd, dcp, gd.Animation, new Vector2( +280f, +120f ), this.成績 );
-                            this._達成率表示.描画する( gd, dcp, (float) this.成績.Achievement );
-                            this._判定パラメータ表示.描画する( gd, dcp, +118f, +372f, this.成績 );
-                            this._曲別SKILL.進行描画する( gd, dcp, 0f );
+                        this._左サイドクリアパネル.クリアする();
+                        this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
+                            this._プレイヤー名表示.進行描画する( dcp );
+                            this._スコア表示.進行描画する( dcp, グラフィックデバイス.Instance.Animation, new Vector2( +280f, +120f ), this.成績 );
+                            this._達成率表示.描画する( dcp, (float) this.成績.Achievement );
+                            this._判定パラメータ表示.描画する( dcp, +118f, +372f, this.成績 );
+                            this._曲別SKILL.進行描画する( dcp, 0f );
                         } );
-                        this._左サイドクリアパネル.描画する( gd, dc );
+                        this._左サイドクリアパネル.描画する( dc );
 
-                        this._右サイドクリアパネル.クリアする( gd, dc );
-                        this._右サイドクリアパネル.描画する( gd, dc );
+                        this._右サイドクリアパネル.クリアする();
+                        this._右サイドクリアパネル.描画する( dc );
 
-                        this._レーンフレーム.描画する( gd, dc );
-                        this._ドラムパッド.進行描画する( gd, dc );
-                        this._背景画像.描画する( gd, dc, 0f, 0f );
-                        this._譜面スクロール速度表示.進行描画する( gd, dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
-                        this._エキサイトゲージ.進行描画する( gd, dc, this.成績.エキサイトゲージ量 );
+                        this._レーンフレーム.描画する( dc );
+                        this._ドラムパッド.進行描画する( dc );
+                        this._背景画像.描画する( dc, 0f, 0f );
+                        this._譜面スクロール速度表示.進行描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
+                        this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
 
-                        this._カウントマップライン.進行描画する( gd, dc );
-                        this._フェーズパネル.進行描画する( gd, dc );
-                        this._曲名パネル.描画する( gd, dc );
-                        this._ヒットバーを描画する( gd, dc );
-                        this._キャプチャ画面を描画する( gd, dc, ( 1.0f - this._フェードインカウンタ.現在値の割合 ) );
+                        this._カウントマップライン.進行描画する( dc );
+                        this._フェーズパネル.進行描画する( dc );
+                        this._曲名パネル.描画する( dc );
+                        this._ヒットバーを描画する( dc );
+                        this._キャプチャ画面を描画する( dc, ( 1.0f - this._フェードインカウンタ.現在値の割合 ) );
                     }
                     break;
 
                 case フェーズ.表示:
                 case フェーズ.キャンセル時フェードアウト:
                     {
-                        double 演奏時刻sec = this._演奏開始からの経過時間secを返す() + gd.次のDComp表示までの残り時間sec;
+                        double 演奏時刻sec = this._演奏開始からの経過時間secを返す() + グラフィックデバイス.Instance.次のDComp表示までの残り時間sec;
 
                         #region " 譜面スクロール速度が変化している → 追い付き進行 "
                         //----------------
@@ -683,53 +684,53 @@ namespace DTXmatixx.ステージ.演奏
                         if( this._背景動画開始済み )
                         {
                             // 背景動画チップがヒット済みなら、背景動画の進行描画を行う。
-                            this._背景動画?.描画する( gd, dc, new RectangleF( 0f, 0f, gd.設計画面サイズ.Width, gd.設計画面サイズ.Height ), 1.0f );
+                            this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Height ), 1.0f );
 
                             // 開始直後のデコードが重たいかもしれないので、演奏時刻をここで更新しておく。	---> 重たくても更新禁止！（譜面スクロールがガタつく原因になる）
                             //演奏時刻sec = this._演奏開始からの経過時間secを返す();
                         }
 
-                        this._左サイドクリアパネル.クリアする( gd, dc );
-                        this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( gd, ( dcp ) => {
-                            this._プレイヤー名表示.進行描画する( gd, dcp );
-                            this._スコア表示.進行描画する( gd, dcp, gd.Animation, new Vector2( +280f, +120f ), this.成績 );
-                            this._達成率表示.描画する( gd, dcp, (float) this.成績.Achievement );
-                            this._判定パラメータ表示.描画する( gd, dcp, +118f, +372f, this.成績 );
-                            this._曲別SKILL.進行描画する( gd, dcp, this.成績.Skill );
+                        this._左サイドクリアパネル.クリアする();
+                        this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
+                            this._プレイヤー名表示.進行描画する(  dcp );
+                            this._スコア表示.進行描画する( dcp, グラフィックデバイス.Instance.Animation, new Vector2( +280f, +120f ), this.成績 );
+                            this._達成率表示.描画する( dcp, (float) this.成績.Achievement );
+                            this._判定パラメータ表示.描画する( dcp, +118f, +372f, this.成績 );
+                            this._曲別SKILL.進行描画する( dcp, this.成績.Skill );
                         } );
-                        this._左サイドクリアパネル.描画する( gd, dc );
+                        this._左サイドクリアパネル.描画する( dc );
 
-                        this._右サイドクリアパネル.クリアする( gd, dc );
-                        this._右サイドクリアパネル.クリアパネル.テクスチャへ描画する( gd, ( dcp ) => {
-                            this._コンボ表示.進行描画する( gd, dcp, gd.Animation, new Vector2( +228f + 264f / 2f, +234f ), this.成績 );
+                        this._右サイドクリアパネル.クリアする();
+                        this._右サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
+                            this._コンボ表示.進行描画する( dcp, グラフィックデバイス.Instance.Animation, new Vector2( +228f + 264f / 2f, +234f ), this.成績 );
                         } );
-                        this._右サイドクリアパネル.描画する( gd, dc );
+                        this._右サイドクリアパネル.描画する( dc );
 
-                        this._レーンフラッシュ.進行描画する( gd, dc );
-                        this._小節線拍線を描画する( gd, dc, 演奏時刻sec );
-                        this._レーンフレーム.描画する( gd, dc );
-                        this._ドラムパッド.進行描画する( gd, dc );
-                        this._背景画像.描画する( gd, dc, 0f, 0f );
-                        this._譜面スクロール速度表示.進行描画する( gd, dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
-                        this._エキサイトゲージ.進行描画する( gd, dc, this.成績.エキサイトゲージ量 );
+                        this._レーンフラッシュ.進行描画する( dc );
+                        this._小節線拍線を描画する( dc, 演奏時刻sec );
+                        this._レーンフレーム.描画する( dc );
+                        this._ドラムパッド.進行描画する( dc );
+                        this._背景画像.描画する( dc, 0f, 0f );
+                        this._譜面スクロール速度表示.進行描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
+                        this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
 
                         double 曲の長さsec = App.演奏スコア.チップリスト[ App.演奏スコア.チップリスト.Count - 1 ].描画時刻sec;
                         float 現在位置 = (float) ( 1.0 - ( 曲の長さsec - 演奏時刻sec ) / 曲の長さsec );
                         this._カウントマップライン.カウント値を設定する( 現在位置, this.成績.判定toヒット数 );
-                        this._カウントマップライン.進行描画する( gd, dc );
+                        this._カウントマップライン.進行描画する( dc );
                         this._フェーズパネル.現在位置 = 現在位置;
-                        this._フェーズパネル.進行描画する( gd, dc );
-                        this._曲名パネル.描画する( gd, dc );
-                        this._ヒットバーを描画する( gd, dc );
-                        this._チップを描画する( gd, dc, 演奏時刻sec );
-                        this._チップ光.進行描画する( gd, dc );
-                        this._判定文字列.進行描画する( gd, dc );
+                        this._フェーズパネル.進行描画する( dc );
+                        this._曲名パネル.描画する( dc );
+                        this._ヒットバーを描画する( dc );
+                        this._チップを描画する( dc, 演奏時刻sec );
+                        this._チップ光.進行描画する( dc );
+                        this._判定文字列.進行描画する( dc );
                         this._FPS.VPSをカウントする();
-                        this._FPS.描画する( gd, dc, 0f, 0f );
+                        this._FPS.描画する( dc, 0f, 0f );
 
                         if( this.現在のフェーズ == フェーズ.キャンセル時フェードアウト )
                         {
-                            App.ステージ管理.現在のアイキャッチ.進行描画する( gd, dc );
+                            App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                             if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                             {
@@ -740,7 +741,7 @@ namespace DTXmatixx.ステージ.演奏
                     break;
 
                 case フェーズ.キャンセル通知:
-                    App.ステージ管理.アイキャッチを選択しクローズする( gd, nameof( アイキャッチ.半回転黒フェード ) );
+                    App.ステージ管理.アイキャッチを選択しクローズする( nameof( アイキャッチ.半回転黒フェード ) );
                     this.現在のフェーズ = フェーズ.キャンセル時フェードアウト;
                     break;
 
@@ -870,17 +871,17 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private 画像 _ヒットバー画像 = null;
-        private void _ヒットバーを描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        private void _ヒットバーを描画する( DeviceContext1 dc )
         {
-            this._ヒットバー画像.描画する( gd, dc, 441f, ヒット判定バーの中央Y座標dpx - 4f );    // 4f がバーの厚みの半分[dpx]。
+            this._ヒットバー画像.描画する( dc, 441f, ヒット判定バーの中央Y座標dpx - 4f );    // 4f がバーの厚みの半分[dpx]。
         }
 
         // 小節線・拍線 と チップ は描画階層（奥行き）が異なるので、別々のメソッドに分ける。
         private SolidColorBrush _小節線色 = null;
         private SolidColorBrush _拍線色 = null;
-        private void _小節線拍線を描画する( グラフィックデバイス gd, DeviceContext1 dc, double 現在の演奏時刻sec )
+        private void _小節線拍線を描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
@@ -903,7 +904,7 @@ namespace DTXmatixx.ステージ.演奏
         private 画像 _ドラムチップ画像 = null;
         private 矩形リスト _ドラムチップ画像の矩形リスト = null;
         private LoopCounter _ドラムチップアニメ = null;
-        private void _チップを描画する( グラフィックデバイス gd, DeviceContext1 dc, double 現在の演奏時刻sec )
+        private void _チップを描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
             Debug.Assert( null != this._ドラムチップ画像の矩形リスト );
 
@@ -926,7 +927,7 @@ namespace DTXmatixx.ステージ.演奏
                 #region " チップが描画開始チップであり、かつ、そのY座標が画面下端を超えたなら、描画開始チップ番号を更新する。"
                 //----------------
                 if( ( index == this._描画開始チップ番号 ) &&
-                    ( gd.設計画面サイズ.Height + 40.0 < 縦中央位置dpx ) )   // +40 はチップが隠れるであろう適当なマージン。
+                    ( グラフィックデバイス.Instance.設計画面サイズ.Height + 40.0 < 縦中央位置dpx ) )   // +40 はチップが隠れるであろう適当なマージン。
                 {
                     this._描画開始チップ番号++;
 
@@ -998,7 +999,6 @@ namespace DTXmatixx.ステージ.演奏
                                 y: 縦中央位置dpx - 縦方向中央位置dpx * 音量0to1 );
 
                         this._ドラムチップ画像.描画する(
-                            gd,
                             dc,
                             変換行列2D,
                             転送元矩形: 矩形,
@@ -1021,7 +1021,6 @@ namespace DTXmatixx.ステージ.演奏
                                 y: 縦中央位置dpx - 縦方向中央位置dpx * 音量0to1 );
 
                         this._ドラムチップ画像.描画する(
-                            gd,
                             dc,
                             変換行列2D,
                             転送元矩形: 矩形,
@@ -1200,14 +1199,14 @@ namespace DTXmatixx.ステージ.演奏
             return 一番近いチップ;
         }
 
-        private void _キャプチャ画面を描画する( グラフィックデバイス gd, DeviceContext1 dc, float 不透明度 = 1.0f )
+        private void _キャプチャ画面を描画する( DeviceContext1 dc, float 不透明度 = 1.0f )
         {
             Debug.Assert( null != this.キャプチャ画面, "キャプチャ画面が設定されていません。" );
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
                 dc.DrawBitmap(
                     this.キャプチャ画面,
-                    new RectangleF( 0f, 0f, gd.設計画面サイズ.Width, gd.設計画面サイズ.Height ),
+                    new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Height ),
                     不透明度,
                     BitmapInterpolationMode.Linear );
             } );

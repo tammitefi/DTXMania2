@@ -15,17 +15,17 @@ namespace DTXmatixx.ステージ.曲読み込み
     {
         public 難易度()
         {
-            this.子リスト.Add( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大矩形.xml", 文字幅補正dpx: 0f ) );
+            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大矩形.xml", 文字幅補正dpx: 0f ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._見出し用TextFormat = new TextFormat( gd.DWriteFactory, "Century Gothic", 50f );
+                this._見出し用TextFormat = new TextFormat( グラフィックデバイス.Instance.DWriteFactory, "Century Gothic", 50f );
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -33,7 +33,7 @@ namespace DTXmatixx.ステージ.曲読み込み
             }
         }
 
-        public void 描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc )
         {
             var 見出し描画領域 = new RectangleF( 783f, 117f, 414f, 63f );
             var 数値描画領域 = new RectangleF( 783f, 180f, 414f, 213f );
@@ -52,7 +52,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                 難易度 = node.難易度[ anker ];
             }
 
-            gd.D2DBatchDraw( dc, () => {
+            グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
@@ -78,7 +78,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                         Matrix3x2.Translation( 数値描画領域.X + 175f, 数値描画領域.Y ) *
                         pretrans;
 
-                    this._数字画像.描画する( gd, dc, 0f, 0f, 数値文字列.Substring( 2 ) );
+                    this._数字画像.描画する( dc, 0f, 0f, 数値文字列.Substring( 2 ) );
 
                     // 整数部と小数点を描画する。
                     dc.Transform =
@@ -86,7 +86,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                         Matrix3x2.Translation( 数値描画領域.X + 15f, 数値描画領域.Y ) *
                         pretrans;
 
-                    this._数字画像.描画する( gd, dc, 0f, 0f, 数値文字列.Substring( 0, 2 ) );
+                    this._数字画像.描画する( dc, 0f, 0f, 数値文字列.Substring( 0, 2 ) );
                 }
 
             } );

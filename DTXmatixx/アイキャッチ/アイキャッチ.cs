@@ -25,19 +25,19 @@ namespace DTXmatixx.アイキャッチ
             protected set;
         } = フェーズ.未定;
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             this.現在のフェーズ = フェーズ.未定;
         }
 
-        public virtual void クローズする( グラフィックデバイス gd, float 速度倍率 = 1.0f )
+        public virtual void クローズする( float 速度倍率 = 1.0f )
         {
             //
             // ここに、ストーリーボードと変数の生成、トラジションの追加、ストーリーボードの開始コードを記述する。
             //
             this.現在のフェーズ = フェーズ.クローズ;
         }
-        public virtual void オープンする( グラフィックデバイス gd, float 速度倍率 = 1.0f )
+        public virtual void オープンする( float 速度倍率 = 1.0f )
         {
             //
             // ここに、ストーリーボードと変数の生成、トラジションの追加、ストーリーボードの開始コードを記述する。
@@ -45,7 +45,7 @@ namespace DTXmatixx.アイキャッチ
             this.現在のフェーズ = フェーズ.オープン;
         }
 
-        public virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public virtual void 進行描画する( DeviceContext1 dc )
         {
             switch( this.現在のフェーズ )
             {
@@ -54,17 +54,17 @@ namespace DTXmatixx.アイキャッチ
 
                 case フェーズ.クローズ:
                 case フェーズ.クローズ完了:
-                    this.進行描画する( gd, dc, StoryboardStatus.Scheduled );
+                    this.進行描画する( dc, StoryboardStatus.Scheduled );
                     break;
 
                 case フェーズ.オープン:
                 case フェーズ.オープン完了:
-                    this.進行描画する( gd, dc, StoryboardStatus.Ready );
+                    this.進行描画する( dc, StoryboardStatus.Ready );
                     break;
             }
         }
 
-        protected virtual void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc, StoryboardStatus 描画しないStatus )
+        protected virtual void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
 

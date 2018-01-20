@@ -44,18 +44,12 @@ namespace DTXmatixx.ステージ
         }
         public void Dispose()
         {
-            throw new InvalidOperationException( "このメソッドは使用できません。別のオーバーロードメソッドを使用してください。" );
-        }
-        public void Dispose( グラフィックデバイス gd )
-        {
-            Debug.Assert( null != gd );
-
             // 現在活性化しているステージがあれば、すべて非活性化する。
             foreach( var kvp in this.ステージリスト )
             {
                 if( kvp.Value.活性化している )
                 {
-                    kvp.Value.非活性化する( gd );
+                    kvp.Value.非活性化する();
                 }
             }
             // 現在活性化しているアイキャッチがあれば、すべて非活性化する。
@@ -63,36 +57,36 @@ namespace DTXmatixx.ステージ
             {
                 if( kvp.Value.活性化している )
                 {
-                    kvp.Value.非活性化する( gd );
+                    kvp.Value.非活性化する();
                 }
             }
 
         }
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 // 全ステージの初期化
                 if( this.現在のステージ?.活性化していない ?? false )
-                    this.現在のステージ?.活性化する( gd );
+                    this.現在のステージ?.活性化する();
 
                 // 全アイキャッチの初期化
                 foreach( var kvp in this._アイキャッチリスト )
-                    kvp.Value.活性化する( gd );
+                    kvp.Value.活性化する();
 
                 // 現在のアイキャッチを設定。
                 this._現在のアイキャッチ = this._アイキャッチリスト.ElementAt( 0 ).Value;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 if( this.現在のステージ?.活性化している ?? false )
-                    this.現在のステージ?.非活性化する( gd );
+                    this.現在のステージ?.非活性化する();
 
                 foreach( var kvp in this._アイキャッチリスト )
-                    kvp.Value.非活性化する( gd );
+                    kvp.Value.非活性化する();
 
                 this._現在のアイキャッチ = null;
             }
@@ -102,7 +96,7 @@ namespace DTXmatixx.ステージ
         ///		現在のステージを非活性化し、指定されたステージに遷移して、活性化する。
         /// </summary>
         /// <param name="遷移先ステージ名">Nullまたは空文字列なら、非活性化のみ行う。</param>
-        public void ステージを遷移する( グラフィックデバイス gd, string 遷移先ステージ名 )
+        public void ステージを遷移する( string 遷移先ステージ名 )
         {
             Log.Header( $"{遷移先ステージ名} へ遷移します。" );
 
@@ -111,13 +105,13 @@ namespace DTXmatixx.ステージ
                 if( null != this._現在のステージ &&
                     this._現在のステージ.活性化している )
                 {
-                    this._現在のステージ.非活性化する( gd );
+                    this._現在のステージ.非活性化する();
                 }
 
                 if( 遷移先ステージ名.Nullでも空でもない() )
                 {
                     this._現在のステージ = this.ステージリスト[ 遷移先ステージ名 ];
-                    this._現在のステージ.活性化する( gd );
+                    this._現在のステージ.活性化する();
 
                     //App.入力管理.すべての入力デバイスをポーリングする();
                 }
@@ -128,10 +122,10 @@ namespace DTXmatixx.ステージ
                 }
             }
         }
-        public void アイキャッチを選択しクローズする( グラフィックデバイス gd, string 名前 )
+        public void アイキャッチを選択しクローズする( string 名前 )
         {
             this._現在のアイキャッチ = this._アイキャッチリスト[ 名前 ];
-            this._現在のアイキャッチ.クローズする( gd );
+            this._現在のアイキャッチ.クローズする();
         }
 
         /// <summary>

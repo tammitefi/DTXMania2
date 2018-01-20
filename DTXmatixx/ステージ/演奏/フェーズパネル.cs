@@ -26,10 +26,10 @@ namespace DTXmatixx.ステージ.演奏
 
         public フェーズパネル()
         {
-            this.子リスト.Add( this._演奏位置カーソル画像 = new 画像( @"$(System)images\演奏位置カーソル.png" ) );
+            this.子を追加する( this._演奏位置カーソル画像 = new 画像( @"$(System)images\演奏位置カーソル.png" ) );
         }
 
-        protected override void On活性化( グラフィックデバイス gd )
+        protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -38,14 +38,14 @@ namespace DTXmatixx.ステージ.演奏
                 this._初めての進行描画 = true;
             }
         }
-        protected override void On非活性化( グラフィックデバイス gd )
+        protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
 
-        public void 進行描画する( グラフィックデバイス gd, DeviceContext1 dc )
+        public void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
             {
@@ -57,7 +57,6 @@ namespace DTXmatixx.ステージ.演奏
 
             var バー矩形 = (RectangleF) this._演奏位置カーソルの矩形リスト[ "Bar" ];
             this._演奏位置カーソル画像.描画する(
-                gd,
                 dc,
                 中央位置dpx.X - バー矩形.Width / 2f,
                 中央位置dpx.Y - バー矩形.Height / 2f,
@@ -65,7 +64,6 @@ namespace DTXmatixx.ステージ.演奏
 
             var 左三角矩形 = (RectangleF) this._演奏位置カーソルの矩形リスト[ "Left" ];
             this._演奏位置カーソル画像.描画する(
-                gd,
                 dc,
                 中央位置dpx.X - 左三角矩形.Width / 2f - this._左右三角アニメ用カウンタ.現在値の割合 * 40f,
                 中央位置dpx.Y - 左三角矩形.Height / 2f,
@@ -73,7 +71,6 @@ namespace DTXmatixx.ステージ.演奏
 
             var 右三角矩形 = (RectangleF) this._演奏位置カーソルの矩形リスト[ "Right" ];
             this._演奏位置カーソル画像.描画する(
-                gd,
                 dc,
                 中央位置dpx.X - 右三角矩形.Width / 2f + this._左右三角アニメ用カウンタ.現在値の割合 * 40f,
                 中央位置dpx.Y - 右三角矩形.Height / 2f,
