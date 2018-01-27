@@ -255,6 +255,8 @@ namespace DTXmatixx
                 this.全画面モード = !( this.全画面モード );
                 App.ユーザ管理.ログオン中のユーザ.全画面モードである = this.全画面モード;
             }
+
+            base.OnKeyDown( e );
         }
 
         #region " IDTXManiaService の実装 "
