@@ -6,9 +6,9 @@ using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
-namespace DTXmatixx.ステージ.設定
+namespace DTXmatixx.ステージ.オプション設定
 {
-    class 設定ステージ : ステージ
+    class オプション設定ステージ : ステージ
     {
         public enum フェーズ
         {
@@ -24,7 +24,7 @@ namespace DTXmatixx.ステージ.設定
             protected set;
         }
 
-        public 設定ステージ()
+        public オプション設定ステージ()
         {
             this.子を追加する( this._舞台画像 = new 舞台画像() );
             this.子を追加する( this._パネルリスト = new パネルリスト() );

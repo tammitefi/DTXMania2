@@ -8,7 +8,7 @@ using FDK;
 using FDK.メディア;
 using DTXmatixx.設定;
 
-namespace DTXmatixx.ステージ.設定
+namespace DTXmatixx.ステージ.オプション設定
 {
     class パネルリスト : Activity
     {

@@ -6,7 +6,7 @@ using SharpDX;
 using FDK;
 using FDK.メディア;
 
-namespace DTXmatixx.ステージ.設定
+namespace DTXmatixx.ステージ.オプション設定
 {
     /// <summary>
     ///		OFF と ON を切り替えられるスイッチ。

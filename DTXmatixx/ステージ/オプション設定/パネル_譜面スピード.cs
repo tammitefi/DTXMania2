@@ -7,7 +7,7 @@ using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
-namespace DTXmatixx.ステージ.設定
+namespace DTXmatixx.ステージ.オプション設定
 {
     /// <summary>
     ///		スクロール速度専用の数値ボックス。
