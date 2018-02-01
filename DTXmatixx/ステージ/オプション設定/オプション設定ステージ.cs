@@ -5,6 +5,7 @@ using System.Linq;
 using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
+using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ.オプション設定
 {
@@ -24,10 +25,21 @@ namespace DTXmatixx.ステージ.オプション設定
             protected set;
         }
 
+        /// <summary>
+        ///		パネルの識別に <see cref="パネル.パネル名"/> を使う も の だ け、
+        ///		ここで一元的に定義しておく。
+        /// </summary>
+        public class 項目名
+        {
+            public static readonly string 設定完了 = "設定完了";
+            public static readonly string 設定完了_戻る = "設定完了（戻る）";
+        }
+
         public オプション設定ステージ()
         {
             this.子を追加する( this._舞台画像 = new 舞台画像() );
             this.子を追加する( this._パネルリスト = new パネルリスト() );
+            //this.子を追加する( this._ルートパネルフォルダ = new パネル_フォルダ( "Root", null, null ) ); --> 活性化のたびに、子パネルとまとめて動的に追加する。
         }
 
         protected override void On活性化()
@@ -36,12 +48,102 @@ namespace DTXmatixx.ステージ.オプション設定
             {
                 this.現在のフェーズ = フェーズ.フェードイン;
                 this._初めての進行描画 = true;
+
+                // フォルダツリーを構築する。
+
+                this._ルートパネルフォルダ = new パネル_フォルダ( "Root", null, null );
+
+                #region " (1) ルート＞自動演奏 "
+                //----------------
+                var user = App.ユーザ管理.ログオン中のユーザ;
+
+                var 自動演奏 = new パネル_フォルダ( "自動演奏", this._ルートパネルフォルダ ) {
+                    ヘッダ色 = パネル.ヘッダ色種別.赤,
+                };
+
+                自動演奏.子パネルリスト = new SelectableList<パネル>();
+
+                foreach( AutoPlay種別 apType in Enum.GetValues( typeof( AutoPlay種別 ) ) )
+                {
+                    if( apType == AutoPlay種別.Unknown )
+                        continue;
+
+                    自動演奏.子パネルリスト.Add(
+                        new パネル_ONOFFトグル(
+                            パネル名: apType.ToString(),
+                            初期状態はON: ( user.AutoPlay[ apType ] ),
+                            値の変更処理: new Action<パネル>( ( panel ) => {
+                                user.AutoPlay[ apType ] = ( (パネル_ONOFFトグル) panel ).ONである;
+                            } ) ) );
+                }
+
+                自動演奏.子パネルリスト.Add( new パネル_システムボタン( 項目名.設定完了_戻る ) );
+                自動演奏.子パネルリスト.SelectFirst();
+                //----------------
+                #endregion
+
+                #region " (2) ルート "
+                //----------------
+                this._ルートパネルフォルダ.子パネルリスト = new SelectableList<パネル>() {
+
+                    #region " 画面モード "
+                    //----------------
+                    new パネル_文字列リスト(
+                        パネル名: "画面モード",
+                        初期選択肢番号: ( user.全画面モードである ) ? 1 : 0,
+                        選択肢初期値s: new[] { "ウィンドウ", "全画面" },
+                        値の変更処理: new Action<パネル>( ( panel ) => {
+                            user.全画面モードである = ( 1 == ( (パネル_文字列リスト)panel).現在選択されている選択肢の番号 );
+                            App.Instance.全画面モード = user.全画面モードである;
+                        } ) ),
+                    //----------------
+                    #endregion
+
+					#region " 譜面スピード "
+					//----------------
+					new パネル_譜面スピード( "譜面スピード" ),
+					//----------------
+					#endregion
+
+					#region " シンバルフリー "
+					//----------------
+					new パネル_ONOFFトグル(
+                        パネル名: "シンバルフリー",
+                        初期状態はON: user.シンバルフリーモードである,
+                        値の変更処理: new Action<パネル>( (panel) => {
+                            user.シンバルフリーモードである = ( (パネル_ONOFFトグル) panel ).ONである;
+                        } ) ),
+                    //----------------
+                    #endregion
+
+					#region " 自動演奏（フォルダ）"
+					//----------------
+                    自動演奏,
+                    //----------------
+                    #endregion
+
+   					#region " 設定完了（システムボタン）"
+					//----------------
+					new パネル_システムボタン( 項目名.設定完了 ),
+					//----------------
+					#endregion
+
+                };
+                //----------------
+                #endregion
+
+                this._パネルリスト.パネルリストを登録する( this._ルートパネルフォルダ );
+
+                // 活性化する。
+                this._ルートパネルフォルダ.活性化する();
             }
         }
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                this._ルートパネルフォルダ.非活性化する();
+                this._ルートパネルフォルダ = null;
             }
         }
 
@@ -120,13 +222,13 @@ namespace DTXmatixx.ステージ.オプション設定
                         if( this._パネルリスト.現在選択中のパネル is パネル_システムボタン systemButton )
                         {
                             // (A) システムボタンの場合。
-                            if( systemButton.パネル名 == パネルリスト.項目名.設定完了 )
+                            if( systemButton.パネル名 == 項目名.設定完了 )
                             {
                                 this._パネルリスト.フェードアウトを開始する();
                                 App.ステージ管理.アイキャッチを選択しクローズする( nameof( アイキャッチ.シャッター ) );
                                 this.現在のフェーズ = フェーズ.フェードアウト;
                             }
-                            else if( systemButton.パネル名 == パネルリスト.項目名.設定完了_戻る )
+                            else if( systemButton.パネル名 == 項目名.設定完了_戻る )
                             {
                                 this._パネルリスト.親のパネルを選択する();
                                 this._パネルリスト.フェードインを開始する();
@@ -151,5 +253,6 @@ namespace DTXmatixx.ステージ.オプション設定
         private bool _初めての進行描画 = true;
         private 舞台画像 _舞台画像 = null;
         private パネルリスト _パネルリスト = null;
+        private パネル_フォルダ _ルートパネルフォルダ = null;
     }
 }
