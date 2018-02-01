@@ -269,16 +269,8 @@ namespace DTXmatixx.ステージ.オプション設定
 
         private void _入力割り当てダイアログを表示する()
         {
-            var dlg = new 入力割り当てダイアログ();
-
-            // todo: 初期値設定
-
-            var dr = dlg.表示する();
-
-            if( dr == System.Windows.Forms.DialogResult.OK )
-            {
-                // todo: 設定を反映
-            }
+            using( var dlg = new 入力割り当てダイアログ() )
+                dlg.表示する();
         }
     }
 }

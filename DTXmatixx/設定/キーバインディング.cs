@@ -10,7 +10,7 @@ using DTXmatixx.入力;
 namespace DTXmatixx.設定
 {
     [DataContract( Name = "KeyBindings", Namespace = "" )]
-    class キーバインディング : IExtensibleDataObject
+    class キーバインディング : IExtensibleDataObject, ICloneable
     {
         /// <summary>
         ///		入力コードのマッピング用 Dictionary のキーとなる型。
@@ -77,6 +77,34 @@ namespace DTXmatixx.設定
         public キーバインディング()
         {
             this.OnDeserializing( new StreamingContext() );
+        }
+
+        /// <summary>
+        ///     メンバを共有しない深いコピーを返す。
+        /// </summary>
+        public object Clone()
+        {
+            var clone = new キーバインディング();
+
+
+            clone.MIDIデバイス番号toデバイス名 = new Dictionary<int, string>();
+
+            foreach( var kvp in this.MIDIデバイス番号toデバイス名 )
+                clone.MIDIデバイス番号toデバイス名.Add( kvp.Key, kvp.Value );
+
+
+            clone.キーボードtoドラム = new Dictionary<IdKey, ドラム入力種別>();
+
+            foreach( var kvp in this.キーボードtoドラム )
+                clone.キーボードtoドラム.Add( kvp.Key, kvp.Value );
+
+
+            clone.MIDItoドラム = new Dictionary<IdKey, ドラム入力種別>();
+
+            foreach( var kvp in this.MIDItoドラム )
+                clone.MIDItoドラム.Add( kvp.Key, kvp.Value );
+
+            return clone;
         }
 
 
