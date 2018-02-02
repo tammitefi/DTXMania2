@@ -20,10 +20,10 @@ namespace DTXmatixx.ステージ.オプション設定
             InitializeComponent();
 
             // 物理画面のサイズに応じて、フォームのサイズを変更。
-            this.Scale(
-                new System.Drawing.SizeF(
-                    Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX横 ),
-                    Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX縦 ) ) );
+            //this.Scale(
+            //    new System.Drawing.SizeF(
+            //        Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX横 ),
+            //        Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX縦 ) ) );
         }
 
         public void 表示する()
@@ -49,6 +49,10 @@ namespace DTXmatixx.ステージ.オプション設定
                 this.comboBoxパッドリスト.SelectedIndex = 0;
 
                 this._前回の入力リスト追加時刻 = QPCTimer.生カウント相対値を秒へ変換して返す( QPCTimer.生カウント );
+
+                this._FootPedal現在値 = 0;
+                this._FootPedal最大値 = 0;
+                this._FootPedal最小値 = 0;
 
                 this._変更あり = false;
                 //----------------
@@ -88,12 +92,38 @@ namespace DTXmatixx.ステージ.オプション設定
 
                         if( ie.押された )
                         {
-                            var item = new ListViewItem入力リスト用( InputDeviceType.MidiIn, ie );
+                            if( 255 == ie.Key )
+                            {
+                                // (A) フットペダルコントロール
 
-                            this._一定時間が経っていれば空行を挿入する();
+                                if( this._FootPedal現在値 != ie.Velocity )
+                                {
+                                    this._FootPedal現在値 = ie.Velocity;
+                                    this.textBoxFootPedal現在値.Text = this._FootPedal現在値.ToString();
 
-                            this.listView入力リスト.Items.Add( item );
-                            this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
+                                    if( this._FootPedal現在値 > this._FootPedal最大値 )
+                                    {
+                                        this._FootPedal最大値 = this._FootPedal現在値;
+                                        this.textBoxFootPedal最大値.Text = this._FootPedal最大値.ToString();
+                                    }
+                                    if( this._FootPedal現在値 < this._FootPedal最小値 )
+                                    {
+                                        this._FootPedal最小値 = this._FootPedal現在値;
+                                        this.textBoxFootPedal最小値.Text = this._FootPedal最小値.ToString();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // (B) その他
+
+                                var item = new ListViewItem入力リスト用( InputDeviceType.MidiIn, ie );
+
+                                this._一定時間が経っていれば空行を挿入する();
+
+                                this.listView入力リスト.Items.Add( item );
+                                this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
+                            }
                         }
                     }
 
@@ -125,6 +155,10 @@ namespace DTXmatixx.ステージ.オプション設定
             }
         }
 
+        /// <summary>
+        ///     <see cref="listView入力リスト"/> 用の ListViewItem 拡張。
+        ///     表示テキストのほかに、入力情報も持つ。
+        /// </summary>
         private class ListViewItem入力リスト用 : ListViewItem
         {
             public InputDeviceType deviceType;  // Device種別
@@ -141,6 +175,11 @@ namespace DTXmatixx.ステージ.オプション設定
                     throw new ArgumentException( "未対応のデバイスです。" );
             }
         }
+
+        /// <summary>
+        ///     <see cref="listView割り当て済み入力リスト"/> 用の ListViewItem 拡張。
+        ///     表示テキストのほかに、入力情報も持つ。
+        /// </summary>
         private class ListViewItem割り当て済み入力リスト用 : ListViewItem
         {
             public InputDeviceType deviceType;      // Device種別
@@ -157,10 +196,17 @@ namespace DTXmatixx.ステージ.オプション設定
                     throw new ArgumentException( "未対応のデバイスです。" );
             }
         }
+
+        /// <summary>
+        ///     ダイアログで編集した内容は、このメンバにいったん保存される。
+        /// </summary>
         private キーバインディング _変更後のキーバインディング;
-        private bool _変更あり;
-        private double _前回の入力リスト追加時刻;
+
         private ドラム入力種別 _現在選択されているドラム入力種別 = ドラム入力種別.Unknown;
+
+        private int _FootPedal現在値;
+        private int _FootPedal最大値;
+        private int _FootPedal最小値;
 
         /// <summary>
         ///     <see cref="_現在選択されているドラム入力種別"/> について、<see cref="_変更後のキーバインディング"/> の内容を、
@@ -254,6 +300,8 @@ namespace DTXmatixx.ステージ.オプション設定
                 }
             }
         }
+
+        private double _前回の入力リスト追加時刻;
         private void _一定時間が経っていれば空行を挿入する()
         {
             double 今回の入力リスト追加時刻 = QPCTimer.生カウント相対値を秒へ変換して返す( QPCTimer.生カウント );
@@ -309,6 +357,7 @@ namespace DTXmatixx.ステージ.オプション設定
             this._割り当て済みリストを更新する();
         }
 
+        private bool _変更あり;
         private void 入力割り当てダイアログ_FormClosing( object sender, FormClosingEventArgs e )
         {
             // ※ウィンドウを閉じようとした時も Cancel になる。
