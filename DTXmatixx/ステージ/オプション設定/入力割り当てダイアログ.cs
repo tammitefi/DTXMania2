@@ -314,7 +314,7 @@ namespace DTXmatixx.ステージ.オプション設定
             // ※ウィンドウを閉じようとした時も Cancel になる。
             if( this.DialogResult == DialogResult.Cancel && this._変更あり )
             {
-                var dr = MessageBox.Show( "変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
+                var dr = MessageBoxEx.Show( "変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
 
                 if( dr == DialogResult.No )
                     e.Cancel = true;
