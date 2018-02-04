@@ -142,24 +142,6 @@ namespace DTXmatixx.ステージ.オプション設定
                                     this._変更後のキーバインディング.FootPedal最小値 = this._FootPedal現在値;
                                     this.textBoxFootPedal最小値.Text = this._変更後のキーバインディング.FootPedal最小値.ToString();
                                 }
-
-                                // ゲージ
-                                using( var g = pictureBoxFootPedal.CreateGraphics() )
-                                {
-                                    var 全体矩形 = pictureBoxFootPedal.ClientRectangle;
-                                    var 背景色 = new System.Drawing.SolidBrush( pictureBoxFootPedal.BackColor );
-                                    var ゲージ色 = System.Drawing.Brushes.Blue;
-
-                                    g.FillRectangle( 背景色, 全体矩形 );
-
-                                    int 差分 = (int) ( 全体矩形.Height * ( 1.0 - ie.Velocity / 127.0 ) );
-                                    var ゲージ矩形 = new System.Drawing.Rectangle(
-                                        全体矩形.X,
-                                        全体矩形.Y + 差分,
-                                        全体矩形.Width,
-                                        全体矩形.Height - 差分 );
-                                    g.FillRectangle( ゲージ色, ゲージ矩形 );
-                                }
                             }
                         }
                         else
@@ -178,6 +160,35 @@ namespace DTXmatixx.ステージ.オプション設定
                     //----------------
                     #endregion
 
+                    #region " MIDI フットペダル開度ゲージの描画 "
+                    //----------------
+                    using( var g = pictureBoxFootPedal.CreateGraphics() )
+                    {
+                        var 全体矩形 = pictureBoxFootPedal.ClientRectangle;
+                        var 背景色 = new System.Drawing.SolidBrush( pictureBoxFootPedal.BackColor );
+                        var 最大値ゲージ色 = System.Drawing.Brushes.LightBlue;
+                        var ゲージ色 = System.Drawing.Brushes.Blue;
+
+                        g.FillRectangle( 背景色, 全体矩形 );
+
+                        int 最大値用差分 = (int) ( 全体矩形.Height * ( 1.0 - this._変更後のキーバインディング.FootPedal最大値 / 127.0 ) );
+                        var 最大値ゲージ矩形 = new System.Drawing.Rectangle(
+                            全体矩形.X,
+                            全体矩形.Y + 最大値用差分,
+                            全体矩形.Width,
+                            全体矩形.Height - 最大値用差分 );
+                        g.FillRectangle( 最大値ゲージ色, 最大値ゲージ矩形 );
+
+                        int 現在値用差分 = (int) ( 全体矩形.Height * ( 1.0 - this._FootPedal現在値 / 127.0 ) );
+                        var ゲージ矩形 = new System.Drawing.Rectangle(
+                            全体矩形.X,
+                            全体矩形.Y + 現在値用差分,
+                            全体矩形.Width,
+                            全体矩形.Height - 現在値用差分 );
+                        g.FillRectangle( ゲージ色, ゲージ矩形 );
+                    }
+                    //----------------
+                    #endregion
                 };
 
                 DialogResult dr;
