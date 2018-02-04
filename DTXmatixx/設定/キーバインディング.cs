@@ -70,6 +70,19 @@ namespace DTXmatixx.設定
             protected set;
         }
 
+        [DataMember]
+        public int FootPedal最小値
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int FootPedal最大値
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         ///		コンストラクタ。
@@ -116,6 +129,9 @@ namespace DTXmatixx.設定
         [OnDeserializing]
         private void OnDeserializing( StreamingContext sc )
         {
+            this.FootPedal最小値 = 0;
+            this.FootPedal最大値 = 90; // VH-11 の Normal Resolution での最大値
+
             this.MIDIデバイス番号toデバイス名 = new Dictionary<int, string>();
 
             this.キーボードtoドラム = new Dictionary<IdKey, ドラム入力種別>() {

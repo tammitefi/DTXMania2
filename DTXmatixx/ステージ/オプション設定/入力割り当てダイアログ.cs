@@ -28,11 +28,17 @@ namespace DTXmatixx.ステージ.オプション設定
 
         public void 表示する()
         {
-            using( var 入力管理 = new 入力.入力管理( this.Handle ) )  // このウィンドウ用の入力管理インスタンスを生成。
+            // メインウィンドウ用の入力管理をいったん破棄。
+            App.入力管理.Dispose();
+
+            // このウィンドウ用の入力管理を生成。
+            using( var 入力管理 = new 入力.入力管理( this.Handle ) )
             using( var timer = new Timer() )
             {
                 #region " 初期化。"
                 //----------------
+                入力管理.キーバインディングを取得する = () => App.システム設定.キーバインディング;
+                入力管理.キーバインディングを保存する = () => App.システム設定.保存する();
                 入力管理.Initialize();
 
                 // パッドリストを初期化。
@@ -51,20 +57,30 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._前回の入力リスト追加時刻 = QPCTimer.生カウント相対値を秒へ変換して返す( QPCTimer.生カウント );
 
                 this._FootPedal現在値 = 0;
-                this._FootPedal最大値 = 0;
-                this._FootPedal最小値 = 0;
+                this.textBoxFootPedal現在値.Text = "0";
+                this.textBoxFootPedal最小値.Text = this._変更後のキーバインディング.FootPedal最小値.ToString();
+                this.textBoxFootPedal最大値.Text = this._変更後のキーバインディング.FootPedal最大値.ToString();
 
                 this._変更あり = false;
+
+                // 初期メッセージを出力。
+                this.listView入力リスト.Items.Add( $"KEYBOARD \"{入力管理.Keyboard.DeviceName}\" の受付を開始しました。" );
+                for( int i = 0; i < 入力管理.MidiIn.DeviceName.Count; i++ )
+                    this.listView入力リスト.Items.Add( $"MIDI IN [{i}] \"{入力管理.MidiIn.DeviceName[ i ]}\" の受付を開始しました。" );
+                this.listView入力リスト.Items.Add( "" );
+                this.listView入力リスト.Items.Add( "* タイミングクロック信号、アクティブ信号は無視します。" );
+                this.listView入力リスト.Items.Add( "* 入力と入力の間が500ミリ秒以上開いた場合は、間に空行を表示します。" );
+                this.listView入力リスト.Items.Add( "" );
+                this.listView入力リスト.Items.Add( "キーボードまたはMIDI信号を入力してください。" );
                 //----------------
                 #endregion
 
-                #region " タイマーイベント処理。"
-                //----------------
+                // タイマーイベント＆入力の表示。
                 timer.Interval = 100;
                 timer.Tick += ( sender, arg ) => {
 
-                    // (A) キーボードのポーリングと、入力リストへの出力。
-
+                    #region " (A) キーボードのポーリングと、入力リストへの出力。"
+                    //----------------
                     入力管理.Keyboard.ポーリングする();
 
                     for( int i = 0; i < 入力管理.Keyboard.入力イベントリスト.Count; i++ )
@@ -75,61 +91,94 @@ namespace DTXmatixx.ステージ.オプション設定
                         {
                             var item = new ListViewItem入力リスト用( InputDeviceType.Keyboard, ie );
 
+                            if( ie.Key == (int) Key.Escape )    // 割り当てされてほしくないキーはここへ。
+                            {
+                                item.割り当て可能 = false;
+                            }
+
                             this._一定時間が経っていれば空行を挿入する();
 
                             this.listView入力リスト.Items.Add( item );
                             this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
                         }
+                        else if( ie.離された )
+                        {
+                            // キーボードについては表示しない。
+                        }
                     }
+                    //----------------
+                    #endregion
 
-                    // (B) Midi入力のポーリングと、入力リストへの出力。
-
+                    #region " (B) Midi入力のポーリングと、入力リストへの出力。"
+                    //----------------
                     入力管理.MidiIn.ポーリングする();
 
                     for( int i = 0; i < 入力管理.MidiIn.入力イベントリスト.Count; i++ )
                     {
                         var ie = 入力管理.MidiIn.入力イベントリスト[ i ];
 
-                        if( ie.押された )
+                        // MidiInChecker の機能もかねて、NoteOFF や ControlChange も一応表示しておく。（割り当てはできない。）
+
+                        if( ie.押された && ( 255 == ie.Key ) && ( 4 == ie.Control ) )
                         {
-                            if( 255 == ie.Key )
+                            // (A) フットペダルコントロールは、入力リストではなく、専用のUIパーツへ表示。
+
+                            if( this._FootPedal現在値 != ie.Velocity )
                             {
-                                // (A) フットペダルコントロール
+                                // "現在地"
+                                this._FootPedal現在値 = ie.Velocity;
+                                this.textBoxFootPedal現在値.Text = this._FootPedal現在値.ToString();
 
-                                if( this._FootPedal現在値 != ie.Velocity )
+                                // "最大値"
+                                if( this._FootPedal現在値 > this._変更後のキーバインディング.FootPedal最大値 )
                                 {
-                                    this._FootPedal現在値 = ie.Velocity;
-                                    this.textBoxFootPedal現在値.Text = this._FootPedal現在値.ToString();
+                                    this._変更後のキーバインディング.FootPedal最大値 = this._FootPedal現在値;
+                                    this.textBoxFootPedal最大値.Text = this._変更後のキーバインディング.FootPedal最大値.ToString();
+                                }
 
-                                    if( this._FootPedal現在値 > this._FootPedal最大値 )
-                                    {
-                                        this._FootPedal最大値 = this._FootPedal現在値;
-                                        this.textBoxFootPedal最大値.Text = this._FootPedal最大値.ToString();
-                                    }
-                                    if( this._FootPedal現在値 < this._FootPedal最小値 )
-                                    {
-                                        this._FootPedal最小値 = this._FootPedal現在値;
-                                        this.textBoxFootPedal最小値.Text = this._FootPedal最小値.ToString();
-                                    }
+                                // "最小値"
+                                if( this._FootPedal現在値 <= this._変更後のキーバインディング.FootPedal最小値 )
+                                {
+                                    this._変更後のキーバインディング.FootPedal最小値 = this._FootPedal現在値;
+                                    this.textBoxFootPedal最小値.Text = this._変更後のキーバインディング.FootPedal最小値.ToString();
+                                }
+
+                                // ゲージ
+                                using( var g = pictureBoxFootPedal.CreateGraphics() )
+                                {
+                                    var 全体矩形 = pictureBoxFootPedal.ClientRectangle;
+                                    var 背景色 = new System.Drawing.SolidBrush( pictureBoxFootPedal.BackColor );
+                                    var ゲージ色 = System.Drawing.Brushes.Blue;
+
+                                    g.FillRectangle( 背景色, 全体矩形 );
+
+                                    int 差分 = (int) ( 全体矩形.Height * ( 1.0 - ie.Velocity / 127.0 ) );
+                                    var ゲージ矩形 = new System.Drawing.Rectangle(
+                                        全体矩形.X,
+                                        全体矩形.Y + 差分,
+                                        全体矩形.Width,
+                                        全体矩形.Height - 差分 );
+                                    g.FillRectangle( ゲージ色, ゲージ矩形 );
                                 }
                             }
-                            else
-                            {
-                                // (B) その他
+                        }
+                        else
+                        {
+                            // (B) その他は入力リストに表示。
 
-                                var item = new ListViewItem入力リスト用( InputDeviceType.MidiIn, ie );
+                            var item = new ListViewItem入力リスト用( InputDeviceType.MidiIn, ie );
 
-                                this._一定時間が経っていれば空行を挿入する();
+                            this._一定時間が経っていれば空行を挿入する();
 
-                                this.listView入力リスト.Items.Add( item );
-                                this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
-                            }
+                            this.listView入力リスト.Items.Add( item );
+                            this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
+
                         }
                     }
+                    //----------------
+                    #endregion
 
                 };
-                //----------------
-                #endregion
 
                 DialogResult dr;
 
@@ -148,11 +197,18 @@ namespace DTXmatixx.ステージ.オプション設定
                     #region " 設定値の反映。"
                     //----------------
                     App.システム設定.キーバインディング = (キーバインディング) this._変更後のキーバインディング.Clone();
-                    App.システム設定.保存する();
+                    入力管理.キーバインディングを保存する();
                     //----------------
                     #endregion
                 }
             }
+
+            // メインウィンドウ用の入力管理を復活。
+            App.入力管理 = new 入力管理( App.Instance.Handle ) {
+                キーバインディングを取得する = () => App.システム設定.キーバインディング,
+                キーバインディングを保存する = () => App.システム設定.保存する(),
+            };
+            App.入力管理.Initialize();
         }
 
         /// <summary>
@@ -161,18 +217,48 @@ namespace DTXmatixx.ステージ.オプション設定
         /// </summary>
         private class ListViewItem入力リスト用 : ListViewItem
         {
+            public bool 割り当て可能;
             public InputDeviceType deviceType;  // Device種別
             public InputEvent inputEvent;       // DeviceID, key, velocity
 
             public ListViewItem入力リスト用( InputDeviceType deviceType, InputEvent inputEvent )
             {
+                this.割り当て可能 = true;
                 this.deviceType = deviceType;
                 this.inputEvent = inputEvent;
 
-                this.Text = 
-                    ( deviceType == InputDeviceType.Keyboard ) ? $"Keyboard, {inputEvent.Key}, '{( (Key) inputEvent.Key ).ToString()}'" :
-                    ( deviceType == InputDeviceType.MidiIn ) ? $"MidiIn[{inputEvent.DeviceID}], Note:{inputEvent.Key}, Velocity:{inputEvent.Velocity}" :
+                if( deviceType == InputDeviceType.Keyboard )
+                {
+                    this.Text = $"Keyboard, {inputEvent.Key}, '{( (Key) inputEvent.Key ).ToString()}'";
+                }
+                else if( deviceType == InputDeviceType.MidiIn )
+                {
+                    if( inputEvent.押された )
+                    {
+                        if( 255 != inputEvent.Key )
+                        {
+                            this.Text = $"MidiIn[{inputEvent.DeviceID}], {inputEvent.Extra}, ノートオン, Note={inputEvent.Key}, Velocity={inputEvent.Velocity}";
+                            this.割り当て可能 = true;                        // 割り当て可
+                            this.ForeColor = System.Drawing.Color.Black;    // 黒
+                        }
+                        else
+                        {
+                            this.Text = $"MidiIn[{inputEvent.DeviceID}], {inputEvent.Extra}, コントロールチェンジ, Control={inputEvent.Control}(0x{inputEvent.Control:X2}), Value={inputEvent.Velocity}";
+                            this.割り当て可能 = false;                       // 割り当て不可
+                            this.ForeColor = System.Drawing.Color.Green;    // 緑
+                        }
+                    }
+                    else if( inputEvent.離された )
+                    {
+                        this.Text = $"MidiIn[{inputEvent.DeviceID}], {inputEvent.Extra}, ノートオフ, Note={inputEvent.Key}, Velocity={inputEvent.Velocity}";
+                        this.割り当て可能 = false;                           // 割り当て不可
+                        this.ForeColor = System.Drawing.Color.Gray;         // 灰
+                    }
+                }
+                else
+                {
                     throw new ArgumentException( "未対応のデバイスです。" );
+                }
             }
         }
 
@@ -182,11 +268,13 @@ namespace DTXmatixx.ステージ.オプション設定
         /// </summary>
         private class ListViewItem割り当て済み入力リスト用 : ListViewItem
         {
+            public bool 割り当て可能;
             public InputDeviceType deviceType;      // Device種別
             public キーバインディング.IdKey idKey;   // DeviceID, key
 
             public ListViewItem割り当て済み入力リスト用( InputDeviceType deviceType, キーバインディング.IdKey idKey )
             {
+                this.割り当て可能 = true;
                 this.deviceType = deviceType;
                 this.idKey = idKey;
 
@@ -205,8 +293,6 @@ namespace DTXmatixx.ステージ.オプション設定
         private ドラム入力種別 _現在選択されているドラム入力種別 = ドラム入力種別.Unknown;
 
         private int _FootPedal現在値;
-        private int _FootPedal最大値;
-        private int _FootPedal最小値;
 
         /// <summary>
         ///     <see cref="_現在選択されているドラム入力種別"/> について、<see cref="_変更後のキーバインディング"/> の内容を、
@@ -257,8 +343,8 @@ namespace DTXmatixx.ステージ.オプション設定
         {
             foreach( var itemobj in this.listView入力リスト.SelectedItems )
             {
-                // 選択されているのが ListViewItem入力リスト用 じゃなければ何もしない。
-                if( itemobj is ListViewItem入力リスト用 item )
+                if( ( itemobj is ListViewItem入力リスト用 item ) &&   // 選択されているのが ListViewItem入力リスト用 じゃなければ何もしない。
+                  ( item.割り当て可能 ) )                             // 割り当て可能のもののみ割り当てる。
                 {
                     var idKey = new キーバインディング.IdKey( item.inputEvent );
 
