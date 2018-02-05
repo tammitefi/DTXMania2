@@ -123,6 +123,12 @@
     <Compile Include="アイキャッチ\アイキャッチ.cs" />
     <Compile Include="アイキャッチ\シャッター.cs" />
     <Compile Include="アイキャッチ\半回転黒フェード.cs" />
+    <Compile Include="ステージ\オプション設定\入力割り当てダイアログ.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ステージ\オプション設定\入力割り当てダイアログ.Designer.cs">
+      <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
+    </Compile>
     <Compile Include="ステージ\ステージ.cs" />
     <Compile Include="ステージ\ステージ管理.cs" />
     <Compile Include="ステージ\タイトル\タイトルステージ.cs" />
@@ -223,6 +229,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ステージ\オプション設定\入力割り当てダイアログ.resx">
+      <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

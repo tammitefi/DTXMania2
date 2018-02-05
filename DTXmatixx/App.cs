@@ -57,7 +57,7 @@ namespace DTXmatixx
         public static 入力管理 入力管理
         {
             get;
-            protected set;
+            set;
         } = null;
         public static ステージ管理 ステージ管理
         {

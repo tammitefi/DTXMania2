@@ -28,7 +28,7 @@ namespace DTXmatixx.設定
         public キーバインディング キーバインディング
         {
             get;
-            protected set;
+            set;
         } = null;
 
         /// <summary>
