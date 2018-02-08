@@ -356,7 +356,7 @@ namespace DTXmatixx
                     App.ステージ管理.現在のステージ.高速進行する();
                 }
 
-                Thread.Sleep( 2 );  // ウェイト。
+                Thread.Sleep( App.システム設定.入力発声スレッドのスリープ量ms );  // ウェイト。
             }
 
             this._高速進行ステータス.現在の状態 = TriStateEvent.状態種別.無効;
