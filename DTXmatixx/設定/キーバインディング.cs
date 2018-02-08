@@ -70,14 +70,14 @@ namespace DTXmatixx.設定
             protected set;
         }
 
-        [DataMember]
+        [DataMember( Order = 20180205 )]
         public int FootPedal最小値
         {
             get;
             set;
         }
 
-        [DataMember]
+        [DataMember( Order = 20180205 ) ]
         public int FootPedal最大値
         {
             get;
