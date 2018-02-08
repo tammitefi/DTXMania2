@@ -1496,6 +1496,43 @@ namespace DTXmatixx.設定
                     },
                     //----------------
                     #endregion
+                    #region " チップ種別.LeftBass "
+                    //----------------
+                    [ チップ種別.LeftBass ] = new Column() {
+                        チップ種別 = チップ種別.LeftBass,
+                        レーン種別 = レーン種別.Bass,
+                        ドラム入力種別 = ドラム入力種別.Bass,
+                        表示レーン種別 = 表示レーン種別.Foot,
+                        AutoPlay種別 = AutoPlay種別.Bass,
+                        不可視 = false,
+                        AutoPlayON = new Column.ColumnAutoPlayON() {
+                            自動ヒット = true,
+                            自動ヒット時処理 = new Column.Columnヒット処理() {
+                                再生 = true,
+                                非表示 = true,
+                                判定 = true,
+                            },
+                            MISS判定 = true,
+                        },
+                        AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
+                            自動ヒット = false,
+                            自動ヒット時処理 = new Column.Columnヒット処理() {
+                                再生 = false,
+                                非表示 = false,
+                                判定 = false,
+                            },
+                            ユーザヒット = true,
+                            ユーザヒット時処理 = new Column.Columnヒット処理() {
+                                再生 = true,
+                                非表示 = true,
+                                判定 = true,
+                            },
+                            MISS判定 = true,
+                        },
+                        シンバルフリーの対象 = false,
+                    },
+                    //----------------
+                    #endregion
                 };
             }
         }
