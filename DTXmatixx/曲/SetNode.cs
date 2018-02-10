@@ -28,17 +28,18 @@ namespace DTXmatixx.曲
         {
             get
             {
-                // (1) 現在選択されている MusicNode のノード画像が有効ならそれを返す。
+                // (1) 現在のフォーカス難易度と同じ MusicNode のノード画像が有効なら、それを返す。
                 var 現在の難易度のMusicNode = this.MusicNodes[ App.曲ツリー.フォーカス難易度 ];
+
                 if( null != 現在の難易度のMusicNode?.ノード画像 )
-                {
                     return 現在の難易度のMusicNode.ノード画像;
-                }
-                // (2) MusicNode のノード画像が無効なら、SetNode の持つノード画像を返す。
-                else
-                {
+
+                // (2) SetNode の持つノード画像が有効ならそれを返す。
+                if( null != this._ノード画像 )
                     return this._ノード画像;
-                }
+
+                // (3) 現在のフォーカス難易度に一番近い MusicNode のノード画像が有効ならそれを返す。
+                return this.MusicNodes[ App.曲ツリー.現在の難易度アンカに最も近い難易度レベルを返す( this ) ].ノード画像;
             }
             protected set
             {

@@ -81,7 +81,7 @@ namespace DTXmatixx.曲
                 }
                 else if( this.フォーカスノード is SetNode setnode )
                 {
-                    return this._現在の難易度アンカに最も近い難易度レベルを返す( setnode );
+                    return this.現在の難易度アンカに最も近い難易度レベルを返す( setnode );
                 }
                 else
                 {
@@ -279,7 +279,48 @@ namespace DTXmatixx.曲
         ///		それ以外の場合は常に null が返される。
         /// </remarks>
         public MusicNode 現在の難易度に応じた曲ノードを返す( SetNode setNode )
-            => setNode.MusicNodes[ this._現在の難易度アンカに最も近い難易度レベルを返す( setNode ) ];
+            => setNode.MusicNodes[ this.現在の難易度アンカに最も近い難易度レベルを返す( setNode ) ];
+
+        public int 現在の難易度アンカに最も近い難易度レベルを返す( SetNode setnode )
+        {
+            if( null == setnode )
+                return this._難易度アンカ;
+
+            if( null != setnode.MusicNodes[ this._難易度アンカ ] )
+                return this._難易度アンカ;    // 難易度ぴったりの曲があった
+
+            // 現在のアンカレベルから、難易度上向きに検索開始。
+
+            int 最も近いレベル = this._難易度アンカ;
+            for( int i = 0; i < 5; i++ )
+            {
+                if( null != setnode.MusicNodes[ 最も近いレベル ] )
+                    break;  // 曲があった。
+
+                // 曲がなかったので次の難易度レベルへGo。（5以上になったら0に戻る。）
+                最も近いレベル = ( 最も近いレベル + 1 ) % 5;
+            }
+
+            // 見つかった曲がアンカより下のレベルだった場合……
+            // アンカから下向きに検索すれば、もっとアンカに近い曲があるんじゃね？
+
+            if( 最も近いレベル < this._難易度アンカ )
+            {
+                // 現在のアンカレベルから、難易度下向きに検索開始。
+
+                最も近いレベル = this._難易度アンカ;
+                for( int i = 0; i < 5; i++ )
+                {
+                    if( null != setnode.MusicNodes[ 最も近いレベル ] )
+                        break;  // 曲があった。
+
+                    // 曲がなかったので次の難易度レベルへGo。（0未満になったら4に戻る。）
+                    最も近いレベル = ( ( 最も近いレベル - 1 ) + 5 ) % 5;
+                }
+            }
+
+            return 最も近いレベル;
+        }
 
         // フォーカス
 
@@ -362,46 +403,5 @@ namespace DTXmatixx.曲
 
 
         private int _難易度アンカ = 3;
-
-        private int _現在の難易度アンカに最も近い難易度レベルを返す( SetNode setnode )
-        {
-            if( null == setnode )
-                return this._難易度アンカ;
-
-            if( null != setnode.MusicNodes[ this._難易度アンカ ] )
-                return this._難易度アンカ;    // 難易度ぴったりの曲があった
-
-            // 現在のアンカレベルから、難易度上向きに検索開始。
-
-            int 最も近いレベル = this._難易度アンカ;
-            for( int i = 0; i < 5; i++ )
-            {
-                if( null != setnode.MusicNodes[ 最も近いレベル ] )
-                    break;  // 曲があった。
-
-                // 曲がなかったので次の難易度レベルへGo。（5以上になったら0に戻る。）
-                最も近いレベル = ( 最も近いレベル + 1 ) % 5;
-            }
-
-            // 見つかった曲がアンカより下のレベルだった場合……
-            // アンカから下向きに検索すれば、もっとアンカに近い曲があるんじゃね？
-
-            if( 最も近いレベル < this._難易度アンカ )
-            {
-                // 現在のアンカレベルから、難易度下向きに検索開始。
-
-                最も近いレベル = this._難易度アンカ;
-                for( int i = 0; i < 5; i++ )
-                {
-                    if( null != setnode.MusicNodes[ 最も近いレベル ] )
-                        break;  // 曲があった。
-
-                    // 曲がなかったので次の難易度レベルへGo。（0未満になったら4に戻る。）
-                    最も近いレベル = ( ( 最も近いレベル - 1 ) + 5 ) % 5;
-                }
-            }
-
-            return 最も近いレベル;
-        }
     }
 }

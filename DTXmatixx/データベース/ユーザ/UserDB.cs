@@ -9,15 +9,16 @@ using DTXmatixx.ステージ.演奏;
 namespace DTXmatixx.データベース.ユーザ
 {
     using User01 = old.User01;
-    using User = User02;    // 最新バージョンを指定(1/2)。
-    using Record = Record02;
+    using User02 = old.User02;
+    using User = User03;    // 最新バージョンを指定（その１）
+    using Record = Record03;
 
     /// <summary>
     ///		ユーザデータベースに対応するエンティティクラス。
     ///		/// </summary>
     class UserDB : SQLiteDBBase
     {
-        public const long VERSION = 2;  // 最新バージョンを指定(2/2)。
+        public const long VERSION = 3;  // 最新バージョンを指定（その２）
 
         public Table<User> Users
             => base.DataContext.GetTable<User>();
@@ -84,7 +85,38 @@ namespace DTXmatixx.データベース.ユーザ
                         {
                             // 失敗。
                             transaction.Rollback();
-                            Log.ERROR( "Users テーブルのアップデートに失敗しました。[1→2]" );
+                            throw new Exception( "Users テーブルのアップデートに失敗しました。[1→2]" );
+                        }
+                    }
+                    //----------------
+                    #endregion
+                    break;
+
+                case 2:
+                    #region " 2 → 3 "
+                    //----------------
+                    // 変更点:
+                    // ・Users テーブルに PlayMode カラムを追加。
+                    this.DataContext.SubmitChanges();
+                    using( var transaction = this.Connection.BeginTransaction() )
+                    {
+                        try
+                        {
+                            // テータベースをアップデートしてデータを移行する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN PlayMode INTEGER NOT NULL DEFAULT 1" );
+                            this.DataContext.SubmitChanges();
+
+                            // 成功。
+                            transaction.Commit();
+                            this.DataContext.ExecuteCommand( "VACUUM" );    // Vacuum はトランザクションの外で。
+                            this.DataContext.SubmitChanges();
+                            Log.Info( "Users テーブルをアップデートしました。[2→3]" );
+                        }
+                        catch
+                        {
+                            // 失敗。
+                            transaction.Rollback();
+                            throw new Exception( "Users テーブルのアップデートに失敗しました。[2→3]" );
                         }
                     }
                     //----------------

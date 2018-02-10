@@ -435,7 +435,7 @@ namespace DTXmatixx.ステージ.演奏
                                         return ( 入力.Type == ドラム入力種別.Ride );
 
                                     case チップ種別.HiHat_Close:
-                                    //case チップ種別.HiHat_Foot:	--> 現状、ヒット判定なし。
+                                    case チップ種別.HiHat_Foot:
                                     case チップ種別.HiHat_HalfOpen:
                                     case チップ種別.HiHat_Open:
                                         return ( 入力.Type == ドラム入力種別.HiHat_Close || 入力.Type == ドラム入力種別.HiHat_Open );
@@ -447,6 +447,7 @@ namespace DTXmatixx.ステージ.演奏
                                         return ( 入力.Type == ドラム入力種別.Snare || 入力.Type == ドラム入力種別.Snare_ClosedRim || 入力.Type == ドラム入力種別.Snare_OpenRim );
 
                                     case チップ種別.Bass:
+                                    case チップ種別.LeftBass:
                                         return ( 入力.Type == ドラム入力種別.Bass );
 
                                     case チップ種別.Tom1:

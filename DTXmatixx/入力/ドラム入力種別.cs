@@ -20,7 +20,7 @@ namespace DTXmatixx.入力
         HiHat_Open,
         //HiHat_HalfOpen,	--> HiHat_Open として扱う。（打ち分けない。）
         HiHat_Close,
-        //HiHat_Foot,		--> ヒット判定しない。
+        HiHat_Foot,     //  --> フットスプラッシュ
         HiHat_Control,  //	--> 開度（入力信号である）
         Snare,
         Snare_OpenRim,

@@ -43,6 +43,16 @@ namespace DTXmatixx.設定
             protected set;
         } = null;
 
+        /// <summary>
+        ///     1～10?
+        /// </summary>
+        [DataMember( Name = "WorkThreadSleep" )]
+        public int 入力発声スレッドのスリープ量ms
+        {
+            get;
+            set;
+        }
+
 
         public システム設定()
         {
@@ -82,6 +92,7 @@ namespace DTXmatixx.設定
             this.キーバインディング = new キーバインディング();
             this.曲検索フォルダ = new List<VariablePath>();
             this._曲検索フォルダProxy = new List<string>();
+            this.入力発声スレッドのスリープ量ms = 2;
         }
 
         /// <summary>
@@ -99,6 +110,13 @@ namespace DTXmatixx.設定
             // パスの指定がなければ、とりあえず exe のあるフォルダを検索対象にする。
             if( 0 == this.曲検索フォルダ.Count )
                 this.曲検索フォルダ.Add( @"$(Exe)" );
+
+            // 値の範囲チェック。
+            if( ( this.入力発声スレッドのスリープ量ms < 1 ) || ( this.入力発声スレッドのスリープ量ms > 10 ) )
+            {
+                Log.WARNING( $"入力発声スレッドのスリープ量msの値（{this.入力発声スレッドのスリープ量ms}）が無効です。1～10の範囲の整数で指定してください。" );
+                this.入力発声スレッドのスリープ量ms = Math.Max( 1, Math.Min( 10, this.入力発声スレッドのスリープ量ms ) );
+            }
         }
 
         /// <summary>

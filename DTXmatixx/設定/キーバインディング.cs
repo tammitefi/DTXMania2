@@ -70,14 +70,14 @@ namespace DTXmatixx.設定
             protected set;
         }
 
-        [DataMember]
+        [DataMember( Order = 20180205 )]
         public int FootPedal最小値
         {
             get;
             set;
         }
 
-        [DataMember]
+        [DataMember( Order = 20180205 ) ]
         public int FootPedal最大値
         {
             get;
@@ -139,6 +139,7 @@ namespace DTXmatixx.設定
                 { new IdKey( 0, (int) Key.Return ), ドラム入力種別.LeftCrash },
                 { new IdKey( 0, (int) Key.A ), ドラム入力種別.HiHat_Open },
                 { new IdKey( 0, (int) Key.Z ), ドラム入力種別.HiHat_Close },
+                { new IdKey( 0, (int) Key.S ), ドラム入力種別.HiHat_Foot },
                 { new IdKey( 0, (int) Key.X ), ドラム入力種別.Snare },
                 { new IdKey( 0, (int) Key.C ), ドラム入力種別.Bass },
                 { new IdKey( 0, (int) Key.Space ), ドラム入力種別.Bass },
@@ -164,6 +165,7 @@ namespace DTXmatixx.設定
                 { new IdKey( 0, 22 ), ドラム入力種別.HiHat_Close },
                 { new IdKey( 0, 26 ), ドラム入力種別.HiHat_Open },
                 { new IdKey( 0, 46 ), ドラム入力種別.HiHat_Open },
+                { new IdKey( 0, 44 ), ドラム入力種別.HiHat_Foot },
                 { new IdKey( 0, 255 ), ドラム入力種別.HiHat_Control },	// FDK の MidiIn クラスは、FootControl を ノート 255 として扱う。
 				{ new IdKey( 0, 48 ), ドラム入力種別.Tom1 },
                 { new IdKey( 0, 50 ), ドラム入力種別.Tom1 },
@@ -179,44 +181,6 @@ namespace DTXmatixx.設定
                 { new IdKey( 0, 38 ), ドラム入力種別.Snare },
                 { new IdKey( 0, 40 ), ドラム入力種別.Snare },
                 { new IdKey( 0, 37 ), ドラム入力種別.Snare },
-
-				// とりあえず、DTXMania からベタ移植。
-				//{ new IdKey( 0, 42 ), ドラム入力種別.HiHat_Close },
-				//{ new IdKey( 0, 93 ), ドラム入力種別.HiHat_Close },
-				//{ new IdKey( 0, 46 ), ドラム入力種別.HiHat_Open },
-				//{ new IdKey( 0, 92 ), ドラム入力種別.HiHat_Open },
-				//{ new IdKey( 0, 255 ), ドラム入力種別.HiHat_Control },	// FDK の MidiIn クラスは、FootControl を ノート 255 として扱う。
-				//{ new IdKey( 0, 25 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 26 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 27 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 28 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 29 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 31 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 32 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 34 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 37 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 38 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 40 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 113 ), ドラム入力種別.Snare },
-				//{ new IdKey( 0, 33 ), ドラム入力種別.Bass },
-				//{ new IdKey( 0, 35 ), ドラム入力種別.Bass },
-				//{ new IdKey( 0, 36 ), ドラム入力種別.Bass },
-				//{ new IdKey( 0, 112 ), ドラム入力種別.Bass },
-				//{ new IdKey( 0, 48 ), ドラム入力種別.Tom1 },
-				//{ new IdKey( 0, 50 ), ドラム入力種別.Tom1 },
-				//{ new IdKey( 0, 47 ), ドラム入力種別.Tom2 },
-				//{ new IdKey( 0, 41 ), ドラム入力種別.Tom3 },
-				//{ new IdKey( 0, 43 ), ドラム入力種別.Tom3 },
-				//{ new IdKey( 0, 45 ), ドラム入力種別.Tom3 },
-				//{ new IdKey( 0, 49 ), ドラム入力種別.RightCrash },
-				//{ new IdKey( 0, 52 ), ドラム入力種別.RightCrash },
-				//{ new IdKey( 0, 55 ), ドラム入力種別.RightCrash },
-				//{ new IdKey( 0, 57 ), ドラム入力種別.RightCrash },
-				//{ new IdKey( 0, 91 ), ドラム入力種別.RightCrash },
-				//{ new IdKey( 0, 51 ), ドラム入力種別.Ride },
-				//{ new IdKey( 0, 53 ), ドラム入力種別.Ride },
-				//{ new IdKey( 0, 59 ), ドラム入力種別.Ride },
-				//{ new IdKey( 0, 89 ), ドラム入力種別.Ride },
 			};
         }
 
