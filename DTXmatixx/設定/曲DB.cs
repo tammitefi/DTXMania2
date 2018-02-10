@@ -11,7 +11,7 @@ using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.データベース.曲;
 using DTXmatixx.ステージ.演奏;
 using Song = DTXmatixx.データベース.曲.Song03;
-using Record = DTXmatixx.データベース.ユーザ.Record02;
+using Record = DTXmatixx.データベース.ユーザ.Record03;
 
 namespace DTXmatixx.設定
 {

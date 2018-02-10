@@ -10,10 +10,10 @@ namespace DTXmatixx.データベース.ユーザ
 {
     /// <summary>
     ///		ユーザテーブルのエンティティクラス。
-    ///		バージョン 2。
+    ///		バージョン 3。
     /// </summary>
     [Table( Name = "Users" )]   // テーブル名は複数形
-    class User02 : ICloneable
+    class User03 : ICloneable
     {
         /// <summary>
         ///		ユーザを一意に識別する文字列。主キー。
@@ -144,13 +144,19 @@ namespace DTXmatixx.データベース.ユーザ
         [Column( DbType = "INT", CanBeNull = false )]
         public int CymbalFree { get; set; }
 
+        /// <summary>
+        ///		演奏モード。
+        ///		0: Basic, 1: Maniac 
+        /// </summary>
+        [Column( DbType = "INT", CanBeNull = false )]
+        public int PlayMode { get; set; }
 
         ///////////////////////////
 
         /// <summary>
         ///		既定値で初期化。
         /// </summary>
-        public User02()
+        public User03()
         {
             this.Id = "Anonymous";
             this.Name = "Anonymous";
@@ -170,12 +176,13 @@ namespace DTXmatixx.データベース.ユーザ
             this.MaxRange_Good = 0.084;
             this.MaxRange_Ok = 0.117;
             this.CymbalFree = 1;
+            this.PlayMode = 1;
         }
 
         // ICloneable 実装
-        public User02 Clone()
+        public User03 Clone()
         {
-            return (User02) this.MemberwiseClone();
+            return (User03) this.MemberwiseClone();
         }
         object ICloneable.Clone()
         {
@@ -206,6 +213,7 @@ namespace DTXmatixx.データベース.ユーザ
             @", MaxRange_Good REAL NOT NULL" +
             @", MaxRange_Ok REAL NOT NULL" +
             @", CymbalFree INTEGER NOT NULL" +
+            @", PlayMode INTEGER NOT NULL" +
             @")";
     }
 }

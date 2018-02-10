@@ -187,7 +187,9 @@
     <Compile Include="ステージ\青い線.cs" />
     <Compile Include="ステージ\選曲\選曲ステージ.cs" />
     <Compile Include="データベース\ユーザ\old\Record01.cs" />
+    <Compile Include="データベース\ユーザ\old\Record02.cs" />
     <Compile Include="データベース\ユーザ\old\User01.cs" />
+    <Compile Include="データベース\ユーザ\old\User02.cs" />
     <Compile Include="データベース\曲\old\Song01.cs" />
     <Compile Include="データベース\曲\old\Song02.cs" />
     <Compile Include="入力\ドラム入力イベント.cs" />
@@ -207,11 +209,12 @@
     <Compile Include="曲\難易度種別.cs" />
     <Compile Include="データベース\曲\SongDB.cs" />
     <Compile Include="データベース\SQLiteDBBase.cs" />
-    <Compile Include="データベース\ユーザ\Record02.cs" />
-    <Compile Include="データベース\ユーザ\User02.cs" />
+    <Compile Include="データベース\ユーザ\Record03.cs" />
+    <Compile Include="データベース\ユーザ\User03.cs" />
     <Compile Include="データベース\ユーザ\UserDB.cs" />
     <Compile Include="データベース\曲\Song03.cs" />
     <Compile Include="設定\AutoPlay種別.cs" />
+    <Compile Include="設定\PlayMode.cs" />
     <Compile Include="設定\キーバインディング.cs" />
     <Compile Include="設定\システム設定.cs" />
     <Compile Include="設定\ドラムとチップと入力の対応表.cs" />

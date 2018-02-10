@@ -50,30 +50,42 @@ namespace DTXmatixx.データベース
 
             var 実DBのバージョン = this.UserVersion;   // DBが存在しない場合は 0 。
 
+            // (A) マイグレーション不要。
             if( 実DBのバージョン == Version )
             {
-                // (A) マイグレーション不要。
             }
+
+            // (B) 実DBが存在していない　→　作成する。
             else if( 実DBのバージョン == 0 )
             {
-                // (B) 実DBが存在していない　→　作成する。
                 this.テーブルがなければ作成する();
                 this.UserVersion = Version;
             }
+
+            // (C) 実DBが下位バージョンである　→　アップグレードする。
             else if( 実DBのバージョン < Version )
             {
-                // (C) 実DBが下位バージョンである　→　アップグレードする。
-                while( 実DBのバージョン < Version )
+                try
                 {
-                    // 1バージョンずつアップグレード。
-                    this.データベースのアップグレードマイグレーションを行う( 実DBのバージョン );
-                    実DBのバージョン++;
+                    while( 実DBのバージョン < Version )
+                    {
+                        // 1バージョンずつアップグレード。
+                        this.データベースのアップグレードマイグレーションを行う( 実DBのバージョン );
+                        実DBのバージョン++;
+                    }
+
+                    // すべて成功した場合にのみ UserVersion を更新する。
+                    this.UserVersion = Version;
                 }
-                this.UserVersion = Version;
+                catch( Exception ex )
+                {
+                    Log.ERROR( ex.Message );
+                }
             }
+
+            // (D) 実DBが上位バージョンである　→　例外発出。上位互換はなし。
             else
             {
-                // (D) 実DBが上位バージョンである　→　例外発出。上位互換はなし。
                 throw new Exception( $"データベースが未知のバージョン({実DBのバージョン})です。" );
             }
         }

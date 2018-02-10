@@ -5,7 +5,7 @@ using System.Linq;
 using FDK;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.ステージ.演奏;
-using User = DTXmatixx.データベース.ユーザ.User02;
+using User = DTXmatixx.データベース.ユーザ.User03;
 
 namespace DTXmatixx.設定
 {
@@ -82,6 +82,13 @@ namespace DTXmatixx.設定
             get;
             protected set;
         } = null;
+        public PlayMode 演奏モード
+        {
+            get
+                => (PlayMode) this._User.PlayMode;
+            set
+                => this._User.PlayMode = (int) value;
+        }
 
         public ユーザ設定()
         {
