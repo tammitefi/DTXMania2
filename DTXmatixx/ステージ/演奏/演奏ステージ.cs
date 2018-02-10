@@ -447,6 +447,7 @@ namespace DTXmatixx.ステージ.演奏
                                         return ( 入力.Type == ドラム入力種別.Snare || 入力.Type == ドラム入力種別.Snare_ClosedRim || 入力.Type == ドラム入力種別.Snare_OpenRim );
 
                                     case チップ種別.Bass:
+                                    case チップ種別.LeftBass:
                                         return ( 入力.Type == ドラム入力種別.Bass );
 
                                     case チップ種別.Tom1:
