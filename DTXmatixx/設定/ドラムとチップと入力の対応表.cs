@@ -42,7 +42,8 @@ namespace DTXmatixx.設定
 
             public struct ColumnAutoPlayON
             {
-                public bool 自動ヒット { get; set; }
+                public bool 自動ヒット
+                    => 自動ヒット時処理.再生 || 自動ヒット時処理.非表示 || 自動ヒット時処理.判定;
 
                 public Columnヒット処理 自動ヒット時処理 { get; set; }
 
@@ -52,11 +53,13 @@ namespace DTXmatixx.設定
 
             public struct ColumnAutoPlayOFF
             {
-                public bool 自動ヒット { get; set; }
+                public bool 自動ヒット
+                    => 自動ヒット時処理.再生 || 自動ヒット時処理.非表示 || 自動ヒット時処理.判定;
 
                 public Columnヒット処理 自動ヒット時処理 { get; set; }
 
-                public bool ユーザヒット { get; set; }
+                public bool ユーザヒット
+                    => ユーザヒット時処理.再生 || ユーザヒット時処理.非表示 || ユーザヒット時処理.判定;
 
                 public Columnヒット処理 ユーザヒット時処理 { get; set; }
 
@@ -100,7 +103,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -109,13 +111,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -137,7 +137,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.LeftCrash,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -146,13 +145,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -174,7 +171,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.RightCrash,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -183,13 +179,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -211,7 +205,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.RightCrash,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -220,13 +213,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -248,7 +239,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.RightCrash,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -257,13 +247,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -285,7 +273,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.LeftCrash,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -294,13 +281,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -322,7 +307,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.HiHat,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -331,13 +315,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -359,7 +341,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.HiHat,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -368,13 +349,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -396,7 +375,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.HiHat,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -405,13 +383,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -433,7 +409,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Foot,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -442,13 +417,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -470,7 +443,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Snare,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -479,13 +451,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -507,7 +477,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Snare,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -516,13 +485,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -544,7 +511,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Snare,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -553,13 +519,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -581,7 +545,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Snare,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -590,13 +553,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -618,7 +579,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Bass,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -627,13 +587,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -655,7 +613,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Tom1,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -664,13 +621,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -692,7 +647,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Tom1,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -701,13 +655,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -729,7 +681,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Tom2,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -738,13 +689,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -766,7 +715,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Tom2,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -775,13 +723,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -803,7 +749,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Tom3,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -812,13 +757,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -840,7 +783,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Tom3,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -849,13 +791,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -877,7 +817,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.RightCrash,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -886,13 +825,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -914,7 +851,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -923,13 +859,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -951,7 +885,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -960,13 +893,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -988,7 +919,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -997,13 +927,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1025,7 +953,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1034,13 +961,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1062,7 +987,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1071,13 +995,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1099,7 +1021,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.LeftCrash,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = true,
@@ -1108,13 +1029,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1136,7 +1055,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.RightCrash,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = true,
@@ -1145,13 +1063,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1173,7 +1089,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1182,13 +1097,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1210,7 +1123,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1219,13 +1131,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1247,7 +1157,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1256,13 +1165,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1284,7 +1191,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1293,13 +1199,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1321,7 +1225,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1330,13 +1233,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1358,7 +1259,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1367,13 +1267,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1395,7 +1293,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1404,13 +1301,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1432,7 +1327,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1441,13 +1335,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1469,7 +1361,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Unknown,
                         不可視 = true,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1478,13 +1369,11 @@ namespace DTXmatixx.設定
                             MISS判定 = false,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
                                 判定 = false,
                             },
-                            ユーザヒット = false,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
@@ -1506,7 +1395,6 @@ namespace DTXmatixx.設定
                         AutoPlay種別 = AutoPlay種別.Bass,
                         不可視 = false,
                         AutoPlayON = new Column.ColumnAutoPlayON() {
-                            自動ヒット = true,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
@@ -1515,13 +1403,11 @@ namespace DTXmatixx.設定
                             MISS判定 = true,
                         },
                         AutoPlayOFF = new Column.ColumnAutoPlayOFF() {
-                            自動ヒット = false,
                             自動ヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = false,
                                 非表示 = false,
                                 判定 = false,
                             },
-                            ユーザヒット = true,
                             ユーザヒット時処理 = new Column.Columnヒット処理() {
                                 再生 = true,
                                 非表示 = true,
