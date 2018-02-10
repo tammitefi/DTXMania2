@@ -7,6 +7,7 @@ using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
+using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ.認証
 {
@@ -24,9 +25,33 @@ namespace DTXmatixx.ステージ.認証
 
         public ユーザリスト()
         {
-            this.子を追加する( this._ユーザパネル = new 画像( @"$(System)images\認証画面_パネル.png" ) );
-            this.子を追加する( this._ユーザパネル光彩付き = new 画像( @"$(System)images\認証画面_パネル光彩あり.png" ) );
-            this.子を追加する( this._ユーザ肩書きパネル = new 画像( @"$(System)images\認証画面_肩書きパネル.png" ) );
+            var image = (画像) null;
+
+
+            this._ユーザパネル = new Dictionary<PlayMode, 画像>();
+
+            this.子を追加する( image = new 画像( @"$(System)images\認証画面_パネル_0.png" ) );
+            this._ユーザパネル.Add( PlayMode.BASIC, image );
+            this.子を追加する( image = new 画像( @"$(System)images\認証画面_パネル_1.png" ) );
+            this._ユーザパネル.Add( PlayMode.MANIAC, image );
+
+
+            this._ユーザパネル光彩付き = new Dictionary<PlayMode, 画像>();
+
+            this.子を追加する( image = new 画像( @"$(System)images\認証画面_パネル_0_光彩あり.png" ) );
+            this._ユーザパネル光彩付き.Add( PlayMode.BASIC, image );
+            this.子を追加する( image = new 画像( @"$(System)images\認証画面_パネル_1_光彩あり.png" ) );
+            this._ユーザパネル光彩付き.Add( PlayMode.MANIAC, image );
+
+
+            this._ユーザ肩書きパネル = new Dictionary<PlayMode, 画像>();
+
+            this.子を追加する( image = new 画像( @"$(System)images\認証画面_肩書きパネル_0.png" ) );
+            this._ユーザ肩書きパネル.Add( PlayMode.BASIC, image );
+            this.子を追加する( image = new 画像( @"$(System)images\認証画面_肩書きパネル_1.png" ) );
+            this._ユーザ肩書きパネル.Add( PlayMode.MANIAC, image );
+
+
             this.子を追加する( this._ユーザ名 = new 文字列画像() {
                 表示文字列 = "",
                 フォントサイズpt = 46f,
@@ -86,21 +111,24 @@ namespace DTXmatixx.ステージ.認証
 
             for( int i = 0; i < 表示人数; i++ )
             {
+                var user = App.ユーザ管理.ユーザリスト[ i ];
+                var playMode = user.演奏モード;
+
                 if( i == this.選択中のユーザ )
-                    this._ユーザパネル光彩付き.描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i, 不透明度0to1: 不透明度 );
+                    this._ユーザパネル光彩付き[ playMode ].描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i, 不透明度0to1: 不透明度 );
 
-                this._ユーザパネル.描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
+                this._ユーザパネル[ playMode ].描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
 
-                this._ユーザ名.表示文字列 = App.ユーザ管理.ユーザリスト[ i ].ユーザ名;
+                this._ユーザ名.表示文字列 = user.ユーザ名;
                 this._ユーザ名.描画する( dc, 描画位置.X + 32f, 描画位置.Y + 40f + リストの改行幅 * i );
 
-                this._ユーザ肩書きパネル.描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
+                this._ユーザ肩書きパネル[ playMode ].描画する( dc, 描画位置.X, 描画位置.Y + リストの改行幅 * i );
             }
         }
 
-        private 画像 _ユーザパネル = null;
-        private 画像 _ユーザパネル光彩付き = null;
-        private 画像 _ユーザ肩書きパネル = null;
+        private Dictionary<PlayMode, 画像> _ユーザパネル = null;
+        private Dictionary<PlayMode, 画像> _ユーザパネル光彩付き = null;
+        private Dictionary<PlayMode, 画像> _ユーザ肩書きパネル = null;
         private LoopCounter _光彩アニメカウンタ = null;
         private 文字列画像 _ユーザ名 = null;
     }
