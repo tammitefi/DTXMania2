@@ -44,8 +44,11 @@ namespace DTXmatixx.ステージ.オプション設定
                 // パッドリストを初期化。
                 foreach( ドラム入力種別 drum in Enum.GetValues( typeof( ドラム入力種別 ) ) )
                 {
-                    if( drum != ドラム入力種別.Unknown )   // Unknown 以外を登録。
-                        this.comboBoxパッドリスト.Items.Add( drum.ToString() );
+                    if( drum == ドラム入力種別.Unknown ||
+                        drum == ドラム入力種別.HiHat_Control )
+                        continue;   // 除外（設定変更不可）
+
+                    this.comboBoxパッドリスト.Items.Add( drum.ToString() );
                 }
 
                 // 変更後のキーバインディングを、現在の設定値で初期化。
