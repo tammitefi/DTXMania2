@@ -77,7 +77,7 @@ namespace DTXmatixx.設定
             get;
             set;
         } = null;
-        public ドラムとチップと入力の対応表 ドラムとチップと入力の対応表
+        public ドラムチッププロパティ管理 ドラムチッププロパティ管理
         {
             get;
             protected set;
@@ -96,12 +96,12 @@ namespace DTXmatixx.設定
                 Id = null,
             };
 
-            this.ドラムとチップと入力の対応表 = new ドラムとチップと入力の対応表(
+            this.ドラムチッププロパティ管理 = new ドラムチッププロパティ管理(
                 new 表示レーンの左右() {    // 使わないので固定。
                     Chinaは左 = false,
                     Rideは左 = false,
-                    Splashは左 = true,
-                } );
+                    Splashは左 = true },
+                入力グループプリセット種別.基本形 );
 
             this._Userに依存するメンバを初期化する();
         }

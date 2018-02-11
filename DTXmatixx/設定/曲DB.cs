@@ -310,19 +310,19 @@ namespace DTXmatixx.設定
 
             foreach( var chip in score.チップリスト )
             {
-                var チップの対応表 = ユーザ設定.ドラムとチップと入力の対応表[ chip.チップ種別 ];
+                var ドラムチッププロパティ = ユーザ設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
 
                 // AutoPlay ON のチップは、すべてがONである場合を除いて、カウントしない。
-                if( ユーザ設定.AutoPlay[ チップの対応表.AutoPlay種別 ] )
+                if( ユーザ設定.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ] )
                 {
                     if( !( ユーザ設定.AutoPlayがすべてONである ) )
                         continue;
                 }
                 // AutoPlay OFF 時でもユーザヒットの対象にならないチップはカウントしない。
-                if( !( チップの対応表.AutoPlayOFF.ユーザヒット ) )
+                if( !( ドラムチッププロパティ.AutoPlayOFF_ユーザヒット ) )
                     continue;
 
-                ノーツ数[ チップの対応表.表示レーン種別 ]++;
+                ノーツ数[ ドラムチッププロパティ.表示レーン種別 ]++;
             }
 
             return ノーツ数;

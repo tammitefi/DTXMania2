@@ -268,17 +268,17 @@ namespace DTXmatixx.ステージ.演奏
 
             foreach( var chip in score.チップリスト )
             {
-                var チップの対応表 = options.ドラムとチップと入力の対応表[ chip.チップ種別 ];
+                var ドラムチッププロパティ = options.ドラムチッププロパティ管理[ chip.チップ種別 ];
 
                 // AutoPlay ON のチップは、
-                if( options.AutoPlay[ チップの対応表.AutoPlay種別 ] )
+                if( options.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ] )
                 {
                     if( !( options.AutoPlayがすべてONである ) )
                         continue;   // すべてがONである場合を除いて、カウントしない。
                 }
 
                 // AutoPlay OFF 時でもユーザヒットの対象にならないチップはカウントしない。
-                if( !( チップの対応表.AutoPlayOFF.ユーザヒット ) )
+                if( !( ドラムチッププロパティ.AutoPlayOFF_ユーザヒット ) )
                     continue;
 
                 総ノーツ数++;
