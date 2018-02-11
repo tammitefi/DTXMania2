@@ -7,6 +7,7 @@ using CSCore;
 using FDK;
 using FDK.メディア.サウンド.WASAPI;
 using SSTFormat.v3;
+using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ
 {
@@ -49,7 +50,7 @@ namespace DTXmatixx.ステージ
                             kvp.Value.Dispose();
                     }
 
-                    this._チップtoコンテキスト = new Dictionary<(チップ種別 chipType, int サブチップID), Cコンテキスト>();
+                    this._チップtoコンテキスト = new Dictionary<(チップ種別 chipType, int サブチップID), SoundContext>();
 
                     // SSTの既定のサウンドを、subChipId = 0 としてプリセット登録する。
                     this.登録する( チップ種別.LeftCrash, 0, @"$(System)sounds\drums\LeftCrash.wav" );
@@ -93,7 +94,7 @@ namespace DTXmatixx.ステージ
                     }
 
                     // コンテキストを作成する。
-                    var context = new Cコンテキスト( this._多重度 );
+                    var context = new SoundContext( this._多重度 );
 
                     // サウンドファイルを読み込んでデコードする。
                     context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
@@ -114,43 +115,25 @@ namespace DTXmatixx.ステージ
             }
         }
 
-        public void 発声する( チップ種別 chipType, int subChipId, float 音量0to1 = 1f )
+        public void 発声する( チップ種別 chipType, int subChipId, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量0to1 = 1f )
         {
             lock( this._Sound利用権 )
             {
-                if( this._チップtoコンテキスト.TryGetValue( (chipType, subChipId), out Cコンテキスト context ) )
+                if( this._チップtoコンテキスト.TryGetValue( (chipType, subChipId), out SoundContext context ) )
                 {
-                    // 現在発声中のサウンドを全部止めるチップ種別の場合は止める。
-                    if( 0 != chipType.排他発声グループID() ) // グループID = 0 は対象外。
+                    // 必要あれば消音する。
+                    if( 発声前に消音する && muteGroupType != 消音グループ種別.Unknown )
                     {
-                        // 消音対象のコンテキストの Sounds[] を select する。
-                        var 停止するサウンドs =
-                            from kvp in this._チップtoコンテキスト
-                            where ( chipType.直前のチップを消音する( kvp.Key.chipType ) )
-                            select kvp.Value.Sounds;
+                        // 指定された消音グループ種別に属する Sound をすべて停止する。
+                        var 停止するSoundContexts = this._チップtoコンテキスト.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
 
-                        // 集めた Sounds[] をすべて停止する。
-                        foreach( var sounds in 停止するサウンドs )
-                        {
-                            foreach( var sound in sounds )
-                            {
+                        foreach( var wavContext in 停止するSoundContexts )
+                            foreach( var sound in wavContext.Value.Sounds )
                                 sound.Stop();
-                            }
-                        }
                     }
 
-                    // 再生する。
-                    if( null != context.Sounds[ context.次に再生するSound番号 ] )
-                    {
-                        context.Sounds[ context.次に再生するSound番号 ].Volume = 音量0to1;
-                        context.Sounds[ context.次に再生するSound番号 ].Play();
-                    }
-
-                    // サウンドローテーション。
-                    context.次に再生するSound番号++;
-
-                    if( context.次に再生するSound番号 >= this._多重度 )
-                        context.次に再生するSound番号 = 0;
+                    // 発声する。
+                    context.発声する( muteGroupType, 音量0to1 );
                 }
                 else
                 {
@@ -159,13 +142,17 @@ namespace DTXmatixx.ステージ
             }
         }
 
-        private class Cコンテキスト : IDisposable
+        private class SoundContext : IDisposable
         {
             public ISampleSource SampleSource = null;
             public Sound[] Sounds = null;
-            public int 次に再生するSound番号 = 0;
+            public 消音グループ種別 最後に発声したときの消音グループ種別
+            {
+                get;
+                protected set;
+            } = 消音グループ種別.Unknown;
 
-            public Cコンテキスト( int 多重度 = 4 )
+            public SoundContext( int 多重度 = 4 )
             {
                 this._多重度 = 多重度;
                 this.Sounds = new Sound[ this._多重度 ];
@@ -182,12 +169,30 @@ namespace DTXmatixx.ステージ
                     FDKUtilities.解放する( ref this.Sounds[ i ] );
                 }
             }
+            public void 発声する( 消音グループ種別 muteGroupType, float 音量 )
+            {
+                this.最後に発声したときの消音グループ種別 = muteGroupType;
+
+                // 発声。
+                if( null != this.Sounds[ this._次に再生するSound番号 ] )
+                {
+                    音量 = 
+                        ( 0f > 音量 ) ? 0f :
+                        ( 1f < 音量 ) ? 1f : 音量;
+                    this.Sounds[ this._次に再生するSound番号 ].Volume = 音量;
+                    this.Sounds[ this._次に再生するSound番号 ].Play();
+                }
+
+                // サウンドローテーション。
+                this._次に再生するSound番号 = ( this._次に再生するSound番号 + 1 ) % this._多重度;
+            }
 
             private readonly int _多重度 = 4;
+            private int _次に再生するSound番号 = 0;
         };
 
         private readonly int _多重度 = 4;
-        private Dictionary<(チップ種別 chipType, int サブチップID), Cコンテキスト> _チップtoコンテキスト = null;
+        private Dictionary<(チップ種別 chipType, int サブチップID), SoundContext> _チップtoコンテキスト = null;
         private readonly object _Sound利用権 = new object();
     }
 }

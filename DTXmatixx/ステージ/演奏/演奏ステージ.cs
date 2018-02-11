@@ -505,7 +505,7 @@ namespace DTXmatixx.ステージ.演奏
 
                                 // (A) 空打ちチップの指定があるなら、それを発声する。
                                 if( 0 != zz )
-                                    App.WAV管理.発声する( zz, prop.チップ種別 );
+                                    App.WAV管理.発声する( zz, prop.チップ種別, prop.発声前消音, prop.消音グループ種別 );
 
                                 // (B) 空打ちチップの指定がないなら、一番近いチップを検索し、それを発声する。
                                 else
@@ -1096,6 +1096,8 @@ namespace DTXmatixx.ステージ.演奏
         }
         private void _チップの発声を行う( チップ chip, double 再生開始位置sec )
         {
+            var prop = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ[ chip.チップ種別 ];
+
             if( 0 == chip.チップサブID )
             {
                 #region " (A) SSTF 準拠のチップ "
@@ -1118,7 +1120,7 @@ namespace DTXmatixx.ステージ.演奏
                     // (A-b) ドラムサウンド
 
                     // BGM以外のサウンドについては、常に最初から再生する。
-                    App.ドラムサウンド.発声する( chip.チップ種別, 0, ( chip.音量 / (float) チップ.最大音量 ) );
+                    App.ドラムサウンド.発声する( chip.チップ種別, 0, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
                 }
                 //----------------
                 #endregion
@@ -1140,7 +1142,7 @@ namespace DTXmatixx.ステージ.演奏
                 else
                 {
                     // (B-b) その他サウンド
-                    App.WAV管理.発声する( chip.チップサブID, chip.チップ種別, ( chip.音量 / (float) チップ.最大音量 ) );
+                    App.WAV管理.発声する( chip.チップサブID, chip.チップ種別, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
                 }
                 //----------------
                 #endregion

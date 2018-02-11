@@ -133,7 +133,6 @@
     <Compile Include="ステージ\ステージ管理.cs" />
     <Compile Include="ステージ\タイトル\タイトルステージ.cs" />
     <Compile Include="アイキャッチ\回転幕.cs" />
-    <Compile Include="ステージ\チップExtensions.cs" />
     <Compile Include="ステージ\ドラムサウンド.cs" />
     <Compile Include="ステージ\パッド矢印.cs" />
     <Compile Include="ステージ\曲ツリー構築\曲ツリー構築ステージ.cs" />

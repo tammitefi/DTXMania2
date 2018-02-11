@@ -7,7 +7,7 @@ using CSCore;
 using FDK;
 using FDK.メディア.サウンド.WASAPI;
 using SSTFormat.v3;
-using DTXmatixx.ステージ;
+using DTXmatixx.設定;
 
 namespace DTXmatixx.曲
 {
@@ -113,30 +113,25 @@ namespace DTXmatixx.曲
         ///		指定した番号のWAVを、指定したチップ種別として発声する。
         /// </summary>
         /// <param name="音量">0:無音～1:原音</param>
-        public void 発声する( int WAV番号, チップ種別 chipType, float 音量 = 1f )
+        public void 発声する( int WAV番号, チップ種別 chipType, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量 = 1f )
         {
+            // 未登録の WAV番号 は無視。
             if( !( this._WavContexts.ContainsKey( WAV番号 ) ) )
                 return;
 
-            // 現在発声中のサウンドを全部止めるチップ種別の場合は止める。
-            if( 0 != chipType.排他発声グループID() ) // グループID = 0 は対象外。
+            // 必要あれば消音する。
+            if( 発声前に消音する && muteGroupType != 消音グループ種別.Unknown )
             {
-                // 消音対象のコンテキストの Sounds[] を select する。
-                var 停止するサウンドs =
-                    from kvp in this._WavContexts
-                    where ( chipType.直前のチップを消音する( kvp.Value.最後に発声したときのチップ種別 ) )
-                    select kvp.Value.Sounds;
+                // 指定された消音グループ種別に属する Sound をすべて停止する。
+                var 停止するWavContexts = this._WavContexts.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
 
-                // 集めた Sounds[] をすべて停止する。
-                foreach( var sounds in 停止するサウンドs )
-                {
-                    foreach( var sound in sounds )
+                foreach( var wavContext in 停止するWavContexts )
+                    foreach( var sound in wavContext.Value.Sounds )
                         sound.Stop();
-                }
             }
 
             // 発声する。
-            this._WavContexts[ WAV番号 ].発声する( chipType, 音量 );
+            this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量 );
         }
 
         public void すべての発声を停止する()
@@ -166,11 +161,11 @@ namespace DTXmatixx.曲
             /// </summary>
             public Sound[] Sounds;
 
-            public チップ種別 最後に発声したときのチップ種別
+            public 消音グループ種別 最後に発声したときの消音グループ種別
             {
                 get;
                 protected set;
-            } = チップ種別.Unknown;
+            } = 消音グループ種別.Unknown;
 
             public WavContext( int wav番号, int 多重度 )
             {
@@ -194,12 +189,14 @@ namespace DTXmatixx.曲
             ///		指定したチップ種別扱いでWAVを発声する。
             /// </summary>
             /// <param name="音量">0:無音～1:原音</param>
-            public void 発声する( チップ種別 chipType, float 音量 )
+            public void 発声する( 消音グループ種別 muteGroupType, float 音量 )
             {
-                this.最後に発声したときのチップ種別 = chipType;
+                this.最後に発声したときの消音グループ種別 = muteGroupType;
 
                 // 発声。
-                音量 = ( 0f > 音量 ) ? 0f : ( 1f < 音量 ) ? 1f : 音量;
+                音量 = 
+                    ( 0f > 音量 ) ? 0f : 
+                    ( 1f < 音量 ) ? 1f : 音量;
                 this.Sounds[ this.次に再生するSound番号 ].Volume = 音量;
                 this.Sounds[ this.次に再生するSound番号 ].Play( 0 );
 

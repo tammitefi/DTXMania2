@@ -33,7 +33,7 @@ namespace DTXmatixx.設定
 
         // ヒット
 
-        public bool 再生前消音 { get; set; }
+        public bool 発声前消音 { get; set; }
         public 消音グループ種別 消音グループ種別 { get; set; }
         public bool AutoPlayON_自動ヒット => ( this.AutoPlayON_自動ヒット_再生 || this.AutoPlayON_自動ヒット_非表示 || this.AutoPlayON_自動ヒット_判定 );
         public bool AutoPlayON_自動ヒット_再生 { get; set; }
