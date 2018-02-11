@@ -930,11 +930,11 @@ namespace DTXmatixx.ステージ.演奏
                         // 拡大縮小回転
                         switch( lane )
                         {
-                            case 表示レーン種別.LeftCrash:
+                            case 表示レーン種別.LeftCymbal:
                             case 表示レーン種別.HiHat:
                             case 表示レーン種別.Foot:
                             case 表示レーン種別.Tom3:
-                            case 表示レーン種別.RightCrash:
+                            case 表示レーン種別.RightCymbal:
                                 {
                                     float v = (float) ( Math.Sin( 2 * Math.PI * 割合 ) * 0.2 );
                                     変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 音量0to1, 矩形中央 );

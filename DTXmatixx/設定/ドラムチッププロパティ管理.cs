@@ -69,7 +69,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.LeftCrash ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.LeftCrash,
                         レーン種別 = レーン種別.LeftCrash,
-                        表示レーン種別 = 表示レーン種別.LeftCrash,
+                        表示レーン種別 = 表示レーン種別.LeftCymbal,
                         不可視 = false,
                         ドラム入力種別 = ドラム入力種別.LeftCrash,
                         AutoPlay種別 = AutoPlay種別.LeftCrash,
@@ -95,7 +95,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.Ride ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.Ride,
                         レーン種別 = レーン種別.Ride,
-                        表示レーン種別 = ( 表示レーンの左右.Rideは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash,
+                        表示レーン種別 = ( 表示レーンの左右.Rideは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal,
                         不可視 = false,
                         ドラム入力種別 = ドラム入力種別.Ride,
                         AutoPlay種別 = ( 表示レーンの左右.Rideは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash,
@@ -121,7 +121,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.Ride_Cup ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.Ride_Cup,
                         レーン種別 = レーン種別.Ride,
-                        表示レーン種別 = ( 表示レーンの左右.Rideは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash,
+                        表示レーン種別 = ( 表示レーンの左右.Rideは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal,
                         不可視 = false,
                         ドラム入力種別 = ドラム入力種別.Ride,
                         AutoPlay種別 = ( 表示レーンの左右.Rideは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash,
@@ -147,7 +147,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.China ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.China,
                         レーン種別 = レーン種別.China,
-                        表示レーン種別 = ( 表示レーンの左右.Chinaは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash,
+                        表示レーン種別 = ( 表示レーンの左右.Chinaは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal,
                         不可視 = false,
                         ドラム入力種別 = ドラム入力種別.China,
                         AutoPlay種別 = ( 表示レーンの左右.Chinaは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash,
@@ -173,7 +173,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.Splash ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.Splash,
                         レーン種別 = レーン種別.Splash,
-                        表示レーン種別 = ( 表示レーンの左右.Splashは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash,
+                        表示レーン種別 = ( 表示レーンの左右.Splashは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal,
                         不可視 = false,
                         ドラム入力種別 = ドラム入力種別.Splash,
                         AutoPlay種別 = ( 表示レーンの左右.Splashは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash,
@@ -615,7 +615,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.RightCrash ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.RightCrash,
                         レーン種別 = レーン種別.RightCrash,
-                        表示レーン種別 = 表示レーン種別.RightCrash,
+                        表示レーン種別 = 表示レーン種別.RightCymbal,
                         不可視 = false,
                         ドラム入力種別 = ドラム入力種別.RightCrash,
                         AutoPlay種別 = AutoPlay種別.RightCrash,
@@ -771,7 +771,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.LeftCymbal_Mute ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.LeftCymbal_Mute,
                         レーン種別 = レーン種別.LeftCrash,
-                        表示レーン種別 = 表示レーン種別.LeftCrash,
+                        表示レーン種別 = 表示レーン種別.LeftCymbal,
                         不可視 = true,
                         ドラム入力種別 = ドラム入力種別.Unknown,
                         AutoPlay種別 = AutoPlay種別.LeftCrash,
@@ -797,7 +797,7 @@ namespace DTXmatixx.設定
                     [ チップ種別.RightCymbal_Mute ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.RightCymbal_Mute,
                         レーン種別 = レーン種別.RightCrash,
-                        表示レーン種別 = 表示レーン種別.RightCrash,
+                        表示レーン種別 = 表示レーン種別.RightCymbal,
                         不可視 = true,
                         ドラム入力種別 = ドラム入力種別.Unknown,
                         AutoPlay種別 = AutoPlay種別.RightCrash,
@@ -1070,19 +1070,19 @@ namespace DTXmatixx.設定
                 {
                     case チップ種別.Ride:
                     case チップ種別.Ride_Cup:
-                        kvp.Value.表示レーン種別 = ( position.Rideは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash;
+                        kvp.Value.表示レーン種別 = ( position.Rideは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( position.Rideは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( position.Rideは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
                         break;
 
                     case チップ種別.China:
-                        kvp.Value.表示レーン種別 = ( position.Chinaは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash;
+                        kvp.Value.表示レーン種別 = ( position.Chinaは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( position.Chinaは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( position.Chinaは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
                         break;
 
                     case チップ種別.Splash:
-                        kvp.Value.表示レーン種別 = ( position.Splashは左 ) ? 表示レーン種別.LeftCrash : 表示レーン種別.RightCrash;
+                        kvp.Value.表示レーン種別 = ( position.Splashは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( position.Splashは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( position.Splashは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
                         break;

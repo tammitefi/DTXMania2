@@ -32,7 +32,7 @@ namespace DTXmatixx.ステージ.演奏
             protected set;
         } = new Dictionary<表示レーン種別, float>() {
             { 表示レーン種別.Unknown, +0f },
-            { 表示レーン種別.LeftCrash, +1f },
+            { 表示レーン種別.LeftCymbal, +1f },
             { 表示レーン種別.HiHat, +108f },
             { 表示レーン種別.Foot, +183f },
             { 表示レーン種別.Snare, +258f },
@@ -40,7 +40,7 @@ namespace DTXmatixx.ステージ.演奏
             { 表示レーン種別.Tom1, +446f },
             { 表示レーン種別.Tom2, +521f },
             { 表示レーン種別.Tom3, +595f },
-            { 表示レーン種別.RightCrash, +677f },
+            { 表示レーン種別.RightCymbal, +677f },
         };
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace DTXmatixx.ステージ.演奏
             protected set;
         } = new Dictionary<表示レーン種別, float>() {
             { 表示レーン種別.Unknown, 0f },
-            { 表示レーン種別.LeftCrash, 96f },
+            { 表示レーン種別.LeftCymbal, 96f },
             { 表示レーン種別.HiHat, 70f },
             { 表示レーン種別.Foot, 73f },
             { 表示レーン種別.Snare, 84f },
@@ -60,7 +60,7 @@ namespace DTXmatixx.ステージ.演奏
             { 表示レーン種別.Tom1, 71f },
             { 表示レーン種別.Tom2, 71f },
             { 表示レーン種別.Tom3, 71f },
-            { 表示レーン種別.RightCrash, 96f },
+            { 表示レーン種別.RightCymbal, 96f },
         };
 
         protected override void On活性化()

@@ -29,7 +29,7 @@ namespace DTXmatixx.ステージ.選曲
                 var dc = グラフィックデバイス.Instance.D2DDeviceContext;
 
                 this._色 = new Dictionary<表示レーン種別, SolidColorBrush>() {
-                    { 表示レーン種別.LeftCrash, new SolidColorBrush( dc, new Color4( 0xff7b1fff ) ) },
+                    { 表示レーン種別.LeftCymbal, new SolidColorBrush( dc, new Color4( 0xff7b1fff ) ) },
                     { 表示レーン種別.HiHat, new SolidColorBrush( dc, new Color4( 0xffffc06a ) ) },
                     { 表示レーン種別.Foot, new SolidColorBrush( dc, new Color4( 0xffed4bff ) ) },
                     { 表示レーン種別.Snare, new SolidColorBrush( dc, new Color4( 0xff16fefc ) ) },
@@ -37,7 +37,7 @@ namespace DTXmatixx.ステージ.選曲
                     { 表示レーン種別.Bass, new SolidColorBrush( dc, new Color4( 0xffff819b ) ) },
                     { 表示レーン種別.Tom2, new SolidColorBrush( dc, new Color4( 0xff0000ff  ) ) },
                     { 表示レーン種別.Tom3, new SolidColorBrush( dc, new Color4( 0xff19a9ff ) ) },
-                    { 表示レーン種別.RightCrash, new SolidColorBrush( dc, new Color4( 0xffffb55e ) ) },
+                    { 表示レーン種別.RightCymbal, new SolidColorBrush( dc, new Color4( 0xffffb55e ) ) },
                 };
             }
         }
@@ -72,7 +72,7 @@ namespace DTXmatixx.ステージ.選曲
                         {
                             this._ノーツ数 = new Dictionary<表示レーン種別, int>() {
                                 { 表示レーン種別.Unknown, 0 },
-                                { 表示レーン種別.LeftCrash, note.TotalNotes_LeftCymbal },
+                                { 表示レーン種別.LeftCymbal, note.TotalNotes_LeftCymbal },
                                 { 表示レーン種別.HiHat, note.TotalNotes_HiHat },
                                 { 表示レーン種別.Foot, note.TotalNotes_LeftPedal },
                                 { 表示レーン種別.Snare, note.TotalNotes_Snare },
@@ -80,7 +80,7 @@ namespace DTXmatixx.ステージ.選曲
                                 { 表示レーン種別.Tom1, note.TotalNotes_HighTom },
                                 { 表示レーン種別.Tom2, note.TotalNotes_LowTom },
                                 { 表示レーン種別.Tom3, note.TotalNotes_FloorTom },
-                                { 表示レーン種別.RightCrash, note.TotalNotes_RightCymbal },
+                                { 表示レーン種別.RightCymbal, note.TotalNotes_RightCymbal },
                             };
                         }
                     }
@@ -102,7 +102,7 @@ namespace DTXmatixx.ステージ.選曲
                     グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                         var Xオフセット = new Dictionary<表示レーン種別, float>() {
-                            { 表示レーン種別.LeftCrash, +70f },
+                            { 表示レーン種別.LeftCymbal, +70f },
                             { 表示レーン種別.HiHat, +88f },
                             { 表示レーン種別.Foot, +106f },
                             { 表示レーン種別.Snare, +124f },
@@ -110,7 +110,7 @@ namespace DTXmatixx.ステージ.選曲
                             { 表示レーン種別.Bass, +160f },
                             { 表示レーン種別.Tom2, +178f },
                             { 表示レーン種別.Tom3, +196f },
-                            { 表示レーン種別.RightCrash, +214f },
+                            { 表示レーン種別.RightCymbal, +214f },
                         };
                         const float Yオフセット = +2f;
 

@@ -86,7 +86,7 @@ namespace DTXmatixx.設定
                                         Level = score.難易度,
                                         MinBPM = BPMs.最小BPM,
                                         MaxBPM = BPMs.最大BPM,
-                                        TotalNotes_LeftCymbal = ノーツ数[ 表示レーン種別.LeftCrash ],
+                                        TotalNotes_LeftCymbal = ノーツ数[ 表示レーン種別.LeftCymbal ],
                                         TotalNotes_HiHat = ノーツ数[ 表示レーン種別.HiHat ],
                                         TotalNotes_LeftPedal = ノーツ数[ 表示レーン種別.Foot ],
                                         TotalNotes_Snare = ノーツ数[ 表示レーン種別.Snare ],
@@ -94,7 +94,7 @@ namespace DTXmatixx.設定
                                         TotalNotes_HighTom = ノーツ数[ 表示レーン種別.Tom1 ],
                                         TotalNotes_LowTom = ノーツ数[ 表示レーン種別.Tom2 ],
                                         TotalNotes_FloorTom = ノーツ数[ 表示レーン種別.Tom3 ],
-                                        TotalNotes_RightCymbal = ノーツ数[ 表示レーン種別.RightCrash ],
+                                        TotalNotes_RightCymbal = ノーツ数[ 表示レーン種別.RightCymbal ],
                                         // プレビュー画像は、曲ファイルからの相対パス。
                                         PreImage = ( score.プレビュー画像.Nullでも空でもない() ) ? Path.Combine( Path.GetDirectoryName( 曲ファイルパス.変数なしパス ), score.プレビュー画像 ) : "",
                                         Artist = score.アーティスト名,
@@ -144,7 +144,7 @@ namespace DTXmatixx.設定
                                 song.Level = score.難易度;
                                 song.MinBPM = BPMs.最小BPM;
                                 song.MaxBPM = BPMs.最大BPM;
-                                song.TotalNotes_LeftCymbal = ノーツ数[ 表示レーン種別.LeftCrash ];
+                                song.TotalNotes_LeftCymbal = ノーツ数[ 表示レーン種別.LeftCymbal ];
                                 song.TotalNotes_HiHat = ノーツ数[ 表示レーン種別.HiHat ];
                                 song.TotalNotes_LeftPedal = ノーツ数[ 表示レーン種別.Foot ];
                                 song.TotalNotes_Snare = ノーツ数[ 表示レーン種別.Snare ];
@@ -152,7 +152,7 @@ namespace DTXmatixx.設定
                                 song.TotalNotes_HighTom = ノーツ数[ 表示レーン種別.Tom1 ];
                                 song.TotalNotes_LowTom = ノーツ数[ 表示レーン種別.Tom2 ];
                                 song.TotalNotes_FloorTom = ノーツ数[ 表示レーン種別.Tom3 ];
-                                song.TotalNotes_RightCymbal = ノーツ数[ 表示レーン種別.RightCrash ];
+                                song.TotalNotes_RightCymbal = ノーツ数[ 表示レーン種別.RightCymbal ];
                                 // プレビュー画像は、曲ファイルからの相対パス。
                                 song.PreImage = ( score.プレビュー画像.Nullでも空でもない() ) ? Path.Combine( Path.GetDirectoryName( 曲ファイルパス.変数なしパス ), score.プレビュー画像 ) : "";
                                 song.Artist = score.アーティスト名;
@@ -210,7 +210,7 @@ namespace DTXmatixx.設定
                                 record.Level = score.難易度;
                                 record.MinBPM = BPMs.最小BPM;
                                 record.MaxBPM = BPMs.最大BPM;
-                                record.TotalNotes_LeftCymbal = ノーツ数[ 表示レーン種別.LeftCrash ];
+                                record.TotalNotes_LeftCymbal = ノーツ数[ 表示レーン種別.LeftCymbal ];
                                 record.TotalNotes_HiHat = ノーツ数[ 表示レーン種別.HiHat ];
                                 record.TotalNotes_LeftPedal = ノーツ数[ 表示レーン種別.Foot ];
                                 record.TotalNotes_Snare = ノーツ数[ 表示レーン種別.Snare ];
@@ -218,7 +218,7 @@ namespace DTXmatixx.設定
                                 record.TotalNotes_HighTom = ノーツ数[ 表示レーン種別.Tom1 ];
                                 record.TotalNotes_LowTom = ノーツ数[ 表示レーン種別.Tom2 ];
                                 record.TotalNotes_FloorTom = ノーツ数[ 表示レーン種別.Tom3 ];
-                                record.TotalNotes_RightCymbal = ノーツ数[ 表示レーン種別.RightCrash ];
+                                record.TotalNotes_RightCymbal = ノーツ数[ 表示レーン種別.RightCymbal ];
                                 // プレビュー画像は、曲ファイルからの相対パス。
                                 record.PreImage = ( score.プレビュー画像.Nullでも空でもない() ) ? Path.Combine( Path.GetDirectoryName( 曲ファイルパス.変数なしパス ), score.プレビュー画像 ) : "";
                                 record.Artist = score.アーティスト名;

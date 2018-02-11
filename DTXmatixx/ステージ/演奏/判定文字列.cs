@@ -25,7 +25,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },
-                    { 表示レーン種別.LeftCrash, new 表示レーンステータス( 表示レーン種別.LeftCrash ) },
+                    { 表示レーン種別.LeftCymbal, new 表示レーンステータス( 表示レーン種別.LeftCymbal ) },
                     { 表示レーン種別.HiHat, new 表示レーンステータス( 表示レーン種別.HiHat ) },
                     { 表示レーン種別.Foot, new 表示レーンステータス( 表示レーン種別.Foot ) },
                     { 表示レーン種別.Snare, new 表示レーンステータス( 表示レーン種別.Snare ) },
@@ -33,7 +33,7 @@ namespace DTXmatixx.ステージ.演奏
                     { 表示レーン種別.Tom1, new 表示レーンステータス( 表示レーン種別.Tom1 ) },
                     { 表示レーン種別.Tom2, new 表示レーンステータス( 表示レーン種別.Tom2 ) },
                     { 表示レーン種別.Tom3, new 表示レーンステータス( 表示レーン種別.Tom3 ) },
-                    { 表示レーン種別.RightCrash, new 表示レーンステータス( 表示レーン種別.RightCrash ) },
+                    { 表示レーン種別.RightCymbal, new 表示レーンステータス( 表示レーン種別.RightCymbal ) },
                 };
             }
         }
@@ -390,7 +390,7 @@ namespace DTXmatixx.ステージ.演奏
                 float x = レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ lane ] + レーンフレーム.レーンtoレーン幅dpx[ lane ] / 2f;
                 switch( lane )
                 {
-                    case 表示レーン種別.LeftCrash: this.表示中央位置dpx = new Vector2( x, 530f ); break;
+                    case 表示レーン種別.LeftCymbal: this.表示中央位置dpx = new Vector2( x, 530f ); break;
                     case 表示レーン種別.HiHat: this.表示中央位置dpx = new Vector2( x, 597f ); break;
                     case 表示レーン種別.Foot: this.表示中央位置dpx = new Vector2( x, 636f ); break;
                     case 表示レーン種別.Snare: this.表示中央位置dpx = new Vector2( x, 597f ); break;
@@ -398,7 +398,7 @@ namespace DTXmatixx.ステージ.演奏
                     case 表示レーン種別.Tom1: this.表示中央位置dpx = new Vector2( x, 561f ); break;
                     case 表示レーン種別.Tom2: this.表示中央位置dpx = new Vector2( x, 561f ); break;
                     case 表示レーン種別.Tom3: this.表示中央位置dpx = new Vector2( x, 600f ); break;
-                    case 表示レーン種別.RightCrash: this.表示中央位置dpx = new Vector2( x, 533f ); break;
+                    case 表示レーン種別.RightCymbal: this.表示中央位置dpx = new Vector2( x, 533f ); break;
                     default: this.表示中央位置dpx = new Vector2( x, -100f ); break;
                 }
             }
