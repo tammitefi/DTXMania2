@@ -910,6 +910,10 @@ namespace DTXmatixx.ステージ.演奏
 
                 var lane = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
 
+                if( chip.チップ種別 == チップ種別.Ride )
+                    Debug.Assert( true );
+
+
                 if( lane != 表示レーン種別.Unknown )
                 {
                     // xml の記述ミスの検出用 Assert 。
