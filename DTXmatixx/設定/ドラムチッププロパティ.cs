@@ -23,7 +23,7 @@ namespace DTXmatixx.設定
         // 表示
 
         public 表示レーン種別 表示レーン種別 { get; set; }
-        public bool 不可視 { get; set; }
+        public 表示チップ種別 表示チップ種別 { get; set; }
 
         // 入力
 

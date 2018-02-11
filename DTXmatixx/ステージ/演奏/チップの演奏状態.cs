@@ -43,7 +43,7 @@ namespace DTXmatixx.ステージ.演奏
         }
         public void ヒット前の状態にする()
         {
-            this.可視 = !( App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ this._chip.チップ種別 ].不可視 );
+            this.可視 = ( App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ this._chip.チップ種別 ].表示チップ種別 != 表示チップ種別.Unknown );
             this.ヒット済みである = false;
             this.発声済みである = false;
         }

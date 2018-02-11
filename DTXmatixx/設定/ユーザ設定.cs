@@ -97,10 +97,8 @@ namespace DTXmatixx.設定
             };
 
             this.ドラムチッププロパティ管理 = new ドラムチッププロパティ管理(
-                new 表示レーンの左右() {    // 使わないので固定。
-                    Chinaは左 = false,
-                    Rideは左 = false,
-                    Splashは左 = true },
+                (PlayMode) this._User.PlayMode,
+                new 表示レーンの左右() { Chinaは左 = false, Rideは左 = false, Splashは左 = true },
                 入力グループプリセット種別.基本形 );
 
             this._Userに依存するメンバを初期化する();
