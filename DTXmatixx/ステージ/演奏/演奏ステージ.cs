@@ -474,8 +474,9 @@ namespace DTXmatixx.ステージ.演奏
                         //----------------
                         foreach( var 入力 in App.入力管理.ポーリング結果 )
                         {
-                            // ヒット済みなら無視。
-                            if( ヒット処理済み入力.Contains( 入力 ) )
+                            
+                            if( ヒット処理済み入力.Contains( 入力 ) ||     // ヒット済みなら無視。
+                                入力.InputEvent.離された )                // 押下じゃないなら無視。
                                 continue;
 
                             var プロパティs = オプション設定.ドラムチッププロパティ管理.チップtoプロパティ.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) );
