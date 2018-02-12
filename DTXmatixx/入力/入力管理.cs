@@ -207,7 +207,7 @@ namespace DTXmatixx.入力
             }
             else
             {
-                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.Type == drumType ) ) );
+                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.Type == drumType && ev.InputEvent.押された ) ) );
             }
         }
 
@@ -224,7 +224,7 @@ namespace DTXmatixx.入力
             }
             else
             {
-                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( drumTypes.Contains( ev.Type ) ) ) );
+                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.InputEvent.押された && drumTypes.Contains( ev.Type ) ) ) );
             }
         }
 
@@ -368,7 +368,7 @@ namespace DTXmatixx.入力
             // ドラム入力種別 と ドラム入力イベント は、1 対 N の関係である。
 
             bool 適合する( ドラム入力種別 drumType, ドラム入力イベント drumEvent )
-                => ( drumEvent.Type == drumType );
+                => ( drumEvent.Type == drumType && drumEvent.InputEvent.押された );
 
             int シーケンスのストローク数 = シーケンス.Count();
 
@@ -420,7 +420,7 @@ namespace DTXmatixx.入力
             // レーン種別 と ドラム入力種別 と ドラム入力イベント は、N 対 M 対 P の関係である。
 
             bool 適合する( レーン種別 laneType, ドラム入力イベント drumEvent )
-                => ( 0 < ドラムチッププロパティ管理.チップtoプロパティ.Count( ( kvp ) => ( ( kvp.Value.レーン種別 == laneType ) && ( kvp.Value.ドラム入力種別 == drumEvent.Type ) ) ) );
+                => ( 0 < ドラムチッププロパティ管理.チップtoプロパティ.Count( ( kvp ) => ( ( kvp.Value.レーン種別 == laneType ) && ( kvp.Value.ドラム入力種別 == drumEvent.Type ) && ( drumEvent.InputEvent.押された ) ) ) );
 
             int シーケンスのストローク数 = シーケンス.Count();
 
