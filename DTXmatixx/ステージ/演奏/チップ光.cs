@@ -26,7 +26,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },
-                    { 表示レーン種別.LeftCrash, new 表示レーンステータス( 表示レーン種別.LeftCrash ) },
+                    { 表示レーン種別.LeftCymbal, new 表示レーンステータス( 表示レーン種別.LeftCymbal ) },
                     { 表示レーン種別.HiHat, new 表示レーンステータス( 表示レーン種別.HiHat ) },
                     { 表示レーン種別.Foot, new 表示レーンステータス( 表示レーン種別.Foot ) },
                     { 表示レーン種別.Snare, new 表示レーンステータス( 表示レーン種別.Snare ) },
@@ -34,7 +34,7 @@ namespace DTXmatixx.ステージ.演奏
                     { 表示レーン種別.Tom1, new 表示レーンステータス( 表示レーン種別.Tom1 ) },
                     { 表示レーン種別.Tom2, new 表示レーンステータス( 表示レーン種別.Tom2 ) },
                     { 表示レーン種別.Tom3, new 表示レーンステータス( 表示レーン種別.Tom3 ) },
-                    { 表示レーン種別.RightCrash, new 表示レーンステータス( 表示レーン種別.RightCrash ) },
+                    { 表示レーン種別.RightCymbal, new 表示レーンステータス( 表示レーン種別.RightCymbal ) },
                 };
             }
         }

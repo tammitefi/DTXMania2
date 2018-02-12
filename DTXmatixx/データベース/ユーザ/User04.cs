@@ -4,16 +4,15 @@ using System.Data.Linq.Mapping;
 using System.Diagnostics;
 using System.Linq;
 using FDK;
-using DTXmatixx.ステージ.演奏;
 
 namespace DTXmatixx.データベース.ユーザ
 {
     /// <summary>
     ///		ユーザテーブルのエンティティクラス。
-    ///		バージョン 3。
+    ///		バージョン 4。
     /// </summary>
     [Table( Name = "Users" )]   // テーブル名は複数形
-    class User03 : ICloneable
+    class User04 : ICloneable
     {
         /// <summary>
         ///		ユーザを一意に識別する文字列。主キー。
@@ -151,12 +150,33 @@ namespace DTXmatixx.データベース.ユーザ
         [Column( DbType = "INT", CanBeNull = false )]
         public int PlayMode { get; set; }
 
+        /// <summary>
+        ///		Ride の表示位置。
+        ///		0: 右, 1: 左
+        /// </summary>
+        [Column( DbType = "INT", CanBeNull = false )]
+        public int RideLeft { get; set; }
+
+        /// <summary>
+        ///		China の表示位置。
+        ///		0: 右, 1: 左
+        /// </summary>
+        [Column( DbType = "INT", CanBeNull = false )]
+        public int ChinaLeft { get; set; }
+
+        /// <summary>
+        ///		Splash の表示位置。
+        ///		0: 右, 1: 左
+        /// </summary>
+        [Column( DbType = "INT", CanBeNull = false )]
+        public int SplashLeft { get; set; }
+
         ///////////////////////////
 
         /// <summary>
         ///		既定値で初期化。
         /// </summary>
-        public User03()
+        public User04()
         {
             this.Id = "Anonymous";
             this.Name = "Anonymous";
@@ -177,12 +197,15 @@ namespace DTXmatixx.データベース.ユーザ
             this.MaxRange_Ok = 0.117;
             this.CymbalFree = 1;
             this.PlayMode = 1;
+            this.RideLeft = 0;
+            this.ChinaLeft = 0;
+            this.SplashLeft = 1;
         }
 
         // ICloneable 実装
-        public User03 Clone()
+        public User04 Clone()
         {
-            return (User03) this.MemberwiseClone();
+            return (User04) this.MemberwiseClone();
         }
         object ICloneable.Clone()
         {
@@ -214,6 +237,9 @@ namespace DTXmatixx.データベース.ユーザ
             @", MaxRange_Ok REAL NOT NULL" +
             @", CymbalFree INTEGER NOT NULL" +
             @", PlayMode INTEGER NOT NULL" +
+            @", RideLeft INTEGER NOT NULL" +
+            @", ChinaLeft INTEGER NOT NULL" +
+            @", SplashLeft INTEGER NOT NULL" +
             @")";
     }
 }

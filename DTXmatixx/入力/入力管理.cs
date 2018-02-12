@@ -207,9 +207,10 @@ namespace DTXmatixx.入力
             }
             else
             {
-                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.Type == drumType ) ) );
+                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.Type == drumType && ev.InputEvent.押された ) ) );
             }
         }
+
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、指定したドラム入力イベント集合のいずれか１つ以上が含まれているかを確認する。
         /// </summary>
@@ -223,7 +224,7 @@ namespace DTXmatixx.入力
             }
             else
             {
-                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( drumTypes.Contains( ev.Type ) ) ) );
+                return ( null != this.ポーリング結果.FirstOrDefault( ( ev ) => ( ev.InputEvent.押された && drumTypes.Contains( ev.Type ) ) ) );
             }
         }
 
@@ -243,6 +244,7 @@ namespace DTXmatixx.入力
                 } )
                 ;// || this.Keyboard.キーが押された( 0, Key.Return );		Enter は、既定で LeftCrash に割り当てられている前提。
         }
+        
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、キャンセルキーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -251,6 +253,7 @@ namespace DTXmatixx.入力
         {
             return this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Escape );
         }
+        
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、上移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -264,6 +267,7 @@ namespace DTXmatixx.入力
                 } )
                 || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Up );
         }
+        
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、下移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -277,6 +281,7 @@ namespace DTXmatixx.入力
                 } )
                 || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Down );
         }
+        
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、左移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -291,6 +296,7 @@ namespace DTXmatixx.入力
                 } )
                 || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Left );
         }
+        
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、右移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -345,6 +351,7 @@ namespace DTXmatixx.入力
 
             return true;
         }
+        
         /// <summary>
         ///		現在の履歴において、指定したシーケンスが成立しているかを確認する。
         /// </summary>
@@ -357,33 +364,46 @@ namespace DTXmatixx.入力
         /// </remarks>
         public bool シーケンスが入力された( IEnumerable<ドラム入力種別> シーケンス )
         {
-            int シーケンスのストローク数 = シーケンス.Count();       // ストローク ＝ ドラム入力イベント（シーケンスの構成単位）
+            // ストロークはシーケンスの構成単位。ここでは「指定されたドラム入力種別に対応するドラム入力イベント」と同義である。
+            // ドラム入力種別 と ドラム入力イベント は、1 対 N の関係である。
 
-            if( 0 == シーケンスのストローク数 )
-                return false;   // 空シーケンスは常に不成立。
+            bool 適合する( ドラム入力種別 drumType, ドラム入力イベント drumEvent )
+                => ( drumEvent.Type == drumType && drumEvent.InputEvent.押された );
 
-            if( this._入力履歴.Count < シーケンスのストローク数 )
-                return false;   // 履歴数が足りない。
+            int シーケンスのストローク数 = シーケンス.Count();
 
-            int 履歴の検索開始位置 = this._入力履歴.FindIndex( ( e ) => ( e.Type == シーケンス.ElementAt( 0 ) ) );
+            if( ( 0 == シーケンスのストローク数 ) ||                   // 空シーケンスは常に不成立。
+                ( this._入力履歴.Count < シーケンスのストローク数 ) )   // 履歴数が足りない。
+                return false;   
+
+
+            // 検索を開始する位置を特定する。
+
+            int 履歴の検索開始位置 = this._入力履歴.FindIndex( ( e ) => 適合する( シーケンス.ElementAt( 0 ), e ) );
+
             if( -1 == 履歴の検索開始位置 )
                 return false;   // 最初のストロークが見つからない。
 
-            if( ( this._入力履歴.Count - 履歴の検索開始位置 ) < シーケンスのストローク数 )
+            if( シーケンスのストローク数 > ( this._入力履歴.Count - 履歴の検索開始位置 ) )
                 return false;   // 履歴数が足りない。
 
-            // 検索開始位置から末尾へ、すべてのストロークが一致するか確認する。
+
+            // 検索開始位置から末尾へ向かって、すべてのストロークが一致するか確認する。
+
             for( int i = 1; i < シーケンスのストローク数; i++ )
             {
-                if( this._入力履歴[ 履歴の検索開始位置 + i ].Type != シーケンス.ElementAt( i ) )
+                if( !( 適合する( シーケンス.ElementAt( i ), this._入力履歴[ 履歴の検索開始位置 + i ] ) ) )
                     return false;   // 一致しなかった。
             }
 
-            // 見つけたシーケンスならびにそれより古い履歴を削除する。
+
+            // すべて一致したので、そのシーケンスならびにそれより古い履歴を削除する。
+
             this._入力履歴.RemoveRange( 0, ( 履歴の検索開始位置 + シーケンスのストローク数 ) );
 
             return true;
         }
+        
         /// <summary>
         ///		現在の履歴において、指定したシーケンスが成立しているかを確認する。
         /// </summary>
@@ -394,47 +414,43 @@ namespace DTXmatixx.入力
         ///		履歴内に複数存在している場合は、一番 古 い シーケンスが対象となる。
         ///		成立した場合、そのシーケンスと、それより古い履歴はすべて削除される。
         /// </remarks>
-        public bool シーケンスが入力された( IEnumerable<レーン種別> シーケンス, ドラムとチップと入力の対応表 対応表 )
+        public bool シーケンスが入力された( IEnumerable<レーン種別> シーケンス, ドラムチッププロパティ管理 ドラムチッププロパティ管理 )
         {
-            int シーケンスのストローク数 = シーケンス.Count();       // ストローク ＝ ドラム入力イベント（シーケンスの構成単位）
+            // ストロークはシーケンスの構成単位。ここでは、「指定されたレーン種別に対応するドラム入力種別に対応するドラム入力イベント」と同義。
+            // レーン種別 と ドラム入力種別 と ドラム入力イベント は、N 対 M 対 P の関係である。
 
-            if( 0 == シーケンスのストローク数 )
-                return false;   // 空シーケンスは常に不成立。
+            bool 適合する( レーン種別 laneType, ドラム入力イベント drumEvent )
+                => ( 0 < ドラムチッププロパティ管理.チップtoプロパティ.Count( ( kvp ) => ( ( kvp.Value.レーン種別 == laneType ) && ( kvp.Value.ドラム入力種別 == drumEvent.Type ) && ( drumEvent.InputEvent.押された ) ) ) );
 
-            if( this._入力履歴.Count < シーケンスのストローク数 )
-                return false;   // 履歴数が足りない。
+            int シーケンスのストローク数 = シーケンス.Count();
 
-            var columns = 対応表.対応表.Where( ( kvp ) => ( kvp.Value.レーン種別 == シーケンス.ElementAt( 0 ) ) );
-            if( 0 == columns.Count() )
-                return false;   // 最初のシーケンスが対応表に存在しない。
+            if( ( 0 == シーケンスのストローク数 ) ||                   // 空シーケンスは常に不成立。
+                ( this._入力履歴.Count < シーケンスのストローク数 ) )   // 履歴数が足りない。
+                return false;   
 
-            int 履歴の検索開始位置 = this._入力履歴.FindIndex( ( e ) => {
-                foreach( var column in columns )
-                {
-                    if( e.Type == column.Value.ドラム入力種別 )
-                        return true;
-                }
-                return false;
-            } );
+
+            // 検索を開始する位置を特定する。
+
+            int 履歴の検索開始位置 = this._入力履歴.FindIndex( ( e ) => 適合する( シーケンス.ElementAt( 0 ), e ) );
+
             if( -1 == 履歴の検索開始位置 )
                 return false;   // 最初のストロークが見つからない。
 
-            if( ( this._入力履歴.Count - 履歴の検索開始位置 ) < シーケンスのストローク数 )
+            if( シーケンスのストローク数 > ( this._入力履歴.Count - 履歴の検索開始位置 ) )
                 return false;   // 履歴数が足りない。
 
-            // 検索開始位置から末尾へ、すべてのストロークが一致するか確認する。
+
+            // 検索開始位置から末尾へ向かって、すべてのストロークが一致するか確認する。
+
             for( int i = 1; i < シーケンスのストローク数; i++ )
             {
-                columns = 対応表.対応表.Where( ( kvp ) => ( kvp.Value.レーン種別 == シーケンス.ElementAt( i ) ) );
-
-                if( 0 == columns.Count() )
-                    return false;   // 一致しなかった。
-
-                if( 0 == columns.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == this._入力履歴[ 履歴の検索開始位置 + i ].Type ) ).Count() )
+                if( !( 適合する( シーケンス.ElementAt( i ), this._入力履歴[ 履歴の検索開始位置 + i ] ) ) )
                     return false;   // 一致しなかった。
             }
 
-            // 見つけたシーケンスならびにそれより古い履歴を削除する。
+
+            // すべて一致したので、そのシーケンスならびにそれより古い履歴を削除する。
+
             this._入力履歴.RemoveRange( 0, ( 履歴の検索開始位置 + シーケンスのストローク数 ) );
 
             return true;

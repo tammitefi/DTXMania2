@@ -5,7 +5,8 @@ using System.Linq;
 using FDK;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.ステージ.演奏;
-using User = DTXmatixx.データベース.ユーザ.User03;
+
+using User = DTXmatixx.データベース.ユーザ.User04;
 
 namespace DTXmatixx.設定
 {
@@ -77,7 +78,7 @@ namespace DTXmatixx.設定
             get;
             set;
         } = null;
-        public ドラムとチップと入力の対応表 ドラムとチップと入力の対応表
+        public ドラムチッププロパティ管理 ドラムチッププロパティ管理
         {
             get;
             protected set;
@@ -89,6 +90,23 @@ namespace DTXmatixx.設定
             set
                 => this._User.PlayMode = (int) value;
         }
+        public 表示レーンの左右 表示レーンの左右
+        {
+            get
+            {
+                return new 表示レーンの左右() {
+                    Rideは左 = ( this._User.RideLeft != 0 ),
+                    Chinaは左 = ( this._User.ChinaLeft != 0 ),
+                    Splashは左 = ( this._User.SplashLeft != 0 ),
+                };
+            }
+            set
+            {
+                this._User.RideLeft = ( value.Rideは左 ) ? 1 : 0;
+                this._User.ChinaLeft = ( value.Chinaは左 ) ? 1 : 0;
+                this._User.SplashLeft = ( value.Splashは左 ) ? 1 : 0;
+            }
+        }
 
         public ユーザ設定()
         {
@@ -96,12 +114,10 @@ namespace DTXmatixx.設定
                 Id = null,
             };
 
-            this.ドラムとチップと入力の対応表 = new ドラムとチップと入力の対応表(
-                new 表示レーンの左右() {    // 使わないので固定。
-                    Chinaは左 = false,
-                    Rideは左 = false,
-                    Splashは左 = true,
-                } );
+            this.ドラムチッププロパティ管理 = new ドラムチッププロパティ管理(
+                (PlayMode) this._User.PlayMode,
+                new 表示レーンの左右() { Chinaは左 = false, Rideは左 = false, Splashは左 = true },
+                入力グループプリセット種別.基本形 );
 
             this._Userに依存するメンバを初期化する();
         }
@@ -275,6 +291,13 @@ namespace DTXmatixx.設定
                         break;
                 }
             };
+            //----------------
+            #endregion
+            #region " ドラムチッププロパティ "
+            //----------------
+            this.ドラムチッププロパティ管理.反映する( this.演奏モード );
+            this.ドラムチッププロパティ管理.反映する( this.表示レーンの左右 );
+            this.ドラムチッププロパティ管理.反映する( ( this.シンバルフリーモードである ) ? 入力グループプリセット種別.シンバルフリー : 入力グループプリセット種別.基本形 );
             //----------------
             #endregion
         }

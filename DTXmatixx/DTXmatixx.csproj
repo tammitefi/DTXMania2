@@ -133,7 +133,6 @@
     <Compile Include="ステージ\ステージ管理.cs" />
     <Compile Include="ステージ\タイトル\タイトルステージ.cs" />
     <Compile Include="アイキャッチ\回転幕.cs" />
-    <Compile Include="ステージ\チップExtensions.cs" />
     <Compile Include="ステージ\ドラムサウンド.cs" />
     <Compile Include="ステージ\パッド矢印.cs" />
     <Compile Include="ステージ\曲ツリー構築\曲ツリー構築ステージ.cs" />
@@ -160,6 +159,7 @@
     <Compile Include="ステージ\演奏\フェーズパネル.cs" />
     <Compile Include="ステージ\演奏\成績.cs" />
     <Compile Include="ステージ\演奏\判定パラメータ表示.cs" />
+    <Compile Include="ステージ\演奏\表示チップ種別.cs" />
     <Compile Include="ステージ\演奏\表示レーン種別.cs" />
     <Compile Include="ステージ\演奏\譜面スクロール速度表示.cs" />
     <Compile Include="ステージ\演奏\達成率表示.cs" />
@@ -188,8 +188,10 @@
     <Compile Include="ステージ\選曲\選曲ステージ.cs" />
     <Compile Include="データベース\ユーザ\old\Record01.cs" />
     <Compile Include="データベース\ユーザ\old\Record02.cs" />
+    <Compile Include="データベース\ユーザ\old\Record03.cs" />
     <Compile Include="データベース\ユーザ\old\User01.cs" />
     <Compile Include="データベース\ユーザ\old\User02.cs" />
+    <Compile Include="データベース\ユーザ\old\User03.cs" />
     <Compile Include="データベース\曲\old\Song01.cs" />
     <Compile Include="データベース\曲\old\Song02.cs" />
     <Compile Include="入力\ドラム入力イベント.cs" />
@@ -209,18 +211,22 @@
     <Compile Include="曲\難易度種別.cs" />
     <Compile Include="データベース\曲\SongDB.cs" />
     <Compile Include="データベース\SQLiteDBBase.cs" />
-    <Compile Include="データベース\ユーザ\Record03.cs" />
-    <Compile Include="データベース\ユーザ\User03.cs" />
+    <Compile Include="データベース\ユーザ\Record04.cs" />
+    <Compile Include="データベース\ユーザ\User04.cs" />
     <Compile Include="データベース\ユーザ\UserDB.cs" />
     <Compile Include="データベース\曲\Song03.cs" />
     <Compile Include="設定\AutoPlay種別.cs" />
     <Compile Include="設定\PlayMode.cs" />
     <Compile Include="設定\キーバインディング.cs" />
     <Compile Include="設定\システム設定.cs" />
-    <Compile Include="設定\ドラムとチップと入力の対応表.cs" />
+    <Compile Include="設定\ドラムチッププロパティ.cs" />
+    <Compile Include="設定\ドラムチッププロパティ管理.cs" />
     <Compile Include="設定\ユーザ管理.cs" />
     <Compile Include="設定\ユーザ設定.cs" />
+    <Compile Include="設定\入力グループプリセット種別.cs" />
+    <Compile Include="設定\入力グループ種別.cs" />
     <Compile Include="設定\曲DB.cs" />
+    <Compile Include="設定\消音グループ種別.cs" />
     <Compile Include="設定\表示レーンの左右.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

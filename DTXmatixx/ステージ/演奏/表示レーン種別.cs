@@ -11,7 +11,7 @@ namespace DTXmatixx.ステージ.演奏
     enum 表示レーン種別
     {
         Unknown,
-        LeftCrash,
+        LeftCymbal,
         HiHat,
         Foot,   // 左ペダル
         Snare,
@@ -19,6 +19,6 @@ namespace DTXmatixx.ステージ.演奏
         Tom1,
         Tom2,
         Tom3,
-        RightCrash,
+        RightCymbal,
     }
 }
