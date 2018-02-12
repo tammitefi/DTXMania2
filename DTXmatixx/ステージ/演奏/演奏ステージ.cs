@@ -872,15 +872,17 @@ namespace DTXmatixx.ステージ.演奏
 
             this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
-                float 縦中央位置dpx = (float) ( ヒット判定バーの中央Y座標dpx + ヒット判定バーとの距離dpx );
+                float たて中央位置dpx = (float) ( ヒット判定バーの中央Y座標dpx + ヒット判定バーとの距離dpx );
                 float 消滅割合 = 0f;
 
-                #region " チップがヒット判定バーを通過してたら、通過距離に応じて 0→1の消滅割合を付与する。0で完全表示、1で完全消滅、通過してなければ 0。"
+                #region " 消滅割合を算出; チップがヒット判定バーを通過したら徐々に消滅する。"
                 //----------------
                 const float 消滅を開始するヒット判定バーからの距離dpx = 20f;
                 const float 消滅開始から完全消滅するまでの距離dpx = 70f;
-                if( 消滅を開始するヒット判定バーからの距離dpx < ヒット判定バーとの距離dpx )
+
+                if( 消滅を開始するヒット判定バーからの距離dpx < ヒット判定バーとの距離dpx )   // 通過した
                 {
+                    // 通過距離に応じて 0→1の消滅割合を付与する。0で完全表示、1で完全消滅、通過してなければ 0。
                     消滅割合 = Math.Min( 1f, (float) ( ( ヒット判定バーとの距離dpx - 消滅を開始するヒット判定バーからの距離dpx ) / 消滅開始から完全消滅するまでの距離dpx ) );
                 }
                 //----------------
@@ -889,10 +891,11 @@ namespace DTXmatixx.ステージ.演奏
                 #region " チップが描画開始チップであり、かつ、そのY座標が画面下端を超えたなら、描画開始チップ番号を更新する。"
                 //----------------
                 if( ( index == this._描画開始チップ番号 ) &&
-                    ( グラフィックデバイス.Instance.設計画面サイズ.Height + 40.0 < 縦中央位置dpx ) )   // +40 はチップが隠れるであろう適当なマージン。
+                    ( グラフィックデバイス.Instance.設計画面サイズ.Height + 40.0 < たて中央位置dpx ) )   // +40 はチップが隠れるであろう適当なマージン。
                 {
                     this._描画開始チップ番号++;
 
+                    // 描画開始チップがチップリストの末尾に到達したら、演奏を終了する。
                     if( App.演奏スコア.チップリスト.Count <= this._描画開始チップ番号 )
                     {
                         this.現在のフェーズ = フェーズ.クリア;
@@ -906,33 +909,32 @@ namespace DTXmatixx.ステージ.演奏
                 if( this._チップの演奏状態[ chip ].不可視 )
                     return;
 
-                float 音量0to1 = 1f;      // chip.音量 / (float) チップ.最大音量;		matixx では音量無視。
+                float 音量0to1 = 1f;      // SSTでは「chip.音量 / (float) チップ.最大音量」、matixx では常に 1（原音）。
 
-                var lane = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
+                // チップ種別 から、表示レーン種別 と 表示チップ種別 を取得。
+                var 表示レーン種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
+                var 表示チップ種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示チップ種別;
 
-                if( chip.チップ種別 == チップ種別.Ride )
-                    Debug.Assert( true );
-
-
-                if( lane != 表示レーン種別.Unknown )
+                if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
+                    ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
-                    // xml の記述ミスの検出用 Assert 。
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ lane.ToString() ] );
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ lane.ToString() + "_back" ] );
+                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() ] );           // xml の記述ミスの検出用 Assert 。
+                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() + "_back" ] ); //
 
-                    var 縦方向中央位置dpx = this._ドラムチップ画像の矩形リスト[ "縦方向中央位置" ]?.Height ?? 0f;
+                    var たて方向中央位置dpx = this._ドラムチップ画像の矩形リスト[ "縦方向中央位置" ]?.Height ?? 0f;
+                    var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ 表示レーン種別 ];
 
-                    #region " パッド絵 "
+                    #region " チップ背景（あれば）を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ lane.ToString() + "_back" ].Value;
+                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() + "_back" ].Value;
                         var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
-                        var 割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
+                        var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
 
                         var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
 
-                        // 拡大縮小回転
-                        switch( lane )
+                        // 変換(1) 拡大縮小、回転
+                        switch( 表示レーン種別 )
                         {
                             case 表示レーン種別.LeftCymbal:
                             case 表示レーン種別.HiHat:
@@ -940,14 +942,14 @@ namespace DTXmatixx.ステージ.演奏
                             case 表示レーン種別.Tom3:
                             case 表示レーン種別.RightCymbal:
                                 {
-                                    float v = (float) ( Math.Sin( 2 * Math.PI * 割合 ) * 0.2 );
+                                    float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
                                     変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 音量0to1, 矩形中央 );
                                 }
                                 break;
 
                             case 表示レーン種別.Bass:
                                 {
-                                    float r = (float) ( Math.Sin( 2 * Math.PI * 割合 ) * 0.2 );
+                                    float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
                                     変換行列2D = 変換行列2D *
                                         Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
                                         Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
@@ -959,34 +961,33 @@ namespace DTXmatixx.ステージ.演奏
                                 break;
                         }
 
-                        // 移動
+                        // 変換(2) 移動
                         変換行列2D = 変換行列2D *
-                            Matrix3x2.Translation(
-                                x: レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ lane ],
-                                y: 縦中央位置dpx - 縦方向中央位置dpx * 音量0to1 );
+                            Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
 
+                        // 描画。
                         this._ドラムチップ画像.描画する(
                             dc,
                             変換行列2D,
                             転送元矩形: 矩形,
-                            不透明度0to1: 1f - 消滅割合 );
+                            不透明度0to1: ( 1f - 消滅割合 ) );
                     }
                     //----------------
                     #endregion
 
-                    #region " チップ本体 "
+                    #region " チップ本体を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ lane.ToString() ].Value;
+                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() ].Value;
                         var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
 
+                        // 変換。
                         var 変換行列2D =
                             ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
                             Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
-                            Matrix3x2.Translation(
-                                x: レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ lane ],
-                                y: 縦中央位置dpx - 縦方向中央位置dpx * 音量0to1 );
+                            Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
 
+                        // 描画。
                         this._ドラムチップ画像.描画する(
                             dc,
                             変換行列2D,
