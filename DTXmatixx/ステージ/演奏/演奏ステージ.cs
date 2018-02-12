@@ -918,8 +918,8 @@ namespace DTXmatixx.ステージ.演奏
                 if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
                     ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() ] );           // xml の記述ミスの検出用 Assert 。
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() + "_back" ] ); //
+                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() ] );           // xml の記述ミスの検出用 Assert 。
+                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() + "_back" ] ); //
 
                     var たて方向中央位置dpx = this._ドラムチップ画像の矩形リスト[ "縦方向中央位置" ]?.Height ?? 0f;
                     var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ 表示レーン種別 ];
@@ -927,50 +927,74 @@ namespace DTXmatixx.ステージ.演奏
                     #region " チップ背景（あれば）を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() + "_back" ].Value;
-                        var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
-                        var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
+                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() + "_back" ];
 
-                        var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
-
-                        // 変換(1) 拡大縮小、回転
-                        switch( 表示レーン種別 )
+                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Value.Width && 0 < 矩形.Value.Height ) ) )
                         {
-                            case 表示レーン種別.LeftCymbal:
-                            case 表示レーン種別.HiHat:
-                            case 表示レーン種別.Foot:
-                            case 表示レーン種別.Tom3:
-                            case 表示レーン種別.RightCymbal:
-                                {
-                                    float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-                                    変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 音量0to1, 矩形中央 );
-                                }
-                                break;
+                            var 矩形中央 = new Vector2( 矩形.Value.Width / 2f, 矩形.Value.Height / 2f );
+                            var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
 
-                            case 表示レーン種別.Bass:
-                                {
-                                    float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-                                    変換行列2D = 変換行列2D *
-                                        Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
-                                        Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
-                                }
-                                break;
+                            var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
 
-                            default:
-                                変換行列2D = 変換行列2D * Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 );
-                                break;
+                            // 変換(1) 拡大縮小、回転
+                            // → 現在は、どの表示チップ種別の背景がどのアニメーションを行うかは、コード内で名指しする（固定）。
+                            switch( 表示チップ種別 )
+                            {
+                                case 表示チップ種別.LeftCymbal:
+                                case 表示チップ種別.RightCymbal:
+                                case 表示チップ種別.HiHat:
+                                case 表示チップ種別.HiHat_Open:
+                                case 表示チップ種別.HiHat_HalfOpen:
+                                case 表示チップ種別.Foot:
+                                case 表示チップ種別.LeftPedal:
+                                case 表示チップ種別.LeftBass:
+                                case 表示チップ種別.Tom3:
+                                case 表示チップ種別.Tom3_Rim:
+                                case 表示チップ種別.LeftRide:
+                                case 表示チップ種別.RightRide:
+                                case 表示チップ種別.LeftRide_Cup:
+                                case 表示チップ種別.RightRide_Cup:
+                                case 表示チップ種別.LeftChina:
+                                case 表示チップ種別.RightChina:
+                                case 表示チップ種別.LeftSplash:
+                                case 表示チップ種別.RightSplash:
+                                    #region " 縦横に伸び縮み "
+                                    //----------------
+                                    {
+
+                                        float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
+                                        変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 音量0to1, 矩形中央 );
+                                    }
+                                    //----------------
+                                    #endregion
+                                    break;
+
+                                case 表示チップ種別.Bass:
+                                    #region " 左右にゆらゆら回転 "
+                                    //----------------
+                                    {
+
+                                        float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
+                                        変換行列2D = 変換行列2D *
+                                            Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
+                                            Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
+                                    }
+                                    //----------------
+                                    #endregion
+                                    break;
+                            }
+
+                            // 変換(2) 移動
+                            変換行列2D = 変換行列2D *
+                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
+
+                            // 描画。
+                            this._ドラムチップ画像.描画する(
+                                dc,
+                                変換行列2D,
+                                転送元矩形: 矩形.Value,
+                                不透明度0to1: ( 1f - 消滅割合 ) );
                         }
-
-                        // 変換(2) 移動
-                        変換行列2D = 変換行列2D *
-                            Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
-
-                        // 描画。
-                        this._ドラムチップ画像.描画する(
-                            dc,
-                            変換行列2D,
-                            転送元矩形: 矩形,
-                            不透明度0to1: ( 1f - 消滅割合 ) );
                     }
                     //----------------
                     #endregion
@@ -978,21 +1002,25 @@ namespace DTXmatixx.ステージ.演奏
                     #region " チップ本体を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示レーン種別.ToString() ].Value;
-                        var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
+                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() ];
 
-                        // 変換。
-                        var 変換行列2D =
-                            ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
-                            Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
-                            Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
+                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Value.Width && 0 < 矩形.Value.Height ) ) )
+                        {
+                            var 矩形中央 = new Vector2( 矩形.Value.Width / 2f, 矩形.Value.Height / 2f );
 
-                        // 描画。
-                        this._ドラムチップ画像.描画する(
-                            dc,
-                            変換行列2D,
-                            転送元矩形: 矩形,
-                            不透明度0to1: 1f - 消滅割合 );
+                            // 変換。
+                            var 変換行列2D =
+                                ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
+                                Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
+                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
+
+                            // 描画。
+                            this._ドラムチップ画像.描画する(
+                                dc,
+                                変換行列2D,
+                                転送元矩形: 矩形.Value,
+                                不透明度0to1: 1f - 消滅割合 );
+                        }
                     }
                     //----------------
                     #endregion
