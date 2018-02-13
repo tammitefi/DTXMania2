@@ -200,7 +200,12 @@ namespace DTXmatixx.ステージ.オプション設定
                 //----------------
                 timer.Start();
 
+                Cursor.Show();
+
                 dr = this.ShowDialog( App.Instance );
+
+                if( App.Instance.全画面モード )
+                    Cursor.Hide();
 
                 timer.Stop();
                 //----------------
