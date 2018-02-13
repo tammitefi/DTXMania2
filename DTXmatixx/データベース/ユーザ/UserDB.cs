@@ -10,16 +10,17 @@ namespace DTXmatixx.データベース.ユーザ
     using User01 = old.User01;
     using User02 = old.User02;
     using User03 = old.User03;
+    using User04 = old.User04;
 
-    using User = User04;    // 最新バージョンを指定（その１）
-    using Record = Record04;
+    using User = User05;        // 最新バージョンを指定（その１）
+    using Record = Record05;    //
 
     /// <summary>
     ///		ユーザデータベースに対応するエンティティクラス。
-    ///		/// </summary>
+    /// </summary>
     class UserDB : SQLiteDBBase
     {
-        public const long VERSION = 4;  // 最新バージョンを指定（その２）
+        public const long VERSION = 5;  // 最新バージョンを指定（その２）
 
         public Table<User> Users
             => base.DataContext.GetTable<User>();
@@ -151,6 +152,37 @@ namespace DTXmatixx.データベース.ユーザ
                             // 失敗。
                             transaction.Rollback();
                             throw new Exception( "Users テーブルのアップデートに失敗しました。[3→4]" );
+                        }
+                    }
+                    //----------------
+                    #endregion
+                    break;
+
+                case 4:
+                    #region " 4 → 5 "
+                    //----------------
+                    // 変更点:
+                    // ・Users テーブルに DrumSound カラムを追加。
+                    this.DataContext.SubmitChanges();
+                    using( var transaction = this.Connection.BeginTransaction() )
+                    {
+                        try
+                        {
+                            // テータベースをアップデートしてデータを移行する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN DrumSound INTEGER NOT NULL DEFAULT 1" );
+                            this.DataContext.SubmitChanges();
+
+                            // 成功。
+                            transaction.Commit();
+                            this.DataContext.ExecuteCommand( "VACUUM" );    // Vacuum はトランザクションの外で。
+                            this.DataContext.SubmitChanges();
+                            Log.Info( $"Users テーブルをアップデートしました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                        catch
+                        {
+                            // 失敗。
+                            transaction.Rollback();
+                            throw new Exception( $"Users テーブルのアップデートに失敗しました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
                         }
                     }
                     //----------------
