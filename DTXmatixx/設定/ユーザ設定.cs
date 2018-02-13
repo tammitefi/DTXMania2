@@ -6,7 +6,7 @@ using FDK;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.ステージ.演奏;
 
-using User = DTXmatixx.データベース.ユーザ.User04;
+using User = DTXmatixx.データベース.ユーザ.User05;
 
 namespace DTXmatixx.設定
 {
@@ -106,6 +106,13 @@ namespace DTXmatixx.設定
                 this._User.ChinaLeft = ( value.Chinaは左 ) ? 1 : 0;
                 this._User.SplashLeft = ( value.Splashは左 ) ? 1 : 0;
             }
+        }
+        public bool ユーザ入力によるドラムの音を発声する
+        {
+            get
+                => ( 0 != this._User.DrumSound );
+            set
+                => this._User.DrumSound = value ? 1 : 0;
         }
 
         public ユーザ設定()

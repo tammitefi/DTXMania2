@@ -5,7 +5,7 @@ using System.Linq;
 using SSTFormatCurrent = SSTFormat.v3;
 using DTXmatixx.設定;
 
-using Record = DTXmatixx.データベース.ユーザ.Record04;
+using Record = DTXmatixx.データベース.ユーザ.Record05;
 
 namespace DTXmatixx.ステージ.演奏
 {

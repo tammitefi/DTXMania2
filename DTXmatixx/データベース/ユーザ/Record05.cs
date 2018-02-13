@@ -9,14 +9,14 @@ namespace DTXmatixx.データベース.ユーザ
 {
     /// <summary>
     ///		成績テーブルのエンティティクラス。
-    ///		バージョン 4。
+    ///		バージョン 5。
     /// </summary>
     /// <remarks>
     ///		変更点：
     ///		なし
     /// </remarks>
     [Table( Name = "Records" )]   // テーブル名は複数形
-    public class Record04 : ICloneable
+    public class Record05 : ICloneable
     {
         /// <summary>
         ///		ユーザを一意に識別するID。
@@ -61,7 +61,7 @@ namespace DTXmatixx.データベース.ユーザ
         /// <summary>
         ///		規定値で初期化。
         /// </summary>
-        public Record04()
+        public Record05()
         {
             this.UserId = "Anonymous";
             this.SongHashId = "";
@@ -72,9 +72,9 @@ namespace DTXmatixx.データベース.ユーザ
         }
 
         // ICloneable 実装
-        public Record04 Clone()
+        public Record05 Clone()
         {
-            return (Record04) this.MemberwiseClone();
+            return (Record05) this.MemberwiseClone();
         }
         object ICloneable.Clone()
         {
