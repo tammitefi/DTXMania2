@@ -117,6 +117,9 @@ namespace DTXmatixx.設定
             foreach( var kvp in this.MIDItoドラム )
                 clone.MIDItoドラム.Add( kvp.Key, kvp.Value );
 
+            clone.FootPedal最小値 = this.FootPedal最小値;
+            clone.FootPedal最大値 = this.FootPedal最大値;
+
             return clone;
         }
 
