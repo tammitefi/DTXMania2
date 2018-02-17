@@ -60,22 +60,25 @@ namespace DTXmatixx.ステージ.演奏
 
             foreach( var rcline in jobj[ "レーンライン" ] )
                 _レーンライン.Add( FDKUtilities.JsonToRectangleF( rcline ) );
+
+            _レーン色 = new Color4( Convert.ToUInt32( (string) jobj[ "レーン色" ], 16 ) );
+            _レーンライン色 = new Color4( Convert.ToUInt32( (string) jobj[ "レーンライン色" ], 16 ) );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._レーン色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( 0xff5d5d5d ) );
-                this._レーンエリア色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( 0f, 0f, 0f, 0.5f ) );
+                this._レーン色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, _レーン色 );
+                this._レーンライン色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, _レーンライン色 );
             }
         }
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                FDKUtilities.解放する( ref this._レーンライン色ブラシ );
                 FDKUtilities.解放する( ref this._レーン色ブラシ );
-                FDKUtilities.解放する( ref this._レーンエリア色ブラシ );
             }
         }
 
@@ -84,7 +87,7 @@ namespace DTXmatixx.ステージ.演奏
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
-                dc.FillRectangle( レーンフレーム.領域, this._レーンエリア色ブラシ );
+                dc.FillRectangle( レーンフレーム.領域, this._レーン色ブラシ );
 
                 // レーンラインを描画する。
                 for( int i = 0; i < _レーンライン.Count; i++ )
@@ -92,7 +95,7 @@ namespace DTXmatixx.ステージ.演奏
                     var rc = _レーンライン[ i ];
                     rc.Left += レーンフレーム.領域.Left;
                     rc.Right += レーンフレーム.領域.Left;
-                    dc.FillRectangle( rc, _レーン色ブラシ );
+                    dc.FillRectangle( rc, _レーンライン色ブラシ );
                 }
 
             } );
@@ -104,7 +107,9 @@ namespace DTXmatixx.ステージ.演奏
         /// </summary>
         private static List<RectangleF> _レーンライン;
 
+        private static Color4 _レーン色;
+        private static Color4 _レーンライン色;
         private SolidColorBrush _レーン色ブラシ = null;
-        private SolidColorBrush _レーンエリア色ブラシ = null;
+        private SolidColorBrush _レーンライン色ブラシ = null;
     }
 }
