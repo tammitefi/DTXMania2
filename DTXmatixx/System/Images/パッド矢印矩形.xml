@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<Root>
-  <SubImage Name="Up" Rectangle="0,0,41,41" />
-  <SubImage Name="Down" Rectangle="42,0,41,41" />
-  <SubImage Name="Left" Rectangle="0,42,41,41" />
-  <SubImage Name="Right" Rectangle="42,42,41,41" />
-</Root>

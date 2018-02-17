@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -24,7 +26,7 @@ namespace DTXmatixx.ステージ.演奏
             {
                 this._前回表示した値 = 0;
                 this._前回表示した数字 = "    ";
-                this._コンボ文字画像の矩形 = new 矩形リスト( @"$(System)images\コンボ文字矩形.xml" );
+                this._コンボ文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\コンボ文字.json" ).変数なしパス ) );
 
                 this._各桁のアニメ = new 各桁のアニメ[ 4 ];
                 for( int i = 0; i < this._各桁のアニメ.Length; i++ )
@@ -72,7 +74,7 @@ namespace DTXmatixx.ステージ.演奏
             var 全体のサイズ = new Vector2( 0f, 0f );
             for( int i = 0; i < 数字.Length; i++ )
             {
-                var 矩形 = this._コンボ文字画像の矩形[ 数字[ i ].ToString() ].Value;
+                var 矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
                 全体のサイズ.X += 矩形.Width + 文字間隔補正;      // 合計
                 全体のサイズ.Y = Math.Max( 全体のサイズ.Y, 矩形.Height ); // 最大値
             }
@@ -110,7 +112,7 @@ namespace DTXmatixx.ステージ.演奏
                         }
                     }
 
-                    var 転送元矩形 = (RectangleF) this._コンボ文字画像の矩形[ 数字[ i ].ToString() ];
+                    var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
 
                     dc.Transform =
                         Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
@@ -126,7 +128,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 // "Combo"
                 {
-                    var 転送元矩形 = (RectangleF) this._コンボ文字画像の矩形[ "Combo" ];
+                    var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ "Combo" ] );
                     文字の位置 = new Vector2( 0f, 130f );
 
                     dc.Transform =
@@ -149,7 +151,7 @@ namespace DTXmatixx.ステージ.演奏
         private int _前回表示した値 = 0;
         private string _前回表示した数字 = "    ";
         private 画像 _コンボ文字画像 = null;
-        private 矩形リスト _コンボ文字画像の矩形 = null;
+        private JObject _コンボ文字設定 = null;
 
         private class 各桁のアニメ : IDisposable
         {

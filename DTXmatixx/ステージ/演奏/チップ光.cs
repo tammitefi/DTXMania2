@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 
@@ -22,7 +24,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._放射光の矩形リスト = new 矩形リスト( @"$(System)images\チップ光矩形.xml" );      // デバイスリソースは持たないので、子Activityではない。
+                this._放射光設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\チップ光.json" ).変数なしパス ) );
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },
@@ -141,7 +143,7 @@ namespace DTXmatixx.ステージ.演奏
 
                         // (1) 放射光
                         {
-                            var 転送元矩形dpx = (RectangleF) this._放射光の矩形リスト[ レーン.ToString() ].Value;
+                            var 転送元矩形dpx = FDKUtilities.JsonToRectangleF( this._放射光設定[ "矩形リスト" ][ レーン.ToString() ] );
                             var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
 
                             var 変換行列2D =
@@ -155,7 +157,7 @@ namespace DTXmatixx.ステージ.演奏
 
                         // (2) 光輪
                         {
-                            var 転送元矩形dpx = (RectangleF) this._放射光の矩形リスト[ レーン.ToString() ].Value;
+                            var 転送元矩形dpx = FDKUtilities.JsonToRectangleF( this._放射光設定[ "矩形リスト" ][ レーン.ToString() ] );
                             var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
 
                             var 変換行列2D =
@@ -182,7 +184,7 @@ namespace DTXmatixx.ステージ.演奏
 
         private 画像 _放射光 = null;
         private 画像 _光輪 = null;
-        private 矩形リスト _放射光の矩形リスト = null;
+        private JObject _放射光設定 = null;
 
         /// <summary>
         ///		以下の画像のアニメ＆表示管理を行うクラス。

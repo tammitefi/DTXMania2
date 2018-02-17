@@ -13,7 +13,7 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 達成率表示()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大矩形.xml", 文字幅補正dpx: 0f ) );
+            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
             this.子を追加する( this._達成率ロゴ画像 = new 画像( @"$(System)images\達成率ロゴ.png" ) );
         }
 

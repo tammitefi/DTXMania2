@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -26,7 +28,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._スコア数字画像の矩形リスト = new 矩形リスト( @"$(System)images\スコア数字矩形.xml" );
+                this._スコア数字画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\スコア数字.json" ).変数なしパス ) );
 
                 // 表示用
                 this._現在表示中のスコア = 0;
@@ -88,7 +90,7 @@ namespace DTXmatixx.ステージ.演奏
                         this._各桁のアニメ[ i ].跳ね開始( am, 0.0 );
                     }
 
-                    var 転送元矩形 = (RectangleF) this._スコア数字画像の矩形リスト[ 数字[ i ].ToString() ];
+                    var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._スコア数字画像設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
 
                     dc.Transform =
                         //Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
@@ -119,7 +121,7 @@ namespace DTXmatixx.ステージ.演奏
         private int _前回表示したスコア = 0;
 
         private 画像 _スコア数字画像 = null;
-        private 矩形リスト _スコア数字画像の矩形リスト = null;
+        private JObject _スコア数字画像設定 = null;
 
         private Dictionary<判定種別, int> _判定toヒット数 = null;
 

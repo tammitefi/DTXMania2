@@ -13,7 +13,7 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 曲別SKILL()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜矩形.xml", 文字幅補正dpx: -6f ) );
+            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜.json", 文字幅補正dpx: -6f ) );
             this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン.png" ) );
         }
 

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 
@@ -22,7 +24,7 @@ namespace DTXmatixx.ステージ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._矢印の矩形リスト = new 矩形リスト( @"$(System)images\パッド矢印矩形.xml" );
+                this._矢印の矩形リスト = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\パッド矢印.json" ).変数なしパス ) );
             }
         }
         protected override void On非活性化()
@@ -38,10 +40,10 @@ namespace DTXmatixx.ステージ
 
             switch( type )
             {
-                case 種類.上_Tom1:  矩形 = this._矢印の矩形リスト[ "Up" ].Value; break;
-                case 種類.下_Tom2:  矩形 = this._矢印の矩形リスト[ "Down" ].Value; break;
-                case 種類.左_Snare: 矩形 = this._矢印の矩形リスト[ "Left" ].Value; break;
-                case 種類.右_Tom3:  矩形 = this._矢印の矩形リスト[ "Right" ].Value; break;
+                case 種類.上_Tom1:  矩形 = FDKUtilities.JsonToRectangleF( this._矢印の矩形リスト[ "矩形リスト" ][ "Up" ] ); break;
+                case 種類.下_Tom2:  矩形 = FDKUtilities.JsonToRectangleF( this._矢印の矩形リスト[ "矩形リスト" ][ "Down" ] ); break;
+                case 種類.左_Snare: 矩形 = FDKUtilities.JsonToRectangleF( this._矢印の矩形リスト[ "矩形リスト" ][ "Left" ] ); break;
+                case 種類.右_Tom3:  矩形 = FDKUtilities.JsonToRectangleF( this._矢印の矩形リスト[ "矩形リスト" ][ "Right" ] ); break;
             }
 
             var 左上位置dpx = new Vector2( 中央位置dpx.X - 矩形.Width * 拡大率 / 2f, 中央位置dpx.Y - 矩形.Height * 拡大率 / 2f );
@@ -54,6 +56,6 @@ namespace DTXmatixx.ステージ
         }
 
         private 画像 _矢印画像 = null;
-        private 矩形リスト _矢印の矩形リスト = null;
+        private JObject _矢印の矩形リスト = null;
     }
 }

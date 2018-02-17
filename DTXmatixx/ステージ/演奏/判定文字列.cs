@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 
@@ -21,7 +23,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._判定文字列の矩形リスト = new 矩形リスト( @"$(System)images\判定文字列矩形.xml" );
+                this._判定文字列画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\判定文字列.json" ).変数なしパス ) );
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },
@@ -244,7 +246,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             if( null != status.光のストーリーボード )
                             {
-                                var 転送元矩形 = (RectangleF) this._判定文字列の矩形リスト[ "PERFECT光" ];
+                                var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._判定文字列画像設定[ "矩形リスト" ][ "PERFECT光" ] );
                                 var 転送元矩形の中心dpx = new Vector2( 転送元矩形.Width / 2f, 転送元矩形.Height / 2f );
 
                                 var 変換行列2D =
@@ -268,7 +270,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             if( null != status.文字列影のストーリーボード )
                             {
-                                var 転送元矩形 = (RectangleF) this._判定文字列の矩形リスト[ status.判定種別.ToString() ];
+                                var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._判定文字列画像設定[ "矩形リスト" ][ status.判定種別.ToString() ] );
 
                                 var 変換行列2D =
                                     Matrix3x2.Translation(
@@ -288,7 +290,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             if( null != status.文字列本体のストーリーボード )
                             {
-                                var 転送元矩形 = (RectangleF) this._判定文字列の矩形リスト[ status.判定種別.ToString() ];
+                                var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._判定文字列画像設定[ "矩形リスト" ][ status.判定種別.ToString() ] );
 
                                 var sx = (float) status.文字列本体のX方向拡大率.Value;
                                 var sy = (float) status.文字列本体のY方向拡大率.Value;
@@ -327,7 +329,7 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private 画像 _判定文字列画像 = null;
-        private 矩形リスト _判定文字列の矩形リスト = null;
+        private JObject _判定文字列画像設定 = null;
 
         /// <summary>
         ///		以下の画像のアニメ＆表示管理を行うクラス。

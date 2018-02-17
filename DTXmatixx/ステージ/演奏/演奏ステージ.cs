@@ -7,6 +7,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectInput;
 using CSCore;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.メディア.サウンド.WASAPI;
@@ -88,7 +89,8 @@ namespace DTXmatixx.ステージ.演奏
                 this._描画開始チップ番号 = -1;
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
-                this._ドラムチップ画像の矩形リスト = new 矩形リスト( @"$(System)images\ドラムチップ矩形.xml" );      // デバイスリソースは持たないので、子Activityではない。
+                this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\ドラムチップ.json" ).変数なしパス ) );
+
                 this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
                 this._背景動画 = null;
@@ -875,11 +877,11 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private 画像 _ドラムチップ画像 = null;
-        private 矩形リスト _ドラムチップ画像の矩形リスト = null;
+        private JObject _ドラムチップ画像設定 = null;
         private LoopCounter _ドラムチップアニメ = null;
         private void _チップを描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
-            Debug.Assert( null != this._ドラムチップ画像の矩形リスト );
+            Debug.Assert( null != this._ドラムチップ画像設定 );
 
             this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
@@ -929,20 +931,17 @@ namespace DTXmatixx.ステージ.演奏
                 if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
                     ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() ] );           // xml の記述ミスの検出用 Assert 。
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() + "_back" ] ); //
-
-                    var たて方向中央位置dpx = this._ドラムチップ画像の矩形リスト[ "縦方向中央位置" ]?.Height ?? 0f;
+                    var たて方向中央位置dpx = (float) ( this._ドラムチップ画像設定[ "縦方向中央位置" ] );
                     var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ 表示レーン種別 ];
 
                     #region " チップ背景（あれば）を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() + "_back" ];
+                        var 矩形 = FDKUtilities.JsonToRectangleF( this._ドラムチップ画像設定[ "矩形リスト" ][ 表示チップ種別.ToString() + "_back" ] );
 
-                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Value.Width && 0 < 矩形.Value.Height ) ) )
+                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
-                            var 矩形中央 = new Vector2( 矩形.Value.Width / 2f, 矩形.Value.Height / 2f );
+                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
                             var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
 
                             var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
@@ -1003,7 +1002,7 @@ namespace DTXmatixx.ステージ.演奏
                             this._ドラムチップ画像.描画する(
                                 dc,
                                 変換行列2D,
-                                転送元矩形: 矩形.Value,
+                                転送元矩形: 矩形,
                                 不透明度0to1: ( 1f - 消滅割合 ) );
                         }
                     }
@@ -1013,11 +1012,11 @@ namespace DTXmatixx.ステージ.演奏
                     #region " チップ本体を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() ];
+                        var 矩形 = FDKUtilities.JsonToRectangleF( this._ドラムチップ画像設定[ "矩形リスト" ][ 表示チップ種別.ToString() ] );
 
-                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Value.Width && 0 < 矩形.Value.Height ) ) )
+                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
-                            var 矩形中央 = new Vector2( 矩形.Value.Width / 2f, 矩形.Value.Height / 2f );
+                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
 
                             // 変換。
                             var 変換行列2D =
@@ -1029,7 +1028,7 @@ namespace DTXmatixx.ステージ.演奏
                             this._ドラムチップ画像.描画する(
                                 dc,
                                 変換行列2D,
-                                転送元矩形: 矩形.Value,
+                                転送元矩形: 矩形,
                                 不透明度0to1: 1f - 消滅割合 );
                         }
                     }
