@@ -85,7 +85,7 @@ namespace DTXmatixx.ステージ.演奏
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
-                dc.FillRectangle( new RectangleF( 445f, 0f, 778f, 938f ), this._レーンエリア色ブラシ );
+                dc.FillRectangle( レーンフレーム.領域, this._レーンエリア色ブラシ );
 
                 // レーンラインを描画する。
                 for( int i = 0; i < _レーンライン.Length; i++ )
