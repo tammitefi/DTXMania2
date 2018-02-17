@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 
@@ -26,42 +28,39 @@ namespace DTXmatixx.ステージ.演奏
         /// <summary>
         ///		表示レーンの左端X位置を、レーンフレームの左端からの相対位置で示す。
         /// </summary>
-        public static Dictionary<表示レーン種別, float> レーンtoチップの左端位置dpx
+        public static Dictionary<表示レーン種別, float> 表示レーンの左端位置dpx
         {
             get;
             protected set;
-        } = new Dictionary<表示レーン種別, float>() {
-            { 表示レーン種別.Unknown, +0f },
-            { 表示レーン種別.LeftCymbal, +1f },
-            { 表示レーン種別.HiHat, +108f },
-            { 表示レーン種別.Foot, +183f },
-            { 表示レーン種別.Snare, +258f },
-            { 表示レーン種別.Bass, +352f },
-            { 表示レーン種別.Tom1, +446f },
-            { 表示レーン種別.Tom2, +521f },
-            { 表示レーン種別.Tom3, +595f },
-            { 表示レーン種別.RightCymbal, +677f },
-        };
+        }
 
         /// <summary>
         ///		表示レーンの幅。
         /// </summary>
-        public static Dictionary<表示レーン種別, float> レーンtoレーン幅dpx
+        public static Dictionary<表示レーン種別, float> 表示レーンの幅dpx
         {
             get;
             protected set;
-        } = new Dictionary<表示レーン種別, float>() {
-            { 表示レーン種別.Unknown, 0f },
-            { 表示レーン種別.LeftCymbal, 96f },
-            { 表示レーン種別.HiHat, 70f },
-            { 表示レーン種別.Foot, 73f },
-            { 表示レーン種別.Snare, 84f },
-            { 表示レーン種別.Bass, 90f },
-            { 表示レーン種別.Tom1, 71f },
-            { 表示レーン種別.Tom2, 71f },
-            { 表示レーン種別.Tom3, 71f },
-            { 表示レーン種別.RightCymbal, 96f },
-        };
+        }
+
+        public static void 初期化する()
+        {
+            表示レーンの左端位置dpx = new Dictionary<表示レーン種別, float>();
+            表示レーンの幅dpx = new Dictionary<表示レーン種別, float>();
+
+            var jobj = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏画面_レーンフレーム.json" ).変数なしパス ) );
+
+            foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
+            {
+                表示レーンの左端位置dpx.Add( lane, (float) jobj[ "左端位置" ][ lane.ToString() ] );
+                表示レーンの幅dpx.Add( lane, (float) jobj[ "幅" ][ lane.ToString() ] );
+            }
+
+            _レーンライン = new List<RectangleF>();
+
+            foreach( var rcline in jobj[ "レーンライン" ] )
+                _レーンライン.Add( FDKUtilities.JsonToRectangleF( rcline ) );
+        }
 
         protected override void On活性化()
         {
@@ -88,7 +87,7 @@ namespace DTXmatixx.ステージ.演奏
                 dc.FillRectangle( レーンフレーム.領域, this._レーンエリア色ブラシ );
 
                 // レーンラインを描画する。
-                for( int i = 0; i < _レーンライン.Length; i++ )
+                for( int i = 0; i < _レーンライン.Count; i++ )
                 {
                     var rc = _レーンライン[ i ];
                     rc.Left += レーンフレーム.領域.Left;
@@ -103,19 +102,7 @@ namespace DTXmatixx.ステージ.演奏
         ///		レーンラインの領域。
         ///		<see cref="レーンフレーム.領域"/>.Left からの相対値[dpx]。
         /// </summary>
-        private static RectangleF[] _レーンライン = {
-            new RectangleF( +96f, +0f, 4f, 938f ),
-            new RectangleF( +104f, +0f, 4f, 938f ),
-            new RectangleF( +179f, +0f, 4f, 938f ),
-            new RectangleF( +256f, +0f, 4f, 938f ),
-            new RectangleF( +340f, +0f, 4f, 938f ),
-            new RectangleF( +347f, +0f, 4f, 938f ),
-            new RectangleF( +443f, +0f, 4f, 938f ),
-            new RectangleF( +518f, +0f, 4f, 938f ),
-            new RectangleF( +592f, +0f, 4f, 938f ),
-            new RectangleF( +665f, +0f, 4f, 938f ),
-            new RectangleF( +673f, +0f, 4f, 938f ),
-        };
+        private static List<RectangleF> _レーンライン;
 
         private SolidColorBrush _レーン色ブラシ = null;
         private SolidColorBrush _レーンエリア色ブラシ = null;

@@ -30,7 +30,7 @@ namespace DTXmatixx.ステージ.演奏
                 {
                     this._レーンtoパッドContext.Add( lane, new パッドContext() {
                         左上位置dpx = new Vector2(
-                            x: レーンフレーム.領域.X + レーンフレーム.レーンtoチップの左端位置dpx[ lane ],
+                            x: レーンフレーム.領域.X + レーンフレーム.表示レーンの左端位置dpx[ lane ],
                             y: 840f ),
                         転送元矩形 = FDKUtilities.JsonToRectangleF( this._パッド絵設定[ "矩形リスト" ][ lane.ToString() ] ),
                         転送元矩形Flush = FDKUtilities.JsonToRectangleF( this._パッド絵設定[ "矩形リスト" ][ lane.ToString() + "_Flush" ] ),

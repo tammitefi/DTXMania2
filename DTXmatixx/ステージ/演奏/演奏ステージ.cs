@@ -99,6 +99,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._BGM再生開始済み = false;
                 //this._デコード済みWaveSource = null;	--> キャッシュなので消さない。
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
+                レーンフレーム.初期化する();
 
                 this._チップの演奏状態 = new Dictionary<チップ, チップの演奏状態>();
                 foreach( var chip in App.演奏スコア.チップリスト )
@@ -932,7 +933,7 @@ namespace DTXmatixx.ステージ.演奏
                     ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
                     var たて方向中央位置dpx = (float) ( this._ドラムチップ画像設定[ "縦方向中央位置" ] );
-                    var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ 表示レーン種別 ];
+                    var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.表示レーンの左端位置dpx[ 表示レーン種別 ];
 
                     #region " チップ背景（あれば）を描画する。"
                     //----------------

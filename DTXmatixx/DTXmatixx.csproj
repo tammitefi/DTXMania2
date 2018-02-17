@@ -256,6 +256,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="System\Images\演奏画面_レーンフレーム.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="設定\ベストプラクティス：DataContractのバージョン管理.md" />
   </ItemGroup>
   <ItemGroup>
