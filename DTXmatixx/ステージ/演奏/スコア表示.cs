@@ -21,14 +21,14 @@ namespace DTXmatixx.ステージ.演奏
     {
         public スコア表示()
         {
-            this.子を追加する( this._スコア数字画像 = new 画像( @"$(System)images\スコア数字.png" ) );
+            this.子を追加する( this._スコア数字画像 = new 画像( @"$(System)images\演奏\スコア数字.png" ) );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._スコア数字画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\スコア数字.json" ).変数なしパス ) );
+                this._スコア数字画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\スコア数字.json" ).変数なしパス ) );
 
                 // 表示用
                 this._現在表示中のスコア = 0;

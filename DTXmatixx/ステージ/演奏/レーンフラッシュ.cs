@@ -16,14 +16,14 @@ namespace DTXmatixx.ステージ.演奏
     {
         public レーンフラッシュ()
         {
-            this.子を追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\レーンフラッシュ.png" ) { 加算合成 = true } );
+            this.子を追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\演奏\レーンフラッシュ.png" ) { 加算合成 = true } );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._レーンフラッシュ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\レーンフラッシュ.json" ).変数なしパス ) );
+                this._レーンフラッシュ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\レーンフラッシュ.json" ).変数なしパス ) );
                 this._レーンtoレーンContext = new Dictionary<表示レーン種別, レーンContext>();
 
                 foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )

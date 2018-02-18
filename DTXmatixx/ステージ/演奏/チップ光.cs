@@ -16,15 +16,15 @@ namespace DTXmatixx.ステージ.演奏
     {
         public チップ光()
         {
-            this.子を追加する( this._放射光 = new 画像( @"$(System)images\チップ光.png" ) { 加算合成 = true } );
-            this.子を追加する( this._光輪 = new 画像( @"$(System)images\チップ光輪.png" ) { 加算合成 = true } );
+            this.子を追加する( this._放射光 = new 画像( @"$(System)images\演奏\チップ光.png" ) { 加算合成 = true } );
+            this.子を追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._放射光設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\チップ光.json" ).変数なしパス ) );
+                this._放射光設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\チップ光.json" ).変数なしパス ) );
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },

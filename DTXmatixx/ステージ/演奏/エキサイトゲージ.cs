@@ -14,8 +14,8 @@ namespace DTXmatixx.ステージ.演奏
     {
         public エキサイトゲージ()
         {
-            this.子を追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏画面_エキサイトゲージ通常.png" ) );
-            this.子を追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏画面_エキサイトゲージDANGER.png" ) );
+            this.子を追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
+            this.子を追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
         }
 
         protected override void On活性化()

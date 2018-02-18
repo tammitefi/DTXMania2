@@ -32,7 +32,7 @@ namespace DTXmatixx.ステージ.認証
         public 認証ステージ_タッチアイコンVer()
         {
             this.子を追加する( this._舞台画像 = new 舞台画像() );
-            this.子を追加する( this._タッチアイコン = new 画像( @"$(System)images\タッチアイコン.png" ) );
+            this.子を追加する( this._タッチアイコン = new 画像( @"$(System)images\認証\タッチアイコン.png" ) );
             this.子を追加する( this._確認できませんでした = new 文字列画像() { 表示文字列 = "確認できませんでした。", フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
         }
 

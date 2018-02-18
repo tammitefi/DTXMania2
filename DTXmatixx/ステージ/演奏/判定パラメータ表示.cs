@@ -16,13 +16,13 @@ namespace DTXmatixx.ステージ.演奏
         public 判定パラメータ表示()
         {
             this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json" ) );
-            this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\パラメータ用判定種別文字.png" ) );
+            this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
         }
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._判定種別文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\パラメータ用判定種別文字.json" ).変数なしパス ) );
+                this._判定種別文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\パラメータ用判定種別文字.json" ).変数なしパス ) );
             }
         }
 

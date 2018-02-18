@@ -51,13 +51,13 @@ namespace DTXmatixx.ステージ.演奏
 
         public 演奏ステージ()
         {
-            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏画面.png" ) );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
             this.子を追加する( this._レーンフレーム = new レーンフレーム() );
             this.子を追加する( this._曲名パネル = new 曲名パネル() );
-            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏画面_ヒットバー.png" ) );
+            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏\ヒットバー.png" ) );
             this.子を追加する( this._ドラムパッド = new ドラムパッド() );
             this.子を追加する( this._レーンフラッシュ = new レーンフラッシュ() );
-            this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\ドラムチップ.png" ) );
+            this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
             this.子を追加する( this._判定文字列 = new 判定文字列() );
             this.子を追加する( this._チップ光 = new チップ光() );
             this.子を追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
@@ -89,7 +89,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._描画開始チップ番号 = -1;
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
-                this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\ドラムチップ.json" ).変数なしパス ) );
+                this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムチップ.json" ).変数なしパス ) );
 
                 this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );

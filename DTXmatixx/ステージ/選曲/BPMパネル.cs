@@ -16,7 +16,7 @@ namespace DTXmatixx.ステージ.選曲
     {
         public BPMパネル()
         {
-            this.子を追加する( this._BPMパネル = new 画像( @"$(System)images\選曲画面_BPMパネル.png" ) );
+            this.子を追加する( this._BPMパネル = new 画像( @"$(System)images\選曲\BPMパネル.png" ) );
             this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json", 文字幅補正dpx: 0f ) );
         }
 

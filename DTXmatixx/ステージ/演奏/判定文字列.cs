@@ -16,14 +16,14 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 判定文字列()
         {
-            this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\判定文字列.png" ) );
+            this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._判定文字列画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\判定文字列.json" ).変数なしパス ) );
+                this._判定文字列画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\判定文字列.json" ).変数なしパス ) );
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },

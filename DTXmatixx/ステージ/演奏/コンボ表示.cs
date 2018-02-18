@@ -17,7 +17,7 @@ namespace DTXmatixx.ステージ.演奏
     {
         public コンボ表示()
         {
-            this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\コンボ文字.png" ) );
+            this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\演奏\コンボ文字.png" ) );
         }
 
         protected override void On活性化()
@@ -26,7 +26,7 @@ namespace DTXmatixx.ステージ.演奏
             {
                 this._前回表示した値 = 0;
                 this._前回表示した数字 = "    ";
-                this._コンボ文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\コンボ文字.json" ).変数なしパス ) );
+                this._コンボ文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\コンボ文字.json" ).変数なしパス ) );
 
                 this._各桁のアニメ = new 各桁のアニメ[ 4 ];
                 for( int i = 0; i < this._各桁のアニメ.Length; i++ )

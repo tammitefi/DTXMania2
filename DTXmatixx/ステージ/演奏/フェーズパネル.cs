@@ -28,7 +28,7 @@ namespace DTXmatixx.ステージ.演奏
 
         public フェーズパネル()
         {
-            this.子を追加する( this._演奏位置カーソル画像 = new 画像( @"$(System)images\演奏位置カーソル.png" ) );
+            this.子を追加する( this._演奏位置カーソル画像 = new 画像( @"$(System)images\演奏\演奏位置カーソル.png" ) );
         }
 
         protected override void On活性化()
@@ -36,7 +36,7 @@ namespace DTXmatixx.ステージ.演奏
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this._現在位置 = 0.0f;
-                this._演奏位置カーソル画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏位置カーソル.json" ).変数なしパス ) );
+                this._演奏位置カーソル画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\演奏位置カーソル.json" ).変数なしパス ) );
                 this._初めての進行描画 = true;
             }
         }

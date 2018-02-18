@@ -19,7 +19,7 @@ namespace DTXmatixx.ステージ.選曲
     {
         public 曲ステータスパネル()
         {
-            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\選曲画面_曲ステータスパネル.png" ) );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\選曲\曲ステータスパネル.png" ) );
         }
 
         protected override void On活性化()

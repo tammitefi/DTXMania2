@@ -16,14 +16,14 @@ namespace DTXmatixx.ステージ.演奏
     {
         public ドラムパッド()
         {
-            this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\ドラムパッド.png" ) );
+            this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._パッド絵設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\ドラムパッド.json" ).変数なしパス ) );
+                this._パッド絵設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムパッド.json" ).変数なしパス ) );
                 this._レーンtoパッドContext = new Dictionary<表示レーン種別, パッドContext>();
 
                 foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )

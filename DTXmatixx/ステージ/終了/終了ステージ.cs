@@ -25,7 +25,7 @@ namespace DTXmatixx.ステージ.終了
 
         public 終了ステージ()
         {
-            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\終了画面.jpg" ) );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\終了\終了画面.jpg" ) );
         }
 
         protected override void On活性化()
