@@ -34,6 +34,8 @@ namespace DTXmatixx
             get;
             protected set;
         }
+        public static T 属性<T>() where T : Attribute
+            => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
         public static App Instance
         {
