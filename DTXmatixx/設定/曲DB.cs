@@ -10,8 +10,9 @@ using SSTFormatCurrent = SSTFormat.v3;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.データベース.曲;
 using DTXmatixx.ステージ.演奏;
+
 using Song = DTXmatixx.データベース.曲.Song03;
-using Record = DTXmatixx.データベース.ユーザ.Record05;
+using Record = DTXmatixx.データベース.ユーザ.Record06;
 
 namespace DTXmatixx.設定
 {

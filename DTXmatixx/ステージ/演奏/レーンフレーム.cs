@@ -20,66 +20,121 @@ namespace DTXmatixx.ステージ.演奏
         ///		画面全体に対する、レーンフレームの表示位置と範囲。
         /// </summary>
         public static RectangleF 領域
-        {
-            get;
-            protected set;
-        } = new RectangleF( 445f, 0f, 778f, 938f );
+            => new RectangleF( 445f, 0f, 778f, 938f );
 
-        /// <summary>
-        ///		表示レーンの左端X位置を、レーンフレームの左端からの相対位置で示す。
-        /// </summary>
-        public static Dictionary<表示レーン種別, float> 表示レーンの左端位置dpx
+        public static Dictionary<string, レーン配置> レーン配置リスト;
+
+        public class レーン配置
         {
-            get;
-            protected set;
+            /// <summary>
+            ///     配置名。
+            ///     「$(System)images\レーン配置\"配置名".json」ファイルがあれば、それがこのインスタンスの設定ファイルになる。
+            /// </summary>
+            public string 配置名
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            ///		表示レーンの左端X位置を、レーンフレームの左端からの相対位置で示す。
+            /// </summary>
+            public Dictionary<表示レーン種別, float> 表示レーンの左端位置dpx
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            ///		表示レーンの幅。
+            /// </summary>
+            public Dictionary<表示レーン種別, float> 表示レーンの幅dpx
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            ///		レーンラインの領域。
+            ///		<see cref="レーンフレーム.領域"/>.Left からの相対値[dpx]。
+            /// </summary>
+            public List<RectangleF> レーンライン;
+
+            public Color4 レーン色;
+            public Color4 レーンライン色;
         }
 
-        /// <summary>
-        ///		表示レーンの幅。
-        /// </summary>
-        public static Dictionary<表示レーン種別, float> 表示レーンの幅dpx
-        {
-            get;
-            protected set;
-        }
+        public static レーン配置 現在のレーン配置
+            => _現在のレーン配置;
 
         public static void 初期化する()
         {
-            表示レーンの左端位置dpx = new Dictionary<表示レーン種別, float>();
-            表示レーンの幅dpx = new Dictionary<表示レーン種別, float>();
-
-            var jobj = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏画面_レーンフレーム.json" ).変数なしパス ) );
-
-            foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
-            {
-                表示レーンの左端位置dpx.Add( lane, (float) jobj[ "左端位置" ][ lane.ToString() ] );
-                表示レーンの幅dpx.Add( lane, (float) jobj[ "幅" ][ lane.ToString() ] );
-            }
-
-            _レーンライン = new List<RectangleF>();
-
-            foreach( var rcline in jobj[ "レーンライン" ] )
-                _レーンライン.Add( FDKUtilities.JsonToRectangleF( rcline ) );
-
-            _レーン色 = new Color4( Convert.ToUInt32( (string) jobj[ "レーン色" ], 16 ) );
-            _レーンライン色 = new Color4( Convert.ToUInt32( (string) jobj[ "レーンライン色" ], 16 ) );
-        }
-
-        protected override void On活性化()
-        {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._レーン色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, _レーン色 );
-                this._レーンライン色ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, _レーンライン色 );
+                var root = new VariablePath( @"$(System)images\演奏\レーン配置" );
+                レーン配置リスト = new Dictionary<string, レーン配置>();
+
+                // images フォルダから、レーン配置に適合する設定ファイルを検索。
+
+                foreach( var fileInfo in new DirectoryInfo( root.変数なしパス ).GetFiles( "*.json", SearchOption.TopDirectoryOnly ) )
+                {
+                    var 拡張子なしのファイル名 = Path.GetFileNameWithoutExtension( fileInfo.Name );
+
+                    レーン配置リスト.Add( 拡張子なしのファイル名, new レーン配置 { 配置名 = 拡張子なしのファイル名 } );   // 名前だけ
+                }
+
+                // 各設定ファイルから設定を読み込む。
+
+                foreach( var kvp in レーン配置リスト )
+                {
+                    var 設定ファイルパス = Path.Combine( root.変数なしパス, kvp.Key + ".json" );
+                    var 設定 = JObject.Parse( File.ReadAllText( 設定ファイルパス ) );
+
+                    kvp.Value.表示レーンの左端位置dpx = new Dictionary<表示レーン種別, float>();
+                    kvp.Value.表示レーンの幅dpx = new Dictionary<表示レーン種別, float>();
+
+                    foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
+                    {
+                        kvp.Value.表示レーンの左端位置dpx.Add( lane, (float) 設定[ "左端位置" ][ lane.ToString() ] );
+                        kvp.Value.表示レーンの幅dpx.Add( lane, (float) 設定[ "幅" ][ lane.ToString() ] );
+                    }
+
+                    kvp.Value.レーンライン = new List<RectangleF>();
+
+                    foreach( var rcline in 設定[ "レーンライン" ] )
+                        kvp.Value.レーンライン.Add( FDKUtilities.JsonToRectangleF( rcline ) );
+
+                    kvp.Value.レーン色 = new Color4( Convert.ToUInt32( (string) 設定[ "レーン色" ], 16 ) );
+                    kvp.Value.レーンライン色 = new Color4( Convert.ToUInt32( (string) 設定[ "レーンライン色" ], 16 ) );
+
+                    Log.Info( $"{new VariablePath( 設定ファイルパス ).変数付きパス} ... 完了" );
+                }
+
+                レーン配置を設定する( "TypeA" );
             }
         }
-        protected override void On非活性化()
+        public static void レーン配置を設定する( string レーン配置名 )
         {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            if( レーン配置リスト.ContainsKey( レーン配置名 ) )
             {
-                FDKUtilities.解放する( ref this._レーンライン色ブラシ );
-                FDKUtilities.解放する( ref this._レーン色ブラシ );
+                _現在のレーン配置 = レーン配置リスト[ レーン配置名 ];
             }
+            else
+            {
+                Log.ERROR( $"指定されたレーン配置名「{レーン配置名}」が存在しません。" );
+
+                if( 0 < レーン配置リスト.Count )
+                {
+                    _現在のレーン配置 = レーン配置リスト.ElementAt( 0 ).Value;
+                    Log.WARNING( $"既定のレーン配置名「{_現在のレーン配置.配置名}」を選択しました。" );
+                }
+                else
+                {
+                    Log.ERRORandTHROW( "既定のレーン配置名を選択しようとしましたが、存在しません。" );
+                }
+            }
+
+            Log.Info( $"レーン配置「{_現在のレーン配置.配置名}」を選択しました。" );
         }
 
         public void 描画する( DeviceContext1 dc )
@@ -87,29 +142,27 @@ namespace DTXmatixx.ステージ.演奏
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
-                dc.FillRectangle( レーンフレーム.領域, this._レーン色ブラシ );
+                using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, 現在のレーン配置.レーン色 ) )
+                {
+                    dc.FillRectangle( レーンフレーム.領域, laneBrush );
+                }
 
                 // レーンラインを描画する。
-                for( int i = 0; i < _レーンライン.Count; i++ )
+                using( var laneLineBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, 現在のレーン配置.レーンライン色 ) )
                 {
-                    var rc = _レーンライン[ i ];
-                    rc.Left += レーンフレーム.領域.Left;
-                    rc.Right += レーンフレーム.領域.Left;
-                    dc.FillRectangle( rc, _レーンライン色ブラシ );
+                    for( int i = 0; i < 現在のレーン配置.レーンライン.Count; i++ )
+                    {
+                        var rc = 現在のレーン配置.レーンライン[ i ];
+                        rc.Left += レーンフレーム.領域.Left;
+                        rc.Right += レーンフレーム.領域.Left;
+                        dc.FillRectangle( rc, laneLineBrush );
+                    }
                 }
 
             } );
         }
 
-        /// <summary>
-        ///		レーンラインの領域。
-        ///		<see cref="レーンフレーム.領域"/>.Left からの相対値[dpx]。
-        /// </summary>
-        private static List<RectangleF> _レーンライン;
 
-        private static Color4 _レーン色;
-        private static Color4 _レーンライン色;
-        private SolidColorBrush _レーン色ブラシ = null;
-        private SolidColorBrush _レーンライン色ブラシ = null;
+        private static レーン配置 _現在のレーン配置;
     }
 }

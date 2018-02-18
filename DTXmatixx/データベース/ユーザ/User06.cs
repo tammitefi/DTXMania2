@@ -9,10 +9,10 @@ namespace DTXmatixx.データベース.ユーザ
 {
     /// <summary>
     ///		ユーザテーブルのエンティティクラス。
-    ///		バージョン 4。
+    ///		バージョン 6。
     /// </summary>
     [Table( Name = "Users" )]   // テーブル名は複数形
-    class User05 : ICloneable
+    class User06 : ICloneable
     {
         /// <summary>
         ///		ユーザを一意に識別する文字列。主キー。
@@ -178,12 +178,19 @@ namespace DTXmatixx.データベース.ユーザ
         [Column( DbType = "INT", CanBeNull = false )]
         public int DrumSound { get; set; }
 
+        /// <summary>
+        ///     レーンタイプ名。
+        ///     $(System)images\演奏\レーン配置\*.json の '*' に当たる部分の名前を指定できる。
+        /// </summary>
+        [Column( DbType = "NVARCHAR", CanBeNull = false )]
+        public string LaneType { get; set; }
+
         ///////////////////////////
 
         /// <summary>
         ///		既定値で初期化。
         /// </summary>
-        public User05()
+        public User06()
         {
             this.Id = "Anonymous";
             this.Name = "Anonymous";
@@ -208,12 +215,13 @@ namespace DTXmatixx.データベース.ユーザ
             this.ChinaLeft = 0;
             this.SplashLeft = 1;
             this.DrumSound = 1;
+            this.LaneType = "TypeA";
         }
 
         // ICloneable 実装
-        public User05 Clone()
+        public User06 Clone()
         {
-            return (User05) this.MemberwiseClone();
+            return (User06) this.MemberwiseClone();
         }
         object ICloneable.Clone()
         {
@@ -249,6 +257,7 @@ namespace DTXmatixx.データベース.ユーザ
             @", ChinaLeft INTEGER NOT NULL" +
             @", SplashLeft INTEGER NOT NULL" +
             @", DrumSound INTEGER NOT NULL" +
+            @", LaneType NVARCHAR NOT NULL" +
             @")";
     }
 }

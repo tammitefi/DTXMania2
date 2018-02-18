@@ -30,7 +30,7 @@ namespace DTXmatixx.ステージ.演奏
                 {
                     this._レーンtoレーンContext.Add( lane, new レーンContext() {
                         開始位置dpx = new Vector2(
-                            x: レーンフレーム.領域.X + レーンフレーム.表示レーンの左端位置dpx[ lane ],
+                            x: レーンフレーム.領域.X + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
                             y: レーンフレーム.領域.Bottom ),
                         転送元矩形 = FDKUtilities.JsonToRectangleF( this._レーンフラッシュ画像設定[ "矩形リスト" ][ lane.ToString() ] ),
                         アニメカウンタ = new Counter(),

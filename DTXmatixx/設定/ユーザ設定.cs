@@ -6,7 +6,7 @@ using FDK;
 using DTXmatixx.データベース.ユーザ;
 using DTXmatixx.ステージ.演奏;
 
-using User = DTXmatixx.データベース.ユーザ.User05;
+using User = DTXmatixx.データベース.ユーザ.User06;
 
 namespace DTXmatixx.設定
 {
@@ -113,6 +113,13 @@ namespace DTXmatixx.設定
                 => ( 0 != this._User.DrumSound );
             set
                 => this._User.DrumSound = value ? 1 : 0;
+        }
+        public string レーン配置
+        {
+            get
+                => this._User.LaneType;
+            set
+                => this._User.LaneType = value;
         }
 
         public ユーザ設定()
