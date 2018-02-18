@@ -62,10 +62,7 @@ namespace DTXmatixx.設定
                     // 他は規定値
                 } );
             }
-#if DEBUG_
-			// hack: テストコード: デバッグ用に固定パスを使用する。
-			user.曲検索フォルダ.Add( new VariablePath( @"$(Exe)..\..\..\曲データ" ) );
-#endif
+
             if( null != user )
                 this.ユーザリスト.Add( user );
         }

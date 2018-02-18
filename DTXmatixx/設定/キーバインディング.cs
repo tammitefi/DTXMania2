@@ -217,7 +217,7 @@ namespace DTXmatixx.設定
 
         /// <summary>
         ///		逆シリアル化後（復元後）に呼び出される。
-        ///		DataMemver を使って他の 非DataMember を初期化する、などの処理を行う。
+        ///		DataMember を使って他の 非DataMember を初期化する、などの処理を行う。
         /// </summary>
         /// <param name="sc">未使用。</param>
         [OnDeserialized]
@@ -227,7 +227,7 @@ namespace DTXmatixx.設定
 
         /// <summary>
         ///		シリアル化前に呼び出される。
-        ///		非DataMemer を使って保存用の DataMember を初期化する、などの処理を行う。
+        ///		非DataMember を使って保存用の DataMember を初期化する、などの処理を行う。
         /// </summary>
         /// <param name="sc">未使用。</param>
         [OnSerializing]
