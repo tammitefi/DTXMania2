@@ -286,13 +286,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\!.png">
+    <None Include="System\Images\アイキャッチ\!.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\G.png">
+    <None Include="System\Images\アイキャッチ\G.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\O.png">
+    <None Include="System\Images\アイキャッチ\O.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\タイトルロゴ.png">
@@ -308,7 +308,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\タッチアイコン.png">
+    <None Include="System\Images\認証\タッチアイコン.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -318,7 +318,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ステージタイマー.png">
+    <None Include="System\Images\選曲\ステージタイマー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -333,57 +333,57 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ご注意ください.png">
+    <None Include="System\Images\曲読み込み\ご注意ください.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面_曲名パネル.png">
+    <None Include="System\Images\演奏\曲名パネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面.png">
+    <None Include="System\Images\演奏\演奏画面.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面_ヒットバー.png">
+    <None Include="System\Images\演奏\ヒットバー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムパッド.png">
+    <None Include="System\Images\演奏\ドラムパッド.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムチップ.png">
+    <None Include="System\Images\演奏\ドラムチップ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\判定文字列.png">
+    <None Include="System\Images\演奏\判定文字列.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\チップ光.png">
+    <None Include="System\Images\演奏\チップ光.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\チップ光輪.png">
+    <None Include="System\Images\演奏\チップ光輪.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\選曲画面_枠ランナー.png">
+    <None Include="System\Images\選曲\枠ランナー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\コンボ文字.png">
+    <None Include="System\Images\演奏\コンボ文字.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -459,12 +459,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\右サイドクリアパネル.png">
+    <None Include="System\Images\演奏\右サイドクリアパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\左サイドクリアパネル.png">
+    <None Include="System\Images\演奏\左サイドクリアパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -474,32 +474,32 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏位置カーソル.png">
+    <None Include="System\Images\演奏\演奏位置カーソル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\レーンフラッシュ.png">
+    <None Include="System\Images\演奏\レーンフラッシュ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\結果画面_曲名パネル.png">
+    <None Include="System\Images\結果\曲名パネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パラメータ用判定種別文字.png">
+    <None Include="System\Images\演奏\パラメータ用判定種別文字.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\選曲画面_曲ステータスパネル.png">
+    <None Include="System\Images\選曲\曲ステータスパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\スコア数字.png">
+    <None Include="System\Images\演奏\スコア数字.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -527,7 +527,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\選曲画面_BPMパネル.png">
+    <None Include="System\Images\選曲\BPMパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -537,20 +537,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\終了画面.jpg">
+    <None Include="System\Images\終了\終了画面.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面_エキサイトゲージDANGER.png">
+    <None Include="System\Images\演奏\エキサイトゲージDANGER.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏画面_エキサイトゲージ通常.png">
+    <None Include="System\Images\演奏\エキサイトゲージ通常.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\認証画面_ユーザ選択ウィンドウ.png">
+    <None Include="System\Images\認証\ユーザ選択ウィンドウ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -597,47 +597,47 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\認証画面_パネル_0.png">
+    <None Include="System\Images\認証\パネル_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_パネル_0_光彩あり.png">
+    <None Include="System\Images\認証\パネル_0_光彩あり.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_パネル_1.png">
+    <None Include="System\Images\認証\パネル_1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_パネル_1_光彩あり.png">
+    <None Include="System\Images\認証\パネル_1_光彩あり.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_肩書きパネル_0.png">
+    <None Include="System\Images\認証\肩書きパネル_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_肩書きパネル_1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\コンボ文字.json">
+    <None Include="System\Images\認証\肩書きパネル_1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\スコア数字.json">
+    <None Include="System\Images\演奏\コンボ文字.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\チップ光.json">
+    <None Include="System\Images\演奏\スコア数字.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムチップ.json">
+    <None Include="System\Images\演奏\チップ光.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムパッド.json">
+    <None Include="System\Images\演奏\ドラムチップ.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\ドラムパッド.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -662,22 +662,22 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パラメータ用判定種別文字.json">
+    <None Include="System\Images\演奏\パラメータ用判定種別文字.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\レーンフラッシュ.json">
+    <None Include="System\Images\演奏\レーンフラッシュ.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏位置カーソル.json">
+    <None Include="System\Images\演奏\演奏位置カーソル.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\判定文字列.json">
+    <None Include="System\Images\演奏\判定文字列.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
