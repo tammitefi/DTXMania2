@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Windows;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.入力;
 using FDK.メディア;

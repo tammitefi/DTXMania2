@@ -34,12 +34,7 @@ namespace DTXmatixx.ステージ.曲ツリー構築
                 $"{App.属性<AssemblyCopyrightAttribute>().Copyright}\n" +
                 "\n";
 
-            this.子を追加する( this._文字列画像 = new 文字列画像() {
-                フォント名 = "Meiryo UI",
-                フォントサイズpt = 20f,
-                前景色 = Color4.White,
-                表示文字列 = this._表示文字列,
-            } );
+            this.子を追加する( this._コンソールフォント = new 画像フォント( @"$(System)images\コンソールフォント20x32.png", @"$(System)images\コンソールフォント20x32.json", 文字幅補正dpx: -6f ) );
         }
 
         protected override void On活性化()
@@ -58,8 +53,9 @@ namespace DTXmatixx.ステージ.曲ツリー構築
 
         public override void 進行描画する( DeviceContext1 dc )
         {
-            this._文字列画像.表示文字列 = this._表示文字列 + $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}";
-            this._文字列画像.描画する( dc, 0f, 0f );
+            this._コンソールフォント.描画する( dc, 0f, 0f, $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}" );
+            this._コンソールフォント.描画する( dc, 0f, 32f, $"{App.属性<AssemblyCopyrightAttribute>().Copyright}" );
+            this._コンソールフォント.描画する( dc, 0f, 96f, $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}" );
 
             App.入力管理.すべての入力デバイスをポーリングする();
 
@@ -94,10 +90,6 @@ namespace DTXmatixx.ステージ.曲ツリー構築
                     if( this._構築タスク.IsCompleted || this._構築タスク.IsCanceled )
                     {
                         App.曲ツリー.活性化する();
-
-                        this._文字列画像.表示文字列 += "\n\nOK";
-                        this._文字列画像.描画する( dc, 0f, 0f );
-
                         this.現在のフェーズ = フェーズ.確定;
                     }
                     break;
@@ -115,7 +107,7 @@ namespace DTXmatixx.ステージ.曲ツリー構築
             }
         }
 
-        private 文字列画像 _文字列画像 = null;
+        private 画像フォント _コンソールフォント = null;
         private string _表示文字列 = "";
         private Task _構築タスク = null;
         private long _ファイル検出数 = 0;
