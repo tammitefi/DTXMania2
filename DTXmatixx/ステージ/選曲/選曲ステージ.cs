@@ -37,7 +37,7 @@ namespace DTXmatixx.ステージ.選曲
             this.子を追加する( this._曲リスト = new 曲リスト() );
             this.子を追加する( this._難易度と成績 = new 難易度と成績() );
             this.子を追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
-            this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\ステージタイマー.png" ) );
+            this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
             this.子を追加する( this._青い線 = new 青い線() );
             this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
             this.子を追加する( this._BPMパネル = new BPMパネル() );

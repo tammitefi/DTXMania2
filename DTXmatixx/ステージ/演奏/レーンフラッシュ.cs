@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -14,24 +16,23 @@ namespace DTXmatixx.ステージ.演奏
     {
         public レーンフラッシュ()
         {
-            this.子を追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\レーンフラッシュ.png" ) { 加算合成 = true } );
+            this.子を追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\演奏\レーンフラッシュ.png" ) { 加算合成 = true } );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._レーンフラッシュの矩形リスト = new 矩形リスト( @"$(System)images\レーンフラッシュ矩形.xml" );
-
+                this._レーンフラッシュ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\レーンフラッシュ.json" ).変数なしパス ) );
                 this._レーンtoレーンContext = new Dictionary<表示レーン種別, レーンContext>();
 
                 foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
                 {
                     this._レーンtoレーンContext.Add( lane, new レーンContext() {
                         開始位置dpx = new Vector2(
-                            x: レーンフレーム.領域.X + レーンフレーム.レーンtoチップの左端位置dpx[ lane ],
+                            x: レーンフレーム.領域.X + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
                             y: レーンフレーム.領域.Bottom ),
-                        転送元矩形 = (RectangleF) this._レーンフラッシュの矩形リスト[ lane.ToString() ],
+                        転送元矩形 = FDKUtilities.JsonToRectangleF( this._レーンフラッシュ画像設定[ "矩形リスト" ][ lane.ToString() ] ),
                         アニメカウンタ = new Counter(),
                     } );
                 }
@@ -75,6 +76,6 @@ namespace DTXmatixx.ステージ.演奏
         private Dictionary<表示レーン種別, レーンContext> _レーンtoレーンContext = null;
 
         private 画像 _レーンフラッシュ画像 = null;
-        private 矩形リスト _レーンフラッシュの矩形リスト = null;
+        private JObject _レーンフラッシュ画像設定 = null;
     }
 }

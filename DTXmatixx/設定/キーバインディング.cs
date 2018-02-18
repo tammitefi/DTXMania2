@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using SharpDX.DirectInput;
@@ -20,6 +22,7 @@ namespace DTXmatixx.設定
         ///		キー（キーコード、ノート番号などデバイスから得られる入力値）の組で定義される。
         /// </remarks>
         [DataContract( Name = "IDとキー", Namespace = "" )]
+        [TypeConverter( typeof( IdKeyConverter ) )]
         public struct IdKey
         {
             [DataMember]
@@ -37,6 +40,31 @@ namespace DTXmatixx.設定
             {
                 this.deviceId = ie.DeviceID;
                 this.key = ie.Key;
+            }
+            public IdKey( string 文字列 )
+            {
+                // 変なの食わせたらそのまま例外発出する。
+                string[] v = 文字列.Split( new char[] { ',' } );
+
+                this.deviceId = int.Parse( v[ 0 ] );
+                this.key = int.Parse( v[ 1 ] );
+            }
+            public override string ToString()
+                => $"{this.deviceId},{this.key}";
+
+            /// <summary>
+            ///     IdKey と string との相互変換。シリアライズ時に必要。
+            /// </summary>
+            public class IdKeyConverter : TypeConverter
+            {
+                public override bool CanConvertFrom( ITypeDescriptorContext context, Type sourceType )
+                    => ( sourceType == typeof( string ) ) ? true : base.CanConvertFrom( context, sourceType );
+                public override object ConvertFrom( ITypeDescriptorContext context, CultureInfo culture, object value )
+                    => ( value is string strvalue ) ? new IdKey( strvalue ) : base.ConvertFrom( context, culture, value );
+                public override bool CanConvertTo( ITypeDescriptorContext context, Type destinationType )
+                    => ( destinationType == typeof( string ) ) ? true : base.CanConvertTo( context, destinationType );
+                public override object ConvertTo( ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType )
+                    => ( destinationType == typeof( string ) && ( value is IdKey idkey ) ) ? idkey.ToString() : base.ConvertTo( context, culture, value, destinationType );
             }
         }
 
@@ -70,14 +98,14 @@ namespace DTXmatixx.設定
             protected set;
         }
 
-        [DataMember( Order = 20180205 )]
+        [DataMember]
         public int FootPedal最小値
         {
             get;
             set;
         }
 
-        [DataMember( Order = 20180205 ) ]
+        [DataMember ]
         public int FootPedal最大値
         {
             get;
@@ -116,6 +144,9 @@ namespace DTXmatixx.設定
 
             foreach( var kvp in this.MIDItoドラム )
                 clone.MIDItoドラム.Add( kvp.Key, kvp.Value );
+
+            clone.FootPedal最小値 = this.FootPedal最小値;
+            clone.FootPedal最大値 = this.FootPedal最大値;
 
             return clone;
         }

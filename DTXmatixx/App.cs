@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Windows;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.入力;
 using FDK.メディア;
@@ -34,6 +35,8 @@ namespace DTXmatixx
             get;
             protected set;
         }
+        public static T 属性<T>() where T : Attribute
+            => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
         public static App Instance
         {

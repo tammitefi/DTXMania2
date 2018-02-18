@@ -15,7 +15,7 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 曲名パネル()
         {
-            this.子を追加する( this._パネル = new 画像( @"$(System)images\演奏画面_曲名パネル.png" ) );
+            this.子を追加する( this._パネル = new 画像( @"$(System)images\演奏\曲名パネル.png" ) );
             this.子を追加する( this._曲名画像 = new 文字列画像() {
                 フォント名 = "HGMaruGothicMPRO",
                 フォントサイズpt = 26f,

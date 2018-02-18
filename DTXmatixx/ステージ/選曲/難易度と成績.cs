@@ -20,7 +20,7 @@ namespace DTXmatixx.ステージ.選曲
 
         public 難易度と成績()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大矩形.xml", 文字幅補正dpx: 0f ) );
+            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
         }
 
         protected override void On活性化()

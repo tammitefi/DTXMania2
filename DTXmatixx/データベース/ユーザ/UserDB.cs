@@ -11,16 +11,17 @@ namespace DTXmatixx.データベース.ユーザ
     using User02 = old.User02;
     using User03 = old.User03;
     using User04 = old.User04;
+    using User05 = old.User05;
 
-    using User = User05;        // 最新バージョンを指定（その１）
-    using Record = Record05;    //
+    using User = User06;        // 最新バージョンを指定（その１）
+    using Record = Record06;    //
 
     /// <summary>
     ///		ユーザデータベースに対応するエンティティクラス。
     /// </summary>
     class UserDB : SQLiteDBBase
     {
-        public const long VERSION = 5;  // 最新バージョンを指定（その２）
+        public const long VERSION = 6;  // 最新バージョンを指定（その２）
 
         public Table<User> Users
             => base.DataContext.GetTable<User>();
@@ -170,6 +171,37 @@ namespace DTXmatixx.データベース.ユーザ
                         {
                             // テータベースをアップデートしてデータを移行する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN DrumSound INTEGER NOT NULL DEFAULT 1" );
+                            this.DataContext.SubmitChanges();
+
+                            // 成功。
+                            transaction.Commit();
+                            this.DataContext.ExecuteCommand( "VACUUM" );    // Vacuum はトランザクションの外で。
+                            this.DataContext.SubmitChanges();
+                            Log.Info( $"Users テーブルをアップデートしました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                        catch
+                        {
+                            // 失敗。
+                            transaction.Rollback();
+                            throw new Exception( $"Users テーブルのアップデートに失敗しました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                    }
+                    //----------------
+                    #endregion
+                    break;
+
+                case 5:
+                    #region " 5 → 6 "
+                    //----------------
+                    // 変更点:
+                    // ・Users テーブルに LaneType カラムを追加。
+                    this.DataContext.SubmitChanges();
+                    using( var transaction = this.Connection.BeginTransaction() )
+                    {
+                        try
+                        {
+                            // テータベースをアップデートしてデータを移行する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN LaneType NVARCHAR NOT NULL DEFAULT 'TypeA'" );
                             this.DataContext.SubmitChanges();
 
                             // 成功。

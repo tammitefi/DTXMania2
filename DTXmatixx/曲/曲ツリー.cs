@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using FDK;
 using FDK.メディア;
 
@@ -137,7 +138,8 @@ namespace DTXmatixx.曲
         /// <remarks>
         ///		追加されたノードは、ここでは活性化されない。
         /// </remarks>
-        public void 曲を検索して親ノードに追加する( Node 親ノード, VariablePath フォルダパス )
+        /// <param name="ファイル検出">ファイルを検出するたびに呼び出されるアクション。引数には、set.def または曲ファイルのパスが格納される。</param>
+        public void 曲を検索して親ノードに追加する( Node 親ノード, VariablePath フォルダパス, Action<VariablePath> ファイル検出 = null )
         {
             #region " フォルダが存在しないなら何もしない。"
             //----------------
@@ -160,6 +162,8 @@ namespace DTXmatixx.曲
             {
                 #region " (A) このフォルダに set.def がある → その内容でSetノード（任意個）を作成する。"
                 //----------------
+                ファイル検出?.Invoke( new VariablePath( setDefPath ) );
+
                 var setDef = SetDef.復元する( setDefPath );
 
                 foreach( var block in setDef.Blocks )
@@ -182,6 +186,8 @@ namespace DTXmatixx.曲
                 foreach( var fileInfo in fileInfos )
                 {
                     var vpath = new VariablePath( fileInfo.FullName );
+                    ファイル検出?.Invoke( vpath );
+
                     try
                     {
                         var music = new MusicNode( vpath, 親ノード );
@@ -214,7 +220,7 @@ namespace DTXmatixx.曲
                     boxNode.子ノードリスト.Add( backNode );
 
                     // BOXノードを親として、サブフォルダへ再帰。
-                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName );
+                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName, ファイル検出 );
                     //----------------
                     #endregion
                 }
@@ -229,7 +235,7 @@ namespace DTXmatixx.曲
                     boxNode.子ノードリスト.Add( backNode );
 
                     // BOXノードを親として、サブフォルダへ再帰。
-                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName );
+                    this.曲を検索して親ノードに追加する( boxNode, subDirInfo.FullName, ファイル検出 );
                     //----------------
                     #endregion
                 }
@@ -237,7 +243,7 @@ namespace DTXmatixx.曲
                 {
                     #region " (C) その他のフォルダの場合 → そのままサブフォルダへ再帰。"
                     //----------------
-                    this.曲を検索して親ノードに追加する( 親ノード, subDirInfo.FullName );
+                    this.曲を検索して親ノードに追加する( 親ノード, subDirInfo.FullName, ファイル検出 );
                     //----------------
                     #endregion
                 }

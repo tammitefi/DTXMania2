@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using SSTFormat.v3;
-using DTXmatixx.曲;
-using DTXmatixx.ステージ.演奏;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXmatixx.設定
@@ -21,10 +21,16 @@ namespace DTXmatixx.設定
     [KnownType( typeof( キーバインディング ) )]
     class システム設定 : IExtensibleDataObject
     {
+        /// <summary>
+        ///     このクラスのバージョン。
+        /// </summary>
+        [DataMember( Order = 1 )]
+        public static int Version = 1;
+
         /// <remarks>
         ///		キーバインディングは全ユーザで共通。
         /// </remarks>
-        [DataMember( Name = "KeyBindings" )]
+        [DataMember( Name = "KeyBindings", Order = 100 )]
         public キーバインディング キーバインディング
         {
             get;
@@ -46,7 +52,7 @@ namespace DTXmatixx.設定
         /// <summary>
         ///     1～10?
         /// </summary>
-        [DataMember( Name = "WorkThreadSleep" )]
+        [DataMember( Name = "WorkThreadSleep", Order = 10 )]
         public int 入力発声スレッドのスリープ量ms
         {
             get;
@@ -65,19 +71,41 @@ namespace DTXmatixx.設定
 
         public static システム設定 復元する()
         {
-            return FDKUtilities.復元または新規作成する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
+            // いったん型なしで読み込む。
+            var jobj = JObject.Parse( File.ReadAllText( _ファイルパス.変数なしパス ) );
+
+            int version = ( (int?) jobj[ "Version" ] ) ?? 0;
+
+            switch( version )
+            {
+                case 0:
+                    return FDKUtilities.復元または新規作成する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
+
+                case 1:
+                    return JsonConvert.DeserializeObject<システム設定>( jobj.ToString() );
+
+                default:
+                    throw new NotSupportedException( $"未知のバージョン {version} が指定されました。" );
+            }
         }
         public void 保存する()
         {
-            FDKUtilities.保存する( this, _ファイルパス, UseSimpleDictionaryFormat: false );
+            switch( Version )
+            {
+                case 0:
+                    //FDKUtilities.保存する( this, _ファイルパス, UseSimpleDictionaryFormat: false );
+                case 1:
+                    File.WriteAllText( _ファイルパス.変数なしパス, JsonConvert.SerializeObject( this, Formatting.Indented ) );
+                    break;
+            }
         }
 
-        private static readonly string _ファイルパス = @"$(AppData)Configuration.json";
+        private static readonly VariablePath _ファイルパス = @"$(AppData)Configuration.json";
 
         /// <summary>
         ///		<see cref="曲検索フォルダ"/> のシリアライゼーションのための仲介役。
         /// </summary>
-        [DataMember( Name = "SongPaths" )]
+        [DataMember( Name = "SongPaths", Order = 10 )]
         private List<string> _曲検索フォルダProxy = null;
 
 

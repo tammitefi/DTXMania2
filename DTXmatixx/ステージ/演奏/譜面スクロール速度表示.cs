@@ -13,7 +13,7 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 譜面スクロール速度表示()
         {
-            this.子を追加する( this._文字画像 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小矩形.xml", 文字幅補正dpx: -3f ) );
+            this.子を追加する( this._文字画像 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json", 文字幅補正dpx: -3f ) );
         }
 
         protected override void On活性化()

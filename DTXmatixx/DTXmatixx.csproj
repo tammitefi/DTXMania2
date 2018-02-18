@@ -59,6 +59,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -90,14 +93,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.106.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.107.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.107.0\lib\net46\System.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.106.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.107.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.107.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.106.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.107.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.107.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -190,10 +193,12 @@
     <Compile Include="データベース\ユーザ\old\Record02.cs" />
     <Compile Include="データベース\ユーザ\old\Record03.cs" />
     <Compile Include="データベース\ユーザ\old\Record04.cs" />
+    <Compile Include="データベース\ユーザ\old\Record05.cs" />
     <Compile Include="データベース\ユーザ\old\User01.cs" />
     <Compile Include="データベース\ユーザ\old\User02.cs" />
     <Compile Include="データベース\ユーザ\old\User03.cs" />
     <Compile Include="データベース\ユーザ\old\User04.cs" />
+    <Compile Include="データベース\ユーザ\old\User05.cs" />
     <Compile Include="データベース\曲\old\Song01.cs" />
     <Compile Include="データベース\曲\old\Song02.cs" />
     <Compile Include="入力\ドラム入力イベント.cs" />
@@ -213,8 +218,8 @@
     <Compile Include="曲\難易度種別.cs" />
     <Compile Include="データベース\曲\SongDB.cs" />
     <Compile Include="データベース\SQLiteDBBase.cs" />
-    <Compile Include="データベース\ユーザ\Record05.cs" />
-    <Compile Include="データベース\ユーザ\User05.cs" />
+    <Compile Include="データベース\ユーザ\Record06.cs" />
+    <Compile Include="データベース\ユーザ\User06.cs" />
     <Compile Include="データベース\ユーザ\UserDB.cs" />
     <Compile Include="データベース\曲\Song03.cs" />
     <Compile Include="設定\AutoPlay種別.cs" />
@@ -253,6 +258,21 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="System\Images\コンソールフォント20x32.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\演奏\レーン配置\TypeB.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\演奏\レーン配置\TypeD.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\演奏\レーン配置\TypeA.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\演奏\レーン配置\TypeC.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="設定\ベストプラクティス：DataContractのバージョン管理.md" />
   </ItemGroup>
   <ItemGroup>
@@ -269,13 +289,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\!.png">
+    <None Include="System\Images\アイキャッチ\!.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\G.png">
+    <None Include="System\Images\アイキャッチ\G.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\O.png">
+    <None Include="System\Images\アイキャッチ\O.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\タイトルロゴ.png">
@@ -291,7 +311,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\タッチアイコン.png">
+    <None Include="System\Images\認証\タッチアイコン.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -301,7 +321,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ステージタイマー.png">
+    <None Include="System\Images\選曲\ステージタイマー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -316,72 +336,57 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ご注意ください.png">
+    <None Include="System\Images\曲読み込み\ご注意ください.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面_曲名パネル.png">
+    <None Include="System\Images\演奏\曲名パネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面.png">
+    <None Include="System\Images\演奏\演奏画面.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面_ヒットバー.png">
+    <None Include="System\Images\演奏\ヒットバー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムパッド.png">
+    <None Include="System\Images\演奏\ドラムパッド.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムチップ.png">
+    <None Include="System\Images\演奏\ドラムチップ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムチップ矩形.xml">
+    <None Include="System\Images\演奏\判定文字列.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\判定文字列.png">
+    <None Include="System\Images\演奏\チップ光.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\判定文字列矩形.xml">
+    <None Include="System\Images\演奏\チップ光輪.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\チップ光.png">
+    <None Include="System\Images\選曲\枠ランナー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\チップ光矩形.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\チップ光輪.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\選曲画面_枠ランナー.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\コンボ文字.png">
+    <None Include="System\Images\演奏\コンボ文字.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -457,17 +462,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\コンボ文字矩形.xml">
+    <None Include="System\Images\演奏\右サイドクリアパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\右サイドクリアパネル.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\左サイドクリアパネル.png">
+    <None Include="System\Images\演奏\左サイドクリアパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -477,62 +477,32 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パラメータ文字_小矩形.xml">
+    <None Include="System\Images\演奏\演奏位置カーソル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏位置カーソル.png">
+    <None Include="System\Images\演奏\レーンフラッシュ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏位置カーソル矩形.xml">
+    <None Include="System\Images\結果\曲名パネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\ドラムパッド矩形.xml">
+    <None Include="System\Images\演奏\パラメータ用判定種別文字.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\レーンフラッシュ矩形.xml">
+    <None Include="System\Images\選曲\曲ステータスパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\レーンフラッシュ.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\結果画面_曲名パネル.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\パラメータ用判定種別文字.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\パラメータ用判定種別文字矩形.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\選曲画面_曲ステータスパネル.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\スコア数字.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\スコア数字矩形.xml">
+    <None Include="System\Images\演奏\スコア数字.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -541,9 +511,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="System\Images\パラメータ文字_大.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="System\Images\パラメータ文字_大矩形.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -556,9 +523,6 @@
     <None Include="System\Images\パラメータ文字_大太斜.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\パラメータ文字_大太斜矩形.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="System\Images\曲別SKILLアイコン.png">
@@ -566,7 +530,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\選曲画面_BPMパネル.png">
+    <None Include="System\Images\選曲\BPMパネル.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -576,27 +540,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\終了画面.jpg">
+    <None Include="System\Images\終了\終了画面.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏画面_エキサイトゲージDANGER.png">
+    <None Include="System\Images\演奏\エキサイトゲージDANGER.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏画面_エキサイトゲージ通常.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="System\Images\認証画面_ユーザ選択ウィンドウ.png">
+    <None Include="System\Images\演奏\エキサイトゲージ通常.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パッド矢印矩形.xml">
+    <None Include="System\Images\認証\ユーザ選択ウィンドウ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="System\Images\パッド矢印.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -639,31 +600,101 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\認証画面_パネル_0.png">
+    <None Include="System\Images\認証\パネル_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_パネル_0_光彩あり.png">
+    <None Include="System\Images\認証\パネル_0_光彩あり.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_パネル_1.png">
+    <None Include="System\Images\認証\パネル_1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_パネル_1_光彩あり.png">
+    <None Include="System\Images\認証\パネル_1_光彩あり.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_肩書きパネル_0.png">
+    <None Include="System\Images\認証\肩書きパネル_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\認証画面_肩書きパネル_1.png">
+    <None Include="System\Images\認証\肩書きパネル_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\コンボ文字.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\スコア数字.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\チップ光.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\ドラムチップ.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\ドラムパッド.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\パッド矢印.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\パラメータ文字_小.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\パラメータ文字_大.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\パラメータ文字_大太斜.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\パラメータ用判定種別文字.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\レーンフラッシュ.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\演奏位置カーソル.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\判定文字列.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\コンソールフォント20x32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.107.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.107.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.107.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.107.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
 </Project>

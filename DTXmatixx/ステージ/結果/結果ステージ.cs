@@ -36,7 +36,7 @@ namespace DTXmatixx.ステージ.結果
         public 結果ステージ()
         {
             this.子を追加する( this._背景 = new 舞台画像() );
-            this.子を追加する( this._曲名パネル = new 画像( @"$(System)images\結果画面_曲名パネル.png" ) );
+            this.子を追加する( this._曲名パネル = new 画像( @"$(System)images\結果\曲名パネル.png" ) );
             this.子を追加する( this._曲名画像 = new 文字列画像() {
                 フォント名 = "HGMaruGothicMPRO",
                 フォントサイズpt = 40f,

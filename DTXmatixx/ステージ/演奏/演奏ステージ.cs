@@ -7,6 +7,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectInput;
 using CSCore;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.メディア.サウンド.WASAPI;
@@ -50,13 +51,13 @@ namespace DTXmatixx.ステージ.演奏
 
         public 演奏ステージ()
         {
-            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏画面.png" ) );
+            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
             this.子を追加する( this._レーンフレーム = new レーンフレーム() );
             this.子を追加する( this._曲名パネル = new 曲名パネル() );
-            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏画面_ヒットバー.png" ) );
+            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏\ヒットバー.png" ) );
             this.子を追加する( this._ドラムパッド = new ドラムパッド() );
             this.子を追加する( this._レーンフラッシュ = new レーンフラッシュ() );
-            this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\ドラムチップ.png" ) );
+            this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
             this.子を追加する( this._判定文字列 = new 判定文字列() );
             this.子を追加する( this._チップ光 = new チップ光() );
             this.子を追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
@@ -88,7 +89,8 @@ namespace DTXmatixx.ステージ.演奏
                 this._描画開始チップ番号 = -1;
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
-                this._ドラムチップ画像の矩形リスト = new 矩形リスト( @"$(System)images\ドラムチップ矩形.xml" );      // デバイスリソースは持たないので、子Activityではない。
+                this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムチップ.json" ).変数なしパス ) );
+
                 this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
                 this._背景動画 = null;
@@ -97,6 +99,8 @@ namespace DTXmatixx.ステージ.演奏
                 this._BGM再生開始済み = false;
                 //this._デコード済みWaveSource = null;	--> キャッシュなので消さない。
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
+
+                レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
 
                 this._チップの演奏状態 = new Dictionary<チップ, チップの演奏状態>();
                 foreach( var chip in App.演奏スコア.チップリスト )
@@ -262,13 +266,13 @@ namespace DTXmatixx.ステージ.演奏
                     //----------------
                     this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
-                        var オプション設定 = App.ユーザ管理.ログオン中のユーザ;
-                        var ドラムチッププロパティ = オプション設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
-                        var AutoPlay = オプション設定.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
+                        var ユーザ設定 = App.ユーザ管理.ログオン中のユーザ;
+                        var ドラムチッププロパティ = ユーザ設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
+                        var AutoPlay = ユーザ設定.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
 
                         bool チップはヒット済みである = this._チップの演奏状態[ chip ].ヒット済みである;
                         bool チップはまだヒットされていない = !( チップはヒット済みである );
-                        bool チップはMISSエリアに達している = ( ヒット判定バーと描画との時間sec > オプション設定.最大ヒット距離sec[ 判定種別.OK ] );
+                        bool チップはMISSエリアに達している = ( ヒット判定バーと描画との時間sec > ユーザ設定.最大ヒット距離sec[ 判定種別.OK ] );
                         bool チップは描画についてヒット判定バーを通過した = ( 0 <= ヒット判定バーと描画との時間sec );
                         bool チップは発声についてヒット判定バーを通過した = ( 0 <= ヒット判定バーと発声との時間sec );
 
@@ -373,7 +377,7 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         var ヒット処理済み入力 = new List<ドラム入力イベント>(); // ヒット処理が終わった入力は、二重処理しないよう、この中に追加しておく。
 
-                        var オプション設定 = App.ユーザ管理.ログオン中のユーザ;
+                        var ユーザ設定 = App.ユーザ管理.ログオン中のユーザ;
 
                         #region " 描画範囲内のすべてのチップについて、対応する入力があればヒット処理を行う。"
                         //----------------
@@ -381,24 +385,25 @@ namespace DTXmatixx.ステージ.演奏
 
                             // チップにヒットしている入力を探す。
 
-                            var ドラムチッププロパティ = オプション設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
-                            var AutoPlayである = オプション設定.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
+                            var ドラムチッププロパティ = ユーザ設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
+                            var AutoPlayである = ユーザ設定.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
 
                             bool チップはヒット済みである = this._チップの演奏状態[ chip ].ヒット済みである;
-                            bool チップはMISSエリアに達している = ( ヒット判定バーと描画との時間sec > オプション設定.最大ヒット距離sec[ 判定種別.OK ] );
+                            bool チップはMISSエリアに達している = ( ヒット判定バーと描画との時間sec > ユーザ設定.最大ヒット距離sec[ 判定種別.OK ] );
                             bool チップは描画についてヒット判定バーを通過した = ( 0 <= ヒット判定バーと描画との時間sec );
                             bool チップは発声についてヒット判定バーを通過した = ( 0 <= ヒット判定バーと発声との時間sec );
 
                             if( チップはヒット済みである || // ヒット済みなら何もしない。
                                 AutoPlayである ||          // AutoPlay チップなので何もしない。
                                 !( ドラムチッププロパティ.AutoPlayOFF_ユーザヒット ) ||   // このチップは AutoPlay OFF の時でもユーザヒットの対象ではないので何もしない。
-                                !( ヒット判定バーと描画との時間sec >= -( オプション設定.最大ヒット距離sec[ 判定種別.OK ] ) && !( チップはMISSエリアに達している ) ) )    // チップはヒット可能エリアの外にあるので何もしない。
+                                !( ヒット判定バーと描画との時間sec >= -( ユーザ設定.最大ヒット距離sec[ 判定種別.OK ] ) && !( チップはMISSエリアに達している ) ) )    // チップはヒット可能エリアの外にあるので何もしない。
                                 return;
 
                             var チップにヒットしている入力 = App.入力管理.ポーリング結果.FirstOrDefault( ( 入力 ) => {
                                 
-                                if( 入力.InputEvent.離された ||              // 押下入力じゃないなら無視。
-                                    ヒット処理済み入力.Contains( 入力 ) )     // すでに今回のターンで処理済み（＝処理済み入力リストに追加済み）なら無視。
+                                if( 入力.InputEvent.離された ||                   // 押下入力じゃないなら無視。
+                                    ヒット処理済み入力.Contains( 入力 ) ||         // すでに今回のターンで処理済み（＝処理済み入力リストに追加済み）なら無視。
+                                    入力.Type == ドラム入力種別.HiHat_Control )    // HiHat_Control 入力はここでは無視。
                                     return false;
 
                                 var チップの入力グループ = ドラムチッププロパティ.入力グループ種別;
@@ -411,7 +416,7 @@ namespace DTXmatixx.ステージ.演奏
                                 // (B) 入力グループ種別が Unknown ではない場合　→　入力グループ種別で比較
                                 else
                                 {
-                                    var 入力の入力グループ = オプション設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
+                                    var 入力の入力グループ = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
 
                                     return ( チップの入力グループ == 入力の入力グループ );
                                 }
@@ -429,9 +434,9 @@ namespace DTXmatixx.ステージ.演奏
                                 double ヒット判定バーとの時間の絶対値sec = Math.Abs( ヒット判定バーと描画との時間sec );
                                 switch( ヒット判定バーとの時間の絶対値sec )
                                 {
-                                    case double span when( span <= オプション設定.最大ヒット距離sec[ 判定種別.PERFECT ] ): 判定 = 判定種別.PERFECT; break;
-                                    case double span when( span <= オプション設定.最大ヒット距離sec[ 判定種別.GREAT ] ): 判定 = 判定種別.GREAT; break;
-                                    case double span when( span <= オプション設定.最大ヒット距離sec[ 判定種別.GOOD ] ): 判定 = 判定種別.GOOD; break;
+                                    case double span when( span <= ユーザ設定.最大ヒット距離sec[ 判定種別.PERFECT ] ): 判定 = 判定種別.PERFECT; break;
+                                    case double span when( span <= ユーザ設定.最大ヒット距離sec[ 判定種別.GREAT ] ): 判定 = 判定種別.GREAT; break;
+                                    case double span when( span <= ユーザ設定.最大ヒット距離sec[ 判定種別.GOOD ] ): 判定 = 判定種別.GOOD; break;
                                     default: 判定 = 判定種別.OK; break;
                                 }
 
@@ -439,7 +444,7 @@ namespace DTXmatixx.ステージ.演奏
                                 this._チップのヒット処理を行う(
                                     chip,
                                     判定,
-                                    ( オプション設定.ユーザ入力によるドラムの音を発声する ) ? ドラムチッププロパティ.AutoPlayOFF_ユーザヒット_再生 : false,
+                                    ( ユーザ設定.ユーザ入力によるドラムの音を発声する ) ? ドラムチッププロパティ.AutoPlayOFF_ユーザヒット_再生 : false,
                                     ドラムチッププロパティ.AutoPlayOFF_ユーザヒット_判定,
                                     ドラムチッププロパティ.AutoPlayOFF_ユーザヒット_非表示,
                                     ヒット判定バーと発声との時間sec );
@@ -463,7 +468,7 @@ namespace DTXmatixx.ステージ.演奏
                                 if( 入力.InputEvent.離された )
                                     continue;
 
-                                var プロパティs = オプション設定.ドラムチッププロパティ管理.チップtoプロパティ.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) );
+                                var プロパティs = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) );
 
                                 //for( int i = 0; i < プロパティs.Count(); i++ )
                                 int i = 0;  // １つの入力で処理するのは、１つの表示レーン種別のみ。
@@ -478,16 +483,15 @@ namespace DTXmatixx.ステージ.演奏
 
                         #region " どのチップにもヒットしなかった入力は空打ちとみなし、空打ち音を再生する。"
                         //----------------
-                        if( オプション設定.ユーザ入力によるドラムの音を発声する )
+                        if( ユーザ設定.ユーザ入力によるドラムの音を発声する )
                         {
                             foreach( var 入力 in App.入力管理.ポーリング結果 )
                             {
-
                                 if( ヒット処理済み入力.Contains( 入力 ) ||   // ヒット済みなら無視。
                                     入力.InputEvent.離された )              // 押下じゃないなら無視。
                                     continue;
 
-                                var プロパティs = オプション設定.ドラムチッププロパティ管理.チップtoプロパティ.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) );
+                                var プロパティs = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) );
 
                                 for( int i = 0; i < プロパティs.Count(); i++ )
                                 {
@@ -530,8 +534,9 @@ namespace DTXmatixx.ステージ.演奏
                         this.BGMを停止する();
                         App.WAV管理.すべての発声を停止する();    // DTXでのBGMサウンドはこっちに含まれる。
 
-                        this.現在のフェーズ = フェーズ.キャンセル通知;    // 通知
-                                                        //----------------
+                        // 進行描画スレッドへの通知フェーズを挟む。
+                        this.現在のフェーズ = フェーズ.キャンセル通知;
+                        //----------------
                         #endregion
                     }
                     if( App.入力管理.Keyboard.キーが押された( 0, Key.Up ) )
@@ -874,11 +879,11 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private 画像 _ドラムチップ画像 = null;
-        private 矩形リスト _ドラムチップ画像の矩形リスト = null;
+        private JObject _ドラムチップ画像設定 = null;
         private LoopCounter _ドラムチップアニメ = null;
         private void _チップを描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
-            Debug.Assert( null != this._ドラムチップ画像の矩形リスト );
+            Debug.Assert( null != this._ドラムチップ画像設定 );
 
             this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
@@ -928,20 +933,17 @@ namespace DTXmatixx.ステージ.演奏
                 if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
                     ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() ] );           // xml の記述ミスの検出用 Assert 。
-                    Debug.Assert( null != this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() + "_back" ] ); //
-
-                    var たて方向中央位置dpx = this._ドラムチップ画像の矩形リスト[ "縦方向中央位置" ]?.Height ?? 0f;
-                    var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.レーンtoチップの左端位置dpx[ 表示レーン種別 ];
+                    var たて方向中央位置dpx = (float) ( this._ドラムチップ画像設定[ "縦方向中央位置" ] );
+                    var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ 表示レーン種別 ];
 
                     #region " チップ背景（あれば）を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() + "_back" ];
+                        var 矩形 = FDKUtilities.JsonToRectangleF( this._ドラムチップ画像設定[ "矩形リスト" ][ 表示チップ種別.ToString() + "_back" ] );
 
-                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Value.Width && 0 < 矩形.Value.Height ) ) )
+                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
-                            var 矩形中央 = new Vector2( 矩形.Value.Width / 2f, 矩形.Value.Height / 2f );
+                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
                             var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
 
                             var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
@@ -1002,7 +1004,7 @@ namespace DTXmatixx.ステージ.演奏
                             this._ドラムチップ画像.描画する(
                                 dc,
                                 変換行列2D,
-                                転送元矩形: 矩形.Value,
+                                転送元矩形: 矩形,
                                 不透明度0to1: ( 1f - 消滅割合 ) );
                         }
                     }
@@ -1012,11 +1014,11 @@ namespace DTXmatixx.ステージ.演奏
                     #region " チップ本体を描画する。"
                     //----------------
                     {
-                        var 矩形 = this._ドラムチップ画像の矩形リスト[ 表示チップ種別.ToString() ];
+                        var 矩形 = FDKUtilities.JsonToRectangleF( this._ドラムチップ画像設定[ "矩形リスト" ][ 表示チップ種別.ToString() ] );
 
-                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Value.Width && 0 < 矩形.Value.Height ) ) )
+                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
-                            var 矩形中央 = new Vector2( 矩形.Value.Width / 2f, 矩形.Value.Height / 2f );
+                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
 
                             // 変換。
                             var 変換行列2D =
@@ -1028,7 +1030,7 @@ namespace DTXmatixx.ステージ.演奏
                             this._ドラムチップ画像.描画する(
                                 dc,
                                 変換行列2D,
-                                転送元矩形: 矩形.Value,
+                                転送元矩形: 矩形,
                                 不透明度0to1: 1f - 消滅割合 );
                         }
                     }

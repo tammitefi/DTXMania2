@@ -19,7 +19,7 @@ namespace DTXmatixx.ステージ.演奏
 
         public 左サイドクリアパネル()
         {
-            this.子を追加する( this._背景 = new 画像( @"$(System)images\左サイドクリアパネル.png" ) );
+            this.子を追加する( this._背景 = new 画像( @"$(System)images\演奏\左サイドクリアパネル.png" ) );
             this.子を追加する( this.クリアパネル = new 描画可能テクスチャ( new Size2F( 388, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
         }
 

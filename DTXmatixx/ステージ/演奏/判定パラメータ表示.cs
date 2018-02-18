@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
+
 namespace DTXmatixx.ステージ.演奏
 {
     class 判定パラメータ表示 : Activity
     {
         public 判定パラメータ表示()
         {
-            this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小矩形.xml" ) );
-            this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\パラメータ用判定種別文字.png" ) );
+            this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json" ) );
+            this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
         }
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._判定種別文字の矩形リスト = new 矩形リスト( @"$(System)images\パラメータ用判定種別文字矩形.xml" );
+                this._判定種別文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\パラメータ用判定種別文字.json" ).変数なしパス ) );
             }
         }
 
@@ -78,7 +81,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 y += 3f;    // ちょっと間を開けて
 
-                var 矩形 = (RectangleF) this._判定種別文字の矩形リスト[ "MaxCombo" ];
+                var 矩形 = FDKUtilities.JsonToRectangleF( this._判定種別文字設定[ "矩形リスト" ][ "MaxCombo" ] );
                 dc.Transform =
                     scaling *
                     Matrix3x2.Translation( x, y ) *
@@ -92,14 +95,13 @@ namespace DTXmatixx.ステージ.演奏
                     pretrans;
                 this.数値を描画する( dc, 0f, 0f, MaxCombo, 桁数: 4 );
                 this.数値を描画する( dc, _dr, 0f, (int) Math.Floor( 100.0 * MaxCombo / 合計 ), 桁数: 3 );    // 切り捨てでいいやもう
-
+                this._パラメータ文字.描画する( dc, _dp, 0f, "%" );
             } );
 
-            this._パラメータ文字.描画する( dc, _dp, 0f, "%" );
         }
         public void パラメータを一行描画する( DeviceContext1 dc, float x, float y, 判定種別 judge, int ヒット数, int ヒット割合, float 不透明度 = 1.0f )
         {
-            var 矩形 = (RectangleF) this._判定種別文字の矩形リスト[ judge.ToString() ];
+            var 矩形 = FDKUtilities.JsonToRectangleF( this._判定種別文字設定[ "矩形リスト" ][ judge.ToString() ] );
             this._判定種別文字.描画する( dc, x, y - 4f, 不透明度, 転送元矩形: 矩形 );
             x += 矩形.Width + 16f;
 
@@ -115,7 +117,7 @@ namespace DTXmatixx.ステージ.演奏
 
         protected 画像フォント _パラメータ文字 = null;
         protected 画像 _判定種別文字 = null;
-        protected 矩形リスト _判定種別文字の矩形リスト = null;
+        protected JObject _判定種別文字設定 = null;
 
         protected void 数値を描画する( DeviceContext1 dc, float x, float y, int 描画する数値, int 桁数, float 不透明度 = 1.0f )
         {

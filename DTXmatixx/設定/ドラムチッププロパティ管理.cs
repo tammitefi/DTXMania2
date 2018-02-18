@@ -546,7 +546,7 @@ namespace DTXmatixx.設定
                         レーン種別 = レーン種別.Tom2,
                         表示レーン種別 = 表示レーン種別.Tom2,
                         //表示チップ種別 = ...
-                        ドラム入力種別 = ドラム入力種別.Tom2,
+                        ドラム入力種別 = ドラム入力種別.Tom2_Rim,
                         AutoPlay種別 = AutoPlay種別.Tom2,
                         入力グループ種別 = 入力グループ種別.Tom2,
                         発声前消音 = false,

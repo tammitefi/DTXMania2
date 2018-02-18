@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
+using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.カウンタ;
@@ -14,25 +16,24 @@ namespace DTXmatixx.ステージ.演奏
     {
         public ドラムパッド()
         {
-            this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\ドラムパッド.png" ) );
+            this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
         }
 
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._パッド絵の矩形リスト = new 矩形リスト( @"$(System)images\ドラムパッド矩形.xml" );
-
+                this._パッド絵設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムパッド.json" ).変数なしパス ) );
                 this._レーンtoパッドContext = new Dictionary<表示レーン種別, パッドContext>();
 
                 foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
                 {
                     this._レーンtoパッドContext.Add( lane, new パッドContext() {
                         左上位置dpx = new Vector2(
-                            x: レーンフレーム.領域.X + レーンフレーム.レーンtoチップの左端位置dpx[ lane ],
+                            x: レーンフレーム.領域.X + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
                             y: 840f ),
-                        転送元矩形 = (RectangleF) this._パッド絵の矩形リスト[ lane.ToString() ],
-                        転送元矩形Flush = (RectangleF) this._パッド絵の矩形リスト[ lane.ToString() + "_Flush" ],
+                        転送元矩形 = FDKUtilities.JsonToRectangleF( this._パッド絵設定[ "矩形リスト" ][ lane.ToString() ] ),
+                        転送元矩形Flush = FDKUtilities.JsonToRectangleF( this._パッド絵設定[ "矩形リスト" ][ lane.ToString() + "_Flush" ] ),
                         アニメカウンタ = new Counter(),
                     } );
                 }
@@ -85,7 +86,7 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private 画像 _パッド絵 = null;
-        private 矩形リスト _パッド絵の矩形リスト = null;
+        private JObject _パッド絵設定 = null;
 
         private struct パッドContext
         {

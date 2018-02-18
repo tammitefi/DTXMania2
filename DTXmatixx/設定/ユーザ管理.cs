@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using FDK;
 
-using User = DTXmatixx.データベース.ユーザ.User05;
+using User = DTXmatixx.データベース.ユーザ.User06;
 
 namespace DTXmatixx.設定
 {

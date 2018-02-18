@@ -110,7 +110,7 @@ namespace DTXmatixx.ステージ.結果
                 y += _改行幅dpx;
 
                 x = 基点X + (float) this._パラメータアニメ.X位置オフセット[ 5 ].Value;
-                var 矩形 = (RectangleF) this._判定種別文字の矩形リスト[ "MaxCombo" ];
+                var 矩形 = FDKUtilities.JsonToRectangleF( this._判定種別文字設定[ "矩形リスト" ][ "MaxCombo" ] );
                 this._判定種別文字.描画する( dc, x, y, 転送元矩形: 矩形, 不透明度0to1: (float) this._パラメータアニメ.不透明度[ 5 ].Value );
 
                 x += 矩形.Width + 16f;
