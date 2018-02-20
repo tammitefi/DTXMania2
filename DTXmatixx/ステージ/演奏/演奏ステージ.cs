@@ -661,7 +661,29 @@ namespace DTXmatixx.ステージ.演奏
                         if( this._背景動画開始済み )
                         {
                             // 背景動画チップがヒット済みなら、背景動画の進行描画を行う。
-                            this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Height ), 1.0f );
+
+                            // (A) 75%縮小表示
+                            {
+                                float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
+                                float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+
+                                this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );  // 全体
+
+                                float 拡大縮小率 = 0.75f;
+                                float 上移動 = 100.0f;
+
+                                // 進行描画せず、直前に取得したフレームをそのまま描画する。
+                                this._背景動画?.前のフレームを描画する( dc, new RectangleF(
+                                    w * ( 1f - 拡大縮小率 ) / 2f,
+                                    h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
+                                    w * 拡大縮小率,
+                                    h * 拡大縮小率 ) );
+                            }
+                            // (B) 100%全体表示
+                            {
+                                //this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Height ), 1.0f );
+                            }
+
 
                             // 開始直後のデコードが重たいかもしれないので、演奏時刻をここで更新しておく。	---> 重たくても更新禁止！（譜面スクロールがガタつく原因になる）
                             //演奏時刻sec = this._演奏開始からの経過時間secを返す();
