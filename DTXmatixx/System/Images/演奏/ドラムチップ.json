@@ -39,8 +39,8 @@
     "LeftCymbal_back": [ 0, 102, 96, 98 ],
     "RightCymbal_back": [ 673, 102, 96, 98 ],
     "HiHat_back": [ 103, 102, 70, 98 ],
-    "HiHat_Open_back": [ 103, 102, 70, 98 ],
-    "HiHat_HalfOpen_back": [ 103, 102, 70, 98 ],
+    "HiHat_Open_back": [ 103, 202, 70, 98 ],
+    "HiHat_HalfOpen_back": [ 103, 202, 70, 98 ],
     "Foot_back": [ 177, 102, 73, 98 ],
     "LeftPedal_back": [ 177, 102, 73, 98 ],
     "Snare_back": [ 0, 0, 0, 0 ],
@@ -64,7 +64,7 @@
     "LeftSplash_back": [ 0, 102, 96, 98 ],
     "RightSplash_back": [ 673, 102, 96, 98 ],
     "LeftCymbal_Mute_back": [ 0, 0, 0, 0 ],
-    "RightCymbal_Mute_back": [ 0, 0, 0, 0 ]
+    "RightCymbal_Mute_back": [ 0, 0, 0, 0 ],
   },
 
   "//4": "縦方向中央位置(全チップ共通",
