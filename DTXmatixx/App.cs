@@ -106,6 +106,11 @@ namespace DTXmatixx
         public App()
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
+#if DEBUG
+            SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
+            SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
+#endif
+
             #region " プロダクトバージョンのメジャー番号をリリース番号として取得する。"
             //----------------
             if( int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) )
