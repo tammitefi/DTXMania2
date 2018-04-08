@@ -10,7 +10,7 @@ using CSCore;
 using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
-using FDK.メディア.サウンド.WASAPI;
+using FDK.メディア.サウンド;
 using FDK.カウンタ;
 using SSTFormat.v3;
 using DTXmatixx.設定;

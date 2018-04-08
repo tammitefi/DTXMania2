@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.入力;
 using FDK.メディア;
-using FDK.メディア.サウンド.WASAPI;
+using FDK.メディア.サウンド;
 using FDK.同期;
 using SSTFormat.v3;
 using DTXmatixx.ステージ;
