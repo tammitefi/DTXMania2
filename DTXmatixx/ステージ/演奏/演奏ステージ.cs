@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
 using FDK.メディア.サウンド;
+using FDK.メディア.ビデオ;
 using FDK.カウンタ;
 using SSTFormat.v3;
 using DTXmatixx.設定;
@@ -117,7 +118,7 @@ namespace DTXmatixx.ステージ.演奏
                         Log.Info( "背景動画とBGMを読み込みます。" );
 
                         // 動画を子リストに追加。
-                        this.子を追加する( this._背景動画 = new 動画( App.演奏スコア.背景動画ファイル名 ) );
+                        this.子を追加する( this._背景動画 = new Video( App.演奏スコア.背景動画ファイル名 ) );
 
                         // 動画から音声パートを抽出して BGM を作成。
                         try
@@ -147,7 +148,7 @@ namespace DTXmatixx.ステージ.演奏
                         var path = Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value );
 
                         // 動画を子リストに追加。
-                        this.子を追加する( this._背景動画 = new 動画( path ) );
+                        this.子を追加する( this._背景動画 = new Video( path ) );
 
                         // BGM パートは使わない。
                         this._BGM = null;
@@ -673,7 +674,7 @@ namespace DTXmatixx.ステージ.演奏
                                 float 上移動 = 100.0f;
 
                                 // 進行描画せず、直前に取得したフレームをそのまま描画する。
-                                this._背景動画?.前のフレームを描画する( dc, new RectangleF(
+                                this._背景動画?.最後のフレームを再描画する( dc, new RectangleF(
                                     w * ( 1f - 拡大縮小率 ) / 2f,
                                     h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
                                     w * 拡大縮小率,
@@ -1064,7 +1065,7 @@ namespace DTXmatixx.ステージ.演奏
             } );
         }
 
-        private 動画 _背景動画 = null;
+        private Video _背景動画 = null;
         private bool _背景動画開始済み = false;
 
         /// <remarks>
