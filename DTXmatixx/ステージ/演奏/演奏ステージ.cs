@@ -110,9 +110,39 @@ namespace DTXmatixx.ステージ.演奏
                 {
                     #region " 背景動画とBGMを生成する。"
                     //----------------
-                    if( App.演奏スコア.背景動画ファイル名.Nullでも空でもない() )
+                    if( App.演奏スコア.動画ID.Nullでも空でもない() )
                     {
-                        #region " (A) SST準拠の動画とBGM "
+                        #region " (A) SSTF準拠のストリーミング動画 "
+                        //----------------
+                        Log.Info( $"背景動画とBGMを指定された動画IDから読み込みます。[{App.演奏スコア.動画ID}]" );
+                        var items = App.演奏スコア.動画ID.Split( ':' );
+                        if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
+                        {
+                            switch( items[ 0 ].ToLower() )
+                            {
+                                case "nicovideo":
+                                    {
+                                        var apiConfig = JObject.Parse( File.ReadAllText( new VariablePath( @"$(AppData)nicovideo.json" ).変数なしパス ) );
+                                        this._動画とBGM = 動画とBGM.CreateFromニコ動( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
+                                        this._背景動画forDTX = null;
+                                    }
+                                    break;
+
+                                default:
+                                    Log.ERROR( $"対応していない動画プロトコルが指定されています。[{App.演奏スコア.動画ID}]" );
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            Log.ERROR( $"動画IDの指定に誤りがあります。[{App.演奏スコア.動画ID}]" );
+                        }
+                        //----------------
+                        #endregion
+                    }
+                    else if( App.演奏スコア.背景動画ファイル名.Nullでも空でもない() )
+                    {
+                        #region " (B) SST準拠の動画とBGM（ローカルファイル）"
                         //----------------
                         Log.Info( "背景動画とBGMを読み込みます。" );
                         this._動画とBGM = 動画とBGM.CreateFromFile( App.演奏スコア.背景動画ファイル名, App.サウンドデバイス );
@@ -122,7 +152,7 @@ namespace DTXmatixx.ステージ.演奏
                     }
                     else if( 0 < App.演奏スコア.dicAVI.Count )
                     {
-                        #region " (B) DTX準拠の動画 "
+                        #region " (C) DTX準拠の動画 "
                         //----------------
                         Log.Info( "背景動画を読み込みます。" );
 
