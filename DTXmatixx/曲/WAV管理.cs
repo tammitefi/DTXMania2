@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using CSCore;
 using FDK;
-using FDK.メディア.サウンド.WASAPI;
+using FDK.メディア.サウンド;
 using SSTFormat.v3;
 using DTXmatixx.設定;
 

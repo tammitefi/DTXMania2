@@ -10,7 +10,8 @@ using CSCore;
 using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.メディア;
-using FDK.メディア.サウンド.WASAPI;
+using FDK.メディア.サウンド;
+using FDK.メディア.ビデオ;
 using FDK.カウンタ;
 using SSTFormat.v3;
 using DTXmatixx.設定;
@@ -48,6 +49,8 @@ namespace DTXmatixx.ステージ.演奏
             get;
             protected set;
         } = null;
+        public 動画とBGM 動画とBGM
+            => this._動画とBGM;
 
         public 演奏ステージ()
         {
@@ -93,11 +96,8 @@ namespace DTXmatixx.ステージ.演奏
 
                 this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
-                this._背景動画 = null;
-                this._BGM = null;
-                this._背景動画開始済み = false;
-                this._BGM再生開始済み = false;
-                //this._デコード済みWaveSource = null;	--> キャッシュなので消さない。
+                this._動画とBGM = null;
+                this._動画とBGMの再生開始済み = false;
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
 
                 レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
@@ -115,25 +115,8 @@ namespace DTXmatixx.ステージ.演奏
                         #region " (A) SST準拠の動画とBGM "
                         //----------------
                         Log.Info( "背景動画とBGMを読み込みます。" );
-
-                        // 動画を子リストに追加。
-                        this.子を追加する( this._背景動画 = new 動画( App.演奏スコア.背景動画ファイル名 ) );
-
-                        // 動画から音声パートを抽出して BGM を作成。
-                        try
-                        {
-                            this._デコード済みWaveSource?.Dispose();
-                            this._デコード済みWaveSource = SampleSourceFactory.Create( App.サウンドデバイス, App.演奏スコア.背景動画ファイル名 );
-
-                            this._BGM?.Dispose();
-                            this._BGM = new Sound( App.サウンドデバイス, this._デコード済みWaveSource );
-                        }
-                        catch( InvalidDataException )
-                        {
-                            // DTXの動画のようにサウンドを含まない動画の場合、この例外が発生するだろう。
-                            Log.WARNING( "背景動画ファイルからBGMを生成することに失敗しました。" );
-                            this._BGM = null;
-                        }
+                        this._動画とBGM = 動画とBGM.CreateFromFile( App.演奏スコア.背景動画ファイル名, App.サウンドデバイス );
+                        this._背景動画forDTX = null;
                         //----------------
                         #endregion
                     }
@@ -147,10 +130,8 @@ namespace DTXmatixx.ステージ.演奏
                         var path = Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value );
 
                         // 動画を子リストに追加。
-                        this.子を追加する( this._背景動画 = new 動画( path ) );
-
-                        // BGM パートは使わない。
-                        this._BGM = null;
+                        this.子を追加する( this._背景動画forDTX = new Video( path ) );
+                        this._動画とBGM = null;
                         //----------------
                         #endregion
                     }
@@ -198,10 +179,11 @@ namespace DTXmatixx.ステージ.演奏
                 #endregion
 
                 // 背景動画を生成した場合は子リストから削除。
-                if( null != this._背景動画 )
-                    this.子を削除する( this._背景動画 );
+                if( null != this._背景動画forDTX )
+                    this.子を削除する( this._背景動画forDTX );
 
-                //App.WAV管理?.Dispose();	--> ここではまだ解放しない。結果ステージの非活性化時に解放する。
+                //this._動画とBGM.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
+                //App.WAV管理?.Dispose();	
                 //App.WAV管理 = null;
 
                 foreach( var kvp in this._チップの演奏状態 )
@@ -231,16 +213,6 @@ namespace DTXmatixx.ステージ.演奏
             // 高速進行
 
             this._FPS.FPSをカウントしプロパティを更新する();
-
-            #region " 背景動画が再生されているのにBGMがまだ再生されていないなら、すぐに再生を開始する。"
-            //----------------
-            if( this._背景動画開始済み && !( this._BGM再生開始済み ) )
-            {
-                this._BGM?.Play();
-                this._BGM再生開始済み = true;
-            }
-            //----------------
-            #endregion
 
             switch( this.現在のフェーズ )
             {
@@ -658,7 +630,7 @@ namespace DTXmatixx.ステージ.演奏
                         //----------------
                         #endregion
 
-                        if( this._背景動画開始済み )
+                        if( this._動画とBGMの再生開始済み )
                         {
                             // 背景動画チップがヒット済みなら、背景動画の進行描画を行う。
 
@@ -666,14 +638,15 @@ namespace DTXmatixx.ステージ.演奏
                             {
                                 float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
                                 float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+                                var video = this._動画とBGM?.Video ?? this._背景動画forDTX;
 
-                                this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );  // 全体
+                                video?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );  // 全体
 
                                 float 拡大縮小率 = 0.75f;
                                 float 上移動 = 100.0f;
 
                                 // 進行描画せず、直前に取得したフレームをそのまま描画する。
-                                this._背景動画?.前のフレームを描画する( dc, new RectangleF(
+                                video?.最後のフレームを再描画する( dc, new RectangleF(
                                     w * ( 1f - 拡大縮小率 ) / 2f,
                                     h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
                                     w * 拡大縮小率,
@@ -759,7 +732,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._描画開始チップ番号 = -1;   // 演奏停止
 
                 this.BGMを停止する();
-                this._背景動画開始済み = false;
+                this._動画とBGMの再生開始済み = false;
 
                 //this._コンボ.COMBO値 = 0;
             }
@@ -772,12 +745,8 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._BGM?.Stop();
-                this._BGM?.Dispose();
-                this._BGM = null;
-
-                //this._デコード済みWaveSource?.Dispose();	--> ここではまだ解放しない。
-                //this._デコード済みWaveSource = null;
+                this._動画とBGM?.Dispose();
+                this._動画とBGM = null;
             }
         }
         public void BGMのキャッシュを解放する()
@@ -785,7 +754,6 @@ namespace DTXmatixx.ステージ.演奏
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.BGMを停止する();
-                FDKUtilities.解放する( ref this._デコード済みWaveSource );
             }
         }
 
@@ -1064,26 +1032,9 @@ namespace DTXmatixx.ステージ.演奏
             } );
         }
 
-        private 動画 _背景動画 = null;
-        private bool _背景動画開始済み = false;
-
-        /// <remarks>
-        ///		停止と解放は、演奏ステージクラスの非活性化後に、外部から行われる。
-        ///		<see cref="SST.ステージ.演奏.演奏ステージ.BGMを停止する"/>
-        ///		<see cref="SST.ステージ.演奏.演奏ステージ.BGMのキャッシュを解放する"/>
-        ///		DTX 準拠スコアでは使わない。
-        /// </remarks>
-        private Sound _BGM = null;
-        private bool _BGM再生開始済み = false;
-
-        /// <summary>
-        ///		BGM の生成もとになるデコード済みサウンドデータ。
-        ///	</summary>
-        ///	<remarks>
-        ///		活性化と非活性化に関係なく、常に最後にデコードしたデータを持つ。（キャッシュ）
-        ///		演奏ステージインスタンスを破棄する際に、このインスタンスもDisposeすること。
-        /// </remarks>
-        private ISampleSource _デコード済みWaveSource = null;
+        private Video _背景動画forDTX = null;
+        private 動画とBGM _動画とBGM = null;
+        private bool _動画とBGMの再生開始済み = false;
 
         private void _チップのヒット処理を行う( チップ chip, 判定種別 judge, bool 再生, bool 判定, bool 非表示, double ヒット判定バーと発声との時間sec )
         {
@@ -1157,11 +1108,9 @@ namespace DTXmatixx.ステージ.演奏
                     // (A-a) 背景動画
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._背景動画?.再生を開始する();
-                    this._背景動画開始済み = true;
-
-                    this._BGM?.Play( 再生開始位置sec );
-                    this._BGM再生開始済み = true;
+                    this._動画とBGM?.Video?.再生を開始する();
+                    this._動画とBGM?.Music?.Play();
+                    this._動画とBGMの再生開始済み = true;
 
                     App.サウンドタイマ.再開する();
                 }
@@ -1184,8 +1133,8 @@ namespace DTXmatixx.ステージ.演奏
                     // (B-a) 背景動画
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._背景動画?.再生を開始する();
-                    this._背景動画開始済み = true;
+                    this._背景動画forDTX?.再生を開始する();
+                    this._動画とBGMの再生開始済み = true;
 
                     App.サウンドタイマ.再開する();
                 }

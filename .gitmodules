@@ -1,7 +1,8 @@
-[submodule "SSTFormatリポジトリ"]
-	path = SSTFormatリポジトリ
-	url = git@github.com:kumakamikoubou/SSTFormat.git
 [submodule "FDKリポジトリ"]
 	path = FDKリポジトリ
 	url = https://github.com/DTXMania/FDK.git
+	branch = develop
+[submodule "SSTFormatリポジトリ"]
+	path = SSTFormatリポジトリ
+	url = git@github.com:kumakamikoubou/SSTFormat.git
 	branch = develop

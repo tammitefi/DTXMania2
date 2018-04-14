@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.入力;
 using FDK.メディア;
-using FDK.メディア.サウンド.WASAPI;
+using FDK.メディア.サウンド;
 using FDK.同期;
 using SSTFormat.v3;
 using DTXmatixx.ステージ;
@@ -72,16 +72,6 @@ namespace DTXmatixx
             get;
             protected set;
         } = null;
-        public static スコア 演奏スコア
-        {
-            get;
-            set;
-        } = null;
-        public static WAV管理 WAV管理
-        {
-            get;
-            set;
-        } = null;
         public static SoundDevice サウンドデバイス
         {
             get;
@@ -101,6 +91,17 @@ namespace DTXmatixx
         {
             get;
             protected set;
+        } = null;
+
+        public static スコア 演奏スコア
+        {
+            get;
+            set;
+        } = null;
+        public static WAV管理 WAV管理
+        {
+            get;
+            set;
         } = null;
 
         public App()
