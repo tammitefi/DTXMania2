@@ -12,6 +12,8 @@ using FDK;
 using FDK.メディア;
 using FDK.メディア.サウンド;
 using FDK.メディア.ビデオ;
+using FDK.メディア.ビデオ.Sources;
+using FDK.メディア.ストリーミング;
 using FDK.カウンタ;
 using SSTFormat.v3;
 using DTXmatixx.設定;
@@ -123,7 +125,7 @@ namespace DTXmatixx.ステージ.演奏
                                 case "nicovideo":
                                     {
                                         var apiConfig = JObject.Parse( File.ReadAllText( new VariablePath( @"$(AppData)nicovideo.json" ).変数なしパス ) );
-                                        this._動画とBGM = 動画とBGM.CreateFromニコ動( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
+                                        this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
                                         this._背景動画forDTX = null;
                                     }
                                     break;
@@ -145,7 +147,7 @@ namespace DTXmatixx.ステージ.演奏
                         #region " (B) SST準拠の動画とBGM（ローカルファイル）"
                         //----------------
                         Log.Info( "背景動画とBGMを読み込みます。" );
-                        this._動画とBGM = 動画とBGM.CreateFromFile( App.演奏スコア.背景動画ファイル名, App.サウンドデバイス );
+                        this._動画とBGM = new 動画とBGM( App.演奏スコア.背景動画ファイル名, App.サウンドデバイス );
                         this._背景動画forDTX = null;
                         //----------------
                         #endregion
@@ -1062,8 +1064,8 @@ namespace DTXmatixx.ステージ.演奏
             } );
         }
 
-        private Video _背景動画forDTX = null;
-        private 動画とBGM _動画とBGM = null;
+        private Video _背景動画forDTX = null; // DTXの動画はこっち
+        private 動画とBGM _動画とBGM = null;  // SSTFの動画とBGMはこっち
         private bool _動画とBGMの再生開始済み = false;
 
         private void _チップのヒット処理を行う( チップ chip, 判定種別 judge, bool 再生, bool 判定, bool 非表示, double ヒット判定バーと発声との時間sec )
@@ -1138,8 +1140,7 @@ namespace DTXmatixx.ステージ.演奏
                     // (A-a) 背景動画
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._動画とBGM?.Video?.再生を開始する();
-                    this._動画とBGM?.Music?.Play();
+                    this._動画とBGM?.再生を開始する();
                     this._動画とBGMの再生開始済み = true;
 
                     App.サウンドタイマ.再開する();
