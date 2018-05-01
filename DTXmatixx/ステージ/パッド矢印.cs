@@ -17,9 +17,11 @@ namespace DTXmatixx.ステージ
 
         public パッド矢印()
         {
-            this.子を追加する( this._矢印画像 = new 画像( @"$(System)images\パッド矢印.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._矢印画像 = new 画像( @"$(System)images\パッド矢印.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -33,7 +35,6 @@ namespace DTXmatixx.ステージ
             {
             }
         }
-
         public void 描画する( DeviceContext1 dc, 種類 type, Vector2 中央位置dpx, float 拡大率 = 1f )
         {
             var 矩形 = new RectangleF();

@@ -19,9 +19,11 @@ namespace DTXmatixx.ステージ.選曲
     {
         public 曲ステータスパネル()
         {
-            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\選曲\曲ステータスパネル.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._背景画像 = new 画像( @"$(System)images\選曲\曲ステータスパネル.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -49,7 +51,6 @@ namespace DTXmatixx.ステージ.選曲
                     kvp.Value.Dispose();
             }
         }
-
         public void 描画する( DeviceContext1 dc )
         {
             var 領域dpx = new RectangleF( 320f, 532f, 239f, 505f );

@@ -15,8 +15,11 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 判定パラメータ表示()
         {
-            this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json" ) );
-            this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json" ) );
+                this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
+            }
         }
         protected override void On活性化()
         {
@@ -25,7 +28,13 @@ namespace DTXmatixx.ステージ.演奏
                 this._判定種別文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\パラメータ用判定種別文字.json" ).変数なしパス ) );
             }
         }
-
+        protected override void On非活性化()
+        {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                base.On非活性化();
+            }
+        }
         public virtual void 描画する( DeviceContext1 dc, float x, float y, 成績 現在の成績 )
         {
             var scaling = Matrix3x2.Scaling( 1.0f, 1.4f );
@@ -114,7 +123,6 @@ namespace DTXmatixx.ステージ.演奏
         protected const float _dr = 78f;       // 割合(%)までのXオフセット[dpx]
         protected const float _dp = 131f;      // "%" 文字までのXオフセット[dpx]
         protected const float _改行幅dpx = 40f;
-
         protected 画像フォント _パラメータ文字 = null;
         protected 画像 _判定種別文字 = null;
         protected JObject _判定種別文字設定 = null;

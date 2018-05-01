@@ -31,10 +31,7 @@ namespace DTXmatixx
     class App : ApplicationForm, IDTXManiaService, IDisposable
     {
         public static int リリース番号
-        {
-            get;
-            protected set;
-        }
+            => int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) ? release : throw new Exception( "アセンブリのプロダクトバージョンに記載ミスがあります。" );
         public static T 属性<T>() where T : Attribute
             => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
@@ -111,20 +108,6 @@ namespace DTXmatixx
             SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
             SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
 #endif
-
-            #region " プロダクトバージョンのメジャー番号をリリース番号として取得する。"
-            //----------------
-            if( int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) )
-            {
-                App.リリース番号 = release;
-            }
-            else
-            {
-                throw new Exception( "アセンブリのプロダクトバージョンに記載ミスがあります。" );
-            }
-            //----------------
-            #endregion
-
             this.Text = Application.ProductName + " " + App.リリース番号.ToString( "000" );
 
             var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
@@ -140,12 +123,12 @@ namespace DTXmatixx
             App.乱数 = new Random( DateTime.Now.Millisecond );
 
             App.システム設定 = システム設定.復元する();
-
+            
             App.入力管理 = new 入力管理( this.Handle ) {
                 キーバインディングを取得する = () => App.システム設定.キーバインディング,
                 キーバインディングを保存する = () => App.システム設定.保存する(),
             };
-            App.入力管理.Initialize();
+            App.入力管理.初期化する();
 
             App.ステージ管理 = new ステージ管理();
 
@@ -156,7 +139,9 @@ namespace DTXmatixx
             App.WAV管理 = null;
 
             App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
+
             App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
+
             App.ドラムサウンド = new ドラムサウンド();
 
             App.ユーザ管理 = new ユーザ管理();

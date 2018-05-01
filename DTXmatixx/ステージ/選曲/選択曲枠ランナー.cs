@@ -13,9 +13,11 @@ namespace DTXmatixx.ステージ.選曲
     {
         public 選択曲枠ランナー()
         {
-            this.子を追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲\枠ランナー.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲\枠ランナー.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -28,7 +30,6 @@ namespace DTXmatixx.ステージ.選曲
             {
             }
         }
-
         public void リセットする()
         {
             this._カウンタ = new LoopCounter( 0, 2300, 1 ); // 2秒ごとに300ms のループ

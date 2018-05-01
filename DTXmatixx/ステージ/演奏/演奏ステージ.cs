@@ -56,30 +56,32 @@ namespace DTXmatixx.ステージ.演奏
 
         public 演奏ステージ()
         {
-            this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
-            this.子を追加する( this._レーンフレーム = new レーンフレーム() );
-            this.子を追加する( this._曲名パネル = new 曲名パネル() );
-            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏\ヒットバー.png" ) );
-            this.子を追加する( this._ドラムパッド = new ドラムパッド() );
-            this.子を追加する( this._レーンフラッシュ = new レーンフラッシュ() );
-            this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
-            this.子を追加する( this._判定文字列 = new 判定文字列() );
-            this.子を追加する( this._チップ光 = new チップ光() );
-            this.子を追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
-            this.子を追加する( this._右サイドクリアパネル = new 右サイドクリアパネル() );
-            this.子を追加する( this._判定パラメータ表示 = new 判定パラメータ表示() );
-            this.子を追加する( this._フェーズパネル = new フェーズパネル() );
-            this.子を追加する( this._コンボ表示 = new コンボ表示() );
-            this.子を追加する( this._カウントマップライン = new カウントマップライン() );
-            this.子を追加する( this._スコア表示 = new スコア表示() );
-            this.子を追加する( this._プレイヤー名表示 = new プレイヤー名表示() );
-            this.子を追加する( this._譜面スクロール速度表示 = new 譜面スクロール速度表示() );
-            this.子を追加する( this._達成率表示 = new 達成率表示() );
-            this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
-            this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
-            this.子を追加する( this._FPS = new FPS() );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
+                this.子を追加する( this._レーンフレーム = new レーンフレーム() );
+                this.子を追加する( this._曲名パネル = new 曲名パネル() );
+                this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏\ヒットバー.png" ) );
+                this.子を追加する( this._ドラムパッド = new ドラムパッド() );
+                this.子を追加する( this._レーンフラッシュ = new レーンフラッシュ() );
+                this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
+                this.子を追加する( this._判定文字列 = new 判定文字列() );
+                this.子を追加する( this._チップ光 = new チップ光() );
+                this.子を追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
+                this.子を追加する( this._右サイドクリアパネル = new 右サイドクリアパネル() );
+                this.子を追加する( this._判定パラメータ表示 = new 判定パラメータ表示() );
+                this.子を追加する( this._フェーズパネル = new フェーズパネル() );
+                this.子を追加する( this._コンボ表示 = new コンボ表示() );
+                this.子を追加する( this._カウントマップライン = new カウントマップライン() );
+                this.子を追加する( this._スコア表示 = new スコア表示() );
+                this.子を追加する( this._プレイヤー名表示 = new プレイヤー名表示() );
+                this.子を追加する( this._譜面スクロール速度表示 = new 譜面スクロール速度表示() );
+                this.子を追加する( this._達成率表示 = new 達成率表示() );
+                this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
+                this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
+                this.子を追加する( this._FPS = new FPS() );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -116,7 +118,6 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         #region " (A) SSTF準拠のストリーミング動画 "
                         //----------------
-                        Log.Info( $"背景動画とBGMを指定された動画IDから読み込みます。[{App.演奏スコア.動画ID}]" );
                         var items = App.演奏スコア.動画ID.Split( ':' );
                         if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
                         {
@@ -127,17 +128,18 @@ namespace DTXmatixx.ステージ.演奏
                                         var apiConfig = JObject.Parse( File.ReadAllText( new VariablePath( @"$(AppData)nicovideo.json" ).変数なしパス ) );
                                         this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
                                         this._背景動画forDTX = null;
+                                        Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.動画ID}]" );
                                     }
                                     break;
 
                                 default:
-                                    Log.ERROR( $"対応していない動画プロトコルが指定されています。[{App.演奏スコア.動画ID}]" );
+                                    Log.ERROR( $"対応していない動画プロトコルが指定されています。無視します。[{App.演奏スコア.動画ID}]" );
                                     break;
                             }
                         }
                         else
                         {
-                            Log.ERROR( $"動画IDの指定に誤りがあります。[{App.演奏スコア.動画ID}]" );
+                            Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.動画ID}]" );
                         }
                         //----------------
                         #endregion
@@ -146,9 +148,10 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         #region " (B) SST準拠の動画とBGM（ローカルファイル）"
                         //----------------
-                        Log.Info( "背景動画とBGMを読み込みます。" );
-                        this._動画とBGM = new 動画とBGM( App.演奏スコア.背景動画ファイル名, App.サウンドデバイス );
+                        var file = new VariablePath( App.演奏スコア.背景動画ファイル名 );
+                        this._動画とBGM = new 動画とBGM( file, App.サウンドデバイス );
                         this._背景動画forDTX = null;
+                        Log.Info( $"背景動画とBGMを読み込みました。[{file.変数付きパス}]" );
                         //----------------
                         #endregion
                     }
@@ -156,20 +159,19 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         #region " (C) DTX準拠の動画 "
                         //----------------
-                        Log.Info( "背景動画を読み込みます。" );
-
                         // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
-                        var path = Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value );
+                        var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value ) );
 
                         // 動画を子リストに追加。
                         this.子を追加する( this._背景動画forDTX = new Video( path ) );
                         this._動画とBGM = null;
+                        Log.Info( $"背景動画を読み込みました。[{path.変数付きパス}]" );
                         //----------------
                         #endregion
                     }
                     else
                     {
-                        Log.Info( "背景動画とBGMはありません。" );
+                        Log.WARNING( "このスコアには、背景動画とBGMの指定がありません。" );
                     }
                     //----------------
                     #endregion
@@ -204,7 +206,7 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         user.ScrollSpeed = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                         userdb.DataContext.SubmitChanges();
-                        Log.Info( $"現在の譜面スクロール速度({App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度})をDBに保存しました。[UserID={user.Id}]" );
+                        Log.Info( $"現在の譜面スクロール速度({App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度})をDBに保存しました。[{user}]" );
                     }
                 }
                 //----------------
@@ -222,14 +224,16 @@ namespace DTXmatixx.ステージ.演奏
                     kvp.Value.Dispose();
                 this._チップの演奏状態 = null;
 
-                FDKUtilities.解放する( ref this._拍線色 );
-                FDKUtilities.解放する( ref this._小節線色 );
+                this._拍線色?.Dispose();
+                this._拍線色 = null;
+
+                this._小節線色?.Dispose();
+                this._小節線色 = null;
 
                 this.キャプチャ画面?.Dispose();
                 this.キャプチャ画面 = null;
             }
         }
-
         /// <summary>
         ///		進行と入力。
         /// </summary>
@@ -533,7 +537,7 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         #region " ESC → 演奏中断 "
                         //----------------
-                        Log.Info( "演奏を中断します。" );
+                        Log.Info( "ESC キーが押されました。演奏を中断します。" );
 
                         this.BGMを停止する();
                         App.WAV管理.すべての発声を停止する();    // DTXでのBGMサウンドはこっちに含まれる。
@@ -564,7 +568,6 @@ namespace DTXmatixx.ステージ.演奏
                     break;
             }
         }
-
         /// <summary>
         ///		描画。
         /// </summary>
@@ -756,7 +759,6 @@ namespace DTXmatixx.ステージ.演奏
                     break;
             }
         }
-
         public void 演奏を停止する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -790,7 +792,6 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private bool _初めての進行描画 = true;
-
         private 画像 _背景画像 = null;
         private レーンフレーム _レーンフレーム = null;
         private 曲名パネル _曲名パネル = null;
@@ -833,9 +834,7 @@ namespace DTXmatixx.ステージ.演奏
         private int _描画開始チップ番号 = -1;
 
         private double _演奏開始からの経過時間secを返す()
-        {
-            return App.サウンドタイマ.現在時刻sec;
-        }
+            => App.サウンドタイマ.現在時刻sec;
 
         /// <summary>
         ///		<see cref="_描画開始チップ番号"/> から画面上端にはみ出すまでの間の各チップに対して、指定された処理を適用する。

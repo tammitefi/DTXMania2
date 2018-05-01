@@ -33,12 +33,14 @@ namespace DTXmatixx.ステージ.認証
 
         public 認証ステージ()
         {
-            this.子を追加する( this._舞台画像 = new 舞台画像() );
-            this.子を追加する( this._ウィンドウ画像 = new 画像( @"$(System)images\認証\ユーザ選択ウィンドウ.png" ) );
-            this.子を追加する( this._プレイヤーを選択してください = new 文字列画像() { 表示文字列 = "プレイヤーを選択してください。", フォントサイズpt = 30f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
-            this.子を追加する( this._ユーザリスト = new ユーザリスト() );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._舞台画像 = new 舞台画像() );
+                this.子を追加する( this._ウィンドウ画像 = new 画像( @"$(System)images\認証\ユーザ選択ウィンドウ.png" ) );
+                this.子を追加する( this._プレイヤーを選択してください = new 文字列画像() { 表示文字列 = "プレイヤーを選択してください。", フォントサイズpt = 30f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
+                this.子を追加する( this._ユーザリスト = new ユーザリスト() );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -53,7 +55,6 @@ namespace DTXmatixx.ステージ.認証
             {
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )

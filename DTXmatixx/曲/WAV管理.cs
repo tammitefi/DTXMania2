@@ -20,40 +20,46 @@ namespace DTXmatixx.曲
         /// <param name="多重度">１サウンドの最大多重発声数。1以上。</param>
         public WAV管理( int 多重度 = 4 )
         {
-            if( 1 > 多重度 )
-                throw new ArgumentException( $"多重度が1未満に設定されています。[{多重度}]" );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                if( 1 > 多重度 )
+                    throw new ArgumentException( $"多重度が1未満に設定されています。[{多重度}]" );
 
-            this._既定の多重度 = 多重度;
+                this._既定の多重度 = 多重度;
 
-            this.初期化する();
+                this.初期化する();
+            }
         }
-
         public void 初期化する()
         {
-            this._WavContexts = new Dictionary<int, WavContext>();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._WavContexts = new Dictionary<int, WavContext>();
+            }
         }
-
         public void Dispose()
         {
-            foreach( var kvp in this._WavContexts )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var context = kvp.Value;
-
-                // Sound[] を解放。
-                if( null != context.Sounds )
+                foreach( var kvp in this._WavContexts )
                 {
-                    foreach( var sd in context.Sounds )
-                        sd.Stop();
-                    context.Sounds = null;
+                    var context = kvp.Value;
+
+                    // Sound[] を解放。
+                    if( null != context.Sounds )
+                    {
+                        foreach( var sd in context.Sounds )
+                            sd.Stop();
+                        context.Sounds = null;
+                    }
+
+                    // Source を解放。
+                    context.SampleSource?.Dispose();
                 }
-
-                // Source を解放。
-                context.SampleSource?.Dispose();
+                this._WavContexts.Clear();
+                this._WavContexts = null;
             }
-            this._WavContexts.Clear();
-            this._WavContexts = null;
         }
-
         /// <summary>
         ///		WAVファイルを登録する。
         /// </summary>
@@ -108,7 +114,6 @@ namespace DTXmatixx.曲
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
         }
-
         /// <summary>
         ///		指定した番号のWAVを、指定したチップ種別として発声する。
         /// </summary>
@@ -133,7 +138,6 @@ namespace DTXmatixx.曲
             // 発声する。
             this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量 );
         }
-
         public void すべての発声を停止する()
         {
             foreach( var kvp in this._WavContexts )

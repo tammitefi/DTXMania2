@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SharpDX;
 using FDK;
-using FDK.メディア;
 
 namespace DTXmatixx.ステージ.オプション設定
 {
@@ -21,6 +19,12 @@ namespace DTXmatixx.ステージ.オプション設定
         public パネル_ONOFFトグル( string パネル名, bool 初期状態はON, Action<パネル> 値の変更処理 = null )
             : base( パネル名, ( 初期状態はON ) ? 1 : 0, new[] { "OFF", "ON" }, 値の変更処理 )
         {
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                Log.Info( $"ONOFFトグルパネルを生成しました。[{this}]" );
+            }
         }
+        public override string ToString()
+            => $"{this.パネル名}, 初期状態: {( this.ONである ? "ON" : "OFF" ) }";
     }
 }

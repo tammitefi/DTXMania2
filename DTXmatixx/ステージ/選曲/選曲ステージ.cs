@@ -33,23 +33,25 @@ namespace DTXmatixx.ステージ.選曲
 
         public 選曲ステージ()
         {
-            this.子を追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
-            this.子を追加する( this._曲リスト = new 曲リスト() );
-            this.子を追加する( this._難易度と成績 = new 難易度と成績() );
-            this.子を追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
-            this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
-            this.子を追加する( this._青い線 = new 青い線() );
-            this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
-            this.子を追加する( this._BPMパネル = new BPMパネル() );
-            this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
-            this.子を追加する( this._SongNotFound = new 文字列画像() {
-                表示文字列 = "Song not found...",
-            } );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
+                this.子を追加する( this._曲リスト = new 曲リスト() );
+                this.子を追加する( this._難易度と成績 = new 難易度と成績() );
+                this.子を追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
+                this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
+                this.子を追加する( this._青い線 = new 青い線() );
+                this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
+                this.子を追加する( this._BPMパネル = new BPMパネル() );
+                this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
+                this.子を追加する( this._SongNotFound = new 文字列画像() {
+                    表示文字列 = "Song not found...",
+                } );
 
-            // 外部接続。
-            this._難易度と成績.青い線を取得する = () => this._青い線;
+                // 外部接続。
+                this._難易度と成績.青い線を取得する = () => this._青い線;
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -84,7 +86,6 @@ namespace DTXmatixx.ステージ.選曲
                 FDKUtilities.解放する( ref this._灰透過 );
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
@@ -210,7 +211,6 @@ namespace DTXmatixx.ステージ.選曲
         private BPMパネル _BPMパネル = null;
         private 曲別SKILL _曲別SKILL = null;
         private 文字列画像 _SongNotFound = null;
-
         private SolidColorBrush _白 = null;
         private SolidColorBrush _黒 = null;
         private SolidColorBrush _黒透過 = null;

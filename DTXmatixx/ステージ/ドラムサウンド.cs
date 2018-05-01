@@ -15,8 +15,11 @@ namespace DTXmatixx.ステージ
     {
         public ドラムサウンド( int 多重度 = 4 )
         {
-            this._多重度 = 多重度;
-            this.初期化する();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._多重度 = 多重度;
+                this.初期化する();
+            }
         }
         public void Dispose()
         {
@@ -34,7 +37,6 @@ namespace DTXmatixx.ステージ
                 }
             }
         }
-
         /// <summary>
         ///		サブチップID = 0（SSTの規定ドラムサウンド）以外をクリアする。
         /// </summary>
@@ -79,7 +81,6 @@ namespace DTXmatixx.ステージ
                 }
             }
         }
-
         public void 登録する( チップ種別 chipType, int subChipId, VariablePath サウンドファイルパス )
         {
             if( File.Exists( サウンドファイルパス.変数なしパス ) )
@@ -114,7 +115,6 @@ namespace DTXmatixx.ステージ
                 Log.ERROR( $"サウンドファイルが存在しません。[{サウンドファイルパス.変数付きパス}]" );
             }
         }
-
         public void 発声する( チップ種別 chipType, int subChipId, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量0to1 = 1f )
         {
             lock( this._Sound利用権 )

@@ -14,9 +14,11 @@ namespace DTXmatixx.アイキャッチ
     {
         public 半回転黒フェード()
         {
-            this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\タイトルロゴ・影.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\タイトルロゴ・影.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -29,144 +31,151 @@ namespace DTXmatixx.アイキャッチ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._黒ブラシ );
-                FDKUtilities.解放する( ref this._アニメ );
+                this._黒ブラシ?.Dispose();
+                this._黒ブラシ = null;
+
+                this._アニメ?.Dispose();
+                this._アニメ = null;
             }
         }
-
         public override void クローズする( float 速度倍率 = 1.0f )
         {
-            double 秒( double v ) => ( v / 速度倍率 );
-
-            var animation = グラフィックデバイス.Instance.Animation;
-
-            this._アニメ?.Dispose();
-            this._アニメ = new アニメ( animation.Manager );
-
-            const double 期間sec = 0.4;
-
-            #region " (1) 背景マスク "
-            //----------------
-            this._アニメ.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.7 ) )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.背景_不透明度, 不透明度の遷移 );
-            }
-            //----------------
-            #endregion
-            #region " (2) 黒幕1（左下） "
-            //----------------
-            this._アニメ.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: -500.0 );
-            this._アニメ.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75 );
-            using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.2 ), finalValue: 0.0 ) )
-            using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 ) )
-            using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
-            {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_回転角rad, 回転角の遷移 );
-            }
-            //----------------
-            #endregion
-            #region " (3) 黒幕2（右上）"
-            //----------------
-            this._アニメ.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0 );
-            this._アニメ.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75f );
-            using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.2 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width ) )
-            using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 ) )
-            using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
-            {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_回転角rad, 回転角の遷移 );
-            }
-            //----------------
-            #endregion
-            #region " (4) ロゴ "
-            //----------------
-            this._アニメ.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 - 150.0 );
-            this._アニメ.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
-            using( var 位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec ), finalValue: 1222.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 1.0 ) )
-            {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 位置Xの遷移 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_不透明度, 不透明度の遷移 );
-            }
-            //----------------
-            #endregion
+                double 秒( double v ) => ( v / 速度倍率 );
 
-            using( var 時間稼ぎ = animation.TrasitionLibrary.Constant( duration: 秒( 0.5 ) ) )
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 時間稼ぎ );
+                var animation = グラフィックデバイス.Instance.Animation;
 
-            // 今すぐ開始。
-            this._アニメ.ストーリーボード.Schedule( animation.Timer.Time );
-            this.現在のフェーズ = フェーズ.クローズ;
+                this._アニメ?.Dispose();
+                this._アニメ = new アニメ( animation.Manager );
+
+                const double 期間sec = 0.4;
+
+                #region " (1) 背景マスク "
+                //----------------
+                this._アニメ.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.7 ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.背景_不透明度, 不透明度の遷移 );
+                }
+                //----------------
+                #endregion
+                #region " (2) 黒幕1（左下） "
+                //----------------
+                this._アニメ.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: -500.0 );
+                this._アニメ.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75 );
+                using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.2 ), finalValue: 0.0 ) )
+                using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 ) )
+                using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_回転角rad, 回転角の遷移 );
+                }
+                //----------------
+                #endregion
+                #region " (3) 黒幕2（右上）"
+                //----------------
+                this._アニメ.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0 );
+                this._アニメ.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75f );
+                using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.2 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width ) )
+                using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 ) )
+                using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_回転角rad, 回転角の遷移 );
+                }
+                //----------------
+                #endregion
+                #region " (4) ロゴ "
+                //----------------
+                this._アニメ.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 - 150.0 );
+                this._アニメ.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                using( var 位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec ), finalValue: 1222.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 1.0 ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 位置Xの遷移 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_不透明度, 不透明度の遷移 );
+                }
+                //----------------
+                #endregion
+
+                using( var 時間稼ぎ = animation.TrasitionLibrary.Constant( duration: 秒( 0.5 ) ) )
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 時間稼ぎ );
+
+                // 今すぐ開始。
+                this._アニメ.ストーリーボード.Schedule( animation.Timer.Time );
+                this.現在のフェーズ = フェーズ.クローズ;
+            }
         }
         public override void オープンする( float 速度倍率 = 1.0f )
         {
-            double 秒( double v ) => ( v / 速度倍率 );
-
-            var animation = グラフィックデバイス.Instance.Animation;
-
-            this._アニメ?.Dispose();
-            this._アニメ = new アニメ( animation.Manager );
-
-            const double 期間sec = 0.6;
-
-            #region " (1) 背景マスク "
-            //----------------
-            this._アニメ.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間sec ) ) )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.背景_不透明度, 不透明度の遷移 );
-            }
-            //----------------
-            #endregion
-            #region " (2) 黒幕1（左下）"
-            //----------------
-            this._アニメ.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
-            this._アニメ.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
-            using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: 0.0 ) )
-            using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec * 0.2 ), finalValue: -500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: Math.PI * 0.75f ) )
-            {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_回転角rad, 回転角の遷移 );
-            }
-            //----------------
-            #endregion
-            #region " (3) 黒幕2（右上）"
-            //----------------
-            this._アニメ.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
-            this._アニメ.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
-            using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width ) )
-            using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec * 0.2 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: Math.PI * 0.75f ) )
-            {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_回転角rad, 回転角の遷移 );
-            }
-            //----------------
-            #endregion
-            #region " (4) ロゴ "
-            //----------------
-            this._アニメ.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 );
-            this._アニメ.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 1.0 );
-            using( var 位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec ), finalValue: 1222.0 - 150.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
-            {
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 位置Xの遷移 );
-                this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_不透明度, 不透明度の遷移 );
-            }
-            //----------------
-            #endregion
+                double 秒( double v ) => ( v / 速度倍率 );
 
-            this._アニメ.ストーリーボード.Schedule( animation.Timer.Time );
-            this.現在のフェーズ = フェーズ.オープン;
+                var animation = グラフィックデバイス.Instance.Animation;
+
+                this._アニメ?.Dispose();
+                this._アニメ = new アニメ( animation.Manager );
+
+                const double 期間sec = 0.6;
+
+                #region " (1) 背景マスク "
+                //----------------
+                this._アニメ.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間sec ) ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.背景_不透明度, 不透明度の遷移 );
+                }
+                //----------------
+                #endregion
+                #region " (2) 黒幕1（左下）"
+                //----------------
+                this._アニメ.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
+                this._アニメ.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
+                using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: 0.0 ) )
+                using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec * 0.2 ), finalValue: -500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: Math.PI * 0.75f ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_回転角rad, 回転角の遷移 );
+                }
+                //----------------
+                #endregion
+                #region " (3) 黒幕2（右上）"
+                //----------------
+                this._アニメ.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
+                this._アニメ.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
+                using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width ) )
+                using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec * 0.2 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: Math.PI * 0.75f ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_回転角rad, 回転角の遷移 );
+                }
+                //----------------
+                #endregion
+                #region " (4) ロゴ "
+                //----------------
+                this._アニメ.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 );
+                this._アニメ.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 1.0 );
+                using( var 位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec ), finalValue: 1222.0 - 150.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
+                {
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 位置Xの遷移 );
+                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_不透明度, 不透明度の遷移 );
+                }
+                //----------------
+                #endregion
+
+                this._アニメ.ストーリーボード.Schedule( animation.Timer.Time );
+                this.現在のフェーズ = フェーズ.オープン;
+            }
         }
-
         protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
@@ -365,14 +374,30 @@ namespace DTXmatixx.アイキャッチ
             public void Dispose()
             {
                 this.ストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.ストーリーボード );
-                FDKUtilities.解放する( ref this.背景_不透明度 );
-                FDKUtilities.解放する( ref this.黒幕1左下_基点位置X );
-                FDKUtilities.解放する( ref this.黒幕1左下_回転角rad );
-                FDKUtilities.解放する( ref this.黒幕2右上_基点位置X );
-                FDKUtilities.解放する( ref this.黒幕2右上_回転角rad );
-                FDKUtilities.解放する( ref this.ロゴ_位置X );
-                FDKUtilities.解放する( ref this.ロゴ_不透明度 );
+
+                this.ストーリーボード?.Dispose();
+                this.ストーリーボード = null;
+
+                this.背景_不透明度?.Dispose();
+                this.背景_不透明度 = null;
+
+                this.黒幕1左下_基点位置X?.Dispose();
+                this.黒幕1左下_基点位置X = null;
+
+                this.黒幕1左下_回転角rad?.Dispose();
+                this.黒幕1左下_回転角rad = null;
+
+                this.黒幕2右上_基点位置X?.Dispose();
+                this.黒幕2右上_基点位置X = null;
+
+                this.黒幕2右上_回転角rad?.Dispose();
+                this.黒幕2右上_回転角rad = null;
+
+                this.ロゴ_位置X?.Dispose();
+                this.ロゴ_位置X = null;
+
+                this.ロゴ_不透明度?.Dispose();
+                this.ロゴ_不透明度 = null;
             }
         }
         private アニメ _アニメ = null;

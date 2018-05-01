@@ -21,9 +21,11 @@ namespace DTXmatixx.ステージ.演奏
     {
         public スコア表示()
         {
-            this.子を追加する( this._スコア数字画像 = new 画像( @"$(System)images\演奏\スコア数字.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._スコア数字画像 = new 画像( @"$(System)images\演奏\スコア数字.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -119,12 +121,9 @@ namespace DTXmatixx.ステージ.演奏
         ///		<see cref="進行描画する(DeviceContext1, Vector2)"/> で更新される。
         /// </summary>
         private int _前回表示したスコア = 0;
-
         private 画像 _スコア数字画像 = null;
         private JObject _スコア数字画像設定 = null;
-
         private Dictionary<判定種別, int> _判定toヒット数 = null;
-
         private class 各桁のアニメ : IDisposable
         {
             public Storyboard ストーリーボード = null;

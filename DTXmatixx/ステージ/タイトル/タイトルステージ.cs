@@ -30,11 +30,13 @@ namespace DTXmatixx.ステージ.タイトル
 
         public タイトルステージ()
         {
-            this.子を追加する( this._舞台画像 = new 舞台画像() );
-            this.子を追加する( this._タイトルロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
-            this.子を追加する( this._パッドを叩いてください = new 文字列画像() { 表示文字列 = "パッドを叩いてください", フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.縁取り } );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._舞台画像 = new 舞台画像() );
+                this.子を追加する( this._タイトルロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
+                this.子を追加する( this._パッドを叩いてください = new 文字列画像() { 表示文字列 = "パッドを叩いてください", フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.縁取り } );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -54,7 +56,6 @@ namespace DTXmatixx.ステージ.タイトル
                 base.On非活性化();
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             App.入力管理.すべての入力デバイスをポーリングする();
@@ -74,11 +75,13 @@ namespace DTXmatixx.ステージ.タイトル
 
                     if( App.入力管理.確定キーが入力された() )
                     {
+                        Log.Info( $"確定キーが入力されました。フェードアウトを開始します。" );
                         App.ステージ管理.アイキャッチを選択しクローズする( nameof( シャッター ) );
                         this.現在のフェーズ = フェーズ.フェードアウト;
                     }
                     else if( App.入力管理.キャンセルキーが入力された() )
                     {
+                        Log.Info( $"キャンセルキーが入力されました。" );
                         this.現在のフェーズ = フェーズ.キャンセル;
                     }
                     break;
@@ -99,6 +102,7 @@ namespace DTXmatixx.ステージ.タイトル
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
                     {
                         this.現在のフェーズ = フェーズ.確定;
+                        Log.Info( $"フェードアウトが完了しました。" );
                     }
                     break;
 

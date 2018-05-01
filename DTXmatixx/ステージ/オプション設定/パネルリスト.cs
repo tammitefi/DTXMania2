@@ -16,34 +16,40 @@ namespace DTXmatixx.ステージ.オプション設定
 
         public パネルリスト()
         {
-            this.子を追加する( this._青い線 = new 青い線() );
-            this.子を追加する( this._パッド矢印 = new パッド矢印() );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._青い線 = new 青い線() );
+                this.子を追加する( this._パッド矢印 = new パッド矢印() );
 
-            this._ルートパネルフォルダ = null;
-            this._現在のパネルフォルダ = null;
+                this._ルートパネルフォルダ = null;
+                this._現在のパネルフォルダ = null;
+            }
         }
-
         public void パネルリストを登録する( パネル_フォルダ root )
         {
             this._ルートパネルフォルダ =
                 this._現在のパネルフォルダ = root;
         }
-
         public void フェードインを開始する( double 速度倍率 = 1.0 )
         {
-            for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._現在のパネルフォルダ.子パネルリスト[ i ].フェードインを開始する( 0.02, 速度倍率 );
+                for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
+                {
+                    this._現在のパネルフォルダ.子パネルリスト[ i ].フェードインを開始する( 0.02, 速度倍率 );
+                }
             }
         }
         public void フェードアウトを開始する( double 速度倍率 = 1.0 )
         {
-            for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._現在のパネルフォルダ.子パネルリスト[ i ].フェードアウトを開始する( 0.02, 速度倍率 );
+                for( int i = 0; i < this._現在のパネルフォルダ.子パネルリスト.Count; i++ )
+                {
+                    this._現在のパネルフォルダ.子パネルリスト[ i ].フェードアウトを開始する( 0.02, 速度倍率 );
+                }
             }
         }
-
         public void 前のパネルを選択する()
         {
             Trace.Assert( null != this._現在のパネルフォルダ?.子パネルリスト );
@@ -68,7 +74,6 @@ namespace DTXmatixx.ステージ.オプション設定
 
             this._現在のパネルフォルダ = this._現在のパネルフォルダ.子パネルリスト.SelectedItem as パネル_フォルダ;
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -86,7 +91,6 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._現在のパネルフォルダ = null;    //
             }
         }
-
         public void 進行描画する( DeviceContext1 dc, float left, float top )
         {
             const float パネルの下マージン = 4f;

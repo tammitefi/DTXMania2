@@ -48,388 +48,402 @@ namespace DTXmatixx.アイキャッチ
     {
         public 回転幕()
         {
-            this.子を追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
-            this.子を追加する( this._画面BC_アイキャッチ遷移画面1_回転中 = new 舞台画像() );
-            this.子を追加する( this._画面D_アイキャッチ遷移画面2_逆回転中 = new 舞台画像() );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
+                this.子を追加する( this._画面BC_アイキャッチ遷移画面1_回転中 = new 舞台画像() );
+                this.子を追加する( this._画面D_アイキャッチ遷移画面2_逆回転中 = new 舞台画像() );
+            }
         }
-
         protected override void On活性化()
         {
-            this._斜めジオメトリマスク = new PathGeometry( グラフィックデバイス.Instance.D2DFactory );
-            using( var sink = this._斜めジオメトリマスク.Open() )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                // 長方形。これを、縮小＆45°回転してマスクさせる。
-                const float w = 1920f;
-                const float h = 1080f * 2.0f;   // 斜めになるのでこのくらいいる。
-                sink.SetFillMode( FillMode.Winding );
-                sink.BeginFigure( new Vector2( -w / 2f, -h / 2f ), FigureBegin.Filled );    // (0,0) を長方形の中心とする。（スケーリング＆回転させるのに都合がいい）
-                sink.AddLine( new Vector2( -w / 2f, +h / 2f ) );
-                sink.AddLine( new Vector2( +w / 2f, +h / 2f ) );
-                sink.AddLine( new Vector2( +w / 2f, -h / 2f ) );
-                sink.EndFigure( FigureEnd.Closed );
-                sink.Close();
+                this._斜めジオメトリマスク = new PathGeometry( グラフィックデバイス.Instance.D2DFactory );
+                using( var sink = this._斜めジオメトリマスク.Open() )
+                {
+                    // 長方形。これを、縮小＆45°回転してマスクさせる。
+                    const float w = 1920f;
+                    const float h = 1080f * 2.0f;   // 斜めになるのでこのくらいいる。
+                    sink.SetFillMode( FillMode.Winding );
+                    sink.BeginFigure( new Vector2( -w / 2f, -h / 2f ), FigureBegin.Filled );    // (0,0) を長方形の中心とする。（スケーリング＆回転させるのに都合がいい）
+                    sink.AddLine( new Vector2( -w / 2f, +h / 2f ) );
+                    sink.AddLine( new Vector2( +w / 2f, +h / 2f ) );
+                    sink.AddLine( new Vector2( +w / 2f, -h / 2f ) );
+                    sink.EndFigure( FigureEnd.Closed );
+                    sink.Close();
+                }
+
+                this._斜めレイヤーパラメータ = new LayerParameters1 {
+                    ContentBounds = RectangleF.Infinite,
+                    GeometricMask = this._斜めジオメトリマスク,
+                    MaskAntialiasMode = AntialiasMode.PerPrimitive,
+                    MaskTransform = Matrix3x2.Identity,
+                    Opacity = 1.0f,
+                    OpacityBrush = null,
+                    LayerOptions = LayerOptions1.None,
+                };
+
+                this.現在のフェーズ = フェーズ.未定;
             }
-
-            this._斜めレイヤーパラメータ = new LayerParameters1 {
-                ContentBounds = RectangleF.Infinite,
-                GeometricMask = this._斜めジオメトリマスク,
-                MaskAntialiasMode = AntialiasMode.PerPrimitive,
-                MaskTransform = Matrix3x2.Identity,
-                Opacity = 1.0f,
-                OpacityBrush = null,
-                LayerOptions = LayerOptions1.None,
-            };
-
-            this.現在のフェーズ = フェーズ.未定;
         }
         protected override void On非活性化()
         {
-            this._斜めレイヤーパラメータ.GeometricMask = null; // 参照してるので先に手放す
-            FDKUtilities.解放する( ref this._斜めジオメトリマスク );
-
-            if( null != this._黒幕 )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                foreach( var b in this._黒幕 )
-                    b.Dispose();
-                this._黒幕 = null;
+                this._斜めレイヤーパラメータ.GeometricMask = null; // 参照してるので先に手放す
+
+                this._斜めジオメトリマスク?.Dispose();
+                this._斜めジオメトリマスク = null;
+
+                if( null != this._黒幕 )
+                {
+                    foreach( var b in this._黒幕 )
+                        b.Dispose();
+                    this._黒幕 = null;
+                }
             }
         }
-
         public override void クローズする( float 速度倍率 = 1.0f )
         {
-            double 秒( double v ) => ( v / 速度倍率 );
-
-            var animation = グラフィックデバイス.Instance.Animation;
-
-            this.現在のフェーズ = フェーズ.クローズ;
-
-            if( null != this._黒幕 )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                foreach( var b in this._黒幕 )
-                    b.Dispose();
-            }
+                double 秒( double v ) => ( v / 速度倍率 );
 
-            this._黒幕 = new 黒幕[ 2 ] {
-				// 上＆左
-				new 黒幕() {
-                    中心位置X = new Variable( animation.Manager, initialValue: 1920.0/2.0 ),	// クローズ初期位置、以下同
-					中心位置Y = new Variable( animation.Manager, initialValue: 0.0-500.0 ),
-                    回転角rad = new Variable( animation.Manager, initialValue: 0.0 ),
-                    太さ = new Variable( animation.Manager, initialValue: 1000.0 ),
-                    不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
-                    ストーリーボード = new Storyboard( animation.Manager ),
-                },
-				// 下＆右
-				new 黒幕() {
-                    中心位置X = new Variable( animation.Manager, initialValue: 1920.0/2.0 ),
-                    中心位置Y = new Variable( animation.Manager, initialValue: 1080.0+500.0 ),
-                    回転角rad = new Variable( animation.Manager, initialValue: 0.0 ),
-                    太さ = new Variable( animation.Manager, initialValue: 1000.0 ),
-                    不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
-                    ストーリーボード = new Storyboard( animation.Manager ),
-                },
-            };
+                var animation = グラフィックデバイス.Instance.Animation;
 
-            this._クローズ割合?.Dispose();
-            this._クローズ割合 = new Variable( animation.Manager, initialValue: 0.0 );     // 0.0 からスタート
+                this.現在のフェーズ = フェーズ.クローズ;
 
-            #region " ストーリーボードの構築(1) 上→左の黒幕, クローズ割合(便乗) "
-            //----------------
-            var 幕 = this._黒幕[ 0 ];
-
-            // シーン1 細くなりつつ画面中央へ移動。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 1080.0 / 2.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 - 0.1 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 100.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
-
-                // 便乗
-                using( var クローズ割合の遷移0to1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 - 0.07/*他より短め*/), finalValue: 1.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                if( null != this._黒幕 )
                 {
-                    幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移0to1 );
+                    foreach( var b in this._黒幕 )
+                        b.Dispose();
                 }
-            }
 
-            // シーン2 270°回転。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン2期間 ), finalValue: Math.PI * 1.75, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+                this._黒幕 = new 黒幕[ 2 ] {
+				    // 上＆左
+				    new 黒幕() {
+                        中心位置X = new Variable( animation.Manager, initialValue: 1920.0/2.0 ),	// クローズ初期位置、以下同
+					    中心位置Y = new Variable( animation.Manager, initialValue: 0.0-500.0 ),
+                        回転角rad = new Variable( animation.Manager, initialValue: 0.0 ),
+                        太さ = new Variable( animation.Manager, initialValue: 1000.0 ),
+                        不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
+                        ストーリーボード = new Storyboard( animation.Manager ),
+                    },
+				    // 下＆右
+				    new 黒幕() {
+                        中心位置X = new Variable( animation.Manager, initialValue: 1920.0/2.0 ),
+                        中心位置Y = new Variable( animation.Manager, initialValue: 1080.0+500.0 ),
+                        回転角rad = new Variable( animation.Manager, initialValue: 0.0 ),
+                        太さ = new Variable( animation.Manager, initialValue: 1000.0 ),
+                        不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
+                        ストーリーボード = new Storyboard( animation.Manager ),
+                    },
+                };
 
-                // 便乗
-                using( var クローズ割合の遷移1to2 = animation.TrasitionLibrary.Linear( duration: 秒( _シーン2期間 - 0.18 + 0.07/*他より長め*/), finalValue: 2.0 ) )
+                this._クローズ割合?.Dispose();
+                this._クローズ割合 = new Variable( animation.Manager, initialValue: 0.0 );     // 0.0 からスタート
+
+                #region " ストーリーボードの構築(1) 上→左の黒幕, クローズ割合(便乗) "
+                //----------------
+                var 幕 = this._黒幕[ 0 ];
+
+                // シーン1 細くなりつつ画面中央へ移動。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 1080.0 / 2.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 - 0.1 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 100.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
                 {
-                    幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移1to2 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
+
+                    // 便乗
+                    using( var クローズ割合の遷移0to1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 - 0.07/*他より短め*/), finalValue: 1.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                    {
+                        幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移0to1 );
+                    }
                 }
-            }
 
-            // シーン3 太くなりつつ画面左へ移動。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 0.0 - 200.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 + 0.05 ), finalValue: 800.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
-
-                // 便乗
-                using( var クローズ割合の遷移2to3 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 3.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                // シーン2 270°回転。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン2期間 ), finalValue: Math.PI * 1.75, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
                 {
-                    幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移2to3 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+
+                    // 便乗
+                    using( var クローズ割合の遷移1to2 = animation.TrasitionLibrary.Linear( duration: 秒( _シーン2期間 - 0.18 + 0.07/*他より長め*/), finalValue: 2.0 ) )
+                    {
+                        幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移1to2 );
+                    }
                 }
+
+                // シーン3 太くなりつつ画面左へ移動。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 0.0 - 200.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 + 0.05 ), finalValue: 800.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+
+                    // 便乗
+                    using( var クローズ割合の遷移2to3 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 3.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                    {
+                        幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移2to3 );
+                    }
+                }
+                //----------------
+                #endregion
+
+                #region " ストーリーボードの構築(2) 下→右の黒幕 "
+                //----------------
+                幕 = this._黒幕[ 1 ];
+
+                double ずれ = 0.03;
+
+                // シーン1 細くなりつつ画面中央へ移動。
+                double 期間 = _シーン1期間 - ずれ;
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 1080.0 / 2.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.1 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 100.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
+                }
+
+                // シーン2 270°回転。
+                期間 = _シーン2期間 + ずれ;
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: Math.PI * 1.75, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+                }
+
+                // シーン3 太くなりつつ画面右へ移動。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 + 200.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 + 0.05 ), finalValue: 800.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+                }
+                //----------------
+                #endregion
+
+                // アニメ開始
+                var start = animation.Timer.Time;
+                foreach( var bs in this._黒幕 )
+                    bs.ストーリーボード.Schedule( start );
+
+                this._初めての進行描画 = true;
             }
-            //----------------
-            #endregion
-
-            #region " ストーリーボードの構築(2) 下→右の黒幕 "
-            //----------------
-            幕 = this._黒幕[ 1 ];
-
-            double ずれ = 0.03;
-
-            // シーン1 細くなりつつ画面中央へ移動。
-            double 期間 = _シーン1期間 - ずれ;
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 1080.0 / 2.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.1 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 100.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
-            }
-
-            // シーン2 270°回転。
-            期間 = _シーン2期間 + ずれ;
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: Math.PI * 1.75, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
-            }
-
-            // シーン3 太くなりつつ画面右へ移動。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 + 200.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 + 0.05 ), finalValue: 800.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
-            }
-            //----------------
-            #endregion
-
-            // アニメ開始
-            var start = animation.Timer.Time;
-            foreach( var bs in this._黒幕 )
-                bs.ストーリーボード.Schedule( start );
-
-            this._初めての進行描画 = true;
         }
         public override void オープンする( float 速度倍率 = 1.0f )
         {
-            double 秒( double v ) => ( v / 速度倍率 );
-
-            var animation = グラフィックデバイス.Instance.Animation;
-
-            this.現在のフェーズ = フェーズ.オープン;
-
-            if( null != this._黒幕 )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                foreach( var b in this._黒幕 )
-                    b.Dispose();
-            }
+                double 秒( double v ) => ( v / 速度倍率 );
 
-            this._黒幕 = new 黒幕[ 2 ] {
-				// 上＆左
-				new 黒幕() {
-                    中心位置X = new Variable( animation.Manager, initialValue: 0.0 - 200.0 ),	// オープン初期位置、以下同
-					中心位置Y = new Variable( animation.Manager, initialValue: 1080.0 / 2.0 ),
-                    回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 1.75 ),
-                    太さ = new Variable( animation.Manager, initialValue: 800.0 ),
-                    不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
-                    ストーリーボード = new Storyboard( animation.Manager ),
-                },
-				// 下＆右
-				new 黒幕() {
-                    中心位置X = new Variable( animation.Manager, initialValue: 1920.0 + 200.0 ),
-                    中心位置Y = new Variable( animation.Manager, initialValue: 1080.0 / 2.0 ),
-                    回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 1.75 ),
-                    太さ = new Variable( animation.Manager, initialValue: 800.0 ),
-                    不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
-                    ストーリーボード = new Storyboard( animation.Manager ),
-                },
-            };
+                var animation = グラフィックデバイス.Instance.Animation;
 
-            this._クローズ割合?.Dispose();
-            this._クローズ割合 = new Variable( animation.Manager, initialValue: 3.0 );     // 3.0 からスタート
+                this.現在のフェーズ = フェーズ.オープン;
 
-            #region " ストーリーボードの構築(1) 上→左の黒幕, クローズ割合(便乗) "
-            //----------------
-            var 幕 = this._黒幕[ 0 ];
-
-            // シーン3 細くなりつつ画面中央へ移動。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 / 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 - 0.08 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 100.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
-
-                // 便乗
-                using( var クローズ割合の遷移3to2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                if( null != this._黒幕 )
                 {
-                    幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移3to2 );
+                    foreach( var b in this._黒幕 )
+                        b.Dispose();
                 }
-            }
 
-            // シーン2 -270°回転。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン2期間 ), finalValue: 0.0, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+                this._黒幕 = new 黒幕[ 2 ] {
+				    // 上＆左
+				    new 黒幕() {
+                        中心位置X = new Variable( animation.Manager, initialValue: 0.0 - 200.0 ),	// オープン初期位置、以下同
+					    中心位置Y = new Variable( animation.Manager, initialValue: 1080.0 / 2.0 ),
+                        回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 1.75 ),
+                        太さ = new Variable( animation.Manager, initialValue: 800.0 ),
+                        不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
+                        ストーリーボード = new Storyboard( animation.Manager ),
+                    },
+				    // 下＆右
+				    new 黒幕() {
+                        中心位置X = new Variable( animation.Manager, initialValue: 1920.0 + 200.0 ),
+                        中心位置Y = new Variable( animation.Manager, initialValue: 1080.0 / 2.0 ),
+                        回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 1.75 ),
+                        太さ = new Variable( animation.Manager, initialValue: 800.0 ),
+                        不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
+                        ストーリーボード = new Storyboard( animation.Manager ),
+                    },
+                };
 
-                // 便乗
-                using( var クローズ割合の遷移2to1 = animation.TrasitionLibrary.Linear( duration: 秒( _シーン2期間 - 0.18 + 0.07/*他より長め*/), finalValue: 1.0 ) )
+                this._クローズ割合?.Dispose();
+                this._クローズ割合 = new Variable( animation.Manager, initialValue: 3.0 );     // 3.0 からスタート
+
+                #region " ストーリーボードの構築(1) 上→左の黒幕, クローズ割合(便乗) "
+                //----------------
+                var 幕 = this._黒幕[ 0 ];
+
+                // シーン3 細くなりつつ画面中央へ移動。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 / 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 - 0.08 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 100.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
                 {
-                    幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移2to1 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
+
+                    // 便乗
+                    using( var クローズ割合の遷移3to2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                    {
+                        幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移3to2 );
+                    }
                 }
-            }
 
-            // シーン1 太くなりつつ画面上方へ移動。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 0.0 - 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 1000.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var ロゴの不透明度の遷移 = animation.TrasitionLibrary.Discrete( delay: 秒( _シーン3期間 * ( 1.0 - 0.24 ) ), finalValue: 0.0, hold: ( _シーン3期間 ) / 速度倍率 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
-
-                // 便乗
-                using( var クローズ割合の遷移1to0 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 - 0.07/*他より短め*/), finalValue: 0.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                // シーン2 -270°回転。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン2期間 ), finalValue: 0.0, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン2期間 - 0.18 ) ) )
                 {
-                    幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移1to0 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+
+                    // 便乗
+                    using( var クローズ割合の遷移2to1 = animation.TrasitionLibrary.Linear( duration: 秒( _シーン2期間 - 0.18 + 0.07/*他より長め*/), finalValue: 1.0 ) )
+                    {
+                        幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移2to1 );
+                    }
                 }
+
+                // シーン1 太くなりつつ画面上方へ移動。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 0.0 - 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 ), finalValue: 1000.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var ロゴの不透明度の遷移 = animation.TrasitionLibrary.Discrete( delay: 秒( _シーン3期間 * ( 1.0 - 0.24 ) ), finalValue: 0.0, hold: ( _シーン3期間 ) / 速度倍率 ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+
+                    // 便乗
+                    using( var クローズ割合の遷移1to0 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン1期間 - 0.07/*他より短め*/), finalValue: 0.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                    {
+                        幕.ストーリーボード.AddTransition( this._クローズ割合, クローズ割合の遷移1to0 );
+                    }
+                }
+                //----------------
+                #endregion
+
+                #region " ストーリーボードの構築(2) 下＆右の黒幕 "
+                //----------------
+                幕 = this._黒幕[ 1 ];
+
+                double ずれ = 0.03;
+
+                // シーン3 細くなりつつ画面中央へ移動。
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 / 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 - 0.08 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 100.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
+                }
+                // シーン2 -270°回転。
+                double 期間 = _シーン2期間 + ずれ;
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 0.0, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+                }
+
+                // シーン1 太くなりつつ画面下方へ移動。
+                期間 = _シーン1期間 - ずれ;
+                using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
+                using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 1080.0 + 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
+                using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 1000.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
+                {
+                    幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
+                    幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
+                }
+                //----------------
+                #endregion
+
+                // アニメ開始
+                var start = animation.Timer.Time;
+                foreach( var bs in this._黒幕 )
+                    bs.ストーリーボード.Schedule( start );
+
+                this._初めての進行描画 = true;
             }
-            //----------------
-            #endregion
-
-            #region " ストーリーボードの構築(2) 下＆右の黒幕 "
-            //----------------
-            幕 = this._黒幕[ 1 ];
-
-            double ずれ = 0.03;
-
-            // シーン3 細くなりつつ画面中央へ移動。
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 / 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン3期間 - 0.08 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 100.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移1 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.75 ), finalValue: 0.9, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 * 0.25 ), finalValue: 0.5, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移1 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移2 );
-            }
-            // シーン2 -270°回転。
-            double 期間 = _シーン2期間 + ずれ;
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 0.0, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 - 0.18 ) ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
-            }
-
-            // シーン1 太くなりつつ画面下方へ移動。
-            期間 = _シーン1期間 - ずれ;
-            using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
-            using( var 中心位置Yの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 1080.0 + 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 回転radの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間 ) ) )
-            using( var 太さの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 ), finalValue: 1000.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間 * 0.25 ), finalValue: 1.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
-            {
-                幕.ストーリーボード.AddTransition( 幕.中心位置X, 中心位置Xの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.中心位置Y, 中心位置Yの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.回転角rad, 回転radの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.太さ, 太さの遷移 );
-                幕.ストーリーボード.AddTransition( 幕.不透明度, 不透明度の遷移 );
-            }
-            //----------------
-            #endregion
-
-            // アニメ開始
-            var start = animation.Timer.Time;
-            foreach( var bs in this._黒幕 )
-                bs.ストーリーボード.Schedule( start );
-
-            this._初めての進行描画 = true;
         }
-
         protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
@@ -649,12 +663,23 @@ namespace DTXmatixx.アイキャッチ
 
             public void Dispose()
             {
-                FDKUtilities.解放する( ref this.ストーリーボード );
-                FDKUtilities.解放する( ref this.不透明度 );
-                FDKUtilities.解放する( ref this.太さ );
-                FDKUtilities.解放する( ref this.回転角rad );
-                FDKUtilities.解放する( ref this.中心位置Y );
-                FDKUtilities.解放する( ref this.中心位置X );
+                this.ストーリーボード?.Dispose();
+                this.ストーリーボード = null;
+
+                this.不透明度?.Dispose();
+                this.不透明度 = null;
+
+                this.太さ?.Dispose();
+                this.太さ = null;
+
+                this.回転角rad?.Dispose();
+                this.回転角rad = null;
+
+                this.中心位置Y?.Dispose();
+                this.中心位置Y = null;
+
+                this.中心位置X?.Dispose();
+                this.中心位置X = null;
             }
         }
         private 黒幕[] _黒幕 = null;

@@ -16,10 +16,12 @@ namespace DTXmatixx.ステージ.演奏
     {
         public チップ光()
         {
-            this.子を追加する( this._放射光 = new 画像( @"$(System)images\演奏\チップ光.png" ) { 加算合成 = true } );
-            this.子を追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._放射光 = new 画像( @"$(System)images\演奏\チップ光.png" ) { 加算合成 = true } );
+                this.子を追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -50,7 +52,6 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoステータス = null;
             }
         }
-
         public void 表示を開始する( 表示レーン種別 lane )
         {
             var status = this._レーンtoステータス[ lane ];
@@ -200,9 +201,7 @@ namespace DTXmatixx.ステージ.演奏
                 表示中,     // 描画スレッドが設定
             }
             public 状態 現在の状態 = 状態.非表示;
-
             public readonly Vector2 表示中央位置dpx;
-
             public Variable 放射光の回転角 = null;
             public Variable 放射光の拡大率 = null;
             public Variable 光輪の拡大率 = null;

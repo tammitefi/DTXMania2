@@ -13,10 +13,12 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 達成率表示()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
-            this.子を追加する( this._達成率ロゴ画像 = new 画像( @"$(System)images\達成率ロゴ.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
+                this.子を追加する( this._達成率ロゴ画像 = new 画像( @"$(System)images\達成率ロゴ.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -29,7 +31,6 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
-
         public void 描画する( DeviceContext1 dc, float 達成率 )
         {
             var 描画領域 = new RectangleF( 220f, 650f, 165f, 80f );

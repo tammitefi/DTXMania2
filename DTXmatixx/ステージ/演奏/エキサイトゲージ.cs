@@ -14,31 +14,47 @@ namespace DTXmatixx.ステージ.演奏
     {
         public エキサイトゲージ()
         {
-            this.子を追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
-            this.子を追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
+                this.子を追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
-            var dc = グラフィックデバイス.Instance.D2DDeviceContext;
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                var dc = グラフィックデバイス.Instance.D2DDeviceContext;
 
-            this._通常ブラシ = new SolidColorBrush( dc, new Color4( 0xfff9b200 ) );
-            this._DANGERブラシ = new SolidColorBrush( dc, new Color4( 0xff0000ff ) );
-            this._MAXブラシ = new SolidColorBrush( dc, new Color4( 0xff00c9f4 ) );
+                this._通常ブラシ = new SolidColorBrush( dc, new Color4( 0xfff9b200 ) );
+                this._DANGERブラシ = new SolidColorBrush( dc, new Color4( 0xff0000ff ) );
+                this._MAXブラシ = new SolidColorBrush( dc, new Color4( 0xff00c9f4 ) );
 
-            this._ゲージ量 = null;
-            this._ゲージ量のストーリーボード = null;
+                this._ゲージ量 = null;
+                this._ゲージ量のストーリーボード = null;
 
-            this._初めての進行描画 = true;
+                this._初めての進行描画 = true;
+            }
         }
         protected override void On非活性化()
         {
-            FDKUtilities.解放する( ref this._通常ブラシ );
-            FDKUtilities.解放する( ref this._DANGERブラシ );
-            FDKUtilities.解放する( ref this._MAXブラシ );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._通常ブラシ?.Dispose();
+                this._通常ブラシ = null;
 
-            FDKUtilities.解放する( ref this._ゲージ量のストーリーボード );
-            FDKUtilities.解放する( ref this._ゲージ量 );
+                this._DANGERブラシ?.Dispose();
+                this._DANGERブラシ = null;
+
+                this._MAXブラシ?.Dispose();
+                this._MAXブラシ = null;
+
+                this._ゲージ量のストーリーボード?.Dispose();
+                this._ゲージ量のストーリーボード = null;
+
+                this._ゲージ量?.Dispose();
+                this._ゲージ量 = null;
+            }
         }
 
         /// <param name="ゲージ量">
@@ -106,7 +122,6 @@ namespace DTXmatixx.ステージ.演奏
         private SolidColorBrush _通常ブラシ = null;  // 青
         private SolidColorBrush _DANGERブラシ = null;  // 赤
         private SolidColorBrush _MAXブラシ = null; // 橙
-
         private Variable _ゲージ量 = null;
         private Storyboard _ゲージ量のストーリーボード = null;
     }

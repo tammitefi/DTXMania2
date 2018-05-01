@@ -39,11 +39,13 @@ namespace DTXmatixx.ステージ.オプション設定
 
         public オプション設定ステージ()
         {
-            this.子を追加する( this._舞台画像 = new 舞台画像() );
-            this.子を追加する( this._パネルリスト = new パネルリスト() );
-            //this.子を追加する( this._ルートパネルフォルダ = new パネル_フォルダ( "Root", null, null ) ); --> 活性化のたびに、子パネルとまとめて動的に追加する。
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._舞台画像 = new 舞台画像() );
+                this.子を追加する( this._パネルリスト = new パネルリスト() );
+                //this.子を追加する( this._ルートパネルフォルダ = new パネル_フォルダ( "Root", null, null ) ); --> 活性化のたびに、子パネルとまとめて動的に追加する。
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -253,7 +255,6 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._ルートパネルフォルダ = null;
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             // 進行描画。
@@ -366,8 +367,11 @@ namespace DTXmatixx.ステージ.オプション設定
 
         private void _入力割り当てダイアログを表示する()
         {
-            using( var dlg = new 入力割り当てダイアログ() )
-                dlg.表示する();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                using( var dlg = new 入力割り当てダイアログ() )
+                    dlg.表示する();
+            }
         }
     }
 }

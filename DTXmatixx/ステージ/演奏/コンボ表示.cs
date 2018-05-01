@@ -17,9 +17,11 @@ namespace DTXmatixx.ステージ.演奏
     {
         public コンボ表示()
         {
-            this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\演奏\コンボ文字.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\演奏\コンボ文字.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -43,7 +45,8 @@ namespace DTXmatixx.ステージ.演奏
                     this._各桁のアニメ[ i ].Dispose();
                 this._各桁のアニメ = null;
 
-                FDKUtilities.解放する( ref this._百ごとのアニメ );
+                this._百ごとのアニメ?.Dispose();
+                this._百ごとのアニメ = null;
             }
         }
 

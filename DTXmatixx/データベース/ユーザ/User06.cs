@@ -228,6 +228,9 @@ namespace DTXmatixx.データベース.ユーザ
             return this.Clone();
         }
 
+        public override string ToString()
+            => $"Id:{this.Id}, Name:{this.Name}";
+
         ///////////////////////////
 
         /// <summary>

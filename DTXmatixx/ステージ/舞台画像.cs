@@ -23,10 +23,12 @@ namespace DTXmatixx.ステージ
 
         public 舞台画像( string 背景画像ファイル名 = null, string 背景黒幕付き画像ファイル名 = null )
         {
-            this.子を追加する( this._背景画像 = new 画像( 背景画像ファイル名 ?? @"$(System)images\舞台.jpg" ) );
-            this.子を追加する( this._背景黒幕付き画像 = new 画像( 背景黒幕付き画像ファイル名 ?? @"$(System)images\舞台黒幕付き.jpg" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._背景画像 = new 画像( 背景画像ファイル名 ?? @"$(System)images\舞台.jpg" ) );
+                this.子を追加する( this._背景黒幕付き画像 = new 画像( 背景黒幕付き画像ファイル名 ?? @"$(System)images\舞台黒幕付き.jpg" ) );
+            }
         }
-
         public void ぼかしと縮小を適用する( double 完了までの最大時間sec = 1.0 )
         {
             Debug.Assert( this.活性化している );
@@ -87,45 +89,64 @@ namespace DTXmatixx.ステージ
                 this.ぼかしと縮小を適用中 = false;
             }
         }
-
         protected override void On活性化()
         {
-            var dc = グラフィックデバイス.Instance.D2DDeviceContext;
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                var dc = グラフィックデバイス.Instance.D2DDeviceContext;
 
-            this._ガウスぼかしエフェクト = new GaussianBlur( dc );
-            this._ガウスぼかしエフェクト黒幕付き用 = new GaussianBlur( dc );
+                this._ガウスぼかしエフェクト = new GaussianBlur( dc );
+                this._ガウスぼかしエフェクト黒幕付き用 = new GaussianBlur( dc );
 
-            this._拡大エフェクト = new Scale( dc ) {
-                CenterPoint = new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0f, グラフィックデバイス.Instance.設計画面サイズ.Height / 2.0f ),
-            };
-            this._拡大エフェクト黒幕付き用 = new Scale( dc ) {
-                CenterPoint = new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0f, グラフィックデバイス.Instance.設計画面サイズ.Height / 2.0f ),
-            };
+                this._拡大エフェクト = new Scale( dc ) {
+                    CenterPoint = new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0f, グラフィックデバイス.Instance.設計画面サイズ.Height / 2.0f ),
+                };
+                this._拡大エフェクト黒幕付き用 = new Scale( dc ) {
+                    CenterPoint = new Vector2( グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0f, グラフィックデバイス.Instance.設計画面サイズ.Height / 2.0f ),
+                };
 
-            this._切り取りエフェクト = new Crop( dc );
-            this._切り取りエフェクト黒幕付き用 = new Crop( dc );
+                this._切り取りエフェクト = new Crop( dc );
+                this._切り取りエフェクト黒幕付き用 = new Crop( dc );
 
-            this._ぼかしと縮小割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 0.0 );
-            this.ぼかしと縮小を適用中 = false;
+                this._ぼかしと縮小割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 0.0 );
+                this.ぼかしと縮小を適用中 = false;
 
-            this._ストーリーボード = null;
+                this._ストーリーボード = null;
 
-            this._初めての進行描画 = true;
+                this._初めての進行描画 = true;
+            }
         }
         protected override void On非活性化()
         {
-            this._ストーリーボード?.Abandon();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._ストーリーボード?.Abandon();
 
-            FDKUtilities.解放する( ref this._ストーリーボード );
-            FDKUtilities.解放する( ref this._ぼかしと縮小割合 );
-            FDKUtilities.解放する( ref this._切り取りエフェクト黒幕付き用 );
-            FDKUtilities.解放する( ref this._切り取りエフェクト );
-            FDKUtilities.解放する( ref this._拡大エフェクト黒幕付き用 );
-            FDKUtilities.解放する( ref this._拡大エフェクト );
-            FDKUtilities.解放する( ref this._ガウスぼかしエフェクト黒幕付き用 );
-            FDKUtilities.解放する( ref this._ガウスぼかしエフェクト );
+                this._ストーリーボード?.Dispose();
+                this._ストーリーボード = null;
+
+                this._ぼかしと縮小割合?.Dispose();
+                this._ぼかしと縮小割合 = null;
+
+                this._切り取りエフェクト黒幕付き用?.Dispose();
+                this._切り取りエフェクト黒幕付き用 = null;
+
+                this._切り取りエフェクト?.Dispose();
+                this._切り取りエフェクト = null;
+
+                this._拡大エフェクト黒幕付き用?.Dispose();
+                this._拡大エフェクト黒幕付き用 = null;
+
+                this._拡大エフェクト?.Dispose();
+                this._拡大エフェクト = null;
+
+                this._ガウスぼかしエフェクト黒幕付き用?.Dispose();
+                this._ガウスぼかしエフェクト黒幕付き用 = null;
+
+                this._ガウスぼかしエフェクト?.Dispose();
+                this._ガウスぼかしエフェクト = null;
+            }
         }
-
         public void 進行描画する( DeviceContext1 dc, bool 黒幕付き = false, Vector4? 表示領域 = null, LayerParameters1? layerParameters1 = null )
         {
             #region " 初めての進行描画 "
@@ -211,7 +232,6 @@ namespace DTXmatixx.ステージ
         private Scale _拡大エフェクト黒幕付き用 = null;
         private Crop _切り取りエフェクト = null;
         private Crop _切り取りエフェクト黒幕付き用 = null;
-
         /// <summary>
         ///		くっきり＆拡大: 0 ～ 1 :ぼかし＆縮小
         /// </summary>

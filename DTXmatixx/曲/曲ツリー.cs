@@ -105,36 +105,47 @@ namespace DTXmatixx.曲
 
         public 曲ツリー()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
         protected override void On活性化()
         {
-            Debug.Assert( this.活性化していない );
-
-            // フォーカスリストを活性化する。
-            if( null != this.フォーカスリスト )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                foreach( var node in this.フォーカスリスト )
-                    node.活性化する();
-            }
+                Debug.Assert( this.活性化していない );
 
-            //this._難易度アンカ = 3;		-> 初期化せず、前回の値を継承する。
+                // フォーカスリストを活性化する。
+                if( null != this.フォーカスリスト )
+                {
+                    foreach( var node in this.フォーカスリスト )
+                        node.活性化する();
+                }
+
+                //this._難易度アンカ = 3;		-> 初期化せず、前回の値を継承する。
+            }
         }
         protected override void On非活性化()
         {
-            Debug.Assert( this.活性化している );
-
-            // フォーカスリストを非活性化する。
-            if( null != this.フォーカスリスト )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                foreach( var node in this.フォーカスリスト )
-                    node.非活性化する();
+                Debug.Assert( this.活性化している );
+
+                // フォーカスリストを非活性化する。
+                if( null != this.フォーカスリスト )
+                {
+                    foreach( var node in this.フォーカスリスト )
+                        node.非活性化する();
+                }
             }
         }
         public void Dispose()
         {
-            this.すべてのノードを削除する();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.すべてのノードを削除する();
+            }
         }
-
         /// <remarks>
         ///		追加されたノードは、ここでは活性化されない。
         /// </remarks>
@@ -274,7 +285,6 @@ namespace DTXmatixx.曲
                 // なければ次のアンカへ。
             }
         }
-
         /// <summary>
         ///		指定された SetNode が保持する、現在の難易度アンカに一番近い難易度（0:BASIC～4:ULTIMATE）の MusicNode を返す。
         /// </summary>
@@ -286,7 +296,6 @@ namespace DTXmatixx.曲
         /// </remarks>
         public MusicNode 現在の難易度に応じた曲ノードを返す( SetNode setNode )
             => setNode.MusicNodes[ this.現在の難易度アンカに最も近い難易度レベルを返す( setNode ) ];
-
         public int 現在の難易度アンカに最も近い難易度レベルを返す( SetNode setnode )
         {
             if( null == setnode )
@@ -376,7 +385,6 @@ namespace DTXmatixx.曲
                 }
             }
         }
-
         /// <remarks>
         ///		末尾なら先頭に戻る。
         /// </remarks>
@@ -391,7 +399,6 @@ namespace DTXmatixx.曲
 
             this.フォーカスリスト.SelectItem( index );
         }
-
         /// <remarks>
         ///		先頭なら末尾に戻る。
         /// </remarks>
@@ -406,7 +413,6 @@ namespace DTXmatixx.曲
 
             this.フォーカスリスト.SelectItem( index );
         }
-
 
         private int _難易度アンカ = 3;
     }

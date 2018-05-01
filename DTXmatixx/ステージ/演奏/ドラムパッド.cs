@@ -16,9 +16,11 @@ namespace DTXmatixx.ステージ.演奏
     {
         public ドラムパッド()
         {
-            this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -46,7 +48,6 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoパッドContext.Clear();
             }
         }
-
         public void ヒットする( 表示レーン種別 lane )
         {
             this._レーンtoパッドContext[ lane ].アニメカウンタ.開始する( 0, 100, 1 );
@@ -87,7 +88,6 @@ namespace DTXmatixx.ステージ.演奏
 
         private 画像 _パッド絵 = null;
         private JObject _パッド絵設定 = null;
-
         private struct パッドContext
         {
             public Vector2 左上位置dpx;

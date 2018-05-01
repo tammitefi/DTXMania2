@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using FDK;
 using SSTFormatCurrent = SSTFormat.v3;
 using DTXmatixx.設定;
 
@@ -20,13 +21,11 @@ namespace DTXmatixx.ステージ.演奏
             get;
             protected set;
         } = 0;
-
         public int MaxCombo
         {
             get;
             protected set;
         } = 0;
-
         /// <summary>
         ///		0.0で0%、1.0で100%。
         /// </summary>
@@ -35,7 +34,6 @@ namespace DTXmatixx.ステージ.演奏
             get;
             protected set;
         }
-
         /// <summary>
         ///		現在の設定において、ヒット対象になるノーツの数を返す。
         /// </summary>
@@ -44,13 +42,11 @@ namespace DTXmatixx.ステージ.演奏
             get;
             protected set;
         } = 0;
-
         /// <summary>
         ///		判定種別ごとのヒット数。
         /// </summary>
         public IReadOnlyDictionary<判定種別, int> 判定toヒット数
             => this._判定toヒット数;
-
         /// <summary>
         ///		現在の <see cref="判定toヒット数"/> から、判定種別ごとのヒット割合を算出して返す。
         ///		判定種別のヒット割合は、すべて合計すればちょうど 100 になる。
@@ -58,35 +54,35 @@ namespace DTXmatixx.ステージ.演奏
         public IReadOnlyDictionary<判定種別, int> 判定toヒット割合
             => this._ヒット割合を算出して返す();
 
-
         public 成績()
         {
-            this.Score = 0;
-            this.MaxCombo = 0;
-            this.エキサイトゲージ量 = 0.75f;
-            this.Achievement = 0.0f;
-            this.総ノーツ数 = 0;
-
-            this._判定toヒット数 = new Dictionary<判定種別, int>();
-            this._最後にスコアを更新したときの判定toヒット数 = new Dictionary<判定種別, int>();
-            foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._判定toヒット数.Add( judge, 0 );
-                this._最後にスコアを更新したときの判定toヒット数.Add( judge, 0 );
+                this.Score = 0;
+                this.MaxCombo = 0;
+                this.エキサイトゲージ量 = 0.75f;
+                this.Achievement = 0.0f;
+                this.総ノーツ数 = 0;
+
+                this._判定toヒット数 = new Dictionary<判定種別, int>();
+                this._最後にスコアを更新したときの判定toヒット数 = new Dictionary<判定種別, int>();
+                foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
+                {
+                    this._判定toヒット数.Add( judge, 0 );
+                    this._最後にスコアを更新したときの判定toヒット数.Add( judge, 0 );
+                }
+
+                // TODO: AutoPlay の状態から、達成率用のオプション補正を算出。
+                this._オプション補正 = 1.0;
+
+                this._譜面レベル = 0.5;
             }
-
-            // TODO: AutoPlay の状態から、達成率用のオプション補正を算出。
-            this._オプション補正 = 1.0;
-
-            this._譜面レベル = 0.5;
         }
-
         public void スコアと設定を反映する( SSTFormatCurrent.スコア 譜面, ユーザ設定 設定 )
         {
             this.総ノーツ数 = ( null != 譜面 && null != 設定 ) ? this._総ノーツ数を算出して返す( 譜面, 設定 ) : 0;
             this._譜面レベル = 譜面?.難易度 ?? 0.5;
         }
-
         /// <summary>
         ///		ヒット数を加算し、各プロパティを更新する。
         /// </summary>
@@ -132,7 +128,6 @@ namespace DTXmatixx.ステージ.演奏
 
             // (6) エキサイトゲージ → ここからは呼び出さない。（AutoPlayと区別がつかないため）
         }
-
         /// <summary>
         ///		判定に応じてエキサイトゲージを加減する。
         /// </summary>
@@ -261,7 +256,6 @@ namespace DTXmatixx.ステージ.演奏
 
             return ヒット割合_整数;
         }
-
         private int _総ノーツ数を算出して返す( SSTFormatCurrent.スコア score, ユーザ設定 options )
         {
             int 総ノーツ数 = 0;

@@ -71,34 +71,58 @@ namespace DTXmatixx.設定
 
         public static システム設定 復元する()
         {
-            // いったん型なしで読み込む。
-            var jobj = JObject.Parse( File.ReadAllText( _ファイルパス.変数なしパス ) );
-
-            int version = ( (int?) jobj[ "Version" ] ) ?? 0;
-
-            switch( version )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                case 0:
-                    // Release 014 まで
-                    return FDKUtilities.復元または新規作成する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
+                // いったん型なしで読み込む。
+                var jobj = JObject.Parse( File.ReadAllText( _ファイルパス.変数なしパス ) );
 
-                case 1:
-                    // Release 015 以降
-                    return JsonConvert.DeserializeObject<システム設定>( jobj.ToString() );
+                int version = ( (int?) jobj[ "Version" ] ) ?? 0;
 
-                default:
-                    throw new NotSupportedException( $"未知のバージョン {version} が指定されました。" );
+                switch( version )
+                {
+                    case 0:
+                        {
+                            // Release 014 まで
+                            var 設定 = (システム設定) null;
+                            try
+                            {
+                                設定 = FDKUtilities.復元する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
+                                Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
+                            }
+                            catch
+                            {
+                                Log.WARNING( $"復元に失敗したので、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+                                設定 = new システム設定();
+                                FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+                            }
+                            return 設定;
+                        }
+                    case 1:
+                        {
+                            // Release 015 以降
+                            var ret = JsonConvert.DeserializeObject<システム設定>( jobj.ToString() );
+                            Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
+                            return ret;
+                        }
+
+                    default:
+                        throw new NotSupportedException( $"未知のバージョン {version} が指定されました。" );
+                }
             }
         }
         public void 保存する()
         {
-            switch( Version )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                case 0:
+                switch( Version )
+                {
+                    case 0:
                     //FDKUtilities.保存する( this, _ファイルパス, UseSimpleDictionaryFormat: false );
-                case 1:
-                    File.WriteAllText( _ファイルパス.変数なしパス, JsonConvert.SerializeObject( this, Formatting.Indented ) );
-                    break;
+                    case 1:
+                        File.WriteAllText( _ファイルパス.変数なしパス, JsonConvert.SerializeObject( this, Formatting.Indented ) );
+                        Log.Info( $"システム設定 を保存しました。[{_ファイルパス.変数付きパス}]" );
+                        break;
+                }
             }
         }
 

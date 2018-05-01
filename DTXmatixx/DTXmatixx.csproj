@@ -223,6 +223,12 @@
     <Compile Include="データベース\ユーザ\User06.cs" />
     <Compile Include="データベース\ユーザ\UserDB.cs" />
     <Compile Include="データベース\曲\Song03.cs" />
+    <Compile Include="未処理例外検出ダイアログ.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="未処理例外検出ダイアログ.Designer.cs">
+      <DependentUpon>未処理例外検出ダイアログ.cs</DependentUpon>
+    </Compile>
     <Compile Include="設定\AutoPlay種別.cs" />
     <Compile Include="設定\PlayMode.cs" />
     <Compile Include="設定\キーバインディング.cs" />
@@ -248,6 +254,9 @@
     </Compile>
     <EmbeddedResource Include="ステージ\オプション設定\入力割り当てダイアログ.resx">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="未処理例外検出ダイアログ.resx">
+      <DependentUpon>未処理例外検出ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -19,8 +19,10 @@ namespace DTXmatixx.ステージ.演奏
 
         public プレイヤー名表示()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -37,9 +39,14 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._文字色 );
-                FDKUtilities.解放する( ref this._TextLayout );
-                FDKUtilities.解放する( ref this._TextFormat );
+                this._文字色?.Dispose();
+                this._文字色 = null;
+
+                this._TextLayout?.Dispose();
+                this._TextLayout = null;
+
+                this._TextFormat?.Dispose();
+                this._TextFormat = null;
             }
         }
 

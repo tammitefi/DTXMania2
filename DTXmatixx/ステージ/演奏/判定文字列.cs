@@ -16,9 +16,11 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 判定文字列()
         {
-            this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -49,7 +51,6 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoステータス = null;
             }
         }
-
         public void 表示を開始する( 表示レーン種別 lane, 判定種別 judge )
         {
             var status = this._レーンtoステータス[ lane ];
@@ -346,10 +347,8 @@ namespace DTXmatixx.ステージ.演奏
                 表示中,        // 描画スレッドが設定
             }
             public 状態 現在の状態 = 状態.非表示;
-
             public 判定種別 判定種別 = 判定種別.PERFECT;
             public readonly Vector2 表示中央位置dpx;
-
             /// <summary>
             ///		判定文字列（本体）の表示されるY座標のオフセット。
             ///		表示中央位置dpx.Y からの相対値[dpx]。
@@ -363,7 +362,6 @@ namespace DTXmatixx.ステージ.演奏
             public Variable 文字列本体のX方向拡大率 = null;
             public Variable 文字列本体のY方向拡大率 = null;
             public Storyboard 文字列本体のストーリーボード = null;
-
             /// <summary>
             ///		判定文字列（影）の表示されるY座標のオフセット。
             ///		表示中央位置dpx.Y からの相対値[dpx]。
@@ -375,7 +373,6 @@ namespace DTXmatixx.ステージ.演奏
             /// </summary>
             public Variable 文字列影の不透明度 = null;
             public Storyboard 文字列影のストーリーボード = null;
-
             /// <summary>
             ///		単位は度（degree）、時計回りを正とする。
             /// </summary>

@@ -15,8 +15,10 @@ namespace DTXmatixx.ステージ.結果
     {
         public 演奏パラメータ結果()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -63,7 +65,8 @@ namespace DTXmatixx.ステージ.結果
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._パラメータアニメ );
+                this._パラメータアニメ?.Dispose();
+                this._パラメータアニメ = null;
 
                 base.On非活性化();
             }
