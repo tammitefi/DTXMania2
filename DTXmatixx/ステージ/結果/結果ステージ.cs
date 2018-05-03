@@ -89,8 +89,11 @@ namespace DTXmatixx.ステージ.結果
             {
                 this._結果 = null;
 
-                FDKUtilities.解放する( ref this._黒マスクブラシ );
-                FDKUtilities.解放する( ref this._プレビュー枠ブラシ );
+                this._黒マスクブラシ?.Dispose();
+                this._黒マスクブラシ = null;
+
+                this._プレビュー枠ブラシ?.Dispose();
+                this._プレビュー枠ブラシ = null;
 
                 this.BGMを停止する();
 

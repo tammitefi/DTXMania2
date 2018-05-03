@@ -225,11 +225,21 @@ namespace DTXmatixx.ステージ.演奏
             public void アニメ用メンバを解放する()
             {
                 this.ストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.ストーリーボード );
-                FDKUtilities.解放する( ref this.放射光の回転角 );
-                FDKUtilities.解放する( ref this.放射光の拡大率 );
-                FDKUtilities.解放する( ref this.光輪の拡大率 );
-                FDKUtilities.解放する( ref this.光輪の不透明度 );
+
+                this.ストーリーボード?.Dispose();
+                this.ストーリーボード = null;
+
+                this.放射光の回転角?.Dispose();
+                this.放射光の回転角 = null;
+
+                this.放射光の拡大率?.Dispose();
+                this.放射光の拡大率 = null;
+
+                this.光輪の拡大率?.Dispose();
+                this.光輪の拡大率 = null;
+
+                this.光輪の不透明度?.Dispose();
+                this.光輪の不透明度 = null;
             }
         }
         private Dictionary<表示レーン種別, 表示レーンステータス> _レーンtoステータス = null;

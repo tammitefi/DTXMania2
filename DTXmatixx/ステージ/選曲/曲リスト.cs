@@ -80,8 +80,12 @@ namespace DTXmatixx.ステージ.選曲
                 this._ノードtoサブタイトル画像.Clear();
 
                 this._選択ノードの表示オフセットのストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this._選択ノードの表示オフセットdpx );
-                FDKUtilities.解放する( ref this._選択ノードの表示オフセットのストーリーボード );
+
+                this._選択ノードの表示オフセットdpx?.Dispose();
+                this._選択ノードの表示オフセットdpx = null;
+
+                this._選択ノードの表示オフセットのストーリーボード?.Dispose();
+                this._選択ノードの表示オフセットのストーリーボード = null;
             }
         }
         public void 進行描画する( DeviceContext1 dc )

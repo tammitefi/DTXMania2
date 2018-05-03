@@ -62,10 +62,17 @@ namespace DTXmatixx.曲
         }
         protected override void On非活性化()
         {
-            FDKUtilities.解放する( ref this._backBrush );
-            FDKUtilities.解放する( ref this._subtitleFontBrush );
-            FDKUtilities.解放する( ref this._titleFontBrush );
-            FDKUtilities.解放する( ref this._textFormat );
+            this._backBrush?.Dispose();
+            this._backBrush = null;
+
+            this._subtitleFontBrush?.Dispose();
+            this._subtitleFontBrush = null;
+
+            this._titleFontBrush?.Dispose();
+            this._titleFontBrush = null;
+
+            this._textFormat?.Dispose();
+            this._textFormat = null;
 
             base.On非活性化(); // 忘れずに。
         }

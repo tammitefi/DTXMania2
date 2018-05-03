@@ -31,7 +31,8 @@ namespace DTXmatixx.ステージ.曲読み込み
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._見出し用TextFormat );
+                this._見出し用TextFormat?.Dispose();
+                this._見出し用TextFormat = null;
             }
         }
         public void 描画する( DeviceContext1 dc )

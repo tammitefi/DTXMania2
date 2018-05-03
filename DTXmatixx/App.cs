@@ -104,55 +104,58 @@ namespace DTXmatixx
         public App()
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
 #if DEBUG
-            SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
-            SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
+                SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
+                SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
 #endif
-            this.Text = Application.ProductName + " " + App.リリース番号.ToString( "000" );
+                this.Text = Application.ProductName + " " + App.リリース番号.ToString( "000" );
 
-            var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-            VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
-            VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
-            VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMatixx\" ) );
+                var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
+                VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
+                VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
+                VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMatixx\" ) );
 
-            if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
-                Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
+                if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
+                    Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
 
-            App.Instance = this;
+                App.Instance = this;
 
-            App.乱数 = new Random( DateTime.Now.Millisecond );
+                App.乱数 = new Random( DateTime.Now.Millisecond );
 
-            App.システム設定 = システム設定.復元する();
-            
-            App.入力管理 = new 入力管理( this.Handle ) {
-                キーバインディングを取得する = () => App.システム設定.キーバインディング,
-                キーバインディングを保存する = () => App.システム設定.保存する(),
-            };
-            App.入力管理.初期化する();
+                App.システム設定 = システム設定.復元する();
 
-            App.ステージ管理 = new ステージ管理();
+                App.入力管理 = new 入力管理( this.Handle ) {
+                    キーバインディングを取得する = () => App.システム設定.キーバインディング,
+                    キーバインディングを保存する = () => App.システム設定.保存する(),
+                };
+                App.入力管理.初期化する();
 
-            App.曲ツリー = new 曲ツリー();
+                App.ステージ管理 = new ステージ管理();
 
-            App.演奏スコア = null;
+                App.曲ツリー = new 曲ツリー();
 
-            App.WAV管理 = null;
+                App.演奏スコア = null;
 
-            App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
+                App.WAV管理 = null;
 
-            App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
+                App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
 
-            App.ドラムサウンド = new ドラムサウンド();
+                App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
 
-            App.ユーザ管理 = new ユーザ管理();
-            App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
+                App.ドラムサウンド = new ドラムサウンド();
 
-            this._活性化する();
+                App.ユーザ管理 = new ユーザ管理();
+                App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
 
-            base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
+                this._活性化する();
 
-            // 最初のステージへ遷移する。
-            App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
+                base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
+
+                // 最初のステージへ遷移する。
+                App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
+            }
         }
         public new void Dispose()
         {

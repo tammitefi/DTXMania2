@@ -51,7 +51,8 @@ namespace DTXmatixx.ステージ.タイトル
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._帯ブラシ );
+                this._帯ブラシ?.Dispose();
+                this._帯ブラシ = null;
 
                 base.On非活性化();
             }

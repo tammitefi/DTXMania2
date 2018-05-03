@@ -409,20 +409,40 @@ namespace DTXmatixx.ステージ.演奏
             public void アニメ用メンバを解放する()
             {
                 this.文字列本体のストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.文字列本体のストーリーボード );
-                FDKUtilities.解放する( ref this.文字列本体の不透明度 );
-                FDKUtilities.解放する( ref this.文字列本体の相対Y位置dpx );
+
+                this.文字列本体のストーリーボード?.Dispose();
+                this.文字列本体のストーリーボード = null;
+
+                this.文字列本体の不透明度?.Dispose();
+                this.文字列本体の不透明度 = null;
+
+                this.文字列本体の相対Y位置dpx?.Dispose();
+                this.文字列本体の相対Y位置dpx = null;
 
                 this.文字列影のストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.文字列影のストーリーボード );
-                FDKUtilities.解放する( ref this.文字列影の不透明度 );
-                FDKUtilities.解放する( ref this.文字列影の相対Y位置dpx );
+
+                this.文字列影のストーリーボード?.Dispose();
+                this.文字列影のストーリーボード = null;
+
+                this.文字列影の不透明度?.Dispose();
+                this.文字列影の不透明度 = null;
+
+                this.文字列影の相対Y位置dpx?.Dispose();
+                this.文字列影の相対Y位置dpx = null;
 
                 this.光のストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.光のストーリーボード );
-                FDKUtilities.解放する( ref this.光のY方向拡大率 );
-                FDKUtilities.解放する( ref this.光のX方向拡大率 );
-                FDKUtilities.解放する( ref this.光の回転角 );
+
+                this.光のストーリーボード?.Dispose();
+                this.光のストーリーボード = null;
+
+                this.光のY方向拡大率?.Dispose();
+                this.光のY方向拡大率 = null;
+
+                this.光のX方向拡大率?.Dispose();
+                this.光のX方向拡大率 = null;
+
+                this.光の回転角?.Dispose();
+                this.光の回転角 = null;
             }
         }
         private Dictionary<表示レーン種別, 表示レーンステータス> _レーンtoステータス = null;

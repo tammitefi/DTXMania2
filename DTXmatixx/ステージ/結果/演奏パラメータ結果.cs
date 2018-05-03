@@ -138,12 +138,17 @@ namespace DTXmatixx.ステージ.結果
             public void Dispose()
             {
                 this.ストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.ストーリーボード );
+
+                this.ストーリーボード?.Dispose();
+                this.ストーリーボード = null;
 
                 for( int i = 0; i < 6; i++ )
                 {
-                    FDKUtilities.解放する( ref this.X位置オフセット[ i ] );
-                    FDKUtilities.解放する( ref this.不透明度[ i ] );
+                    this.X位置オフセット[i]?.Dispose();
+                    this.X位置オフセット[i] = null;
+
+                    this.不透明度[i]?.Dispose();
+                    this.不透明度[i] = null;
                 }
                 this.X位置オフセット = null;
                 this.不透明度 = null;

@@ -76,14 +76,29 @@ namespace DTXmatixx.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._上に伸びる導線の長さdpx );
-                FDKUtilities.解放する( ref this._左に伸びる導線の長さdpx );
-                FDKUtilities.解放する( ref this._プレビュー枠の長さdpx );
-                FDKUtilities.解放する( ref this._導線のストーリーボード );
-                FDKUtilities.解放する( ref this._白 );
-                FDKUtilities.解放する( ref this._黒 );
-                FDKUtilities.解放する( ref this._黒透過 );
-                FDKUtilities.解放する( ref this._灰透過 );
+                this._上に伸びる導線の長さdpx?.Dispose();
+                this._上に伸びる導線の長さdpx = null;
+
+                this._左に伸びる導線の長さdpx?.Dispose();
+                this._左に伸びる導線の長さdpx = null;
+
+                this._プレビュー枠の長さdpx?.Dispose();
+                this._プレビュー枠の長さdpx = null;
+
+                this._導線のストーリーボード?.Dispose();
+                this._導線のストーリーボード = null;
+
+                this._白?.Dispose();
+                this._白 = null;
+
+                this._黒?.Dispose();
+                this._黒 = null;
+
+                this._黒透過?.Dispose();
+                this._黒透過 = null;
+
+                this._灰透過?.Dispose();
+                this._灰透過 = null;
             }
         }
         public override void 進行描画する( DeviceContext1 dc )
