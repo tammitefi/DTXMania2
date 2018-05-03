@@ -20,9 +20,11 @@ namespace DTXmatixx.ステージ.選曲
 
         public 難易度と成績()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -35,10 +37,10 @@ namespace DTXmatixx.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._見出し用TextFormat );
+                this._見出し用TextFormat?.Dispose();
+                this._見出し用TextFormat = null;
             }
         }
-
         /// <param name="選択している難易度">
         ///		0:BASIC～4:ULTIMATE
         ///	</param>

@@ -16,10 +16,12 @@ namespace DTXmatixx.ステージ.選曲
     {
         public 曲別SKILL()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜.json", 文字幅補正dpx: 0f ) );
-            this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン2.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜.json", 文字幅補正dpx: 0f ) );
+                this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン2.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -33,7 +35,6 @@ namespace DTXmatixx.ステージ.選曲
             {
             }
         }
-
         public void 進行描画する( DeviceContext1 dc )
         {
             var 描画領域 = new RectangleF( 10f, 340f, 275f, 98f );
@@ -101,7 +102,6 @@ namespace DTXmatixx.ステージ.選曲
 
         private 画像フォント _数字画像 = null;
         private 画像 _ロゴ画像 = null;
-
         private MusicNode _現在表示しているノード = null;
         private string _スキル値文字列 = null;
     }

@@ -29,14 +29,16 @@ namespace DTXmatixx.ステージ.曲ツリー構築
 
         public 曲ツリー構築ステージ()
         {
-            this._表示文字列 =
-                $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}\n" +
-                $"{App.属性<AssemblyCopyrightAttribute>().Copyright}\n" +
-                "\n";
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._表示文字列 =
+                    $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}\n" +
+                    $"{App.属性<AssemblyCopyrightAttribute>().Copyright}\n" +
+                    "\n";
 
-            this.子を追加する( this._コンソールフォント = new 画像フォント( @"$(System)images\コンソールフォント20x32.png", @"$(System)images\コンソールフォント20x32.json", 文字幅補正dpx: -6f ) );
+                this.子を追加する( this._コンソールフォント = new 画像フォント( @"$(System)images\コンソールフォント20x32.png", @"$(System)images\コンソールフォント20x32.json", 文字幅補正dpx: -6f ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -50,7 +52,6 @@ namespace DTXmatixx.ステージ.曲ツリー構築
             {
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             this._コンソールフォント.描画する( dc, 0f, 0f, $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}" );

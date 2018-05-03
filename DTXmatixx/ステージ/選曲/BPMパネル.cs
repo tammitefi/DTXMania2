@@ -16,19 +16,26 @@ namespace DTXmatixx.ステージ.選曲
     {
         public BPMパネル()
         {
-            this.子を追加する( this._BPMパネル = new 画像( @"$(System)images\選曲\BPMパネル.png" ) );
-            this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json", 文字幅補正dpx: 0f ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._BPMパネル = new 画像( @"$(System)images\選曲\BPMパネル.png" ) );
+                this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json", 文字幅補正dpx: 0f ) );
+            }
         }
-
         protected override void On活性化()
         {
-            base.On活性化();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                base.On活性化();
+            }
         }
         protected override void On非活性化()
         {
-            base.On非活性化();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                base.On非活性化();
+            }
         }
-
         public void 描画する( DeviceContext1 dc )
         {
             var 領域 = new RectangleF( 78f, 455f, 357f, 55f );
@@ -80,7 +87,6 @@ namespace DTXmatixx.ステージ.選曲
 
         private 画像 _BPMパネル = null;
         private 画像フォント _パラメータ文字 = null;
-
         private MusicNode _現在表示しているノード = null;
         private double _最小BPM;
         private double _最大BPM;

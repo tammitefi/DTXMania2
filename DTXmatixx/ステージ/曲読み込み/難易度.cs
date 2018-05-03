@@ -15,9 +15,11 @@ namespace DTXmatixx.ステージ.曲読み込み
     {
         public 難易度()
         {
-            this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -29,10 +31,10 @@ namespace DTXmatixx.ステージ.曲読み込み
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._見出し用TextFormat );
+                this._見出し用TextFormat?.Dispose();
+                this._見出し用TextFormat = null;
             }
         }
-
         public void 描画する( DeviceContext1 dc )
         {
             var 見出し描画領域 = new RectangleF( 783f, 117f, 414f, 63f );

@@ -25,43 +25,41 @@ namespace DTXmatixx.ステージ.認証
 
         public ユーザリスト()
         {
-            var image = (画像) null;
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                var image = (画像) null;
 
+                this._ユーザパネル = new Dictionary<PlayMode, 画像>();
 
-            this._ユーザパネル = new Dictionary<PlayMode, 画像>();
+                this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_0.png" ) );
+                this._ユーザパネル.Add( PlayMode.BASIC, image );
+                this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_1.png" ) );
+                this._ユーザパネル.Add( PlayMode.MANIAC, image );
 
-            this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_0.png" ) );
-            this._ユーザパネル.Add( PlayMode.BASIC, image );
-            this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_1.png" ) );
-            this._ユーザパネル.Add( PlayMode.MANIAC, image );
+                this._ユーザパネル光彩付き = new Dictionary<PlayMode, 画像>();
 
+                this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_0_光彩あり.png" ) );
+                this._ユーザパネル光彩付き.Add( PlayMode.BASIC, image );
+                this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_1_光彩あり.png" ) );
+                this._ユーザパネル光彩付き.Add( PlayMode.MANIAC, image );
 
-            this._ユーザパネル光彩付き = new Dictionary<PlayMode, 画像>();
+                this._ユーザ肩書きパネル = new Dictionary<PlayMode, 画像>();
 
-            this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_0_光彩あり.png" ) );
-            this._ユーザパネル光彩付き.Add( PlayMode.BASIC, image );
-            this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_1_光彩あり.png" ) );
-            this._ユーザパネル光彩付き.Add( PlayMode.MANIAC, image );
+                this.子を追加する( image = new 画像( @"$(System)images\認証\肩書きパネル_0.png" ) );
+                this._ユーザ肩書きパネル.Add( PlayMode.BASIC, image );
+                this.子を追加する( image = new 画像( @"$(System)images\認証\肩書きパネル_1.png" ) );
+                this._ユーザ肩書きパネル.Add( PlayMode.MANIAC, image );
 
-
-            this._ユーザ肩書きパネル = new Dictionary<PlayMode, 画像>();
-
-            this.子を追加する( image = new 画像( @"$(System)images\認証\肩書きパネル_0.png" ) );
-            this._ユーザ肩書きパネル.Add( PlayMode.BASIC, image );
-            this.子を追加する( image = new 画像( @"$(System)images\認証\肩書きパネル_1.png" ) );
-            this._ユーザ肩書きパネル.Add( PlayMode.MANIAC, image );
-
-
-            this.子を追加する( this._ユーザ名 = new 文字列画像() {
-                表示文字列 = "",
-                フォントサイズpt = 46f,
-                描画効果 = 文字列画像.効果.縁取り,
-                縁のサイズdpx = 6f,
-                前景色 = Color4.Black,
-                背景色 = Color4.White,
-            } );
+                this.子を追加する( this._ユーザ名 = new 文字列画像() {
+                    表示文字列 = "",
+                    フォントサイズpt = 46f,
+                    描画効果 = 文字列画像.効果.縁取り,
+                    縁のサイズdpx = 6f,
+                    前景色 = Color4.Black,
+                    背景色 = Color4.White,
+                } );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -75,7 +73,6 @@ namespace DTXmatixx.ステージ.認証
             {
             }
         }
-
         public void 前のユーザを選択する()
         {
             this.選択中のユーザ = ( this.選択中のユーザ - 1 + App.ユーザ管理.ユーザリスト.Count ) % App.ユーザ管理.ユーザリスト.Count;
@@ -86,7 +83,6 @@ namespace DTXmatixx.ステージ.認証
             this.選択中のユーザ = ( this.選択中のユーザ + 1 ) % App.ユーザ管理.ユーザリスト.Count;
             this._光彩アニメカウンタ = new LoopCounter( 0, 200, 5 );
         }
-
         public void 進行描画する( DeviceContext1 dc )
         {
             var 描画位置 = new Vector2( 569f, 188f );

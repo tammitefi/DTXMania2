@@ -42,7 +42,6 @@ namespace DTXmatixx.曲
             this._fontSizePt = 20f;
             this._textAlignment = TextAlignment.Leading;
         }
-
         protected override void On活性化()
         {
             base.On活性化();  // 忘れずに。サイズメンバを確定させるために、先に呼び出す。
@@ -63,14 +62,20 @@ namespace DTXmatixx.曲
         }
         protected override void On非活性化()
         {
-            FDKUtilities.解放する( ref this._backBrush );
-            FDKUtilities.解放する( ref this._subtitleFontBrush );
-            FDKUtilities.解放する( ref this._titleFontBrush );
-            FDKUtilities.解放する( ref this._textFormat );
+            this._backBrush?.Dispose();
+            this._backBrush = null;
+
+            this._subtitleFontBrush?.Dispose();
+            this._subtitleFontBrush = null;
+
+            this._titleFontBrush?.Dispose();
+            this._titleFontBrush = null;
+
+            this._textFormat?.Dispose();
+            this._textFormat = null;
 
             base.On非活性化(); // 忘れずに。
         }
-
         public new void 描画する( Matrix ワールド行列変換, RectangleF? レイアウト矩形 = null )
         {
             Debug.Assert( this.活性化している );

@@ -47,96 +47,102 @@ namespace DTXmatixx.入力
         ///	<param name="最大入力履歴数">１つのシーケンスの最大入力サイズ。</param>
         public 入力管理( IntPtr hWindow, int 最大入力履歴数 = 32 )
         {
-            this._hWindow = hWindow;
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._hWindow = hWindow;
 
-            Trace.Assert( 0 < 最大入力履歴数 );
-            this._最大入力履歴数 = 最大入力履歴数;
+                Trace.Assert( 0 < 最大入力履歴数 );
+                this._最大入力履歴数 = 最大入力履歴数;
+            }
         }
 
         /// <summary>
         ///		初期化する。
         ///		コンストラクタの実行時点では外部依存アクションが設定されていないので、初期化にはこのメソッドを呼び出すこと。
         /// </summary>
-        public void Initialize()
+        public void 初期化する()
         {
-            this.Keyboard = new Keyboard( this._hWindow );
-            this.MidiIn = new MidiIn();
-            this.ポーリング結果.Clear();
-            this._入力履歴 = new List<ドラム入力イベント>( this._最大入力履歴数 );
-
-            // MIDI入力デバイスの可変IDへの対応を行う。
-            if( 0 < this.MidiIn.DeviceName.Count )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var デバイスリスト = new Dictionary<int, string>();    // <デバイスID, デバイス名>
-                var キーバインディング = this.キーバインディングを取得する();
+                this.Keyboard = new Keyboard( this._hWindow );
+                this.MidiIn = new MidiIn();
+                this.ポーリング結果.Clear();
+                this._入力履歴 = new List<ドラム入力イベント>( this._最大入力履歴数 );
 
-                #region " (1) 先に列挙された実際のデバイスに合わせて、デバイスリスト（配列番号がデバイス番号）を作成する。"
-                //----------------
-                for( int i = 0; i < this.MidiIn.DeviceName.Count; i++ )
-                    デバイスリスト.Add( i, this.MidiIn.DeviceName[ i ] );
-                //----------------
-                #endregion
-
-                #region " (2) キーバインディングのデバイスリストとマージして、新しいデバイスリストを作成する。"
-                //----------------
-                foreach( var kvp in キーバインディング.MIDIデバイス番号toデバイス名 )
+                // MIDI入力デバイスの可変IDへの対応を行う。
+                if( 0 < this.MidiIn.DeviceName.Count )
                 {
-                    var キーバインディング側のデバイス名 = kvp.Value;
+                    var デバイスリスト = new Dictionary<int, string>();    // <デバイスID, デバイス名>
+                    var キーバインディング = this.キーバインディングを取得する();
 
-                    if( デバイスリスト.ContainsValue( キーバインディング側のデバイス名 ) )
+                    #region " (1) 先に列挙された実際のデバイスに合わせて、デバイスリスト（配列番号がデバイス番号）を作成する。"
+                    //----------------
+                    for( int i = 0; i < this.MidiIn.DeviceName.Count; i++ )
+                        デバイスリスト.Add( i, this.MidiIn.DeviceName[ i ] );
+                    //----------------
+                    #endregion
+
+                    #region " (2) キーバインディングのデバイスリストとマージして、新しいデバイスリストを作成する。"
+                    //----------------
+                    foreach( var kvp in キーバインディング.MIDIデバイス番号toデバイス名 )
                     {
-                        // (A) 今回も存在しているデバイスなら、何もしない。
+                        var キーバインディング側のデバイス名 = kvp.Value;
+
+                        if( デバイスリスト.ContainsValue( キーバインディング側のデバイス名 ) )
+                        {
+                            // (A) 今回も存在しているデバイスなら、何もしない。
+                        }
+                        else
+                        {
+                            // (B) 今回は存在していないデバイスなら、末尾（＝未使用ID）に登録する。
+                            デバイスリスト.Add( デバイスリスト.Count, キーバインディング側のデバイス名 );
+                        }
                     }
-                    else
+                    //----------------
+                    #endregion
+
+                    #region " (3) キーバインディングのデバイスから新しいデバイスへ、キーのIDを付け直す。"
+                    //----------------
+                    var 中間バッファ = new Dictionary<キーバインディング.IdKey, ドラム入力種別>();
+
+                    foreach( var kvp in キーバインディング.MIDItoドラム )
                     {
-                        // (B) 今回は存在していないデバイスなら、末尾（＝未使用ID）に登録する。
-                        デバイスリスト.Add( デバイスリスト.Count, キーバインディング側のデバイス名 );
+                        var キーのデバイスID = kvp.Key.deviceId;
+
+                        // キーバインディングのデバイス番号 から、デバイスリストのデバイス番号 へ付け替える。
+                        if( キーバインディング.MIDIデバイス番号toデバイス名.TryGetValue( キーのデバイスID, out string キーのデバイス名 ) )
+                        {
+                            キーのデバイスID = デバイスリスト.First( ( kvp2 ) => ( kvp2.Value == キーのデバイス名 ) ).Key;    // マージしたので、必ず存在する。
+                        }
+
+                        中間バッファ.Add( new キーバインディング.IdKey( キーのデバイスID, kvp.Key.key ), kvp.Value );    // デバイスID以外は変更なし。
                     }
+
+                    キーバインディング.MIDItoドラム.Clear();
+
+                    for( int i = 0; i < 中間バッファ.Count; i++ )
+                    {
+                        var kvp = 中間バッファ.ElementAt( i );
+                        キーバインディング.MIDItoドラム.Add( new キーバインディング.IdKey( kvp.Key.deviceId, kvp.Key.key ), kvp.Value );
+                    }
+                    //----------------
+                    #endregion
+
+                    #region " (4) 新しいデバイスリストをキーバインディングに格納して、保存する。"
+                    //----------------
+                    キーバインディング.MIDIデバイス番号toデバイス名.Clear();
+
+                    for( int i = 0; i < デバイスリスト.Count; i++ )
+                        キーバインディング.MIDIデバイス番号toデバイス名.Add( i, デバイスリスト[ i ] );
+
+                    this.キーバインディングを保存する();
+                    //----------------
+                    #endregion
                 }
-                //----------------
-                #endregion
-
-                #region " (3) キーバインディングのデバイスから新しいデバイスへ、キーのIDを付け直す。"
-                //----------------
-                var 中間バッファ = new Dictionary<キーバインディング.IdKey, ドラム入力種別>();
-
-                foreach( var kvp in キーバインディング.MIDItoドラム )
+                else
                 {
-                    var キーのデバイスID = kvp.Key.deviceId;
-
-                    // キーバインディングのデバイス番号 から、デバイスリストのデバイス番号 へ付け替える。
-                    if( キーバインディング.MIDIデバイス番号toデバイス名.TryGetValue( キーのデバイスID, out string キーのデバイス名 ) )
-                    {
-                        キーのデバイスID = デバイスリスト.First( ( kvp2 ) => ( kvp2.Value == キーのデバイス名 ) ).Key;    // マージしたので、必ず存在する。
-                    }
-
-                    中間バッファ.Add( new キーバインディング.IdKey( キーのデバイスID, kvp.Key.key ), kvp.Value );    // デバイスID以外は変更なし。
+                    // 列挙されたMIDI入力デバイスがまったくないなら、キーバインディングは何もいじらない。
                 }
-
-                キーバインディング.MIDItoドラム.Clear();
-
-                for( int i = 0; i < 中間バッファ.Count; i++ )
-                {
-                    var kvp = 中間バッファ.ElementAt( i );
-                    キーバインディング.MIDItoドラム.Add( new キーバインディング.IdKey( kvp.Key.deviceId, kvp.Key.key ), kvp.Value );
-                }
-                //----------------
-                #endregion
-
-                #region " (4) 新しいデバイスリストをキーバインディングに格納して、保存する。"
-                //----------------
-                キーバインディング.MIDIデバイス番号toデバイス名.Clear();
-
-                for( int i = 0; i < デバイスリスト.Count; i++ )
-                    キーバインディング.MIDIデバイス番号toデバイス名.Add( i, デバイスリスト[ i ] );
-
-                this.キーバインディングを保存する();
-                //----------------
-                #endregion
-            }
-            else
-            {
-                // 列挙されたMIDI入力デバイスがまったくないなら、キーバインディングは何もいじらない。
             }
         }
 
@@ -467,7 +473,6 @@ namespace DTXmatixx.入力
 
         private int _最大入力履歴数 = 32;
         private IntPtr _hWindow;
-
         private bool _入力履歴を記録中である
         {
             get;
@@ -480,7 +485,6 @@ namespace DTXmatixx.入力
             set
                 => this._入力履歴を記録中である = !( value );
         }
-
         /// <summary>
         ///		null なら、入力履歴に追加された入力がまだないことを示す。
         /// </summary>

@@ -16,9 +16,11 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 判定文字列()
         {
-            this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -49,7 +51,6 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoステータス = null;
             }
         }
-
         public void 表示を開始する( 表示レーン種別 lane, 判定種別 judge )
         {
             var status = this._レーンtoステータス[ lane ];
@@ -346,10 +347,8 @@ namespace DTXmatixx.ステージ.演奏
                 表示中,        // 描画スレッドが設定
             }
             public 状態 現在の状態 = 状態.非表示;
-
             public 判定種別 判定種別 = 判定種別.PERFECT;
             public readonly Vector2 表示中央位置dpx;
-
             /// <summary>
             ///		判定文字列（本体）の表示されるY座標のオフセット。
             ///		表示中央位置dpx.Y からの相対値[dpx]。
@@ -363,7 +362,6 @@ namespace DTXmatixx.ステージ.演奏
             public Variable 文字列本体のX方向拡大率 = null;
             public Variable 文字列本体のY方向拡大率 = null;
             public Storyboard 文字列本体のストーリーボード = null;
-
             /// <summary>
             ///		判定文字列（影）の表示されるY座標のオフセット。
             ///		表示中央位置dpx.Y からの相対値[dpx]。
@@ -375,7 +373,6 @@ namespace DTXmatixx.ステージ.演奏
             /// </summary>
             public Variable 文字列影の不透明度 = null;
             public Storyboard 文字列影のストーリーボード = null;
-
             /// <summary>
             ///		単位は度（degree）、時計回りを正とする。
             /// </summary>
@@ -412,20 +409,40 @@ namespace DTXmatixx.ステージ.演奏
             public void アニメ用メンバを解放する()
             {
                 this.文字列本体のストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.文字列本体のストーリーボード );
-                FDKUtilities.解放する( ref this.文字列本体の不透明度 );
-                FDKUtilities.解放する( ref this.文字列本体の相対Y位置dpx );
+
+                this.文字列本体のストーリーボード?.Dispose();
+                this.文字列本体のストーリーボード = null;
+
+                this.文字列本体の不透明度?.Dispose();
+                this.文字列本体の不透明度 = null;
+
+                this.文字列本体の相対Y位置dpx?.Dispose();
+                this.文字列本体の相対Y位置dpx = null;
 
                 this.文字列影のストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.文字列影のストーリーボード );
-                FDKUtilities.解放する( ref this.文字列影の不透明度 );
-                FDKUtilities.解放する( ref this.文字列影の相対Y位置dpx );
+
+                this.文字列影のストーリーボード?.Dispose();
+                this.文字列影のストーリーボード = null;
+
+                this.文字列影の不透明度?.Dispose();
+                this.文字列影の不透明度 = null;
+
+                this.文字列影の相対Y位置dpx?.Dispose();
+                this.文字列影の相対Y位置dpx = null;
 
                 this.光のストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.光のストーリーボード );
-                FDKUtilities.解放する( ref this.光のY方向拡大率 );
-                FDKUtilities.解放する( ref this.光のX方向拡大率 );
-                FDKUtilities.解放する( ref this.光の回転角 );
+
+                this.光のストーリーボード?.Dispose();
+                this.光のストーリーボード = null;
+
+                this.光のY方向拡大率?.Dispose();
+                this.光のY方向拡大率 = null;
+
+                this.光のX方向拡大率?.Dispose();
+                this.光のX方向拡大率 = null;
+
+                this.光の回転角?.Dispose();
+                this.光の回転角 = null;
             }
         }
         private Dictionary<表示レーン種別, 表示レーンステータス> _レーンtoステータス = null;

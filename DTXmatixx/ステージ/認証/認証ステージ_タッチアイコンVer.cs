@@ -31,11 +31,13 @@ namespace DTXmatixx.ステージ.認証
 
         public 認証ステージ_タッチアイコンVer()
         {
-            this.子を追加する( this._舞台画像 = new 舞台画像() );
-            this.子を追加する( this._タッチアイコン = new 画像( @"$(System)images\認証\タッチアイコン.png" ) );
-            this.子を追加する( this._確認できませんでした = new 文字列画像() { 表示文字列 = "確認できませんでした。", フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._舞台画像 = new 舞台画像() );
+                this.子を追加する( this._タッチアイコン = new 画像( @"$(System)images\認証\タッチアイコン.png" ) );
+                this.子を追加する( this._確認できませんでした = new 文字列画像() { 表示文字列 = "確認できませんでした。", フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -50,7 +52,6 @@ namespace DTXmatixx.ステージ.認証
             {
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
@@ -120,7 +121,6 @@ namespace DTXmatixx.ステージ.認証
         private 文字列画像 _確認できませんでした = null;
         private Counter _表示フェーズカウンタ = null;
         private Counter _待機フェーズカウンタ = null;
-
         private readonly Matrix3x2 _タッチアイコン表示行列 = Matrix3x2.Translation( 960f - 128f, 540f - 128f );
         private readonly Matrix3x2 _確認できませんでした表示行列 = Matrix3x2.Translation( 960f - 180f, 540f - 200f );
     }

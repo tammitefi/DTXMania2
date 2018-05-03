@@ -15,8 +15,10 @@ namespace DTXmatixx.ステージ.結果
     {
         public 演奏パラメータ結果()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -63,7 +65,8 @@ namespace DTXmatixx.ステージ.結果
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._パラメータアニメ );
+                this._パラメータアニメ?.Dispose();
+                this._パラメータアニメ = null;
 
                 base.On非活性化();
             }
@@ -135,12 +138,17 @@ namespace DTXmatixx.ステージ.結果
             public void Dispose()
             {
                 this.ストーリーボード?.Abandon();
-                FDKUtilities.解放する( ref this.ストーリーボード );
+
+                this.ストーリーボード?.Dispose();
+                this.ストーリーボード = null;
 
                 for( int i = 0; i < 6; i++ )
                 {
-                    FDKUtilities.解放する( ref this.X位置オフセット[ i ] );
-                    FDKUtilities.解放する( ref this.不透明度[ i ] );
+                    this.X位置オフセット[i]?.Dispose();
+                    this.X位置オフセット[i] = null;
+
+                    this.不透明度[i]?.Dispose();
+                    this.不透明度[i] = null;
                 }
                 this.X位置オフセット = null;
                 this.不透明度 = null;

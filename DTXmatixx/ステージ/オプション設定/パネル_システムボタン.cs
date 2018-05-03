@@ -18,9 +18,12 @@ namespace DTXmatixx.ステージ.オプション設定
         public パネル_システムボタン( string パネル名 )
             : base( パネル名, null )
         {
-            this._パネル名画像.前景色 = Color.Black;
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._パネル名画像.前景色 = Color.Black;
+                Log.Info( $"システムボタンパネルを生成しました。[{this}]" );
+            }
         }
-
         protected override void On活性化()
         {
             base.On活性化();   //忘れないこと
@@ -29,7 +32,6 @@ namespace DTXmatixx.ステージ.オプション設定
         {
             base.On非活性化();   //忘れないこと
         }
-
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             float 拡大率Y = (float) this._パネルの高さ割合.Value;

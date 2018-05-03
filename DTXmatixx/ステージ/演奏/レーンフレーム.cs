@@ -21,7 +21,6 @@ namespace DTXmatixx.ステージ.演奏
         /// </summary>
         public static RectangleF 領域
             => new RectangleF( 445f, 0f, 778f, 938f );
-
         public static Dictionary<string, レーン配置> レーン配置リスト;
 
         public class レーン配置
@@ -63,7 +62,6 @@ namespace DTXmatixx.ステージ.演奏
             public Color4 レーン色;
             public Color4 レーンライン色;
         }
-
         public static レーン配置 現在のレーン配置
             => _現在のレーン配置;
 
@@ -115,26 +113,29 @@ namespace DTXmatixx.ステージ.演奏
         }
         public static void レーン配置を設定する( string レーン配置名 )
         {
-            if( レーン配置リスト.ContainsKey( レーン配置名 ) )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                _現在のレーン配置 = レーン配置リスト[ レーン配置名 ];
-            }
-            else
-            {
-                Log.ERROR( $"指定されたレーン配置名「{レーン配置名}」が存在しません。" );
-
-                if( 0 < レーン配置リスト.Count )
+                if( レーン配置リスト.ContainsKey( レーン配置名 ) )
                 {
-                    _現在のレーン配置 = レーン配置リスト.ElementAt( 0 ).Value;
-                    Log.WARNING( $"既定のレーン配置名「{_現在のレーン配置.配置名}」を選択しました。" );
+                    _現在のレーン配置 = レーン配置リスト[ レーン配置名 ];
                 }
                 else
                 {
-                    Log.ERRORandTHROW( "既定のレーン配置名を選択しようとしましたが、存在しません。" );
-                }
-            }
+                    Log.ERROR( $"指定されたレーン配置名「{レーン配置名}」が存在しません。" );
 
-            Log.Info( $"レーン配置「{_現在のレーン配置.配置名}」を選択しました。" );
+                    if( 0 < レーン配置リスト.Count )
+                    {
+                        _現在のレーン配置 = レーン配置リスト.ElementAt( 0 ).Value;
+                        Log.WARNING( $"既定のレーン配置名「{_現在のレーン配置.配置名}」を選択しました。" );
+                    }
+                    else
+                    {
+                        throw new Exception( "既定のレーン配置名を選択しようとしましたが、存在しません。" );
+                    }
+                }
+
+                Log.Info( $"レーン配置「{_現在のレーン配置.配置名}」を選択しました。" );
+            }
         }
 
         public void 描画する( DeviceContext1 dc )
@@ -161,7 +162,6 @@ namespace DTXmatixx.ステージ.演奏
 
             } );
         }
-
 
         private static レーン配置 _現在のレーン配置;
     }

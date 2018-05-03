@@ -20,97 +20,109 @@ namespace DTXmatixx.ステージ.オプション設定
             get;
             protected set;
         } = "";
-
         /// <summary>
         ///		パネル全体のサイズ。static。
         /// </summary>
         public static Size2F サイズ
             => new Size2F( 642f, 96f );
-
         public class ヘッダ色種別
         {
             public static readonly Color4 青 = new Color4( 0xff725031 );   // ABGR
             public static readonly Color4 赤 = new Color4( 0xff315072 );
         }
-
         public Color4 ヘッダ色
         {
             get;
             set;
         } = ヘッダ色種別.青;
 
-
         public パネル( string パネル名, Action<パネル> 値の変更処理 = null )
         {
-            this.パネル名 = パネル名;
-            this._値の変更処理 = 値の変更処理;
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.パネル名 = パネル名;
+                this._値の変更処理 = 値の変更処理;
 
-            this.子を追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
+                this.子を追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
+            }
         }
-
         public void フェードインを開始する( double 遅延sec, double 速度倍率 = 1.0 )
         {
-            Trace.Assert( this.活性化している );
-
-            double 秒( double v ) => ( v / 速度倍率 );
-
-            var animation = グラフィックデバイス.Instance.Animation;
-
-            this._パネルの高さ割合?.Dispose();
-            this._パネルの高さ割合 = new Variable( animation.Manager, initialValue: 1.0 );
-
-            this._パネルのストーリーボード?.Abandon();
-            this._パネルのストーリーボード?.Dispose();
-            this._パネルのストーリーボード = new Storyboard( animation.Manager );
-
-            using( var 遅延遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
-            using( var 縮む遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
-            using( var 膨らむ遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 1.0 ) )
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
-                this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
-                this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 膨らむ遷移 );
+                Trace.Assert( this.活性化している );
+
+                double 秒( double v ) => ( v / 速度倍率 );
+
+                var animation = グラフィックデバイス.Instance.Animation;
+
+                this._パネルの高さ割合?.Dispose();
+                this._パネルの高さ割合 = new Variable( animation.Manager, initialValue: 1.0 );
+
+                this._パネルのストーリーボード?.Abandon();
+                this._パネルのストーリーボード?.Dispose();
+                this._パネルのストーリーボード = new Storyboard( animation.Manager );
+
+                using( var 遅延遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
+                using( var 縮む遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+                using( var 膨らむ遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 1.0 ) )
+                {
+                    this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
+                    this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
+                    this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 膨らむ遷移 );
+                }
+                this._パネルのストーリーボード.Schedule( animation.Timer.Time );
             }
-            this._パネルのストーリーボード.Schedule( animation.Timer.Time );
         }
         public void フェードアウトを開始する( double 遅延sec, double 速度倍率 = 1.0 )
         {
-            Trace.Assert( this.活性化している );
-
-            double 秒( double v ) => ( v / 速度倍率 );
-
-            var animation = グラフィックデバイス.Instance.Animation;
-
-            if( null == this._パネルの高さ割合 )    // 未生成のときだけ生成。生成済みなら、その現状を引き継ぐ。
-                this._パネルの高さ割合 = new Variable( animation.Manager, initialValue: 1.0 );
-
-            this._パネルのストーリーボード?.Abandon();
-            this._パネルのストーリーボード?.Dispose();
-            this._パネルのストーリーボード = new Storyboard( animation.Manager );
-
-            using( var 遅延遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
-            using( var 縮む遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
-                this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
-            }
-            this._パネルのストーリーボード.Schedule( animation.Timer.Time );
-        }
+                Trace.Assert( this.活性化している );
 
+                double 秒( double v ) => ( v / 速度倍率 );
+
+                var animation = グラフィックデバイス.Instance.Animation;
+
+                if( null == this._パネルの高さ割合 )    // 未生成のときだけ生成。生成済みなら、その現状を引き継ぐ。
+                    this._パネルの高さ割合 = new Variable( animation.Manager, initialValue: 1.0 );
+
+                this._パネルのストーリーボード?.Abandon();
+                this._パネルのストーリーボード?.Dispose();
+                this._パネルのストーリーボード = new Storyboard( animation.Manager );
+
+                using( var 遅延遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 遅延sec ) ) )
+                using( var 縮む遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 0.1 ), finalValue: 0.0 ) )
+                {
+                    this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 遅延遷移 );
+                    this._パネルのストーリーボード.AddTransition( this._パネルの高さ割合, 縮む遷移 );
+                }
+                this._パネルのストーリーボード.Schedule( animation.Timer.Time );
+            }
+        }
         // ※派生クラスから呼び出すのを忘れないこと。
         protected override void On活性化()
         {
-            this._パネルの高さ割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 1.0 );
-            this._パネルのストーリーボード = null;
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._パネルの高さ割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 1.0 );
+                this._パネルのストーリーボード = null;
+            }
         }
         // ※派生クラスから呼び出すのを忘れないこと。
         protected override void On非活性化()
         {
-            this._パネルのストーリーボード?.Abandon();
-            FDKUtilities.解放する( ref this._パネルのストーリーボード );
-            FDKUtilities.解放する( ref this._パネルの高さ割合 );
-        }
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._パネルのストーリーボード?.Abandon();
 
+                this._パネルのストーリーボード?.Dispose();
+                this._パネルのストーリーボード = null;
+
+                this._パネルの高さ割合?.Dispose();
+                this._パネルの高さ割合 = null;
+            }
+        }
         public virtual void 確定キーが入力された()
         {
             // 必要あれば、派生クラスで実装すること。
@@ -129,7 +141,6 @@ namespace DTXmatixx.ステージ.オプション設定
 
             this._値の変更処理?.Invoke( this );
         }
-
         public virtual void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             float 拡大率Y = (float) this._パネルの高さ割合.Value;
@@ -169,6 +180,8 @@ namespace DTXmatixx.ステージ.オプション設定
                 X方向拡大率: 拡大率X,
                 Y方向拡大率: 拡大率Y );
         }
+        public override string ToString()
+            => $"{this.パネル名}";
 
         protected 文字列画像 _パネル名画像 = null;
         protected Action<パネル> _値の変更処理 = null;

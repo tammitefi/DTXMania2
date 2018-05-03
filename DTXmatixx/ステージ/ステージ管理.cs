@@ -11,13 +11,10 @@ namespace DTXmatixx.ステージ
     {
         public string 最初のステージ名
             => this.ステージリスト.ElementAt( 0 ).Value.GetType().Name;
-
         public ステージ 現在のステージ
             => this._現在のステージ;
-
         public アイキャッチ.アイキャッチ 現在のアイキャッチ
             => this._現在のアイキャッチ;
-
         /// <summary>
         ///		全ステージのリスト。
         ///		新しいステージができたら、ここに追加すること。
@@ -36,34 +33,39 @@ namespace DTXmatixx.ステージ
 
         public ステージ管理()
         {
-            // 各ステージの外部依存アクションを接続。
-            var 結果ステージ = (結果.結果ステージ) this.ステージリスト[ nameof( 結果.結果ステージ ) ];
-            var 演奏ステージ = (演奏.演奏ステージ) this.ステージリスト[ nameof( 演奏.演奏ステージ ) ];
-            結果ステージ.結果を取得する = () => ( 演奏ステージ.成績 );
-            結果ステージ.BGMを停止する = () => 演奏ステージ.BGMを停止する();
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                // 各ステージの外部依存アクションを接続。
+                var 結果ステージ = (結果.結果ステージ) this.ステージリスト[ nameof( 結果.結果ステージ ) ];
+                var 演奏ステージ = (演奏.演奏ステージ) this.ステージリスト[ nameof( 演奏.演奏ステージ ) ];
+                結果ステージ.結果を取得する = () => ( 演奏ステージ.成績 );
+                結果ステージ.BGMを停止する = () => 演奏ステージ.BGMを停止する();
 
-            // static なメンバの初期化。
-            演奏.レーンフレーム.初期化する();
+                // static なメンバの初期化。
+                演奏.レーンフレーム.初期化する();
+            }
         }
         public void Dispose()
         {
-            // 現在活性化しているステージがあれば、すべて非活性化する。
-            foreach( var kvp in this.ステージリスト )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                if( kvp.Value.活性化している )
+                // 現在活性化しているステージがあれば、すべて非活性化する。
+                foreach( var kvp in this.ステージリスト )
                 {
-                    kvp.Value.非活性化する();
+                    if( kvp.Value.活性化している )
+                    {
+                        kvp.Value.非活性化する();
+                    }
+                }
+                // 現在活性化しているアイキャッチがあれば、すべて非活性化する。
+                foreach( var kvp in this._アイキャッチリスト )
+                {
+                    if( kvp.Value.活性化している )
+                    {
+                        kvp.Value.非活性化する();
+                    }
                 }
             }
-            // 現在活性化しているアイキャッチがあれば、すべて非活性化する。
-            foreach( var kvp in this._アイキャッチリスト )
-            {
-                if( kvp.Value.活性化している )
-                {
-                    kvp.Value.非活性化する();
-                }
-            }
-
         }
         protected override void On活性化()
         {
@@ -94,7 +96,6 @@ namespace DTXmatixx.ステージ
                 this._現在のアイキャッチ = null;
             }
         }
-
         /// <summary>
         ///		現在のステージを非活性化し、指定されたステージに遷移して、活性化する。
         /// </summary>
@@ -135,12 +136,10 @@ namespace DTXmatixx.ステージ
         ///		現在実行中のステージ。<see cref="ステージリスト"/> の中のひとつを参照している（ので、うかつにDisposeとかしたりしないこと）。
         /// </summary>
         private ステージ _現在のステージ;
-
         /// <summary>
         ///		現在選択中のアイキャッチ。アイキャッチリストの中のひとつを参照している（ので、うかつにDisposeとかしたりしないこと）。
         /// </summary>
         private アイキャッチ.アイキャッチ _現在のアイキャッチ = null;
-
         private Dictionary<string, アイキャッチ.アイキャッチ> _アイキャッチリスト = new Dictionary<string, アイキャッチ.アイキャッチ>() {
             { nameof( アイキャッチ.シャッター ), new アイキャッチ.シャッター() },
             { nameof( アイキャッチ.回転幕 ), new アイキャッチ.回転幕() },

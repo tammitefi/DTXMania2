@@ -15,29 +15,31 @@ namespace DTXmatixx.ステージ.演奏
     {
         public 曲名パネル()
         {
-            this.子を追加する( this._パネル = new 画像( @"$(System)images\演奏\曲名パネル.png" ) );
-            this.子を追加する( this._曲名画像 = new 文字列画像() {
-                フォント名 = "HGMaruGothicMPRO",
-                フォントサイズpt = 26f,
-                フォント幅 = FontWeight.Regular,
-                フォントスタイル = FontStyle.Normal,
-                描画効果 = 文字列画像.効果.縁取り,
-                縁のサイズdpx = 4f,
-                前景色 = Color4.Black,
-                背景色 = Color4.White,
-            } );
-            this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
-                フォント名 = "HGMaruGothicMPRO",
-                フォントサイズpt = 18f,
-                フォント幅 = FontWeight.Regular,
-                フォントスタイル = FontStyle.Normal,
-                描画効果 = 文字列画像.効果.縁取り,
-                縁のサイズdpx = 3f,
-                前景色 = Color4.Black,
-                背景色 = Color4.White,
-            } );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._パネル = new 画像( @"$(System)images\演奏\曲名パネル.png" ) );
+                this.子を追加する( this._曲名画像 = new 文字列画像() {
+                    フォント名 = "HGMaruGothicMPRO",
+                    フォントサイズpt = 26f,
+                    フォント幅 = FontWeight.Regular,
+                    フォントスタイル = FontStyle.Normal,
+                    描画効果 = 文字列画像.効果.縁取り,
+                    縁のサイズdpx = 4f,
+                    前景色 = Color4.Black,
+                    背景色 = Color4.White,
+                } );
+                this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
+                    フォント名 = "HGMaruGothicMPRO",
+                    フォントサイズpt = 18f,
+                    フォント幅 = FontWeight.Regular,
+                    フォントスタイル = FontStyle.Normal,
+                    描画効果 = 文字列画像.効果.縁取り,
+                    縁のサイズdpx = 3f,
+                    前景色 = Color4.Black,
+                    背景色 = Color4.White,
+                } );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -55,7 +57,6 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
-
         public void 描画する( DeviceContext1 dc )
         {
             this._パネル.描画する( dc, 1458f, 3f );

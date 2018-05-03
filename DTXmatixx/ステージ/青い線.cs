@@ -19,10 +19,13 @@ namespace DTXmatixx.ステージ
             get;
             protected set;
         } = 26f;
+
         public 青い線()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -51,11 +54,13 @@ namespace DTXmatixx.ステージ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                FDKUtilities.解放する( ref this._線グラブラシ );
-                FDKUtilities.解放する( ref this._線グラ頂点集合 );
+                this._線グラブラシ?.Dispose();
+                this._線グラブラシ = null;
+
+                this._線グラ頂点集合?.Dispose();
+                this._線グラ頂点集合 = null;
             }
         }
-
         /// <summary>
         /// 	よこ線（左→右）か、たて線（上→下）のいずれかを描画できる。
         /// 	よこ線を描画したい場合は<paramref name="幅dpx"/>を指定し、

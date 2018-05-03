@@ -17,9 +17,12 @@ namespace DTXmatixx.ステージ.オプション設定
         public パネル_譜面スピード( string パネル名 )
             : base( パネル名, null )
         {
-            this.子を追加する( this._項目画像 = new 文字列画像() { 表示文字列 = "", フォントサイズpt = 34f, 前景色 = Color4.White } );
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._項目画像 = new 文字列画像() { 表示文字列 = "", フォントサイズpt = 34f, 前景色 = Color4.White } );
+                Log.Info( $"譜面スピードパネルを生成しました。[{this}]" );
+            }
         }
-
         public override void 左移動キーが入力された()
         {
             // 譜面スクロールを減速
@@ -41,7 +44,6 @@ namespace DTXmatixx.ステージ.オプション設定
             if( 最大倍率 < App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 )
                 App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 = 最小倍率;
         }
-
         protected override void On活性化()
         {
             base.On活性化();   //忘れないこと
@@ -50,7 +52,6 @@ namespace DTXmatixx.ステージ.オプション設定
         {
             base.On非活性化();   //忘れないこと
         }
-
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。

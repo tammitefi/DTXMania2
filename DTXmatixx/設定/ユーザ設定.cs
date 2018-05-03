@@ -124,18 +124,20 @@ namespace DTXmatixx.設定
 
         public ユーザ設定()
         {
-            this._User = new User() {
-                Id = null,
-            };
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._User = new User() {
+                    Id = null,
+                };
 
-            this.ドラムチッププロパティ管理 = new ドラムチッププロパティ管理(
-                (PlayMode) this._User.PlayMode,
-                new 表示レーンの左右() { Chinaは左 = false, Rideは左 = false, Splashは左 = true },
-                入力グループプリセット種別.基本形 );
+                this.ドラムチッププロパティ管理 = new ドラムチッププロパティ管理(
+                    (PlayMode) this._User.PlayMode,
+                    new 表示レーンの左右() { Chinaは左 = false, Rideは左 = false, Splashは左 = true },
+                    入力グループプリセット種別.基本形 );
 
-            this._Userに依存するメンバを初期化する();
+                this._Userに依存するメンバを初期化する();
+            }
         }
-
         /// <summary>
         ///		指定したユーザIDをデータベースから検索し、その情報でインスタンスを初期化する。
         ///		検索で見つからなければ、<see cref="ユーザID"/> が null となる。。
@@ -143,23 +145,26 @@ namespace DTXmatixx.設定
         public ユーザ設定( string ユーザID )
             : this()
         {
-            using( var userdb = new UserDB() )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var record = userdb.Users.Where( ( r ) => ( r.Id == ユーザID ) ).SingleOrDefault();
+                using( var userdb = new UserDB() )
+                {
+                    var record = userdb.Users.Where( ( r ) => ( r.Id == ユーザID ) ).SingleOrDefault();
 
-                if( null != record )
-                {
-                    // レコードが存在するなら、その内容を継承する。
-                    this._User = record.Clone();
-                    this._Userに依存するメンバを初期化する();
-                }
-                else
-                {
-                    Log.WARNING( $"ユーザがデータベース上に見つかりませんでした。[Id:{ユーザID}]" );
+                    if( null != record )
+                    {
+                        // レコードが存在するなら、その内容を継承する。
+                        this._User = record.Clone();
+                        this._Userに依存するメンバを初期化する();
+                        Log.Info( $"ユーザの設定をデータベースから読み込みました。[{this._User}]" );
+                    }
+                    else
+                    {
+                        Log.WARNING( $"ID={ユーザID} のユーザがデータベース上に見つかりませんでした。" );
+                    }
                 }
             }
         }
-
         /// <summary>
         ///		指定したユーザ情報を新しいユーザとしてデータベースに登録し、
         ///		その情報で初期化したインスタンスを返す。
@@ -167,47 +172,54 @@ namespace DTXmatixx.設定
         /// </summary>
         public static ユーザ設定 作成する( User user )
         {
-            using( var userdb = new UserDB() )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var record = userdb.Users.Where( ( r ) => ( r.Id == user.Id ) ).SingleOrDefault();
-
-                if( null == record )
+                using( var userdb = new UserDB() )
                 {
-                    // (A) データベースに新規追加し、新しいインスタンスを返す。
-                    userdb.Users.InsertOnSubmit( user );
-                    userdb.DataContext.SubmitChanges();
+                    var record = userdb.Users.Where( ( r ) => ( r.Id == user.Id ) ).SingleOrDefault();
 
-                    var settings = new ユーザ設定() {
-                        _User = user.Clone(),
-                    };
-                    settings._Userに依存するメンバを初期化する();
+                    if( null == record )
+                    {
+                        // (A) データベースに新規追加し、新しいインスタンスを返す。
+                        userdb.Users.InsertOnSubmit( user );
+                        userdb.DataContext.SubmitChanges();
 
-                    return settings;
-                }
-                else
-                {
-                    // (B) データベース上にすでに存在している。
-                    Log.WARNING( $"指定されたユーザはすでにデータベース上に存在しています。[Id:{user.Id}]" );
-                    return null;
+                        var settings = new ユーザ設定() {
+                            _User = user.Clone(),
+                        };
+                        settings._Userに依存するメンバを初期化する();
+
+                        Log.Info( $"ユーザを新規に作成しました。[{user}]" );
+                        return settings;
+                    }
+                    else
+                    {
+                        // (B) データベース上にすでに存在している。
+                        Log.WARNING( $"指定されたユーザはすでにデータベース上に存在しています。[{user}]" );
+                        return null;
+                    }
                 }
             }
         }
-
         public void 保存する()
         {
-            using( var userdb = new UserDB() )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                // すでにデータベース上にレコードが存在する場合は、いったん削除する。（更新するより手っ取り早いので）
-                var record = userdb.Users.Where( ( r ) => ( r.Id == this.ユーザID ) ).SingleOrDefault();
-                if( null != record )
-                    userdb.Users.DeleteOnSubmit( record );
+                using( var userdb = new UserDB() )
+                {
+                    // すでにデータベース上にレコードが存在する場合は、いったん削除する。（更新するより手っ取り早いので）
+                    var record = userdb.Users.Where( ( r ) => ( r.Id == this.ユーザID ) ).SingleOrDefault();
+                    if( null != record )
+                        userdb.Users.DeleteOnSubmit( record );
 
-                // レコードを追加する。
-                userdb.Users.InsertOnSubmit( this._User );
-                userdb.DataContext.SubmitChanges();
+                    // レコードを追加する。
+                    userdb.Users.InsertOnSubmit( this._User );
+                    userdb.DataContext.SubmitChanges();
+                }
             }
         }
-
+        public override string ToString()
+            => this._User.ToString();
 
         private User _User = null;
 

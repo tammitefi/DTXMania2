@@ -29,8 +29,30 @@ namespace DTXmatixx.ステージ.演奏
 
         public カウントマップライン()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
+        protected override void On活性化()
+        {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.カウントマップ = new int[ カウントマップの最大要素数 ];
+                for( int i = 0; i < this.カウントマップ.Length; i++ )
+                    this.カウントマップ[ i ] = 0;
 
+                this._最後にカウント値を設定した位置 = 0f;
+                this._最後にカウント値を設定したときの成績 = new Dictionary<判定種別, int>();
+                foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
+                    this._最後にカウント値を設定したときの成績.Add( judge, 0 );
+            }
+        }
+        protected override void On非活性化()
+        {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
+        }
         /// <summary>
         ///		初期化。
         /// </summary>
@@ -41,7 +63,6 @@ namespace DTXmatixx.ステージ.演奏
             this._過去最大のカウントマップ = new int[ カウントマップ.Length ];
             カウントマップ.CopyTo( this._過去最大のカウントマップ, 0 );    // コピー
         }
-
         /// <summary>
         ///		指定された位置における現在の成績から、対応するカウント値を算出し、反映する。
         /// </summary>
@@ -71,28 +92,6 @@ namespace DTXmatixx.ステージ.演奏
             foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
                 this._最後にカウント値を設定したときの成績[ judge ] = 判定toヒット数[ judge ];
         }
-
-        protected override void On活性化()
-        {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-                this.カウントマップ = new int[ カウントマップの最大要素数 ];
-                for( int i = 0; i < this.カウントマップ.Length; i++ )
-                    this.カウントマップ[ i ] = 0;
-
-                this._最後にカウント値を設定した位置 = 0f;
-                this._最後にカウント値を設定したときの成績 = new Dictionary<判定種別, int>();
-                foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
-                    this._最後にカウント値を設定したときの成績.Add( judge, 0 );
-            }
-        }
-        protected override void On非活性化()
-        {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-            }
-        }
-
         public void 進行描画する( DeviceContext1 dc )
         {
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {

@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 using FDK;
 using FDK.入力;
 using FDK.メディア;
-using FDK.メディア.サウンド.WASAPI;
+using FDK.メディア.サウンド;
 using FDK.同期;
 using SSTFormat.v3;
 using DTXmatixx.ステージ;
@@ -31,10 +31,7 @@ namespace DTXmatixx
     class App : ApplicationForm, IDTXManiaService, IDisposable
     {
         public static int リリース番号
-        {
-            get;
-            protected set;
-        }
+            => int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) ? release : throw new Exception( "アセンブリのプロダクトバージョンに記載ミスがあります。" );
         public static T 属性<T>() where T : Attribute
             => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
@@ -72,16 +69,6 @@ namespace DTXmatixx
             get;
             protected set;
         } = null;
-        public static スコア 演奏スコア
-        {
-            get;
-            set;
-        } = null;
-        public static WAV管理 WAV管理
-        {
-            get;
-            set;
-        } = null;
         public static SoundDevice サウンドデバイス
         {
             get;
@@ -103,65 +90,72 @@ namespace DTXmatixx
             protected set;
         } = null;
 
+        public static スコア 演奏スコア
+        {
+            get;
+            set;
+        } = null;
+        public static WAV管理 WAV管理
+        {
+            get;
+            set;
+        } = null;
+
         public App()
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
-            #region " プロダクトバージョンのメジャー番号をリリース番号として取得する。"
-            //----------------
-            if( int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) )
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                App.リリース番号 = release;
+#if DEBUG
+                SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
+                SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
+#endif
+                this.Text = Application.ProductName + " " + App.リリース番号.ToString( "000" );
+
+                var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
+                VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
+                VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
+                VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMatixx\" ) );
+
+                if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
+                    Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
+
+                App.Instance = this;
+
+                App.乱数 = new Random( DateTime.Now.Millisecond );
+
+                App.システム設定 = システム設定.復元する();
+
+                App.入力管理 = new 入力管理( this.Handle ) {
+                    キーバインディングを取得する = () => App.システム設定.キーバインディング,
+                    キーバインディングを保存する = () => App.システム設定.保存する(),
+                };
+                App.入力管理.初期化する();
+
+                App.ステージ管理 = new ステージ管理();
+
+                App.曲ツリー = new 曲ツリー();
+
+                App.演奏スコア = null;
+
+                App.WAV管理 = null;
+
+                App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
+
+                App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
+
+                App.ドラムサウンド = new ドラムサウンド();
+
+                App.ユーザ管理 = new ユーザ管理();
+                App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
+
+                this._活性化する();
+
+                base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
+
+                // 最初のステージへ遷移する。
+                App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
             }
-            else
-            {
-                throw new Exception( "アセンブリのプロダクトバージョンに記載ミスがあります。" );
-            }
-            //----------------
-            #endregion
-
-            this.Text = Application.ProductName + " " + App.リリース番号.ToString( "000" );
-
-            var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-            VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
-            VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
-            VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMatixx\" ) );
-
-            if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
-                Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
-
-            App.Instance = this;
-
-            App.乱数 = new Random( DateTime.Now.Millisecond );
-
-            App.システム設定 = システム設定.復元する();
-
-            App.入力管理 = new 入力管理( this.Handle ) {
-                キーバインディングを取得する = () => App.システム設定.キーバインディング,
-                キーバインディングを保存する = () => App.システム設定.保存する(),
-            };
-            App.入力管理.Initialize();
-
-            App.ステージ管理 = new ステージ管理();
-
-            App.曲ツリー = new 曲ツリー();
-
-            App.演奏スコア = null;
-
-            App.WAV管理 = null;
-
-            App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
-            App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
-            App.ドラムサウンド = new ドラムサウンド();
-
-            App.ユーザ管理 = new ユーザ管理();
-            App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
-
-            this._活性化する();
-
-            base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
-
-            // 最初のステージへ遷移する。
-            App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
         }
         public new void Dispose()
         {

@@ -35,31 +35,33 @@ namespace DTXmatixx.ステージ.結果
 
         public 結果ステージ()
         {
-            this.子を追加する( this._背景 = new 舞台画像() );
-            this.子を追加する( this._曲名パネル = new 画像( @"$(System)images\結果\曲名パネル.png" ) );
-            this.子を追加する( this._曲名画像 = new 文字列画像() {
-                フォント名 = "HGMaruGothicMPRO",
-                フォントサイズpt = 40f,
-                フォント幅 = FontWeight.Regular,
-                フォントスタイル = FontStyle.Normal,
-                描画効果 = 文字列画像.効果.縁取り,
-                縁のサイズdpx = 6f,
-                前景色 = Color4.Black,
-                背景色 = Color4.White,
-            } );
-            this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
-                フォント名 = "HGMaruGothicMPRO",
-                フォントサイズpt = 25f,
-                フォント幅 = FontWeight.Regular,
-                フォントスタイル = FontStyle.Normal,
-                描画効果 = 文字列画像.効果.縁取り,
-                縁のサイズdpx = 5f,
-                前景色 = Color4.Black,
-                背景色 = Color4.White,
-            } );
-            this.子を追加する( this._演奏パラメータ結果 = new 演奏パラメータ結果() );
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._背景 = new 舞台画像() );
+                this.子を追加する( this._曲名パネル = new 画像( @"$(System)images\結果\曲名パネル.png" ) );
+                this.子を追加する( this._曲名画像 = new 文字列画像() {
+                    フォント名 = "HGMaruGothicMPRO",
+                    フォントサイズpt = 40f,
+                    フォント幅 = FontWeight.Regular,
+                    フォントスタイル = FontStyle.Normal,
+                    描画効果 = 文字列画像.効果.縁取り,
+                    縁のサイズdpx = 6f,
+                    前景色 = Color4.Black,
+                    背景色 = Color4.White,
+                } );
+                this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
+                    フォント名 = "HGMaruGothicMPRO",
+                    フォントサイズpt = 25f,
+                    フォント幅 = FontWeight.Regular,
+                    フォントスタイル = FontStyle.Normal,
+                    描画効果 = 文字列画像.効果.縁取り,
+                    縁のサイズdpx = 5f,
+                    前景色 = Color4.Black,
+                    背景色 = Color4.White,
+                } );
+                this.子を追加する( this._演奏パラメータ結果 = new 演奏パラメータ結果() );
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -87,8 +89,11 @@ namespace DTXmatixx.ステージ.結果
             {
                 this._結果 = null;
 
-                FDKUtilities.解放する( ref this._黒マスクブラシ );
-                FDKUtilities.解放する( ref this._プレビュー枠ブラシ );
+                this._黒マスクブラシ?.Dispose();
+                this._黒マスクブラシ = null;
+
+                this._プレビュー枠ブラシ?.Dispose();
+                this._プレビュー枠ブラシ = null;
 
                 this.BGMを停止する();
 
@@ -96,7 +101,6 @@ namespace DTXmatixx.ステージ.結果
                 App.WAV管理 = null;
             }
         }
-
         public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
@@ -143,14 +147,12 @@ namespace DTXmatixx.ステージ.結果
 
         private bool _初めての進行描画 = true;
         private 成績 _結果 = null;
-
         private 舞台画像 _背景 = null;
         private 画像 _曲名パネル = null;
         private 文字列画像 _曲名画像 = null;
         private 文字列画像 _サブタイトル画像 = null;
         private 演奏パラメータ結果 _演奏パラメータ結果 = null;
         private SolidColorBrush _黒マスクブラシ = null;
-
         private SolidColorBrush _プレビュー枠ブラシ = null;
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 668f, 194f, 0f );
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 574f, 574f, 0f );

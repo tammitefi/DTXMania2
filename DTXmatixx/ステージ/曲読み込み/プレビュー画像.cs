@@ -14,8 +14,10 @@ namespace DTXmatixx.ステージ.曲読み込み
     {
         public プレビュー画像()
         {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -28,7 +30,6 @@ namespace DTXmatixx.ステージ.曲読み込み
             {
             }
         }
-
         public void 描画する( DeviceContext1 dc )
         {
             var 選択曲 = App.曲ツリー.フォーカス曲ノード;

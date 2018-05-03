@@ -28,50 +28,57 @@ namespace DTXmatixx.設定
 
         public ユーザ管理()
         {
-            this.ユーザリスト = new SelectableList<ユーザ設定>();
-
-            // 現在は、AutoPlayer と Guest しかいない。
-            var user = (ユーザ設定) null;
-
-            user = new ユーザ設定( "AutoPlayer" );
-            if( null == user.ユーザID )    // DBにいない
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                user = ユーザ設定.作成する( new User() {
-                    Id = "AutoPlayer",
-                    Name = "AutoPlayer",
-                } );
-            }
-            if( null != user )
-                this.ユーザリスト.Add( user );
+                this.ユーザリスト = new SelectableList<ユーザ設定>();
 
-            user = new ユーザ設定( "Guest" );
-            if( null == user.ユーザID )    // DBにいない
-            {
-                user = ユーザ設定.作成する( new User() {
-                    Id = "Guest",
-                    Name = "Guest",
-                    AutoPlay_LeftCymbal = 0,
-                    AutoPlay_HiHat = 0,
-                    AutoPlay_LeftPedal = 0,
-                    AutoPlay_Snare = 0,
-                    AutoPlay_Bass = 0,
-                    AutoPlay_HighTom = 0,
-                    AutoPlay_LowTom = 0,
-                    AutoPlay_FloorTom = 0,
-                    AutoPlay_RightCymbal = 0,
-                    // 他は規定値
-                } );
+                // 現在は、AutoPlayer と Guest しかいない。
+                var user = (ユーザ設定) null;
+
+                user = new ユーザ設定( "AutoPlayer" );
+                if( null == user.ユーザID )    // DBにいない
+                {
+                    Log.Info( "ユーザ AutoPlayer がデータベースに存在していません。" );
+
+                    user = ユーザ設定.作成する( new User() {
+                        Id = "AutoPlayer",
+                        Name = "AutoPlayer",
+                    } );
+
+                    Log.Info( "ユーザ AutoPlayer を作成しました。" );
+                }
+                if( null != user )
+                    this.ユーザリスト.Add( user );
+
+                user = new ユーザ設定( "Guest" );
+                if( null == user.ユーザID )    // DBにいない
+                {
+                    user = ユーザ設定.作成する( new User() {
+                        Id = "Guest",
+                        Name = "Guest",
+                        AutoPlay_LeftCymbal = 0,
+                        AutoPlay_HiHat = 0,
+                        AutoPlay_LeftPedal = 0,
+                        AutoPlay_Snare = 0,
+                        AutoPlay_Bass = 0,
+                        AutoPlay_HighTom = 0,
+                        AutoPlay_LowTom = 0,
+                        AutoPlay_FloorTom = 0,
+                        AutoPlay_RightCymbal = 0,
+                        // 他は規定値
+                    } );
+                }
+
+                if( null != user )
+                    this.ユーザリスト.Add( user );
             }
-#if DEBUG_
-			// hack: テストコード: デバッグ用に固定パスを使用する。
-			user.曲検索フォルダ.Add( new VariablePath( @"$(Exe)..\..\..\曲データ" ) );
-#endif
-            if( null != user )
-                this.ユーザリスト.Add( user );
         }
         public void Dispose()
         {
-            this.ユーザリスト = null;
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.ユーザリスト = null;
+            }
         }
     }
 }

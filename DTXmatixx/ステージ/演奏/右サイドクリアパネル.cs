@@ -19,10 +19,12 @@ namespace DTXmatixx.ステージ.演奏
 
         public 右サイドクリアパネル()
         {
-            this.子を追加する( this._背景 = new 画像( @"$(System)images\演奏\右サイドクリアパネル.png" ) );
-            this.子を追加する( this.クリアパネル = new 描画可能テクスチャ( new Size2F( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this.子を追加する( this._背景 = new 画像( @"$(System)images\演奏\右サイドクリアパネル.png" ) );
+                this.子を追加する( this.クリアパネル = new 描画可能テクスチャ( new Size2F( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
+            }
         }
-
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
