@@ -75,53 +75,60 @@ namespace DTXmatixx.設定
             {
                 var 設定 = ( システム設定 ) null;
 
-                try
-                {
-                    // コンフィグのバージョン番号を取得。
-                    var jobj = JObject.Parse( File.ReadAllText( _ファイルパス.変数なしパス ) ); // いったん型なしで読み込む
-                    int configVersion = ( ( int? ) jobj[ "Version" ] ) ?? 0;
+				try
+				{
+					// コンフィグのバージョン番号を取得。
+					var jobj = JObject.Parse( File.ReadAllText( _ファイルパス.変数なしパス ) ); // いったん型なしで読み込む
+					int configVersion = ( (int?) jobj[ "Version" ] ) ?? 0;
 
-                    // バージョン別に読み込み。
-                    switch( configVersion )
-                    {
-                        case 1:
-                            // Release 015 以降
-                            設定 = JsonConvert.DeserializeObject<システム設定>( jobj.ToString() );
-                            Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
-                            break;
+					// バージョン別に読み込み。
+					switch( configVersion )
+					{
+						case 1:
+							// Release 015 以降
+							設定 = JsonConvert.DeserializeObject<システム設定>( jobj.ToString() );
+							Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
+							break;
 
-                        case 0:
-                            #region " Release 014 まで "
-                            //----------------
-                            try
-                            {
-                                設定 = FDKUtilities.復元する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
-                                Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
-                            }
-                            catch
-                            {
-                                Log.WARNING( $"復元に失敗したので、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
-                                設定 = new システム設定();
-                                FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
-                            }
-                            return 設定;
-                            //----------------
-                            #endregion
+						case 0:
+							#region " Release 014 まで "
+							//----------------
+							try
+							{
+								設定 = FDKUtilities.復元する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
+								Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
+							}
+							catch
+							{
+								Log.WARNING( $"復元に失敗したので、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+								設定 = new システム設定();
+								FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+							}
+							return 設定;
+						//----------------
+						#endregion
 
-                        default:
-                            throw new NotSupportedException( $"未知のバージョン（{configVersion}）が指定されました。" );
-                    }
+						default:
+							throw new NotSupportedException( $"未知のバージョン（{configVersion}）が指定されました。" );
+					}
 
-                    return 設定;
-                }
-                catch( FileNotFoundException )
-                {
-                    Log.WARNING( $"ファイルが存在しないため、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
-                    設定 = new システム設定();
-                    FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
-                    return 設定;
-                }
-            }
+					return 設定;
+				}
+				catch( FileNotFoundException )
+				{
+					Log.Info( $"ファイルが存在しないため、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+					設定 = new システム設定();
+					FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+					return 設定;
+				}
+				catch
+				{
+					Log.ERROR( $"ファイルの内容に誤りがあります。新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+					設定 = new システム設定();
+					FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+					return 設定;
+				}
+			}
         }
         public void 保存する()
         {
