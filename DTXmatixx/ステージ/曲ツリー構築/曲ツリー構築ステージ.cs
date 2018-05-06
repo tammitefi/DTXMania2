@@ -63,14 +63,13 @@ namespace DTXmatixx.ステージ.曲ツリー構築
             switch( this.現在のフェーズ )
             {
                 case フェーズ.開始:
-                    // 状態チェック； ここの時点で曲ツリーが初期状態であること。
-                    Debug.Assert( null != App.曲ツリー.ルートノード );
-                    Debug.Assert( null == App.曲ツリー.フォーカスノード );
-                    Debug.Assert( null == App.曲ツリー.フォーカスリスト );
+					App.曲ツリー.非活性化する();
+					App.曲ツリー = new 曲.曲ツリー();
+					App.曲ツリー.活性化する();
 
-                    // 曲検索タスクを起動し、構築中フェーズへ。
+					// 曲検索タスクを起動し、構築中フェーズへ。
 
-                    App.曲ツリー.非活性化する();
+					App.曲ツリー.非活性化する();
                     this._ファイル検出数 = 0;
 
                     this._構築タスク = Task.Factory.StartNew( () => {

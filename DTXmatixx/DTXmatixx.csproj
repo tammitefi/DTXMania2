@@ -60,9 +60,19 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -127,6 +137,12 @@
     <Compile Include="アイキャッチ\アイキャッチ.cs" />
     <Compile Include="アイキャッチ\シャッター.cs" />
     <Compile Include="アイキャッチ\半回転黒フェード.cs" />
+    <Compile Include="ステージ\オプション設定\曲読み込みフォルダ割り当てダイアログ.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ステージ\オプション設定\曲読み込みフォルダ割り当てダイアログ.Designer.cs">
+      <DependentUpon>曲読み込みフォルダ割り当てダイアログ.cs</DependentUpon>
+    </Compile>
     <Compile Include="ステージ\オプション設定\入力割り当てダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,6 +268,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ステージ\オプション設定\曲読み込みフォルダ割り当てダイアログ.resx">
+      <DependentUpon>曲読み込みフォルダ割り当てダイアログ.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ステージ\オプション設定\入力割り当てダイアログ.resx">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </EmbeddedResource>
