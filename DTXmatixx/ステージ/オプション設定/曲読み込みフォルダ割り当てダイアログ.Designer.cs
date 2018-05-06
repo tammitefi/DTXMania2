@@ -78,7 +78,7 @@
 			// columnHeaderフォルダ名
 			// 
 			this.columnHeaderフォルダ名.Text = "フォルダ名";
-			this.columnHeaderフォルダ名.Width = 474;
+			this.columnHeaderフォルダ名.Width = 574;
 			// 
 			// label1
 			// 
@@ -117,7 +117,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(984, 577);
+			this.ClientSize = new System.Drawing.Size(600, 365);
 			this.Controls.Add(this.button削除);
 			this.Controls.Add(this.button選択);
 			this.Controls.Add(this.label1);
