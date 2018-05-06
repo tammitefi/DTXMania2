@@ -44,8 +44,10 @@ namespace DTXmatixx.ステージ.選曲
                 this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
                 this.子を追加する( this._BPMパネル = new BPMパネル() );
                 this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
-                this.子を追加する( this._SongNotFound = new 文字列画像() {
-                    表示文字列 = "Song not found...",
+				this.子を追加する( this._SongNotFound = new 文字列画像() {
+					表示文字列 =
+					"Song not found...\n" +
+					"Hit BDx2 (in default SPACEx2) to select song folders."
                 } );
 
                 // 外部接続。

@@ -102,8 +102,6 @@ namespace DTXmatixx.ステージ
         /// <param name="遷移先ステージ名">Nullまたは空文字列なら、非活性化のみ行う。</param>
         public void ステージを遷移する( string 遷移先ステージ名 )
         {
-            Log.Header( $"{遷移先ステージ名} へ遷移します。" );
-
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 if( null != this._現在のステージ &&
@@ -114,6 +112,8 @@ namespace DTXmatixx.ステージ
 
                 if( 遷移先ステージ名.Nullでも空でもない() )
                 {
+                    Log.Header( $"{遷移先ステージ名} へ遷移します。" );
+
                     this._現在のステージ = this.ステージリスト[ 遷移先ステージ名 ];
                     this._現在のステージ.活性化する();
 

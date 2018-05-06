@@ -67,7 +67,7 @@ namespace DTXmatixx
         public static 曲ツリー 曲ツリー
         {
             get;
-            protected set;
+            set;
         } = null;
         public static SoundDevice サウンドデバイス
         {
@@ -488,9 +488,17 @@ namespace DTXmatixx
                             {
                                 App.ステージ管理.ステージを遷移する( nameof( ステージ.選曲.選曲ステージ ) );
                             }
-                            //----------------
-                            #endregion
-                            break;
+							//----------------
+							#endregion
+							#region " 曲読み込みフォルダ変更 → 曲読み込みステージへ "
+							//----------------
+							if( stage.現在のフェーズ == ステージ.オプション設定.オプション設定ステージ.フェーズ.曲読み込みフォルダ変更済み )
+							{
+								App.ステージ管理.ステージを遷移する( nameof( ステージ.曲ツリー構築.曲ツリー構築ステージ ) );
+							}
+							//----------------
+							#endregion
+							break;
 
                         case ステージ.曲読み込み.曲読み込みステージ stage:
                             #region " 確定 → 演奏ステージへ "
