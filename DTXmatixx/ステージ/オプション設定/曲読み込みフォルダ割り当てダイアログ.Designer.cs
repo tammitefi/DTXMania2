@@ -39,9 +39,10 @@
 			// 
 			// buttonOk
 			// 
+			this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonOk.Font = new System.Drawing.Font("MS UI Gothic", 12F);
-			this.buttonOk.Location = new System.Drawing.Point(708, 527);
+			this.buttonOk.Location = new System.Drawing.Point(450, 341);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Size = new System.Drawing.Size(129, 38);
 			this.buttonOk.TabIndex = 5;
@@ -50,9 +51,10 @@
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Font = new System.Drawing.Font("MS UI Gothic", 12F);
-			this.buttonCancel.Location = new System.Drawing.Point(843, 527);
+			this.buttonCancel.Location = new System.Drawing.Point(594, 341);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(129, 38);
 			this.buttonCancel.TabIndex = 6;
@@ -69,7 +71,7 @@
 			this.listViewフォルダ一覧.HideSelection = false;
 			this.listViewフォルダ一覧.Location = new System.Drawing.Point(12, 43);
 			this.listViewフォルダ一覧.Name = "listViewフォルダ一覧";
-			this.listViewフォルダ一覧.Size = new System.Drawing.Size(959, 217);
+			this.listViewフォルダ一覧.Size = new System.Drawing.Size(711, 217);
 			this.listViewフォルダ一覧.TabIndex = 7;
 			this.listViewフォルダ一覧.UseCompatibleStateImageBehavior = false;
 			this.listViewフォルダ一覧.View = System.Windows.Forms.View.Details;
@@ -78,7 +80,7 @@
 			// columnHeaderフォルダ名
 			// 
 			this.columnHeaderフォルダ名.Text = "フォルダ名";
-			this.columnHeaderフォルダ名.Width = 574;
+			this.columnHeaderフォルダ名.Width = 662;
 			// 
 			// label1
 			// 
@@ -117,7 +119,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(600, 365);
+			this.ClientSize = new System.Drawing.Size(735, 391);
 			this.Controls.Add(this.button削除);
 			this.Controls.Add(this.button選択);
 			this.Controls.Add(this.label1);
