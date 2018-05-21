@@ -125,10 +125,18 @@ namespace DTXmatixx.ステージ.演奏
                             {
                                 case "nicovideo":
                                     {
-                                        var apiConfig = JObject.Parse( File.ReadAllText( new VariablePath( @"$(AppData)nicovideo.json" ).変数なしパス ) );
-                                        this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
-                                        this._背景動画forDTX = null;
-                                        Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.動画ID}]" );
+										var vpath = new VariablePath( @"$(AppData)nicovideo.json" );
+										try
+										{
+											var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
+											this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
+											this._背景動画forDTX = null;
+											Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.動画ID}]" );
+										}
+										catch( Exception e )
+										{
+											Log.ERROR( $"nicovideo.json の読み込みに失敗しました。[{vpath.変数付きパス}]" );
+										}
                                     }
                                     break;
 
