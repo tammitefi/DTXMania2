@@ -133,7 +133,7 @@ namespace DTXmatixx.ステージ.演奏
 											this._背景動画forDTX = null;
 											Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.動画ID}]" );
 										}
-										catch( Exception e )
+										catch( Exception )
 										{
 											Log.ERROR( $"nicovideo.json の読み込みに失敗しました。[{vpath.変数付きパス}]" );
 										}
