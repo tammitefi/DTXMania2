@@ -1062,9 +1062,9 @@ namespace DTXmatixx.ステージ.演奏
 
                             // 変換。
                             var 変換行列2D =
-                                ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
-                                Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
+								( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
+								Matrix3x2.Scaling( 0.6f + ( 0.4f * 大きさ0to1 ), 大きさ0to1, 矩形中央 ) *		// 大きさ: 0→1 のとき、幅 x0.6→x1.0
+								Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
 
                             // 描画。
                             this._ドラムチップ画像.描画する(
