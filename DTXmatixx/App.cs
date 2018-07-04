@@ -141,6 +141,7 @@ namespace DTXmatixx
                 App.WAV管理 = null;
 
                 App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
+				App.サウンドデバイス.音量 = 0.3f;
 
                 App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
 
