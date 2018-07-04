@@ -227,9 +227,11 @@ namespace DTXmatixx.ステージ.演奏
 					this._背景動画forDTX = null;
 				}
 
-                //this._動画とBGM.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
-                //App.WAV管理?.Dispose();	
-                //App.WAV管理 = null;
+				//this._動画とBGM?.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
+				//App.WAV管理?.Dispose();	
+				//App.WAV管理 = null;
+				if( null != this._動画とBGM )
+					this._動画とBGM.ビデオをキャンセルする();	// ビデオが詰まってしまうのでオーディオのみ再生を続ける
 
                 foreach( var kvp in this._チップの演奏状態 )
                     kvp.Value.Dispose();
