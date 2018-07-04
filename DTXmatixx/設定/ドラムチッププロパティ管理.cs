@@ -1080,78 +1080,78 @@ namespace DTXmatixx.設定
                 switch( kvp.Key )
                 {
                     case チップ種別.Ride:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftRide : 表示チップ種別.RightRide ) :
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
 
                     case チップ種別.Ride_Cup:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftRide_Cup : 表示チップ種別.RightRide_Cup ) :
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
 
                     case チップ種別.China:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Chinaは左 ) ? 表示チップ種別.LeftChina : 表示チップ種別.RightChina ) :
                             ( ( this._表示レーンの左右.Chinaは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
 
                     case チップ種別.Splash:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Splashは左 ) ? 表示チップ種別.LeftSplash : 表示チップ種別.RightSplash ) :
                             ( ( this._表示レーンの左右.Splashは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
 
                     case チップ種別.HiHat_Open:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.HiHat_Open : 表示チップ種別.HiHat;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.HiHat_Open : 表示チップ種別.HiHat;
                         break;
 
                     case チップ種別.HiHat_HalfOpen:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.HiHat_HalfOpen : 表示チップ種別.HiHat;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.HiHat_HalfOpen : 表示チップ種別.HiHat;
                         break;
 
                     case チップ種別.HiHat_Foot:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Foot : 表示チップ種別.LeftPedal;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Foot : 表示チップ種別.LeftPedal;
                         break;
 
                     case チップ種別.Snare_OpenRim:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Snare_OpenRim : 表示チップ種別.Snare;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Snare_OpenRim : 表示チップ種別.Snare;
                         break;
 
                     case チップ種別.Snare_ClosedRim:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Snare_ClosedRim : 表示チップ種別.Snare;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Snare_ClosedRim : 表示チップ種別.Snare;
                         break;
 
                     case チップ種別.Snare_Ghost:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Snare_Ghost : 表示チップ種別.Unknown;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Snare_Ghost : 表示チップ種別.Unknown;
                         break;
 
                     case チップ種別.LeftBass:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Bass : 表示チップ種別.LeftBass;
-                        kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示レーン種別.Bass : 表示レーン種別.Foot;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Bass : 表示チップ種別.LeftBass;
+                        kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示レーン種別.Bass : 表示レーン種別.Foot;
                         break;
 
                     case チップ種別.Tom1_Rim:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Tom1_Rim : 表示チップ種別.Tom1;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Tom1_Rim : 表示チップ種別.Tom1;
                         break;
 
                     case チップ種別.Tom2_Rim:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Tom2_Rim : 表示チップ種別.Tom2;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Tom2_Rim : 表示チップ種別.Tom2;
                         break;
 
                     case チップ種別.Tom3_Rim:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.Tom3_Rim : 表示チップ種別.Tom3;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Tom3_Rim : 表示チップ種別.Tom3;
                         break;
 
                     case チップ種別.LeftCymbal_Mute:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.LeftCymbal_Mute : 表示チップ種別.Unknown;
-                        kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.Unknown;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.LeftCymbal_Mute : 表示チップ種別.Unknown;
+                        kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.Unknown;
                         break;
 
                     case チップ種別.RightCymbal_Mute:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示チップ種別.RightCymbal_Mute : 表示チップ種別.Unknown;
-                        kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.MANIAC ) ? 表示レーン種別.RightCymbal : 表示レーン種別.Unknown;
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.RightCymbal_Mute : 表示チップ種別.Unknown;
+                        kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示レーン種別.RightCymbal : 表示レーン種別.Unknown;
                         break;
                 }
             }
@@ -1173,7 +1173,7 @@ namespace DTXmatixx.設定
                         kvp.Value.表示レーン種別 = ( this._表示レーンの左右.Rideは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( this._表示レーンの左右.Rideは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( this._表示レーンの左右.Rideは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftRide : 表示チップ種別.RightRide ) :
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
@@ -1182,7 +1182,7 @@ namespace DTXmatixx.設定
                         kvp.Value.表示レーン種別 = ( this._表示レーンの左右.Rideは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( this._表示レーンの左右.Rideは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( this._表示レーンの左右.Rideは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftRide_Cup : 表示チップ種別.RightRide_Cup ) :
                             ( ( this._表示レーンの左右.Rideは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
@@ -1191,7 +1191,7 @@ namespace DTXmatixx.設定
                         kvp.Value.表示レーン種別 = ( this._表示レーンの左右.Chinaは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( this._表示レーンの左右.Chinaは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( this._表示レーンの左右.Chinaは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Chinaは左 ) ? 表示チップ種別.LeftChina : 表示チップ種別.RightChina ) :
                             ( ( this._表示レーンの左右.Chinaは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;
@@ -1200,7 +1200,7 @@ namespace DTXmatixx.設定
                         kvp.Value.表示レーン種別 = ( this._表示レーンの左右.Splashは左 ) ? 表示レーン種別.LeftCymbal : 表示レーン種別.RightCymbal;
                         kvp.Value.AutoPlay種別 = ( this._表示レーンの左右.Splashは左 ) ? AutoPlay種別.LeftCrash : AutoPlay種別.RightCrash;
                         kvp.Value.消音グループ種別 = ( this._表示レーンの左右.Splashは左 ) ? 消音グループ種別.LeftCymbal : 消音グループ種別.RightCymbal;
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.MANIAC ) ?
+                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ?
                             ( ( this._表示レーンの左右.Splashは左 ) ? 表示チップ種別.LeftSplash : 表示チップ種別.RightSplash ) :
                             ( ( this._表示レーンの左右.Splashは左 ) ? 表示チップ種別.LeftCymbal : 表示チップ種別.RightCymbal );
                         break;

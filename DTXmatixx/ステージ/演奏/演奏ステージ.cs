@@ -955,7 +955,7 @@ namespace DTXmatixx.ステージ.演奏
 
 				// チップの大きさを計算する。
 				float 大きさ0to1 = 1.0f;
-				if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.MANIAC )
+				if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
 				{
 					// 音量により大きさ可変。
 					大きさ0to1 = Math.Min( 1.0f, chip.音量 / (float) チップ.既定音量 );	// 既定音量未満は大きさを小さくするが、既定音量以上は大きさ1.0のままとする。

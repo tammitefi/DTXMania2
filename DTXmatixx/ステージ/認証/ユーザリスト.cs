@@ -34,21 +34,21 @@ namespace DTXmatixx.ステージ.認証
                 this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_0.png" ) );
                 this._ユーザパネル.Add( PlayMode.BASIC, image );
                 this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_1.png" ) );
-                this._ユーザパネル.Add( PlayMode.MANIAC, image );
+                this._ユーザパネル.Add( PlayMode.EXPERT, image );
 
                 this._ユーザパネル光彩付き = new Dictionary<PlayMode, 画像>();
 
                 this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_0_光彩あり.png" ) );
                 this._ユーザパネル光彩付き.Add( PlayMode.BASIC, image );
                 this.子を追加する( image = new 画像( @"$(System)images\認証\パネル_1_光彩あり.png" ) );
-                this._ユーザパネル光彩付き.Add( PlayMode.MANIAC, image );
+                this._ユーザパネル光彩付き.Add( PlayMode.EXPERT, image );
 
                 this._ユーザ肩書きパネル = new Dictionary<PlayMode, 画像>();
 
                 this.子を追加する( image = new 画像( @"$(System)images\認証\肩書きパネル_0.png" ) );
                 this._ユーザ肩書きパネル.Add( PlayMode.BASIC, image );
                 this.子を追加する( image = new 画像( @"$(System)images\認証\肩書きパネル_1.png" ) );
-                this._ユーザ肩書きパネル.Add( PlayMode.MANIAC, image );
+                this._ユーザ肩書きパネル.Add( PlayMode.EXPERT, image );
 
                 this.子を追加する( this._ユーザ名 = new 文字列画像() {
                     表示文字列 = "",
