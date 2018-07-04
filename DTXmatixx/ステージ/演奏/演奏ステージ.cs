@@ -217,12 +217,15 @@ namespace DTXmatixx.ステージ.演奏
                         Log.Info( $"現在の譜面スクロール速度({App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度})をDBに保存しました。[{user}]" );
                     }
                 }
-                //----------------
-                #endregion
+				//----------------
+				#endregion
 
-                // 背景動画を生成した場合は子リストから削除。
-                if( null != this._背景動画forDTX )
-                    this.子を削除する( this._背景動画forDTX );
+				// 背景動画を生成した場合は子リストから削除。
+				if( null != this._背景動画forDTX )
+				{
+					this.子を削除する( this._背景動画forDTX );
+					this._背景動画forDTX = null;
+				}
 
                 //this._動画とBGM.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
                 //App.WAV管理?.Dispose();	
