@@ -170,10 +170,19 @@ namespace DTXmatixx.ステージ.演奏
                         // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
                         var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value ) );
 
-                        // 動画を子リストに追加。
-                        this.子を追加する( this._背景動画forDTX = new Video( path ) );
-                        this._動画とBGM = null;
-                        Log.Info( $"背景動画を読み込みました。[{path.変数付きパス}]" );
+						// 動画を子リストに追加。
+						try
+						{
+							this.子を追加する( this._背景動画forDTX = new Video( path ) );
+
+							this._動画とBGM = null;
+							Log.Info( $"背景動画を読み込みました。[{path.変数付きパス}]" );
+						}
+						catch
+						{
+							this._背景動画forDTX = null;    // 生成失敗
+							Log.ERROR( $"背景動画の読み込みに失敗しました。[{path.変数付きパス}]" );
+						}
                         //----------------
                         #endregion
                     }
