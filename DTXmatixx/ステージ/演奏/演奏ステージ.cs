@@ -953,7 +953,15 @@ namespace DTXmatixx.ステージ.演奏
                 if( this._チップの演奏状態[ chip ].不可視 )
                     return;
 
-                float 音量0to1 = 1f;      // SSTでは「chip.音量 / (float) チップ.最大音量」、matixx では常に 1（原音）。
+				// チップの大きさを計算する。
+				float 大きさ0to1 = 1.0f;
+				if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.MANIAC )
+				{
+					// 音量により大きさ可変。
+					大きさ0to1 = Math.Min( 1.0f, chip.音量 / (float) チップ.既定音量 );	// 既定音量未満は大きさを小さくするが、既定音量以上は大きさ1.0のままとする。
+					if( chip.チップ種別 == チップ種別.Snare_Ghost )	// Ghost は対象外
+						大きさ0to1 = 1.0f;
+				}
 
                 // チップ種別 から、表示レーン種別 と 表示チップ種別 を取得。
                 var 表示レーン種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
@@ -1003,10 +1011,11 @@ namespace DTXmatixx.ステージ.演奏
                                     #region " 縦横に伸び縮み "
                                     //----------------
                                     {
-
                                         float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-                                        変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 音量0to1, 矩形中央 );
-                                    }
+										
+										//変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 大きさ0to1, 矩形中央 );
+										変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 1.0f, 矩形中央 );		// チップ背景は大きさを変えない
+									}
                                     //----------------
                                     #endregion
                                     break;
@@ -1015,23 +1024,24 @@ namespace DTXmatixx.ステージ.演奏
                                     #region " 左右にゆらゆら回転 "
                                     //----------------
                                     {
-
                                         float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
                                         変換行列2D = 変換行列2D *
-                                            Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
-                                            Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
+											//Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
+											Matrix3x2.Scaling( 1f, 1f, 矩形中央 ) * // チップ背景は大きさを変えない
+											Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
                                     }
                                     //----------------
                                     #endregion
                                     break;
                             }
 
-                            // 変換(2) 移動
-                            変換行列2D = 変換行列2D *
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
+							// 変換(2) 移動
+							変換行列2D = 変換行列2D *
+								//Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 大きさ0to1 ) );
+								Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 1.0f ) );		// チップ背景は大きさを変えない
 
-                            // 描画。
-                            this._ドラムチップ画像.描画する(
+							// 描画。
+							this._ドラムチップ画像.描画する(
                                 dc,
                                 変換行列2D,
                                 転送元矩形: 矩形,
@@ -1053,8 +1063,8 @@ namespace DTXmatixx.ステージ.演奏
                             // 変換。
                             var 変換行列2D =
                                 ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
-                                Matrix3x2.Scaling( 1f, 音量0to1, 矩形中央 ) *
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 音量0to1 ) );
+                                Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
+                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
 
                             // 描画。
                             this._ドラムチップ画像.描画する(
