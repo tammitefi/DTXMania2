@@ -145,7 +145,7 @@ namespace DTXmatixx.データベース.ユーザ
 
         /// <summary>
         ///		演奏モード。
-        ///		0: Basic, 1: Maniac 
+        ///		0: Basic, 1: Expert
         /// </summary>
         [Column( DbType = "INT", CanBeNull = false )]
         public int PlayMode { get; set; }

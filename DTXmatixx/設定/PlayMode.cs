@@ -12,6 +12,6 @@ namespace DTXmatixx.設定
     enum PlayMode : int
     {
         BASIC = 0,
-        MANIAC = 1,
+        EXPERT = 1,
     }
 }

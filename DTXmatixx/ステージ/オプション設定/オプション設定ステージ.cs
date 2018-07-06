@@ -89,7 +89,7 @@ namespace DTXmatixx.ステージ.オプション設定
                     new パネル_文字列リスト(
                         パネル名: "演奏モード",
                         初期選択肢番号: (int) user.演奏モード,
-                        選択肢初期値s: new[] { "BASIC", "MANIAC" },
+                        選択肢初期値s: new[] { "BASIC", "EXPERT" },
                         値の変更処理: new Action<パネル>( ( panel ) => {
                             user.演奏モード = (PlayMode) ( (パネル_文字列リスト) panel ).現在選択されている選択肢の番号;
                             user.ドラムチッププロパティ管理.反映する( user.演奏モード );

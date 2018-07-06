@@ -27,10 +27,10 @@ namespace DTXmatixx.アイキャッチ
                 #region " Go! "
                 //----------------
                 this._文字 = new 文字[ 3 ] {
-                new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\G.png" ) },
-                new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\O.png" ) },
-                new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\!.png" ) },
-            };
+					new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\G.png" ) },
+					new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\O.png" ) },
+					new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\!.png" ) },
+				};
                 foreach( var s in this._文字 )
                 {
                     s.画像.加算合成 = true;

@@ -184,20 +184,28 @@ namespace DTXmatixx.入力
 
             var キーバインディング = this.キーバインディングを取得する();
 
-            // キーボード
-            this._入力デバイスをポーリングする(
-                this.Keyboard,
-                キーバインディング.キーボードtoドラム,
-                入力履歴を記録する );
+            if( App.ウィンドウがアクティブである )
+            {
 
-            // MIDI入力
-            this._入力デバイスをポーリングする(
-                this.MidiIn,
-                キーバインディング.MIDItoドラム,
-                入力履歴を記録する );
+                // キーボード
+                this._入力デバイスをポーリングする(
+                    this.Keyboard,
+                    キーバインディング.キーボードtoドラム,
+                    入力履歴を記録する );
 
-            // タイムスタンプの小さい順にソートする。
-            this.ポーリング結果.Sort( ( x, y ) => (int) ( x.InputEvent.TimeStamp - y.InputEvent.TimeStamp ) );
+                // MIDI入力
+                this._入力デバイスをポーリングする(
+                    this.MidiIn,
+                    キーバインディング.MIDItoドラム,
+                    入力履歴を記録する );
+
+                // タイムスタンプの小さい順にソートする。
+                this.ポーリング結果.Sort( ( x, y ) => (int) ( x.InputEvent.TimeStamp - y.InputEvent.TimeStamp ) );
+            }
+            else
+            {
+                // ウィンドウが非アクティブならポーリングしない。
+            }
         }
 
         /// <summary>
@@ -250,7 +258,7 @@ namespace DTXmatixx.入力
                 } )
                 ;// || this.Keyboard.キーが押された( 0, Key.Return );		Enter は、既定で LeftCrash に割り当てられている前提。
         }
-        
+
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、キャンセルキーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -259,7 +267,7 @@ namespace DTXmatixx.入力
         {
             return this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Escape );
         }
-        
+
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、上移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -273,7 +281,7 @@ namespace DTXmatixx.入力
                 } )
                 || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Up );
         }
-        
+
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、下移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -287,7 +295,7 @@ namespace DTXmatixx.入力
                 } )
                 || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Down );
         }
-        
+
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、左移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -302,7 +310,7 @@ namespace DTXmatixx.入力
                 } )
                 || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Left );
         }
-        
+
         /// <summary>
         ///		現在の<see cref="ポーリング結果"/>に、右移動キーとみなせるドラム入力イベントが含まれているかを確認する。
         /// </summary>
@@ -357,7 +365,7 @@ namespace DTXmatixx.入力
 
             return true;
         }
-        
+
         /// <summary>
         ///		現在の履歴において、指定したシーケンスが成立しているかを確認する。
         /// </summary>
@@ -380,7 +388,7 @@ namespace DTXmatixx.入力
 
             if( ( 0 == シーケンスのストローク数 ) ||                   // 空シーケンスは常に不成立。
                 ( this._入力履歴.Count < シーケンスのストローク数 ) )   // 履歴数が足りない。
-                return false;   
+                return false;
 
 
             // 検索を開始する位置を特定する。
@@ -409,7 +417,7 @@ namespace DTXmatixx.入力
 
             return true;
         }
-        
+
         /// <summary>
         ///		現在の履歴において、指定したシーケンスが成立しているかを確認する。
         /// </summary>
@@ -432,7 +440,7 @@ namespace DTXmatixx.入力
 
             if( ( 0 == シーケンスのストローク数 ) ||                   // 空シーケンスは常に不成立。
                 ( this._入力履歴.Count < シーケンスのストローク数 ) )   // 履歴数が足りない。
-                return false;   
+                return false;
 
 
             // 検索を開始する位置を特定する。
