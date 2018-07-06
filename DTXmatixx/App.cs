@@ -101,7 +101,21 @@ namespace DTXmatixx
             set;
         } = null;
 
-        public App()
+		public static bool ウィンドウがアクティブである
+		{
+			get;
+			set;
+		} = false;
+		public static bool ウィンドウがアクティブではない
+		{
+			get
+				=> !( App.ウィンドウがアクティブである );
+
+			set
+				=> App.ウィンドウがアクティブである = !( value );
+		}
+
+		public App()
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -256,21 +270,35 @@ namespace DTXmatixx
 
             base.OnKeyDown( e );
         }
+		protected override void OnActivated( EventArgs e )
+		{
+			App.ウィンドウがアクティブである = true;
+			Log.Info( "ウィンドウがアクティブ化されました。" );
 
-        #region " IDTXManiaService の実装 "
-        //----------------
-        // このアセンブリ（exe）は、WCF で IDTXManiaService を公開する。
-        // ・このサービスインターフェースは、シングルスレッド（GUIスレッド）で同期実行される。（Appクラスの ServiceBehavior属性を参照。）
-        // ・このサービスホストはシングルトンであり、すべてのクライアントセッションは同一（単一）のサービスインスタンスへ接続される。（Program.Main() を参照。）
+			base.OnActivated( e );
+		}
+		protected override void OnDeactivate( EventArgs e )
+		{
+			App.ウィンドウがアクティブではない = true;
+			Log.Info( "ウィンドウが非アクティブ化されました。" );
 
-        /// <summary>
-        ///		曲を読み込み、演奏を開始する。
-        ///		ビュアーモードのときのみ有効。
-        /// </summary>
-        /// <param name="path">曲ファイルパス</param>
-        /// <param name="startPart">演奏開始小節番号(0～)</param>
-        /// <param name="drumsSound">ドラムチップ音を発声させるなら true。</param>
-        public void ViewerPlay( string path, int startPart = 0, bool drumsSound = true )
+			base.OnDeactivate( e );
+		}
+
+		#region " IDTXManiaService の実装 "
+		//----------------
+		// このアセンブリ（exe）は、WCF で IDTXManiaService を公開する。
+		// ・このサービスインターフェースは、シングルスレッド（GUIスレッド）で同期実行される。（Appクラスの ServiceBehavior属性を参照。）
+		// ・このサービスホストはシングルトンであり、すべてのクライアントセッションは同一（単一）のサービスインスタンスへ接続される。（Program.Main() を参照。）
+
+		/// <summary>
+		///		曲を読み込み、演奏を開始する。
+		///		ビュアーモードのときのみ有効。
+		/// </summary>
+		/// <param name="path">曲ファイルパス</param>
+		/// <param name="startPart">演奏開始小節番号(0～)</param>
+		/// <param name="drumsSound">ドラムチップ音を発声させるなら true。</param>
+		public void ViewerPlay( string path, int startPart = 0, bool drumsSound = true )
         {
             // TODO: ViewerPlay メソッドを実装する。
             throw new NotImplementedException();
@@ -348,14 +376,14 @@ namespace DTXmatixx
                     if( this._高速進行ステータス.現在の状態 != TriStateEvent.状態種別.ON )    // lock してる間に状態が変わることがあるので注意。
                         break;
 
-                    //App.入力管理.すべての入力デバイスをポーリングする();
-                    // --> 入力ポーリングの挙動はステージごとに異なるので、それぞれのステージ内で行う。
+					//App.入力管理.すべての入力デバイスをポーリングする();
+					// --> 入力ポーリングの挙動はステージごとに異なるので、それぞれのステージ内で行う。
 
                     App.ステージ管理.現在のステージ.高速進行する();
-                }
+				}
 
                 Thread.Sleep( App.システム設定.入力発声スレッドのスリープ量ms );  // ウェイト。
-            }
+			}
 
             this._高速進行ステータス.現在の状態 = TriStateEvent.状態種別.無効;
 
