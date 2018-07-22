@@ -202,6 +202,7 @@
     <Compile Include="ステージ\選曲\曲ステータスパネル.cs" />
     <Compile Include="ステージ\選曲\曲リスト.cs" />
     <Compile Include="ステージ\選曲\曲別SKILL.cs" />
+    <Compile Include="ステージ\選曲\表示方法選択パネル.cs" />
     <Compile Include="ステージ\選曲\選択曲枠ランナー.cs" />
     <Compile Include="ステージ\選曲\難易度と成績.cs" />
     <Compile Include="ステージ\青い線.cs" />
@@ -715,6 +716,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="System\Images\コンソールフォント20x32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\選曲\表示方法・全曲.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\選曲\表示方法・評価順.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

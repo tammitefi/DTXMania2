@@ -44,6 +44,7 @@ namespace DTXmatixx.ステージ.選曲
                 this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
                 this.子を追加する( this._BPMパネル = new BPMパネル() );
                 this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
+                this.子を追加する( this._表示方法選択パネル = new 表示方法選択パネル() );
 				this.子を追加する( this._SongNotFound = new 文字列画像() {
 					表示文字列 =
 					"Song not found...\n" +
@@ -116,9 +117,11 @@ namespace DTXmatixx.ステージ.選曲
 
             if( null != App.曲ツリー.フォーカスノード )
             {
+                // (A) 曲がある場合
                 this._舞台画像.進行描画する( dc );
                 this._曲リスト.進行描画する( dc );
                 this._その他パネルを描画する( dc );
+                this._表示方法選択パネル.進行描画する( dc );
                 this._難易度と成績.描画する( dc, App.曲ツリー.フォーカス難易度 );
                 this._曲ステータスパネル.描画する( dc );
                 this._プレビュー画像を描画する( dc, App.曲ツリー.フォーカスノード );
@@ -131,8 +134,9 @@ namespace DTXmatixx.ステージ.選曲
             }
             else
             {
-                // 曲が１つもない
+                // (B) 曲が１つもない場合
                 this._舞台画像.進行描画する( dc );
+                this._表示方法選択パネル.進行描画する( dc );
                 this._ステージタイマー.描画する( dc, 1689f, 37f );
                 this._SongNotFound.描画する( dc, 1150f, 400f );
             }
@@ -155,6 +159,8 @@ namespace DTXmatixx.ステージ.選曲
                 case フェーズ.表示:
                     if( App.入力管理.確定キーが入力された() )
                     {
+                        #region " 確定 "
+                        //----------------
                         if( App.曲ツリー.フォーカスノード is BoxNode boxNode )
                         {
                             this._曲リスト.BOXに入る();
@@ -169,37 +175,75 @@ namespace DTXmatixx.ステージ.選曲
                             App.ステージ管理.アイキャッチを選択しクローズする( nameof( GO ) );
                             this.現在のフェーズ = フェーズ.フェードアウト;
                         }
+                        //----------------
+                        #endregion
                     }
                     else if( App.入力管理.キャンセルキーが入力された() )
                     {
+                        #region " キャンセル "
+                        //----------------
                         this.現在のフェーズ = フェーズ.キャンセル;
+                        //----------------
+                        #endregion
                     }
                     else if( App.入力管理.上移動キーが入力された() )
                     {
+                        #region " 上移動 "
+                        //----------------
                         if( null != App.曲ツリー.フォーカスノード )
                         {
                             //App.曲ツリー.前のノードをフォーカスする();	--> 曲リストへ委譲
                             this._曲リスト.前のノードを選択する();
                             this._導線アニメをリセットする();
                         }
+                        //----------------
+                        #endregion
                     }
                     else if( App.入力管理.下移動キーが入力された() )
                     {
+                        #region " 下移動 "
+                        //----------------
                         if( null != App.曲ツリー.フォーカスノード )
                         {
                             //App.曲ツリー.次のノードをフォーカスする();	--> 曲リストへ委譲
                             this._曲リスト.次のノードを選択する();
                             this._導線アニメをリセットする();
                         }
+                        //----------------
+                        #endregion
+                    }
+                    else if( App.入力管理.左移動キーが入力された() )
+                    {
+                        #region " 左移動 "
+                        //----------------
+                        this._表示方法選択パネル.前のパネルを選択する();
+                        //----------------
+                        #endregion
+                    }
+                    else if( App.入力管理.右移動キーが入力された() )
+                    {
+                        #region " 右移動 "
+                        //----------------
+                        this._表示方法選択パネル.次のパネルを選択する();
+                        //----------------
+                        #endregion
                     }
                     else if( App.入力管理.シーケンスが入力された( new[] { レーン種別.HiHat, レーン種別.HiHat }, App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理 ) )
                     {
+                        #region " HH×2 → 難易度変更 "
+                        //----------------
                         //App.曲ツリー.難易度アンカをひとつ増やす();	--> 曲リストへ委譲
                         this._曲リスト.難易度アンカをひとつ増やす();
+                        //----------------
+                        #endregion
                     }
                     else if( App.入力管理.シーケンスが入力された( new[] { レーン種別.Bass, レーン種別.Bass }, App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理 ) )
                     {
+                        #region " BD×2 → オプション設定 "
+                        //----------------
                         this.現在のフェーズ = フェーズ.確定_設定;
+                        //----------------
+                        #endregion
                     }
                     break;
 
@@ -227,6 +271,7 @@ namespace DTXmatixx.ステージ.選曲
         private 選択曲枠ランナー _選択曲枠ランナー = null;
         private BPMパネル _BPMパネル = null;
         private 曲別SKILL _曲別SKILL = null;
+        private 表示方法選択パネル _表示方法選択パネル = null;
         private 文字列画像 _SongNotFound = null;
         private SolidColorBrush _白 = null;
         private SolidColorBrush _黒 = null;
