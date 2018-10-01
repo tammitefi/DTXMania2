@@ -96,6 +96,7 @@ namespace DTXmatixx
                 Log.WriteLine( "" );
                 Log.WriteLine( "遊んでくれてありがとう！" );
             }
+#if !DEBUG
             catch( Exception e )
             {
                 using( var dlg = new 未処理例外検出ダイアログ() )
@@ -107,6 +108,10 @@ namespace DTXmatixx
 
                     dlg.ShowDialog();
                 }
+            }
+#endif
+            finally
+            {
             }
         }
 
