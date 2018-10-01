@@ -37,6 +37,8 @@ namespace DTXmatixx.MMF
                 this.Adapter = dxgiDevice.Adapter;
                 this.DXGIFactory = this.Adapter.GetParent<SharpDX.DXGI.Factory2>();
             }
+
+            エフェクト.初期化する( this );    // 忘れずに！
         }
 
         public void Dispose()

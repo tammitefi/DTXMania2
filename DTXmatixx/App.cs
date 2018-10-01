@@ -94,6 +94,7 @@ namespace DTXmatixx
                 App.DeviceManagerブリッジ.Load();
                 MikuMikuFlex.RenderContext.インスタンスを生成する( App.DeviceManagerブリッジ );
                 MikuMikuFlex.RenderContext.Instance.Initialize();
+                App.TargetContext = new TargetContext( this );
 
                 App.システム設定 = システム設定.復元する();
 
@@ -391,6 +392,11 @@ namespace DTXmatixx
 
                 // 現在のUIツリーを描画する。
                 gd.UIFramework.描画する( gd.D2DDeviceContext );
+
+                // MMFを描画する。
+                MikuMikuFlex.RenderContext.Instance.描画対象にする( App.TargetContext );
+                MikuMikuFlex.RenderContext.Instance.ワールド座標をすべて更新する( App.TargetContext );
+                App.TargetContext.ワールド空間.登録されているすべての描画の必要があるものを描画する();
 
                 // ステージの進行描画の結果（フェーズの状態など）を受けての後処理。
                 switch( App.ステージ管理.現在のステージ )

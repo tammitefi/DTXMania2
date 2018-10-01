@@ -27,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -73,10 +74,10 @@
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
     <Reference Include="MikuMikuFlex, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MikuMikuFlex.2.0.0-alpha7\lib\net471\MikuMikuFlex.dll</HintPath>
+      <HintPath>..\packages\MikuMikuFlex.2.0.0-alpha8\lib\net471\MikuMikuFlex.dll</HintPath>
     </Reference>
     <Reference Include="MMDFileParser, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MikuMikuFlex.2.0.0-alpha7\lib\net471\MMDFileParser.dll</HintPath>
+      <HintPath>..\packages\MikuMikuFlex.2.0.0-alpha8\lib\net471\MMDFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -145,7 +146,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="TgaLib, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MikuMikuFlex.2.0.0-alpha7\lib\net471\TgaLib.dll</HintPath>
+      <HintPath>..\packages\MikuMikuFlex.2.0.0-alpha8\lib\net471\TgaLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
