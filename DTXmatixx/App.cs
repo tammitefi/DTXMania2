@@ -24,6 +24,7 @@ using DTXmatixx.曲;
 using DTXmatixx.設定;
 using DTXmatixx.入力;
 using DTXmatixx.Viewer;
+using DTXmatixx.MMF;
 
 namespace DTXmatixx
 {
@@ -35,82 +36,33 @@ namespace DTXmatixx
         public static T 属性<T>() where T : Attribute
             => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
-        public static App Instance
-        {
-            get;
-            protected set;
-        } = null;
+        public static App Instance { get; protected set; }
+
         /// <remarks>
         ///		SharpDX.Mathematics パッケージを参照し、かつ SharpDX 名前空間を using しておくと、
         ///		SharpDX で定義する追加の拡張メソッド（NextFloatなど）を使えるようになる。
         /// </remarks>
-        public static Random 乱数
-        {
-            get;
-            protected set;
-        } = null;
-        public static システム設定 システム設定
-        {
-            get;
-            protected set;
-        } = null;
-        public static 入力管理 入力管理
-        {
-            get;
-            set;
-        } = null;
-        public static ステージ管理 ステージ管理
-        {
-            get;
-            protected set;
-        } = null;
-        public static 曲ツリー 曲ツリー
-        {
-            get;
-            set;
-        } = null;
-        public static SoundDevice サウンドデバイス
-        {
-            get;
-            protected set;
-        } = null;
-        public static SoundTimer サウンドタイマ
-        {
-            get;
-            protected set;
-        } = null;
-        public static ドラムサウンド ドラムサウンド
-        {
-            get;
-            protected set;
-        } = null;
-        public static ユーザ管理 ユーザ管理
-        {
-            get;
-            protected set;
-        } = null;
+        public static Random 乱数 { get; protected set; }
+        public static システム設定 システム設定 { get; protected set; }
+        public static 入力管理 入力管理 { get; set; }
+        public static ステージ管理 ステージ管理 { get; protected set; }
+        public static 曲ツリー 曲ツリー { get; set; }
+        public static SoundDevice サウンドデバイス { get; protected set; }
+        public static SoundTimer サウンドタイマ { get; protected set; }
+        public static ドラムサウンド ドラムサウンド { get; protected set; }
+        public static ユーザ管理 ユーザ管理 { get; protected set; }
 
-        public static スコア 演奏スコア
-        {
-            get;
-            set;
-        } = null;
-        public static WAV管理 WAV管理
-        {
-            get;
-            set;
-        } = null;
+        public static スコア 演奏スコア { get; set; }
+        public static WAV管理 WAV管理 { get; set; }
 
-		public static bool ウィンドウがアクティブである
-		{
-			get;
-			set;
-		} = false;
+        public static DeviceManagerBridge DeviceManagerブリッジ { get; protected set; }
+        public static TargetContext TargetContext { get; protected set; }
+
+        public static bool ウィンドウがアクティブである { get; set; } = false;
 		public static bool ウィンドウがアクティブではない
 		{
 			get
 				=> !( App.ウィンドウがアクティブである );
-
 			set
 				=> App.ウィンドウがアクティブである = !( value );
 		}
@@ -137,6 +89,11 @@ namespace DTXmatixx
                 App.Instance = this;
 
                 App.乱数 = new Random( DateTime.Now.Millisecond );
+
+                App.DeviceManagerブリッジ = new DeviceManagerBridge();
+                App.DeviceManagerブリッジ.Load();
+                MikuMikuFlex.RenderContext.インスタンスを生成する( App.DeviceManagerブリッジ );
+                MikuMikuFlex.RenderContext.Instance.Initialize();
 
                 App.システム設定 = システム設定.復元する();
 
@@ -207,6 +164,11 @@ namespace DTXmatixx
 
                 App.システム設定.保存する();
                 App.システム設定 = null;
+
+                MikuMikuFlex.RenderContext.Instance.Dispose();
+
+                App.DeviceManagerブリッジ?.Dispose();
+                App.DeviceManagerブリッジ = null;
 
                 App.Instance = null;
 
