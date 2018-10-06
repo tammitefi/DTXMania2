@@ -179,6 +179,12 @@ namespace FDK.メディア
                 d3dDevice.ImmediateContext.VertexShader.Set( テクスチャ._VertexShader );
                 d3dDevice.ImmediateContext.VertexShader.SetConstantBuffers( 0, this._ConstantBuffer );
 
+                // ハルシェーダ
+                d3dDevice.ImmediateContext.HullShader.Set( null );
+
+                // ドメインシェーダ
+                d3dDevice.ImmediateContext.DomainShader.Set( null );
+
                 // ジオメトリシェーダ
                 d3dDevice.ImmediateContext.GeometryShader.Set( null );
 
