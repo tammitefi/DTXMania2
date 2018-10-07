@@ -49,7 +49,7 @@ namespace DTXmatixx.MMF
                 カメラの初期注視点: new Vector3( 0, 3, 0 ),
                 カメラの初期上方向ベクトル: new Vector3( 0, 1, 0 ) );
             var 射影行列 = new 射影();
-            射影行列.射影行列を初期化する( (float) Math.PI / 4f, 1.618f, 1, 200 );
+            射影行列.射影行列を初期化する( (float) Math.PI / 4f, 1.77778f, 1, 200 );
             this.行列管理 = new 行列管理( new ワールド行列(), カメラ, 射影行列 );
 
             this.ワールド空間 = new ワールド空間();
@@ -67,10 +67,13 @@ namespace DTXmatixx.MMF
         {
             RenderContext.Instance.DeviceManager.D3DDeviceContext.Rasterizer.SetViewports(
                 new SharpDX.Mathematics.Interop.RawViewportF[] {
-                    new Viewport {
-                        Width = BindedControl.Width,
-                        Height = BindedControl.Height,
-                        MaxDepth = 1,
+                    new SharpDX.Mathematics.Interop.RawViewportF {
+                        X = 0.0f,
+                        Y = 0.0f,
+                        Width = グラフィックデバイス.Instance.物理画面サイズ.Width,
+                        Height = グラフィックデバイス.Instance.物理画面サイズ.Height,
+                        MinDepth = 0.0f,
+                        MaxDepth = 1.0f,
                     }
                 } );
         }
