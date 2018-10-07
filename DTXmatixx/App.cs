@@ -56,7 +56,7 @@ namespace DTXmatixx
         public static WAV管理 WAV管理 { get; set; }
 
         public static DeviceManagerBridge DeviceManagerブリッジ { get; protected set; }
-        public static TargetContext TargetContext { get; protected set; }
+        public static TargetContext MMFTargetContext { get; protected set; }
 
         public static bool ウィンドウがアクティブである { get; set; } = false;
 		public static bool ウィンドウがアクティブではない
@@ -94,7 +94,7 @@ namespace DTXmatixx
                 App.DeviceManagerブリッジ.Load();
                 MikuMikuFlex.RenderContext.インスタンスを生成する( App.DeviceManagerブリッジ );
                 MikuMikuFlex.RenderContext.Instance.Initialize();
-                App.TargetContext = new TargetContext( this );
+                App.MMFTargetContext = new TargetContext( this );
 
                 App.システム設定 = システム設定.復元する();
 
@@ -394,9 +394,9 @@ namespace DTXmatixx
                 gd.UIFramework.描画する( gd.D2DDeviceContext );
 
                 // MMFを描画する。
-                MikuMikuFlex.RenderContext.Instance.描画対象にする( App.TargetContext );
-                MikuMikuFlex.RenderContext.Instance.ワールド座標をすべて更新する( App.TargetContext );
-                App.TargetContext.ワールド空間.登録されているすべての描画の必要があるものを描画する();
+                MikuMikuFlex.RenderContext.Instance.描画対象にする( App.MMFTargetContext );
+                MikuMikuFlex.RenderContext.Instance.ワールド座標をすべて更新する( App.MMFTargetContext );
+                App.MMFTargetContext.ワールド空間.登録されているすべての描画の必要があるものを描画する();
 
                 // ステージの進行描画の結果（フェーズの状態など）を受けての後処理。
                 switch( App.ステージ管理.現在のステージ )

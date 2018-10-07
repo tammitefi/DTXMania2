@@ -326,7 +326,7 @@ namespace FDK.メディア
 #if DEBUG
             this.D2DFactory = new SharpDX.Direct2D1.Factory2( SharpDX.Direct2D1.FactoryType.MultiThreaded, SharpDX.Direct2D1.DebugLevel.Information );
 #else
-			this._D2DFactory = new SharpDX.Direct2D1.Factory2( SharpDX.Direct2D1.FactoryType.MultiThreaded, SharpDX.Direct2D1.DebugLevel.None );
+			this.D2DFactory = new SharpDX.Direct2D1.Factory2( SharpDX.Direct2D1.FactoryType.MultiThreaded, SharpDX.Direct2D1.DebugLevel.None );
 #endif
             this.DWriteFactory = new SharpDX.DirectWrite.Factory( SharpDX.DirectWrite.FactoryType.Shared );
 
