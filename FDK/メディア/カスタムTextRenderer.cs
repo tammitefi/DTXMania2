@@ -105,7 +105,7 @@ namespace FDK.メディア
         {
             this._wrFactory = null;
 
-            base.Dispose();
+            //base.Dispose();
         }
 
 
