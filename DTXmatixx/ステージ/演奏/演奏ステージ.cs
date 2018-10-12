@@ -500,11 +500,14 @@ namespace DTXmatixx.ステージ.演奏
 
                                 var プロパティs = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.Where( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) );
 
-                                //for( int i = 0; i < プロパティs.Count(); i++ )
-                                int i = 0;  // １つの入力で処理するのは、１つの表示レーン種別のみ。
+                                if( プロパティs.Count() > 0 )
                                 {
-                                    this._ドラムパッド.ヒットする( プロパティs.ElementAt( i ).Value.表示レーン種別 );
-                                    this._レーンフラッシュ.開始する( プロパティs.ElementAt( i ).Value.表示レーン種別 );
+                                    //for( int i = 0; i < プロパティs.Count(); i++ )
+                                    int i = 0;  // １つの入力で処理するのは、１つの表示レーン種別のみ。
+                                    {
+                                        this._ドラムパッド.ヒットする( プロパティs.ElementAt( i ).Value.表示レーン種別 );
+                                        this._レーンフラッシュ.開始する( プロパティs.ElementAt( i ).Value.表示レーン種別 );
+                                    }
                                 }
                             }
                         }
