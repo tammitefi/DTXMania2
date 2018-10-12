@@ -13,13 +13,8 @@ namespace DTXmatixx.ステージ
 {
     class ドラムサウンド : IDisposable
     {
-        public ドラムサウンド( int 多重度 = 4 )
+        public ドラムサウンド()
         {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-                this._多重度 = 多重度;
-                this.初期化する();
-            }
         }
         public void Dispose()
         {

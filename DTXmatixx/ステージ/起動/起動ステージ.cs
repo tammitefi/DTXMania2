@@ -17,7 +17,8 @@ namespace DTXmatixx.ステージ.起動
         public enum フェーズ
         {
             開始,
-            構築中,
+            ドラムサウンド構築中,
+            曲ツリー構築中,
             確定,
             キャンセル,
         }
@@ -56,14 +57,14 @@ namespace DTXmatixx.ステージ.起動
         {
             this._コンソールフォント.描画する( dc, 0f, 0f, $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}" );
             this._コンソールフォント.描画する( dc, 0f, 32f, $"{App.属性<AssemblyCopyrightAttribute>().Copyright}" );
-            this._コンソールフォント.描画する( dc, 0f, 96f, $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}" );
 
             App.入力管理.すべての入力デバイスをポーリングする();
 
             switch( this.現在のフェーズ )
             {
                 case フェーズ.開始:
-					App.曲ツリー.非活性化する();
+
+                    App.曲ツリー.非活性化する();
 					App.曲ツリー = new 曲.曲ツリー();
 					App.曲ツリー.活性化する();
 
@@ -83,20 +84,33 @@ namespace DTXmatixx.ステージ.起動
 
                     } );
 
-                    this.現在のフェーズ = フェーズ.構築中;
+                    this.現在のフェーズ = フェーズ.曲ツリー構築中;
                     break;
 
-                case フェーズ.構築中:
+
+                case フェーズ.曲ツリー構築中:
+
+                    this._コンソールフォント.描画する( dc, 0f, 96f, $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}" );
+
                     if( this._構築タスク.IsCompleted || this._構築タスク.IsCanceled )
                     {
                         App.曲ツリー.活性化する();
-                        this.現在のフェーズ = フェーズ.確定;
+
+                        this._コンソールフォント.描画する( dc, 0f, 128f, $"Loading and decoding sounds ..." );
+                        this.現在のフェーズ = フェーズ.ドラムサウンド構築中;
                     }
                     break;
 
-                case フェーズ.確定:
+
+                case フェーズ.ドラムサウンド構築中:
+
+                    App.ドラムサウンド.初期化する();
+
+                    this.現在のフェーズ = フェーズ.確定;
                     break;
 
+
+                case フェーズ.確定:
                 case フェーズ.キャンセル:
                     break;
             }
