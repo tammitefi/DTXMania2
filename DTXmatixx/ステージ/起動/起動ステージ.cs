@@ -10,9 +10,9 @@ using SharpDX.Direct2D1;
 using FDK;
 using FDK.メディア;
 
-namespace DTXmatixx.ステージ.曲ツリー構築
+namespace DTXmatixx.ステージ.起動
 {
-    class 曲ツリー構築ステージ : ステージ
+    class 起動ステージ : ステージ
     {
         public enum フェーズ
         {
@@ -27,7 +27,7 @@ namespace DTXmatixx.ステージ.曲ツリー構築
             protected set;
         }
 
-        public 曲ツリー構築ステージ()
+        public 起動ステージ()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {

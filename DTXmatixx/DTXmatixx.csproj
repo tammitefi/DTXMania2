@@ -228,7 +228,7 @@
     <Compile Include="アイキャッチ\回転幕.cs" />
     <Compile Include="ステージ\ドラムサウンド.cs" />
     <Compile Include="ステージ\パッド矢印.cs" />
-    <Compile Include="ステージ\曲ツリー構築\曲ツリー構築ステージ.cs" />
+    <Compile Include="ステージ\起動\起動ステージ.cs" />
     <Compile Include="ステージ\曲読み込み\プレビュー画像.cs" />
     <Compile Include="ステージ\曲読み込み\曲読み込みステージ.cs" />
     <Compile Include="ステージ\曲読み込み\難易度.cs" />
