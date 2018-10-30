@@ -154,9 +154,6 @@ namespace DTXmatixx.ステージ
             }
             public void Dispose()
             {
-                this.SampleSource?.Dispose();
-                this.SampleSource = null;
-
                 for( int i = 0; i < this.Sounds.Length; i++ )
                 {
                     if( this.Sounds[ i ].再生中である )
@@ -165,6 +162,9 @@ namespace DTXmatixx.ステージ
                     this.Sounds[i]?.Dispose();
                     this.Sounds[i] = null;
                 }
+
+                this.SampleSource?.Dispose();
+                this.SampleSource = null;
             }
             public void 発声する( 消音グループ種別 muteGroupType, float 音量 )
             {
