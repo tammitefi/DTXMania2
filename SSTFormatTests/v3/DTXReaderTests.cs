@@ -290,7 +290,7 @@ namespace SSTFormat.v3.Tests
                         Assert.AreEqual( 1, chip.チップサブID );
 
                         // 位置が 10 であること。
-                        Assert.AreEqual( 10, chip.位置 );
+                        Assert.AreEqual( 10, chip.左右位置 );
                     }
                     //----------------
                     #endregion
@@ -303,7 +303,7 @@ namespace SSTFormat.v3.Tests
                         Assert.AreEqual( 2, chip.チップサブID );
 
                         // 位置が 20 であること。
-                        Assert.AreEqual( 20, chip.位置 );
+                        Assert.AreEqual( 20, chip.左右位置 );
                     }
                     //----------------
                     #endregion
@@ -316,7 +316,7 @@ namespace SSTFormat.v3.Tests
                         Assert.AreEqual( 3, chip.チップサブID );
 
                         // 位置が 100 であること。
-                        Assert.AreEqual( 100, chip.位置 );
+                        Assert.AreEqual( 100, chip.左右位置 );
                     }
                     //----------------
                     #endregion
@@ -329,7 +329,7 @@ namespace SSTFormat.v3.Tests
                         Assert.AreEqual( 4, chip.チップサブID );
 
                         // 位置が -100 であること。（#WAVPAN に対応していること。）
-                        Assert.AreEqual( -100, chip.位置 );
+                        Assert.AreEqual( -100, chip.左右位置 );
                     }
                     //----------------
                     #endregion
@@ -342,7 +342,7 @@ namespace SSTFormat.v3.Tests
                         Assert.AreEqual( 5, chip.チップサブID );
 
                         // 位置が 100 であること。（-100～+100 の範囲外の値は、この範囲内に丸められる。）
-                        Assert.AreEqual( 100, chip.位置 );
+                        Assert.AreEqual( 100, chip.左右位置 );
                     }
                     //----------------
                     #endregion
@@ -355,7 +355,7 @@ namespace SSTFormat.v3.Tests
                         Assert.AreEqual( 6, chip.チップサブID );
 
                         // 位置が 0 であること。（#PAN/#WAVPANの指定がない場合の規定値）
-                        Assert.AreEqual( 0, chip.位置 );
+                        Assert.AreEqual( 0, chip.左右位置 );
                     }
                     //----------------
                     #endregion

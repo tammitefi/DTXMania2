@@ -225,7 +225,7 @@ namespace SSTFormat.v3
                         if( 現在の.PAN定義マップ.ContainsKey( chip.チップサブID ) )
                         {
                             // それをチップに設定する。
-                            chip.位置 = 現在の.PAN定義マップ[ chip.チップサブID ];
+                            chip.左右位置 = 現在の.PAN定義マップ[ chip.チップサブID ];
                         }
 
                         // VOLUME の指定があるなら、

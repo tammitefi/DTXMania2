@@ -180,12 +180,9 @@ namespace DTXmatixx.ステージ.曲読み込み
 
                 // 全チップの発声時刻を修正する。
 
-                //long 早める時間ms = (long) ( App.サウンドデバイス.再生遅延sec * 1000 - App.演奏スコア.サウンドデバイス遅延ms );
-                long 早める時間ms = (long) ( App.サウンドデバイス.再生遅延sec * 1000 );  // SoundDevice.Delay 不要論
-
                 foreach( var chip in App.演奏スコア.チップリスト )
                 {
-                    chip.発声時刻ms -= (long) 早める時間ms;
+                    chip.発声時刻sec -= App.サウンドデバイス.再生遅延sec;
                 }
 
                 // 完了。

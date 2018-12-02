@@ -11,21 +11,18 @@ namespace SSTFormat.v3
     public class スコア : IDisposable
     {
         /// <summary>
-        ///		  このソースで対応するバージョン。
+        ///		  このソースが実装するSSTFバージョン。
         /// </summary>
-        public Version SSTFVERSION { get; } = new Version( 3, 2, 0, 0 );
-
-        // 定数
+        public Version SSTFVERSION { get; } = new Version( 3, 3, 0, 0 );
 
         public const double 初期BPM = 120.0;
         public const double 初期小節解像度 = 480.0;
-        public const double BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );
-        public const double BPM初期値固定での1小節4拍の時間sec = 60.0 / ( スコア.初期BPM / 4.0 );
+
         /// <summary>
-        ///		1ms あたりの設計ピクセル数 [dpx] 。
+        ///		1ms あたりのピクセル数。
         /// </summary>
         /// <remarks>
-        ///		BPM 150 のとき、1小節が 234 dpx になるように調整。
+        ///		BPM 150 のとき、1小節が 234 ピクセルになるように調整。
         ///		→ 60秒で150拍のとき、1小節(4拍)が 234 dpx。
         ///		→ 60秒の間に、150[拍]÷4[拍]＝37.5[小節]。
         ///		→ 60秒の間に、37.5[小節]×234[dpx/小節]＝ 8775[dpx]。
@@ -36,25 +33,9 @@ namespace SSTFormat.v3
                                                            ///		1秒あたりの設計ピクセル数 [dpx] 。
                                                            /// </summary>
         public const double 基準譜面速度dpxsec = 基準譜面速度dpxms * 1000.0;
-        public static readonly Dictionary<レーン種別, List<チップ種別>> dicSSTFレーンチップ対応表 = new Dictionary<レーン種別, List<チップ種別>>() {
-            { レーン種別.Unknown, new List<チップ種別>() { チップ種別.Unknown } },
-            { レーン種別.LeftCrash, new List<チップ種別>() { チップ種別.LeftCrash, チップ種別.LeftCymbal_Mute } },
-            { レーン種別.Ride, new List<チップ種別>() { チップ種別.Ride, チップ種別.Ride_Cup } },
-            { レーン種別.China, new List<チップ種別>() { チップ種別.China } },
-            { レーン種別.Splash, new List<チップ種別>() { チップ種別.Splash } },
-            { レーン種別.HiHat, new List<チップ種別>() { チップ種別.HiHat_Close, チップ種別.HiHat_HalfOpen, チップ種別.HiHat_Open } },
-            { レーン種別.Foot, new List<チップ種別>() { チップ種別.HiHat_Foot } },
-            { レーン種別.Snare, new List<チップ種別>() { チップ種別.Snare, チップ種別.Snare_ClosedRim, チップ種別.Snare_Ghost, チップ種別.Snare_OpenRim } },
-            { レーン種別.Bass, new List<チップ種別>() { チップ種別.Bass } },
-            { レーン種別.Tom1, new List<チップ種別>() { チップ種別.Tom1, チップ種別.Tom1_Rim } },
-            { レーン種別.Tom2, new List<チップ種別>() { チップ種別.Tom2, チップ種別.Tom2_Rim } },
-            { レーン種別.Tom3, new List<チップ種別>() { チップ種別.Tom3, チップ種別.Tom3_Rim } },
-            { レーン種別.RightCrash, new List<チップ種別>() { チップ種別.RightCrash, チップ種別.RightCymbal_Mute } },
-            { レーン種別.BPM, new List<チップ種別>() { チップ種別.BPM } },
-            { レーン種別.Song, new List<チップ種別>() { チップ種別.背景動画, チップ種別.BGM, チップ種別.SE1, チップ種別.SE2, チップ種別.SE3, チップ種別.SE4, チップ種別.SE5, チップ種別.GuitarAuto, チップ種別.BassAuto } },
-        };
-        public static readonly List<string> 背景動画のデフォルト拡張子s = new List<string>() {
-            ".avi", ".flv", ".mp4", ".wmv", ".mpg", ".mpeg"
+
+        public static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
+            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
         };
 
         // 外部向けヘルパ
@@ -68,15 +49,9 @@ namespace SSTFormat.v3
         ///		対象文字列のコマンド名が指定したコマンド名と異なる場合には、パラメータ文字列に null を格納して false を返す。
         ///		コマンド名は正しくてもパラメータが存在しない場合には、空文字列("") を格納して true を返す。
         /// </remarks>
-        /// <param name="対象文字列">
-        ///		調べる対象の文字列。（例: "#TITLE: 曲名 ;コメント"）
-        ///	</param>
-        /// <param name="コマンド名">
-        ///		調べるコマンドの名前（例:"TITLE"）。#は不要、大文字小文字は区別されない。
-        ///	</param>
-        /// <returns>
-        ///		パラメータ文字列の取得に成功したら true、異なるコマンドだったなら false。
-        ///	</returns>
+        /// <param name="対象文字列">調べる対象の文字列。（例: "#TITLE: 曲名 ;コメント"）</param>
+        /// <param name="コマンド名">調べるコマンドの名前（例:"TITLE"）。#は不要、大文字小文字は区別されない。</param>
+        /// <returns>パラメータ文字列の取得に成功したら true、異なるコマンドだったなら false。</returns>
         public static bool コマンドのパラメータ文字列部分を返す( string 対象文字列, string コマンド名, out string パラメータ文字列 )
         {
             // コメント部分を除去し、両端をトリムする。なお、全角空白はトリムしない。
@@ -104,63 +79,31 @@ namespace SSTFormat.v3
         ///		ファイルのSSTFバージョン。
         ///		ファイルにバージョンの指定がない場合は v1.0.0.0 とみなす。
         /// </summary>
-        public Version SSTFバージョン
-        {
-            get;
-            protected set;
-        } = new Version( 1, 0, 0, 0 );
+        public Version SSTFバージョン { get; protected set; } = new Version( 1, 0, 0, 0 );
 
-        public string 曲名
-        {
-            get;
-            set;
-        } = "(no title)";
+        public string 曲名 { get; set; } = "(no title)";
 
-        public string アーティスト名
-        {
-            get;
-            set;
-        } = "";
+        public string アーティスト名 { get; set; } = "";
 
-        public string 説明文
-        {
-            get;
-            set;
-        } = "";
+        public string 説明文 { get; set; } = "";
 
-        public float サウンドデバイス遅延ms
-        {
-            get;
-            set;
-        } = 0f;
+        public float サウンドデバイス遅延ms { get; set; } = 0f;
 
         /// <summary>
         ///		0.00～9.99。
         /// </summary>
-        public float 難易度
-        {
-            get;
-            set;
-        } = 5.0f;
+        public float 難易度 { get; set; } = 5.0f;
 
         /// <summary>
         ///		動画ファイルパス。
         ///		SSTF用。
         /// </summary>
-        public string 背景動画ファイル名
-        {
-            get;
-            set;
-        } = null;
+        public string 背景動画ファイル名 { get; set; } = null;
 
         /// <summary>
         ///		プレビュー画像。DTX用。
         /// </summary>
-        public string プレビュー画像
-        {
-            get;
-            set;
-        } = null;
+        public string プレビュー画像 { get; set; } = null;
 
         /// <summary>
         ///     動画のID。SSTF用。
@@ -170,29 +113,18 @@ namespace SSTFormat.v3
         ///     書式: "プロトコル: 動画ID", 大文字小文字は区別されない。
         ///     　例: ニコニコ動画の場合 …… "NicoVideo: sm12345678"
         /// </remarks>
-        public string 動画ID
-        {
-            get;
-            set;
-        } = null;
+        public string 動画ID { get; set; } = null;
+
 
         // プロパティ
 
-        public List<チップ> チップリスト
-        {
-            get;
-            set;
-        } = new List<チップ>();
+        public List<チップ> チップリスト { get; set; } = new List<チップ>();
 
         /// <summary>
         ///		インデックス番号が小節番号を表すので、
         ///		小節 0 から最大小節まで、すべての小節の倍率がこのリストに含まれる。
         /// </summary>
-        public List<double> 小節長倍率リスト
-        {
-            get;
-            protected set;
-        } = new List<double>();
+        public List<double> 小節長倍率リスト { get; protected set; } = new List<double>();
 
         public int 最大小節番号
         {
@@ -210,21 +142,13 @@ namespace SSTFormat.v3
             }
         }
 
-        public Dictionary<int, string> dicメモ
-        {
-            get;
-            protected set;
-        } = new Dictionary<int, string>();
+        public Dictionary<int, string> dicメモ { get; protected set; } = new Dictionary<int, string>();
 
         /// <summary>
         ///		#WAVzz で指定された、サウンドファイルへの相対パス他。
         ///		パスの基点は、#PATH_WAV があればそこ、なければ曲譜面ファイルと同じ場所。
         /// </summary>
-        public Dictionary<int, (string ファイルパス, bool 多重再生する)> dicWAV
-        {
-            get;
-            protected set;
-        } = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+        public Dictionary<int, (string ファイルパス, bool 多重再生する)> dicWAV { get; protected set; } = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
 
         /// <summary>
         ///		#AVIzz で指定された、動画ファイルへの相対パス。
@@ -424,7 +348,7 @@ namespace SSTFormat.v3
                 while( 現在の小節の番号 < chip.小節番号 )
                 {
                     double 現在の小節の小節長倍率 = this.小節長倍率を取得する( 現在の小節の番号 );
-                    チップが存在する小節の先頭時刻ms += BPM初期値固定での1小節4拍の時間ms * 現在の小節の小節長倍率;
+                    チップが存在する小節の先頭時刻ms += _BPM初期値固定での1小節4拍の時間ms * 現在の小節の小節長倍率;
 
                     現在の小節の番号++;    // 現在の小節番号 が chip.小節番号 に追いつくまでループする。
                 }
@@ -434,9 +358,9 @@ namespace SSTFormat.v3
                 //-----------------
                 double チップが存在する小節の小節長倍率 = this.小節長倍率を取得する( 現在の小節の番号 );
 
-                chip.発声時刻ms =
-                    chip.描画時刻ms =
-                        (long) ( チップが存在する小節の先頭時刻ms + ( BPM初期値固定での1小節4拍の時間ms * チップが存在する小節の小節長倍率 * chip.小節内位置 ) / chip.小節解像度 );
+                chip.発声時刻sec =
+                    chip.描画時刻sec =
+                        ( チップが存在する小節の先頭時刻ms + ( _BPM初期値固定での1小節4拍の時間ms * チップが存在する小節の小節長倍率 * chip.小節内位置 ) / chip.小節解像度 ) / 1000.0;
                 //-----------------
                 #endregion
             }
@@ -456,10 +380,9 @@ namespace SSTFormat.v3
                 double 加速率 = BPMチップ.BPM / 現在のBPM; // BPMチップ.dbBPM > 0.0 であることは読み込み時に保証済み。
                 for( int j = i + 1; j < チップ数; j++ )
                 {
-                    long 時刻ms = (long) ( BPMチップ.発声時刻ms + ( ( this.チップリスト[ j ].発声時刻ms - BPMチップ.発声時刻ms ) / 加速率 ) );
-
-                    this.チップリスト[ j ].発声時刻ms = 時刻ms;
-                    this.チップリスト[ j ].描画時刻ms = 時刻ms;
+                    double 時刻sec = BPMチップ.発声時刻sec + ( this.チップリスト[ j ].発声時刻sec - BPMチップ.発声時刻sec ) / 加速率;
+                    this.チップリスト[ j ].発声時刻sec = 時刻sec;
+                    this.チップリスト[ j ].描画時刻sec = 時刻sec;
                 }
 
                 現在のBPM = BPMチップ.BPM;
@@ -551,7 +474,7 @@ namespace SSTFormat.v3
                         {
                             var lane = レーン種別.Bass;   // 対応するレーンがなかったら Bass でも返しておく。
 
-                            foreach( var kvp in dicSSTFレーンチップ対応表 )
+                            foreach( var kvp in _dicSSTFレーンチップ対応表 )
                             {
                                 if( kvp.Value.Contains( cc.チップ種別 ) )
                                 {
@@ -776,6 +699,26 @@ namespace SSTFormat.v3
         /// </summary>
         private string _PATH_WAV = "";
 
+        private static readonly Dictionary<レーン種別, List<チップ種別>> _dicSSTFレーンチップ対応表 = new Dictionary<レーン種別, List<チップ種別>>() {
+            { レーン種別.Unknown, new List<チップ種別>() { チップ種別.Unknown } },
+            { レーン種別.LeftCrash, new List<チップ種別>() { チップ種別.LeftCrash, チップ種別.LeftCymbal_Mute } },
+            { レーン種別.Ride, new List<チップ種別>() { チップ種別.Ride, チップ種別.Ride_Cup } },
+            { レーン種別.China, new List<チップ種別>() { チップ種別.China } },
+            { レーン種別.Splash, new List<チップ種別>() { チップ種別.Splash } },
+            { レーン種別.HiHat, new List<チップ種別>() { チップ種別.HiHat_Close, チップ種別.HiHat_HalfOpen, チップ種別.HiHat_Open } },
+            { レーン種別.Foot, new List<チップ種別>() { チップ種別.HiHat_Foot } },
+            { レーン種別.Snare, new List<チップ種別>() { チップ種別.Snare, チップ種別.Snare_ClosedRim, チップ種別.Snare_Ghost, チップ種別.Snare_OpenRim } },
+            { レーン種別.Bass, new List<チップ種別>() { チップ種別.Bass } },
+            { レーン種別.Tom1, new List<チップ種別>() { チップ種別.Tom1, チップ種別.Tom1_Rim } },
+            { レーン種別.Tom2, new List<チップ種別>() { チップ種別.Tom2, チップ種別.Tom2_Rim } },
+            { レーン種別.Tom3, new List<チップ種別>() { チップ種別.Tom3, チップ種別.Tom3_Rim } },
+            { レーン種別.RightCrash, new List<チップ種別>() { チップ種別.RightCrash, チップ種別.RightCymbal_Mute } },
+            { レーン種別.BPM, new List<チップ種別>() { チップ種別.BPM } },
+            { レーン種別.Song, new List<チップ種別>() { チップ種別.背景動画, チップ種別.BGM, チップ種別.SE1, チップ種別.SE2, チップ種別.SE3, チップ種別.SE4, チップ種別.SE5, チップ種別.GuitarAuto, チップ種別.BassAuto } },
+        };
+
+        private const double _BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );
+        private const double _BPM初期値固定での1小節4拍の時間sec = 60.0 / ( スコア.初期BPM / 4.0 );
 
         private void _初期化する()
         {
@@ -807,7 +750,7 @@ namespace SSTFormat.v3
             //----------------
             this.背景動画ファイル名 =
                 ( from file in Directory.GetFiles( Path.GetDirectoryName( 曲データファイル名 ) )
-                  where スコア.背景動画のデフォルト拡張子s.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                  where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                   select file ).FirstOrDefault();
             //----------------
             #endregion
@@ -866,7 +809,7 @@ namespace SSTFormat.v3
             //----------------
             this.背景動画ファイル名 =
                 ( from file in Directory.GetFiles( Path.GetDirectoryName( 曲データファイル名 ) )
-                  where スコア.背景動画のデフォルト拡張子s.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                  where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                   select file ).FirstOrDefault();
             //----------------
             #endregion

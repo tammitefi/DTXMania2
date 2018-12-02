@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SSTFormat")]
-[assembly: AssemblyCopyright( "Copyright © 2009 2016 くまかみ工房" )]
+[assembly: AssemblyCopyright( "Copyright © 2009 2018 くまかみ工房" )]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "1.2.1.*" )]
-[assembly: AssemblyFileVersion( "1.2.1.0" )]
+[assembly: AssemblyVersion( "3.3.0.*" )]
+[assembly: AssemblyFileVersion( "3.3.0.0" )]
 
 // 公開先のアセンブリを指定する
 // [assembly: InternalsVisibleTo("公開先のアセンブリ名")]
