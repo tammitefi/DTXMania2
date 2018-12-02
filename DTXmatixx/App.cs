@@ -24,7 +24,6 @@ using DTXmatixx.曲;
 using DTXmatixx.設定;
 using DTXmatixx.入力;
 using DTXmatixx.Viewer;
-using DTXmatixx.MMF;
 
 namespace DTXmatixx
 {
@@ -54,9 +53,6 @@ namespace DTXmatixx
 
         public static スコア 演奏スコア { get; set; }
         public static WAV管理 WAV管理 { get; set; }
-
-        public static DeviceManagerBridge DeviceManagerブリッジ { get; protected set; }
-        public static TargetContext MMFTargetContext { get; protected set; }
 
         public static bool ウィンドウがアクティブである { get; set; } = false;
 		public static bool ウィンドウがアクティブではない
@@ -89,12 +85,6 @@ namespace DTXmatixx
                 App.Instance = this;
 
                 App.乱数 = new Random( DateTime.Now.Millisecond );
-
-                App.DeviceManagerブリッジ = new DeviceManagerBridge();
-                App.DeviceManagerブリッジ.Load();
-                MikuMikuFlex.RenderContext.インスタンスを生成する( App.DeviceManagerブリッジ );
-                MikuMikuFlex.RenderContext.Instance.Initialize();
-                App.MMFTargetContext = new TargetContext( this );
 
                 App.システム設定 = システム設定.復元する();
 
@@ -165,11 +155,6 @@ namespace DTXmatixx
 
                 App.システム設定.保存する();
                 App.システム設定 = null;
-
-                MikuMikuFlex.RenderContext.Instance.Dispose();
-
-                App.DeviceManagerブリッジ?.Dispose();
-                App.DeviceManagerブリッジ = null;
 
                 App.Instance = null;
 
@@ -392,11 +377,6 @@ namespace DTXmatixx
 
                 // 現在のUIツリーを描画する。
                 gd.UIFramework.描画する( gd.D2DDeviceContext );
-
-                // MMFを描画する。
-                MikuMikuFlex.RenderContext.Instance.描画対象にする( App.MMFTargetContext );
-                MikuMikuFlex.RenderContext.Instance.ワールド座標をすべて更新する( App.MMFTargetContext );
-                App.MMFTargetContext.ワールド空間.登録されているすべての描画の必要があるものを描画する();
 
                 // ステージの進行描画の結果（フェーズの状態など）を受けての後処理。
                 switch( App.ステージ管理.現在のステージ )
