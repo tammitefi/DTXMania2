@@ -12,9 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Windows;
-using Newtonsoft.Json.Linq;
 using FDK;
-using FDK.入力;
 using FDK.メディア;
 using FDK.メディア.サウンド;
 using FDK.同期;
@@ -28,7 +26,7 @@ using DTXmatixx.Viewer;
 namespace DTXmatixx
 {
     [ServiceBehavior( InstanceContextMode = InstanceContextMode.Single )]   // サービスインターフェースをシングルスレッドで呼び出す。
-    class App : ApplicationForm, IDTXManiaService, IDisposable
+    class App : ApplicationForm, IDTXManiaService
     {
         public static int リリース番号
             => int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) ? release : throw new Exception( "アセンブリのプロダクトバージョンに記載ミスがあります。" );
@@ -120,45 +118,50 @@ namespace DTXmatixx
                 App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
             }
         }
-        public new void Dispose()
+        protected override void Dispose( bool disposing )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._非活性化する();
+                if( disposing && !( this._Dispose済み ) )
+                {
+                    this._Dispose済み = true;
 
-                App.ユーザ管理?.Dispose();
-                App.ユーザ管理 = null;
+                    this._非活性化する();
 
-                App.ドラムサウンド?.Dispose();
-                App.ドラムサウンド = null;
+                    App.ユーザ管理?.Dispose();
+                    App.ユーザ管理 = null;
 
-                App.WAV管理?.Dispose();   // サウンドデバイスより先に開放すること
-                App.WAV管理 = null;
+                    App.ドラムサウンド?.Dispose();
+                    App.ドラムサウンド = null;
 
-                App.サウンドタイマ?.Dispose();
-                App.サウンドタイマ = null;
+                    App.WAV管理?.Dispose();   // サウンドデバイスより先に開放すること
+                    App.WAV管理 = null;
 
-                App.サウンドデバイス?.Dispose();
-                App.サウンドデバイス = null;
+                    App.サウンドタイマ?.Dispose();
+                    App.サウンドタイマ = null;
 
-                App.演奏スコア?.Dispose();
-                App.演奏スコア = null;
+                    App.サウンドデバイス?.Dispose();
+                    App.サウンドデバイス = null;
 
-                App.曲ツリー.Dispose();
-                App.曲ツリー = null;
+                    App.演奏スコア?.Dispose();
+                    App.演奏スコア = null;
 
-                App.ステージ管理.Dispose();
-                App.ステージ管理 = null;
+                    App.曲ツリー.Dispose();
+                    App.曲ツリー = null;
 
-                App.入力管理.Dispose();
-                App.入力管理 = null;
+                    App.ステージ管理.Dispose();
+                    App.ステージ管理 = null;
 
-                App.システム設定.保存する();
-                App.システム設定 = null;
+                    App.入力管理.Dispose();
+                    App.入力管理 = null;
 
-                App.Instance = null;
+                    App.システム設定.保存する();
+                    App.システム設定 = null;
 
-                base.Dispose();
+                    App.Instance = null;
+                }
+
+                base.Dispose( disposing );
             }
         }
         public override void Run()
@@ -282,6 +285,8 @@ namespace DTXmatixx
         ///		OFF:タスク起動前、ON:タスク実行中、無効:タスク終了済み
         /// </summary>
         private TriStateEvent _高速進行ステータス;
+
+        private bool _Dispose済み = false;
 
         /// <summary>
         ///		グローバルリソースのうち、グラフィックリソースを持つものについて、活性化がまだなら活性化する。

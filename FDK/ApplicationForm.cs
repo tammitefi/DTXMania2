@@ -9,7 +9,7 @@ using FDK.メディア;
 
 namespace FDK
 {
-    public class ApplicationForm : SharpDX.Windows.RenderForm, IDisposable
+    public class ApplicationForm : SharpDX.Windows.RenderForm
     {
         /// <summary>
         ///		ウィンドウの表示モード（全画面 or ウィンドウ）を示す。
@@ -100,17 +100,18 @@ namespace FDK
         /// <summary>
         ///		終了処理。
         /// </summary>
-        public new void Dispose()
+        protected override void Dispose( bool disposing )
         {
-            Debug.Assert( this._初期化完了 );
+            if( disposing && this._初期化完了 )
+            {
+                this._初期化完了 = false;
 
-			PowerManagement.システムの自動スリープと画面の自動非表示の抑制を解除する();
+                PowerManagement.システムの自動スリープと画面の自動非表示の抑制を解除する();
 
-			グラフィックデバイス.インスタンスを解放する();
+                グラフィックデバイス.インスタンスを解放する();
+            }
 
-            this._初期化完了 = false;
-
-            base.Dispose();
+            base.Dispose( disposing );
         }
 
         /// <summary>
@@ -235,10 +236,12 @@ namespace FDK
 
         protected virtual void スワップチェーンに依存するグラフィックリソースを作成する()
         {
+            // スワップチェーンの作成直後に呼び出される。
             // 派生クラスで実装すること。
         }
         protected virtual void スワップチェーンに依存するグラフィックリソースを解放する()
         {
+            // スワップチェーンの破棄直前に呼び出される。
             // 派生クラスで実装すること。
         }
 

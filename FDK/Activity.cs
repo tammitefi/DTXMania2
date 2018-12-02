@@ -62,7 +62,7 @@ namespace FDK
         }
         public void 子リストをクリアする()
         {
-            this._子リスト.Clear();
+            this._子リスト.Clear(); // Dispose はしない。
         }
 
         /// <summary>
@@ -73,7 +73,6 @@ namespace FDK
         {
             var gd = グラフィックデバイス.Instance;
 
-            //Debug.Assert( this.活性化していない );
             if( this.活性化している )
                 return;
 
@@ -94,7 +93,6 @@ namespace FDK
         {
             var gd = グラフィックデバイス.Instance;
 
-            //Debug.Assert( this.活性化している );
             if( this.活性化していない )
                 return;
 

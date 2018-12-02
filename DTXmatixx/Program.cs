@@ -13,9 +13,9 @@ namespace DTXmatixx
 {
     static class Program
     {
-        /// <summary>
-        /// アプリケーションのメイン エントリ ポイントです。
-        /// </summary>
+        public const int ログファイルの最大保存日数 = 30;
+        public static string ログファイル名 = "";
+
         [STAThread]
         static void Main()
         {
@@ -26,7 +26,7 @@ namespace DTXmatixx
             {
                 Trace.AutoFlush = true;
 
-                #region " AppData フォルダがなければ作成する。"
+                #region " %USERPROFILE%/AppData/DTXMatixx フォルダがなければ作成する。"
                 //----------------
                 var AppDataフォルダ名 = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMatixx\" );
 
@@ -36,24 +36,24 @@ namespace DTXmatixx
                 //----------------
                 #endregion
 
-                #region " ログファイルへのログの複製出力開始 "
+                #region " ログファイルへのログの複製出力開始。"
                 //----------------
-                Program.ログファイル名 = Log.ログファイル名を生成する( Path.Combine( AppDataフォルダ名, "Logs" ), "Log.", TimeSpan.FromDays( 30 ) );    // 最大30日分保存
+                Program.ログファイル名 = Log.ログファイル名を生成する( Path.Combine( AppDataフォルダ名, "Logs" ), "Log.", TimeSpan.FromDays( ログファイルの最大保存日数 ) );
+
+                // ログファイルをTraceリスナとして追加。
+                // 以降、Trace（ならびにFDK.Logクラス）による出力は、このリスナ（＝ログファイル）にも出力される。
                 Trace.Listeners.Add( new TraceLogListener( new StreamWriter( Program.ログファイル名, false, Encoding.GetEncoding( "utf-8" ) ) ) );
                 //----------------
                 #endregion
 
                 Log.現在のスレッドに名前をつける( "描画" );
-
-                Log.WriteLine( "========================" );
-                Log.WriteLine( Application.ProductName + " " + App.リリース番号.ToString( "000" ) );
-                Log.WriteLine( "========================" );
-
+                Log.WriteLine( Application.ProductName + " " + App.リリース番号.ToString( "000" ) );  // アプリ名とバージョン
                 Log.システム情報をログ出力する();
                 Log.WriteLine( "" );
 
                 using( var app = new App() )
                 {
+                    // WCFサービスのエンドポイントとURI。
                     string serviceUri = "net.pipe://localhost/DTXMania";
                     string endPointName = "Viewer";
                     string endPointUri = $"{serviceUri}/{endPointName}";
@@ -63,18 +63,19 @@ namespace DTXmatixx
 
                     // 名前付きパイプにバインドしたエンドポイントをサービスホストへ追加する。
                     serviceHost.AddServiceEndpoint(
-                        typeof( IDTXManiaService ),
-                        new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ),
-                        endPointName );
+                        typeof( IDTXManiaService ),     // 公開するインターフェース
+                        new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ),   // 名前付きパイプ
+                        endPointName ); // 公開するエンドポイント
 
-                    // サービスの受付を開始する。
+                    // WCFサービスの受付を開始する。
                     try
                     {
                         serviceHost.Open();
-                        Log.Info( $"WCF サービス {endPointUri} の受付を開始しました。" );
+                        Log.Info( $"WCF サービスの受付を開始しました。[{endPointUri}]" );
                     }
                     catch( AddressAlreadyInUseException )
                     {
+                        // エンドポイントが使用中なら、アプリの二重起動とみなして終了。
                         MessageBox.Show( "DTXMania はすでに起動しています。多重起動はできません。", "DTXMania Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
                         return;
                     }
@@ -109,12 +110,12 @@ namespace DTXmatixx
                     dlg.ShowDialog();
                 }
             }
-#endif
+#else
             finally
             {
+                // DEBUG 時には、未処理の例外が発出されてもcatchしない。（デバッガでキャッチすることを想定。）
             }
+#endif
         }
-
-        public static string ログファイル名 = "";
     }
 }
