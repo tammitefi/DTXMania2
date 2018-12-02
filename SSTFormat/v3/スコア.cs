@@ -1690,6 +1690,28 @@ namespace SSTFormat.v3
             int 区切り位置 = 行.IndexOf( '#' );
             if( 0 <= 区切り位置 )
             {
+                var コメント文 = 行.Substring( 区切り位置 + 1 ).Trim();    // '#' より後ろの内容。前後の空白は除く。
+
+                #region " # SSTFVersion ? "
+                //----------------
+                if( コメント文.StartsWith( "sstfversion", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string 正規表現パターン = $@"^SSTFVersion(:|\s)+(\d+)\.(\d+)\.(\d+)\.(\d+)$";  // \s は空白文字, \d は10進数文字。
+                    var m = Regex.Match( コメント文, 正規表現パターン, RegexOptions.IgnoreCase );
+
+                    if( m.Success )
+                    {
+                        int major = ( 2 < m.Groups.Count && int.TryParse( m.Groups[ 2 ].Value, out int majorValue ) ) ? majorValue : 1;
+                        int minor = ( 3 < m.Groups.Count && int.TryParse( m.Groups[ 3 ].Value, out int minorValue ) ) ? minorValue : 0;
+                        int build = ( 4 < m.Groups.Count && int.TryParse( m.Groups[ 4 ].Value, out int buildValue ) ) ? buildValue : 0;
+                        int revid = ( 5 < m.Groups.Count && int.TryParse( m.Groups[ 5 ].Value, out int revidValue ) ) ? revidValue : 0;
+
+                        this.SSTFバージョン = new Version( major, minor, build, revid );
+                    }
+                }
+                //----------------
+                #endregion
+
                 行 = 行.Substring( 0, 区切り位置 );
                 行 = 行.Trim();
             }
