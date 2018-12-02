@@ -11,73 +11,19 @@ namespace SSTFormat.v3
     public class スコア : IDisposable
     {
         /// <summary>
-        ///		  このソースが実装するSSTFバージョン。
+        ///     このソースが実装するSSTFバージョン。
         /// </summary>
-        public Version SSTFVERSION { get; } = new Version( 3, 3, 0, 0 );
+        public readonly Version SSTFVERSION = new Version( 3, 3, 0, 0 );
 
         public const double 初期BPM = 120.0;
         public const double 初期小節解像度 = 480.0;
-
-        /// <summary>
-        ///		1ms あたりのピクセル数。
-        /// </summary>
-        /// <remarks>
-        ///		BPM 150 のとき、1小節が 234 ピクセルになるように調整。
-        ///		→ 60秒で150拍のとき、1小節(4拍)が 234 dpx。
-        ///		→ 60秒の間に、150[拍]÷4[拍]＝37.5[小節]。
-        ///		→ 60秒の間に、37.5[小節]×234[dpx/小節]＝ 8775[dpx]。
-        ///		→ 1ms の間に、8775[dpx]÷60000[ms]＝0.14625[dpx/ms]。割り切れて良かった。
-        /// </remarks>
-        public const double 基準譜面速度dpxms = 0.14625 * 2.25;  // "* 2.25" は「x1.0はもう少し速くてもいいんではないか？」という感覚的な調整分。
-                                                           /// <summary>
-                                                           ///		1秒あたりの設計ピクセル数 [dpx] 。
-                                                           /// </summary>
-        public const double 基準譜面速度dpxsec = 基準譜面速度dpxms * 1000.0;
-
-        public static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
-            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
-        };
-
-        // 外部向けヘルパ
-
-        /// <summary>
-        ///		指定されたコマンド名が対象文字列内で使用されている場合に、パラメータ部分の文字列を返す。
-        /// </summary>
-        /// <remarks>
-        ///		.dtx や box.def 等で使用されている "#＜コマンド名＞[:]＜パラメータ＞[;コメント]" 形式の文字列（対象文字列）について、
-        ///		指定されたコマンドを使用する行であるかどうかを判別し、使用する行であるなら、そのパラメータ部分の文字列を引数に格納し、true を返す。
-        ///		対象文字列のコマンド名が指定したコマンド名と異なる場合には、パラメータ文字列に null を格納して false を返す。
-        ///		コマンド名は正しくてもパラメータが存在しない場合には、空文字列("") を格納して true を返す。
-        /// </remarks>
-        /// <param name="対象文字列">調べる対象の文字列。（例: "#TITLE: 曲名 ;コメント"）</param>
-        /// <param name="コマンド名">調べるコマンドの名前（例:"TITLE"）。#は不要、大文字小文字は区別されない。</param>
-        /// <returns>パラメータ文字列の取得に成功したら true、異なるコマンドだったなら false。</returns>
-        public static bool コマンドのパラメータ文字列部分を返す( string 対象文字列, string コマンド名, out string パラメータ文字列 )
-        {
-            // コメント部分を除去し、両端をトリムする。なお、全角空白はトリムしない。
-            対象文字列 = 対象文字列.Split( ';' )[ 0 ].Trim( ' ', '\t' );
-
-            string 正規表現パターン = $@"^\s*#{コマンド名}(:|\s)+(.*)\s*$";  // \s は空白文字。
-            var m = Regex.Match( 対象文字列, 正規表現パターン, RegexOptions.IgnoreCase );
-
-            if( m.Success && ( 3 <= m.Groups.Count ) )
-            {
-                パラメータ文字列 = m.Groups[ 2 ].Value;
-                return true;
-            }
-            else
-            {
-                パラメータ文字列 = null;
-                return false;
-            }
-        }
 
 
         // ヘッダ
 
         /// <summary>
-        ///		ファイルのSSTFバージョン。
-        ///		ファイルにバージョンの指定がない場合は v1.0.0.0 とみなす。
+        ///		SSTFバージョン。
+        ///		ファイルから読み込んだ場合、ファイルにSSTFVersionの記述がなかった場合は v1.0.0.0 とみなす。
         /// </summary>
         public Version SSTFバージョン { get; protected set; } = new Version( 1, 0, 0, 0 );
 
@@ -87,10 +33,13 @@ namespace SSTFormat.v3
 
         public string 説明文 { get; set; } = "";
 
+        /// <summary>
+        ///     このスコアが作成されたときのサウンドデバイスの遅延量[ミリ秒]。
+        /// </summary>
         public float サウンドデバイス遅延ms { get; set; } = 0f;
 
         /// <summary>
-        ///		0.00～9.99。
+        ///	    易:0.00～9.99:難。
         /// </summary>
         public float 難易度 { get; set; } = 5.0f;
 
@@ -474,7 +423,7 @@ namespace SSTFormat.v3
                         {
                             var lane = レーン種別.Bass;   // 対応するレーンがなかったら Bass でも返しておく。
 
-                            foreach( var kvp in _dicSSTFレーンチップ対応表 )
+                            foreach( var kvp in _レーンtoチップ対応表 )
                             {
                                 if( kvp.Value.Contains( cc.チップ種別 ) )
                                 {
@@ -647,23 +596,6 @@ namespace SSTFormat.v3
             }
         }
 
-        /// <summary>
-        ///		指定された Config.Speed を考慮し、指定された時間[ms]の間に流れるピクセル数[dpx]を算出して返す。</para>
-        /// </summary>
-        [Obsolete( "指定時間がミリ秒単位ではなく秒単位であるメソッドを使用してください。" )]
-        public int 指定された時間msに対応する符号付きピクセル数を返す( double speed, long 指定時間ms )
-        {
-            return (int) ( 指定時間ms * スコア.基準譜面速度dpxms * speed );
-        }
-
-        /// <summary>
-        ///		指定された Config.Speed を考慮し、指定された時間[秒]の間に流れるピクセル数[dpx]を算出して返す。
-        /// </summary>
-        public double 指定された時間secに対応する符号付きピクセル数を返す( double speed, double 指定時間sec )
-        {
-            return ( 指定時間sec * スコア.基準譜面速度dpxsec * speed );
-        }
-
         public double 小節長倍率を取得する( int 小節番号 )
         {
             // 小節長倍率リスト が短ければ増設する。
@@ -693,13 +625,55 @@ namespace SSTFormat.v3
         }
 
 
+        // 外部向けヘルパ
+
+        /// <summary>
+        ///		指定されたコマンド名が対象文字列内で使用されている場合に、パラメータ部分の文字列を返す。
+        /// </summary>
+        /// <remarks>
+        ///		.dtx や box.def 等で使用されている "#＜コマンド名＞[:]＜パラメータ＞[;コメント]" 形式の文字列（対象文字列）について、
+        ///		指定されたコマンドを使用する行であるかどうかを判別し、使用する行であるなら、そのパラメータ部分の文字列を引数に格納し、true を返す。
+        ///		対象文字列のコマンド名が指定したコマンド名と異なる場合には、パラメータ文字列に null を格納して false を返す。
+        ///		コマンド名は正しくてもパラメータが存在しない場合には、空文字列("") を格納して true を返す。
+        /// </remarks>
+        /// <param name="対象文字列">調べる対象の文字列。（例: "#TITLE: 曲名 ;コメント"）</param>
+        /// <param name="コマンド名">調べるコマンドの名前（例:"TITLE"）。#は不要、大文字小文字は区別されない。</param>
+        /// <returns>パラメータ文字列の取得に成功したら true、異なるコマンドだったなら false。</returns>
+        public static bool コマンドのパラメータ文字列部分を返す( string 対象文字列, string コマンド名, out string パラメータ文字列 )
+        {
+            // コメント部分を除去し、両端をトリムする。なお、全角空白はトリムしない。
+            対象文字列 = 対象文字列.Split( ';' )[ 0 ].Trim( ' ', '\t' );
+
+            string 正規表現パターン = $@"^\s*#{コマンド名}(:|\s)+(.*)\s*$";  // \s は空白文字。
+            var m = Regex.Match( 対象文字列, 正規表現パターン, RegexOptions.IgnoreCase );
+
+            if( m.Success && ( 3 <= m.Groups.Count ) )
+            {
+                パラメータ文字列 = m.Groups[ 2 ].Value;
+                return true;
+            }
+            else
+            {
+                パラメータ文字列 = null;
+                return false;
+            }
+        }
+
+
+        // private
+
         /// <summary>
         ///		空文字、または絶対パス。
         ///		null は不可。
         /// </summary>
         private string _PATH_WAV = "";
 
-        private static readonly Dictionary<レーン種別, List<チップ種別>> _dicSSTFレーンチップ対応表 = new Dictionary<レーン種別, List<チップ種別>>() {
+        /// <summary>
+        ///     レーンに属するチップの一覧。
+        /// </summary>
+        private static readonly Dictionary<レーン種別, List<チップ種別>> _レーンtoチップ対応表 = new Dictionary<レーン種別, List<チップ種別>>() {
+            #region " *** "
+            //----------------
             { レーン種別.Unknown, new List<チップ種別>() { チップ種別.Unknown } },
             { レーン種別.LeftCrash, new List<チップ種別>() { チップ種別.LeftCrash, チップ種別.LeftCymbal_Mute } },
             { レーン種別.Ride, new List<チップ種別>() { チップ種別.Ride, チップ種別.Ride_Cup } },
@@ -715,10 +689,16 @@ namespace SSTFormat.v3
             { レーン種別.RightCrash, new List<チップ種別>() { チップ種別.RightCrash, チップ種別.RightCymbal_Mute } },
             { レーン種別.BPM, new List<チップ種別>() { チップ種別.BPM } },
             { レーン種別.Song, new List<チップ種別>() { チップ種別.背景動画, チップ種別.BGM, チップ種別.SE1, チップ種別.SE2, チップ種別.SE3, チップ種別.SE4, チップ種別.SE5, チップ種別.GuitarAuto, チップ種別.BassAuto } },
+            //----------------
+            #endregion
         };
 
         private const double _BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );
         private const double _BPM初期値固定での1小節4拍の時間sec = 60.0 / ( スコア.初期BPM / 4.0 );
+
+        protected static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
+            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
+        };
 
         private void _初期化する()
         {
