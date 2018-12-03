@@ -114,11 +114,11 @@ namespace DTXmatixx.ステージ.演奏
                 {
                     #region " 背景動画とBGMを生成する。"
                     //----------------
-                    if( App.演奏スコア.動画ID.Nullでも空でもない() )
+                    if( App.演奏スコア.背景動画ID.Nullでも空でもない() )
                     {
                         #region " (A) SSTF準拠のストリーミング動画 "
                         //----------------
-                        var items = App.演奏スコア.動画ID.Split( ':' );
+                        var items = App.演奏スコア.背景動画ID.Split( ':' );
                         if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
                         {
                             switch( items[ 0 ].ToLower() )
@@ -131,7 +131,7 @@ namespace DTXmatixx.ステージ.演奏
 											var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
 											this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
 											this._背景動画forDTX = null;
-											Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.動画ID}]" );
+											Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
 										}
 										catch( Exception )
 										{
@@ -141,13 +141,13 @@ namespace DTXmatixx.ステージ.演奏
                                     break;
 
                                 default:
-                                    Log.ERROR( $"対応していない動画プロトコルが指定されています。無視します。[{App.演奏スコア.動画ID}]" );
+                                    Log.ERROR( $"対応していない動画プロトコルが指定されています。無視します。[{App.演奏スコア.背景動画ID}]" );
                                     break;
                             }
                         }
                         else
                         {
-                            Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.動画ID}]" );
+                            Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.背景動画ID}]" );
                         }
                         //----------------
                         #endregion

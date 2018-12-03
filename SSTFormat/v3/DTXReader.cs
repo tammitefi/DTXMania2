@@ -509,7 +509,7 @@ namespace SSTFormat.v3
             if( "preimage" != 現在の.コマンド.ToLower() )
                 return false;
 
-            現在の.スコア.プレビュー画像 = 現在の.パラメータ;
+            現在の.スコア.プレビューファイル名 = 現在の.パラメータ;
 
             return true;
         }

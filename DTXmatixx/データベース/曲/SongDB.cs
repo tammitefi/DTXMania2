@@ -169,10 +169,10 @@ namespace DTXmatixx.データベース.曲
                                 using( score )
                                 {
                                     // PreImage カラムの更新。
-                                    if( score.プレビュー画像.Nullでも空でもない() )
+                                    if( score.プレビューファイル名.Nullでも空でもない() )
                                     {
                                         // プレビュー画像は、曲ファイルからの相対パス。
-                                        song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビュー画像 );
+                                        song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビューファイル名 );
                                     }
                                     else
                                     {

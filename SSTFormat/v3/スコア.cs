@@ -10,12 +10,15 @@ namespace SSTFormat.v3
 {
     public class スコア : IDisposable
     {
+        // 定数
+
         /// <summary>
         ///     このソースが実装するSSTFバージョン。
         /// </summary>
         public readonly Version SSTFVERSION = new Version( 3, 3, 0, 0 );
 
         public const double 初期BPM = 120.0;
+
         public const double 初期小節解像度 = 480.0;
 
 
@@ -34,11 +37,6 @@ namespace SSTFormat.v3
         public string 説明文 { get; set; } = "";
 
         /// <summary>
-        ///     このスコアが作成されたときのサウンドデバイスの遅延量[ミリ秒]。
-        /// </summary>
-        public float サウンドデバイス遅延ms { get; set; } = 0f;
-
-        /// <summary>
         ///	    易:0.00～9.99:難。
         /// </summary>
         public float 難易度 { get; set; } = 5.0f;
@@ -50,36 +48,47 @@ namespace SSTFormat.v3
         public string 背景動画ファイル名 { get; set; } = null;
 
         /// <summary>
-        ///		プレビュー画像。DTX用。
-        /// </summary>
-        public string プレビュー画像 { get; set; } = null;
-
-        /// <summary>
-        ///     動画のID。SSTF用。
-        ///     指定がある場合、<see cref="背景動画ファイル名"/>より優先される。
+        ///     動画のID。
+        ///     指定がある（非nullの）場合、<see cref="背景動画ファイル名"/>より優先される。
         /// </summary>
         /// <remarks>
         ///     書式: "プロトコル: 動画ID", 大文字小文字は区別されない。
         ///     　例: ニコニコ動画の場合 …… "NicoVideo: sm12345678"
         /// </remarks>
-        public string 動画ID { get; set; } = null;
+        public string 背景動画ID { get; set; } = null;
+
+        /// <summary>
+        ///		プレビュー画像または動画のファイル名。
+        /// </summary>
+        public string プレビューファイル名 { get; set; } = null;
+
+        /// <summary>
+        ///     このスコアが作成されたときのサウンドデバイスの遅延量[ミリ秒]。
+        /// </summary>
+        public float サウンドデバイス遅延ms { get; set; } = 0f;
 
 
-        // プロパティ
+        // 譜面
 
+        /// <summary>
+        ///     このスコアに存在するすべてのチップのリスト。
+        /// </summary>
         public List<チップ> チップリスト { get; set; } = new List<チップ>();
 
         /// <summary>
-        ///		インデックス番号が小節番号を表すので、
-        ///		小節 0 から最大小節まで、すべての小節の倍率がこのリストに含まれる。
+        ///     小節ごとの倍率のリスト。
+        ///		インデックス番号が小節番号を表し、小節 0 から最大小節まで、すべての小節の倍率がこのリストに含まれる。
         /// </summary>
         public List<double> 小節長倍率リスト { get; protected set; } = new List<double>();
 
+        /// <summary>
+        ///     この譜面における最後（最大）の小節番号。
+        /// </summary>
         public int 最大小節番号
         {
             get
             {
-                int 最大小節番号 = 0;
+                int 最大小節番号 = -1;
 
                 foreach( チップ chip in this.チップリスト )
                 {
@@ -91,7 +100,25 @@ namespace SSTFormat.v3
             }
         }
 
+        /// <summary>
+        ///     メモリスト。
+        /// </summary>
         public Dictionary<int, string> dicメモ { get; protected set; } = new Dictionary<int, string>();
+
+        /// <summary>
+        ///		レーン種別, zz番号。
+        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
+        /// </summary>
+        public Dictionary<レーン種別, int> 空打ちチップ { get; protected set; } = new Dictionary<レーン種別, int>();
+        
+        /// <summary>
+        ///		譜面ファイルの絶対パス。
+        /// </summary>
+        public string 譜面ファイルパス { get; set; } = null;
+
+
+
+        // WAV/AVI
 
         /// <summary>
         ///		#WAVzz で指定された、サウンドファイルへの相対パス他。
@@ -111,7 +138,7 @@ namespace SSTFormat.v3
         } = new Dictionary<int, string>();
 
         /// <summary>
-        ///		WAV/AVIファイルの基点フォルダの絶対パス。
+        ///		WAV, AVI, その他ファイルの基点となるフォルダの絶対パス。
         ///		末尾は '\' 。（例: "D:\DTXData\DemoSong\Sounds\"）
         /// </summary>
         public string PATH_WAV
@@ -123,37 +150,15 @@ namespace SSTFormat.v3
                 else
                     return this._PATH_WAV;
             }
-
             set
             {
                 this._PATH_WAV = value;
 
                 if( this._PATH_WAV.Last() != '\\' )
                     this._PATH_WAV += '\\';
-
-                //if( !( Directory.Exists( this.PATH_WAV ) ) )
-                //	throw new DirectoryNotFoundException( "PATH_WAV に存在しないフォルダが指定されました。" );
             }
         }
 
-        /// <summary>
-        ///		譜面ファイルの絶対パス。
-        /// </summary>
-        public string 譜面ファイルパス
-        {
-            get;
-            set;
-        } = null;
-
-        /// <summary>
-        ///		レーン種別, zz番号。
-        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
-        /// </summary>
-        public Dictionary<レーン種別, int> 空打ちチップ
-        {
-            get;
-            protected set;
-        } = new Dictionary<レーン種別, int>();
 
 
         public スコア()
@@ -161,35 +166,39 @@ namespace SSTFormat.v3
             this._初期化する();
         }
 
-        public スコア( string 曲データファイル名 )
+        public スコア( string スコアファイルパス )
             : this()
         {
-            this.曲データファイルを読み込む( 曲データファイル名 );
+            this.スコアファイルを読み込む( スコアファイルパス );
         }
 
         public void Dispose()
         {
         }
 
+
         /// <remarks>
         ///		失敗すれば何らかの例外を発出する。
         /// </remarks>
-        public void 曲データファイルを読み込む( string 曲データファイル名 )
+        public void スコアファイルを読み込む( string スコアファイルパス )
         {
-            this.譜面ファイルパス = Path.GetFullPath( 曲データファイル名 );
+            // 絶対パスに変換して保存。
+            this.譜面ファイルパス = Path.GetFullPath( スコアファイルパス );
+
             if( !( File.Exists( this.譜面ファイルパス ) ) )
                 throw new FileNotFoundException( $"指定されたファイルが存在しません。" );
 
-            var ファイルのSSTFバージョン = Version.CreateVersionFromFile( 曲データファイル名 );
+            // スコアファイルからバージョンを取得する。
+            var ファイルのSSTFバージョン = Version.CreateVersionFromFile( this.譜面ファイルパス );
 
-            // ファイルのSSTFバージョンによって処理分岐。
+            // スコアファイルのバージョンによって処理分岐。
             if( SSTFVERSION.Major == ファイルのSSTFバージョン.Major )
             {
-                this._v3曲データファイルを読み込む( 曲データファイル名 );
+                this._v3曲データファイルを読み込む( スコアファイルパス );
             }
             else
             {
-                var v2score = new SSTFormat.v2.スコア( 曲データファイル名 );
+                var v2score = new SSTFormat.v2.スコア( スコアファイルパス );
                 this._v2スコアからマイグレーションする( v2score );
             }
 
@@ -216,6 +225,7 @@ namespace SSTFormat.v3
                 this._v2スコアからマイグレーションする_ヘッダだけ( v2score );
             }
         }
+
         /// <summary>
         ///		すでにスコアの構築が完了しているものとして、チップリストへの後処理（小節線・拍線の追加、発声時刻の計算など）のみ行う。
         /// </summary>
@@ -708,7 +718,7 @@ namespace SSTFormat.v3
             this.サウンドデバイス遅延ms = 0f;
             this.難易度 = 5.0f;
             this.背景動画ファイル名 = "";
-            this.プレビュー画像 = null;
+            this.プレビューファイル名 = null;
             this.小節長倍率リスト = new List<double>();
             this.dicメモ = new Dictionary<int, string>();
             this.dicWAV = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
@@ -962,7 +972,7 @@ namespace SSTFormat.v3
                     }
                 }
 
-                this.動画ID = videoId;
+                this.背景動画ID = videoId;
 
                 return true;
                 //----------------
@@ -1670,28 +1680,6 @@ namespace SSTFormat.v3
             int 区切り位置 = 行.IndexOf( '#' );
             if( 0 <= 区切り位置 )
             {
-                var コメント文 = 行.Substring( 区切り位置 + 1 ).Trim();    // '#' より後ろの内容。前後の空白は除く。
-
-                #region " # SSTFVersion ? "
-                //----------------
-                if( コメント文.StartsWith( "sstfversion", StringComparison.OrdinalIgnoreCase ) )
-                {
-                    string 正規表現パターン = $@"^SSTFVersion(:|\s)+(\d+)\.(\d+)\.(\d+)\.(\d+)$";  // \s は空白文字, \d は10進数文字。
-                    var m = Regex.Match( コメント文, 正規表現パターン, RegexOptions.IgnoreCase );
-
-                    if( m.Success )
-                    {
-                        int major = ( 2 < m.Groups.Count && int.TryParse( m.Groups[ 2 ].Value, out int majorValue ) ) ? majorValue : 1;
-                        int minor = ( 3 < m.Groups.Count && int.TryParse( m.Groups[ 3 ].Value, out int minorValue ) ) ? minorValue : 0;
-                        int build = ( 4 < m.Groups.Count && int.TryParse( m.Groups[ 4 ].Value, out int buildValue ) ) ? buildValue : 0;
-                        int revid = ( 5 < m.Groups.Count && int.TryParse( m.Groups[ 5 ].Value, out int revidValue ) ) ? revidValue : 0;
-
-                        this.SSTFバージョン = new Version( major, minor, build, revid );
-                    }
-                }
-                //----------------
-                #endregion
-
                 行 = 行.Substring( 0, 区切り位置 );
                 行 = 行.Trim();
             }
