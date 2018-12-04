@@ -170,7 +170,7 @@ namespace SSTFormat.v3
         }
 
 
-        // 上位互換
+        // 前方互換
 
         /// <summary>
         ///		v2 からのバージョンアップ。

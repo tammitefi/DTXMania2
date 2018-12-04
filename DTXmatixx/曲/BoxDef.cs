@@ -53,7 +53,7 @@ namespace DTXmatixx.曲
 
                         #region " TITLE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"TITLE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"TITLE", out パラメータ ) )
                         {
                             boxDef.TITLE = パラメータ;
                             continue;
@@ -62,7 +62,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " ARTIST コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"ARTIST", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"ARTIST", out パラメータ ) )
                         {
                             boxDef.ARTIST = パラメータ;
                             continue;

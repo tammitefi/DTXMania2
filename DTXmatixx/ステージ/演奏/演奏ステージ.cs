@@ -163,12 +163,12 @@ namespace DTXmatixx.ステージ.演奏
                         //----------------
                         #endregion
                     }
-                    else if( 0 < App.演奏スコア.dicAVI.Count )
+                    else if( 0 < App.演奏スコア.AVIリスト.Count )
                     {
                         #region " (C) DTX準拠の動画 "
                         //----------------
                         // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
-                        var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.dicAVI.ElementAt( 0 ).Value ) );
+                        var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.AVIリスト.ElementAt( 0 ).Value ) );
 
 						// 動画を子リストに追加。
 						try
@@ -197,7 +197,7 @@ namespace DTXmatixx.ステージ.演奏
                     //----------------
                     App.WAV管理 = new 曲.WAV管理();
 
-                    foreach( var kvp in App.演奏スコア.dicWAV )
+                    foreach( var kvp in App.演奏スコア.WAVリスト )
                     {
                         var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value.ファイルパス );
                         App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, kvp.Value.多重再生する );

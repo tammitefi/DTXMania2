@@ -76,35 +76,17 @@ namespace DTXmatixx.データベース.曲
                                 var score = (SSTFormatCurrent.スコア) null;
                                 var vpath = new VariablePath( song03.Path );
 
-                                #region " スコアを読み込む "
-                                //----------------
-                                var 拡張子名 = Path.GetExtension( vpath.変数なしパス );
-                                if( ".sstf" == 拡張子名 )
+                                // スコアを読み込む 
+                                score = SSTFormatCurrent.スコア.ファイルから生成する( vpath.変数なしパス );
+
+                                // Artist カラムの更新。
+                                if( score.アーティスト名.Nullでも空でもない() )
                                 {
-                                    score = new SSTFormatCurrent.スコア( vpath.変数なしパス );
-                                }
-                                else if( ".dtx" == 拡張子名 )
-                                {
-                                    score = SSTFormatCurrent.DTXReader.ReadFromFile( vpath.変数なしパス );
+                                    song03.Artist = score.アーティスト名;
                                 }
                                 else
                                 {
-                                    throw new Exception( $"未対応のフォーマットファイルです。[{vpath.変数付きパス}]" );
-                                }
-                                //----------------
-                                #endregion
-
-                                using( score )
-                                {
-                                    // Artist カラムの更新。
-                                    if( score.アーティスト名.Nullでも空でもない() )
-                                    {
-                                        song03.Artist = score.アーティスト名;
-                                    }
-                                    else
-                                    {
-                                        song03.Artist = ""; // null不可
-                                    }
+                                    song03.Artist = ""; // null不可
                                 }
                             }
                             this.DataContext.SubmitChanges();
@@ -148,39 +130,21 @@ namespace DTXmatixx.データベース.曲
                                 var score = (SSTFormatCurrent.スコア) null;
                                 var vpath = new VariablePath( song02.Path );
 
-                                #region " スコアを読み込む "
-                                //----------------
-                                var 拡張子名 = Path.GetExtension( vpath.変数なしパス );
-                                if( ".sstf" == 拡張子名 )
+                                // スコアを読み込む
+                                score = SSTFormatCurrent.スコア.ファイルから生成する( vpath.変数なしパス );
+
+                                // PreImage カラムの更新。
+                                if( score.プレビューファイル名.Nullでも空でもない() )
                                 {
-                                    score = new SSTFormatCurrent.スコア( vpath.変数なしパス );
-                                }
-                                else if( ".dtx" == 拡張子名 )
-                                {
-                                    score = SSTFormatCurrent.DTXReader.ReadFromFile( vpath.変数なしパス );
+                                    // プレビュー画像は、曲ファイルからの相対パス。
+                                    song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビューファイル名 );
                                 }
                                 else
                                 {
-                                    throw new Exception( $"未対応のフォーマットファイルです。[{vpath.変数付きパス}]" );
-                                }
-                                //----------------
-                                #endregion
-
-                                using( score )
-                                {
-                                    // PreImage カラムの更新。
-                                    if( score.プレビューファイル名.Nullでも空でもない() )
-                                    {
-                                        // プレビュー画像は、曲ファイルからの相対パス。
-                                        song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビューファイル名 );
-                                    }
-                                    else
-                                    {
-                                        song02.PreImage =
-                                            ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( vpath.変数なしパス ) )
-                                              where _対応するサムネイル画像名.Any( thumbファイル名 => ( Path.GetFileName( ファイル名 ).ToLower() == thumbファイル名 ) )
-                                              select ファイル名 ).FirstOrDefault();
-                                    }
+                                    song02.PreImage =
+                                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( vpath.変数なしパス ) )
+                                          where _対応するサムネイル画像名.Any( thumbファイル名 => ( Path.GetFileName( ファイル名 ).ToLower() == thumbファイル名 ) )
+                                          select ファイル名 ).FirstOrDefault();
                                 }
                             }
                             this.DataContext.SubmitChanges();

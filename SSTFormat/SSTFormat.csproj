@@ -94,7 +94,8 @@
     <Compile Include="v1\チップ.cs" />
     <Compile Include="v1\チップ種別.cs" />
     <Compile Include="v1\レーン種別.cs" />
-    <Compile Include="v3\DTXReader.cs" />
+    <Compile Include="v3\スコア.DTX.cs" />
+    <Compile Include="v3\スコア.SSTF.cs" />
     <Compile Include="v3\スコア.cs" />
     <Compile Include="v3\チップ.cs" />
     <Compile Include="v3\チップ種別.cs" />
@@ -109,6 +110,7 @@
   <ItemGroup>
     <Content Include="仕様履歴.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

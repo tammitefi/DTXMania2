@@ -79,7 +79,7 @@ namespace DTXmatixx.曲
 
                         #region " TITLE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"TITLE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"TITLE", out パラメータ ) )
                         {
                             if( blockが有効 )
                             {
@@ -97,7 +97,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " FONTCOLOR コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"FONTCOLOR", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"FONTCOLOR", out パラメータ ) )
                         {
                             var sysColor = System.Drawing.ColorTranslator.FromHtml( $"#{パラメータ}" );
                             block.FontColor = new Color( sysColor.R, sysColor.G, sysColor.B, sysColor.A );
@@ -108,7 +108,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L1FILE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L1FILE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L1FILE", out パラメータ ) )
                         {
                             block.File[ 0 ] = パラメータ;
                             blockが有効 = true;
@@ -118,7 +118,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L2FILE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L2FILE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L2FILE", out パラメータ ) )
                         {
                             block.File[ 1 ] = パラメータ;
                             blockが有効 = true;
@@ -128,7 +128,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L3FILE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L3FILE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L3FILE", out パラメータ ) )
                         {
                             block.File[ 2 ] = パラメータ;
                             blockが有効 = true;
@@ -138,7 +138,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L4FILE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L4FILE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L4FILE", out パラメータ ) )
                         {
                             block.File[ 3 ] = パラメータ;
                             blockが有効 = true;
@@ -148,7 +148,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L5FILE コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L5FILE", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L5FILE", out パラメータ ) )
                         {
                             block.File[ 4 ] = パラメータ;
                             blockが有効 = true;
@@ -158,7 +158,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L1LABEL コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L1LABEL", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L1LABEL", out パラメータ ) )
                         {
                             block.Label[ 0 ] = パラメータ;
                             blockが有効 = true;
@@ -168,7 +168,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L2LABEL コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L2LABEL", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L2LABEL", out パラメータ ) )
                         {
                             block.Label[ 1 ] = パラメータ;
                             blockが有効 = true;
@@ -178,7 +178,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L3LABEL コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L3LABEL", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L3LABEL", out パラメータ ) )
                         {
                             block.Label[ 2 ] = パラメータ;
                             blockが有効 = true;
@@ -188,7 +188,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L4LABEL コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L4LABEL", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L4LABEL", out パラメータ ) )
                         {
                             block.Label[ 3 ] = パラメータ;
                             blockが有効 = true;
@@ -198,7 +198,7 @@ namespace DTXmatixx.曲
                         #endregion
                         #region " L5LABEL コマンド "
                         //---------------------
-                        if( スコア.コマンドのパラメータ文字列部分を返す( 行, @"L5LABEL", out パラメータ ) )
+                        if( Utilities.コマンドのパラメータ文字列部分を返す( 行, @"L5LABEL", out パラメータ ) )
                         {
                             block.Label[ 4 ] = パラメータ;
                             blockが有効 = true;

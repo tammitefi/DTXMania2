@@ -90,7 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="v1\スコアTests.cs" />
     <Compile Include="v2\DTXReaderTests.cs" />
-    <Compile Include="v3\DTXReaderTests.cs" />
+    <Compile Include="v3\スコアDTXTests.cs" />
     <Compile Include="VersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +103,7 @@
     <None Include="v2\テストファイル\ようこそじゃパリパークへ.dtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="v3\スコアSSTFTests.cs" />
   </ItemGroup>
   <ItemGroup />
   <Choose>

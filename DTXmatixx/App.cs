@@ -143,7 +143,6 @@ namespace DTXmatixx
                     App.サウンドデバイス?.Dispose();
                     App.サウンドデバイス = null;
 
-                    App.演奏スコア?.Dispose();
                     App.演奏スコア = null;
 
                     App.曲ツリー.Dispose();
