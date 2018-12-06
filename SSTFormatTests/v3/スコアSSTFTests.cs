@@ -118,6 +118,7 @@ Lane=BPM; Resolution = 1; Chips = 0b166;    # 位置 0/1 で BPM を 166 にす�
 Lane=Song; Resolution = 128; Chips = 77;    # 位置 77/128 に Song チップを配置する
 ";
                 var score = スコア.SSTF._全行解析する( ref text );
+                スコア._後処理を行う( score );
 
                 Assert.AreEqual( "タイトルです", score.曲名 );
                 Assert.AreEqual( "私です", score.アーティスト名 );
@@ -129,30 +130,6 @@ Lane=Song; Resolution = 128; Chips = 77;    # 位置 77/128 に Song チップ�
                 Assert.AreEqual( "始まるよー", score.メモリスト[ 1 ] );
                 例外が出れば成功( () => { var m = score.メモリスト[ 2 ]; } );
                 Assert.AreEqual( "終わるよー", score.メモリスト[ 99 ] );
-
-                Assert.AreEqual( 4, score.チップリスト.Count );   // 小節メモ1 + 小節メモ99 + BPM + Song
-
-                int i = 0;
-                Assert.AreEqual( チップ種別.小節メモ, score.チップリスト[ i ].チップ種別 );
-                Assert.AreEqual( 1, score.チップリスト[ i ].小節番号 );
-                Assert.AreEqual( 0, score.チップリスト[ i ].小節内位置 );
-                Assert.AreEqual( 1, score.チップリスト[ i ].小節解像度 );
-                i++;
-                Assert.AreEqual( チップ種別.小節メモ, score.チップリスト[ i ].チップ種別 );
-                Assert.AreEqual( 99, score.チップリスト[ i ].小節番号 );
-                Assert.AreEqual( 0, score.チップリスト[ i ].小節内位置 );
-                Assert.AreEqual( 1, score.チップリスト[ i ].小節解像度 );
-                i++;
-                Assert.AreEqual( チップ種別.BPM, score.チップリスト[ i ].チップ種別 );
-                Assert.AreEqual( 0, score.チップリスト[ i ].小節番号 );
-                Assert.AreEqual( 0, score.チップリスト[ i ].小節内位置 );
-                Assert.AreEqual( 1, score.チップリスト[ i ].小節解像度 );
-                Assert.AreEqual( 166, score.チップリスト[ i ].BPM );
-                i++;
-                Assert.AreEqual( チップ種別.背景動画, score.チップリスト[ i ].チップ種別 );
-                Assert.AreEqual( 0, score.チップリスト[ i ].小節番号 );
-                Assert.AreEqual( 77, score.チップリスト[ i ].小節内位置 );
-                Assert.AreEqual( 128, score.チップリスト[ i ].小節解像度 );
             }
             //----------------
             #endregion
@@ -166,6 +143,8 @@ Title=ほんもののタイトル
 Artist=私    #　ではありません
 ";
                 var score = スコア.SSTF._全行解析する( ref text );
+                スコア._後処理を行う( score );
+
                 Assert.AreEqual( "ほんもののタイトル", score.曲名 );
                 Assert.AreEqual( "私", score.アーティスト名 );
             }
@@ -185,8 +164,7 @@ Part=3; Lane=HiHat; Resolution=1; Chips=0;  # HHClose
                 // 解析
 
                 var score = スコア.SSTF._全行解析する( ref text );
-
-                Assert.AreEqual( 3, score.小節長倍率リスト.Count ); // 譜面の小節数(1～3の3個)
+                スコア._後処理を行う( score );
 
 
                 // 後処理

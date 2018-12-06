@@ -9,8 +9,13 @@ namespace SSTFormat.v3
 {
     public partial class スコア
     {
-        // ※ テストプロジェクトに対しては InternalsVisibleTo 属性(AssemblyInfo.cs参照))により internal メソッドを可視としているため、
-        // 　 テスト対象のメソッドは、本来 private でも internal として宣言している。
+        /// <summary>
+        ///     SSTFフォーマットのファイルまたはテキストから <see cref="スコア"/> インスタンスを生成するためのクラス。
+        /// </summary>
+        /// <remarks>
+        ///     テストプロジェクトに対しては InternalsVisibleTo 属性(AssemblyInfo.cs参照))により internal メソッドを可視としているため、
+        ///     テスト対象のメソッドは、本来 private でも internal として宣言している。
+        /// </remarks>
         public static class SSTF
         {
             /// <summary>
@@ -89,9 +94,7 @@ namespace SSTFormat.v3
                     //----------------
                     #endregion
 
-                    // 後処理を行う。
-
-                    _後処理を行う( score );
+                    スコア._後処理を行う( score );
                 }
 
                 return score;
@@ -169,13 +172,9 @@ namespace SSTFormat.v3
                 if( !( ヘッダだけ ) )
                 {
                     // ファイル以外から情報を取得する。
-                    
                     //score.背景動画ファイル名 = ...     --> 文字列から生成した場合は設定しない。
 
-
-                    // 後処理を行う。
-
-                    _後処理を行う( score );
+                    スコア._後処理を行う( score );
                 }
 
                 return score;
@@ -254,7 +253,7 @@ namespace SSTFormat.v3
                 score.難易度 = 5.0;                      // v3で新規追加
                 score.背景動画ファイル名 = v2score.背景動画ファイル名;
                 score.背景動画ID = null;                 // v3で新規追加
-                score.プレビューファイル名 = null;        // v3で新規追加
+                score.プレビュー画像ファイル名 = null;        // v3で新規追加
                 score.サウンドデバイス遅延ms = v2score.Header.サウンドデバイス遅延ms;
                 //score.譜面ファイルパス = SSTFファイルパス;  --> 呼び出し元で設定すること。
 
@@ -311,6 +310,7 @@ namespace SSTFormat.v3
                 public static int 小節番号;
                 public static int 小節解像度;
                 public static チップ種別 チップ種別;
+                public static bool 可視;
 
                 public static void 状態をリセットする()
                 {
@@ -319,6 +319,7 @@ namespace SSTFormat.v3
                     小節番号 = 0;
                     小節解像度 = 384;
                     チップ種別 = チップ種別.Unknown;
+                    可視 = true;
                 }
             }
 
@@ -359,11 +360,17 @@ namespace SSTFormat.v3
                         if( string.IsNullOrEmpty( 行 ) )
                             continue;   // 空行
 
+
+                        // ヘッダの解析
+
                         if( _行をヘッダ行と想定して解析する( ref 行 ) )
                             continue;
 
                         if( ヘッダだけ )
                             continue;   // ヘッダだけならここまで。
+
+
+                        // ヘッダ以外の解析
 
                         if( _行を小節メモ行として解析する( ref 行 ) )
                             continue;
@@ -371,6 +378,50 @@ namespace SSTFormat.v3
                         if( _行をチップ記述行として解析する( ref 行 ) )
                             continue;
                     }
+                }
+
+                if( !( ヘッダだけ ) )
+                {
+                    #region " 拍線を追加する。"
+                    //-----------------
+                    // 小節線を先に追加すると小節が１つ増えてしまうので、拍線から先に追加する。
+
+                    int 最大小節番号 = 現在の.スコア.最大小節番号を返す();      // 最大小節番号はチップ数に依存して変化するので、次の for 文には組み込まないこと。
+
+                    for( int i = 0; i <= 最大小節番号; i++ )
+                    {
+                        double 小節長倍率 = 現在の.スコア.小節長倍率を取得する( i );
+
+                        for( int n = 1; n * 0.25 < 小節長倍率; n++ )
+                        {
+                            現在の.スコア.チップリスト.Add(
+                                new チップ() {
+                                    小節番号 = i,
+                                    チップ種別 = チップ種別.拍線,
+                                    小節内位置 = (int) ( ( n * 0.25 ) * 100 ),
+                                    小節解像度 = (int) ( 小節長倍率 * 100 ),
+                                } );
+                        }
+                    }
+                    //-----------------
+                    #endregion
+
+                    #region " 小節線を追加する。"
+                    //-----------------
+                    最大小節番号 = 現在の.スコア.最大小節番号を返す();
+
+                    for( int i = 0; i <= 最大小節番号 + 1; i++ )
+                    {
+                        現在の.スコア.チップリスト.Add(
+                            new チップ() {
+                                小節番号 = i,
+                                チップ種別 = チップ種別.小節線,
+                                小節内位置 = 0,
+                                小節解像度 = 1,
+                            } );
+                    }
+                    //-----------------
+                    #endregion
                 }
 
                 var score = 現在の.スコア;
@@ -383,10 +434,10 @@ namespace SSTFormat.v3
             ///	</returns>
             private static bool _行をヘッダ行と想定して解析する( ref string 行 )
             {
+                #region " Title "
+                //-----------------
                 if( 行.StartsWith( "title", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    #region " Title コマンド "
-                    //-----------------
                     string[] items = 行.Split( '=' );
 
                     if( 2 != items.Length )
@@ -398,13 +449,13 @@ namespace SSTFormat.v3
                     現在の.スコア.曲名 = items[ 1 ].Trim();
 
                     return true;
-                    //-----------------
-                    #endregion
                 }
+                //-----------------
+                #endregion
+                #region " Artist "
+                //----------------
                 if( 行.StartsWith( "artist", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    #region " Artist コマンド "
-                    //-----------------
                     string[] items = 行.Split( '=' );
 
                     if( 2 != items.Length )
@@ -416,13 +467,13 @@ namespace SSTFormat.v3
                     現在の.スコア.アーティスト名 = items[ 1 ].Trim();
 
                     return true;
-                    //-----------------
-                    #endregion
                 }
+                //----------------
+                #endregion
+                #region " Description "
+                //-----------------
                 if( 行.StartsWith( "description", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    #region " Description コマンド "
-                    //-----------------
                     string[] items = 行.Split( '=' );
 
                     if( items.Length != 2 )
@@ -435,13 +486,13 @@ namespace SSTFormat.v3
                     現在の.スコア.説明文 = items[ 1 ].Trim().Replace( @"\n", Environment.NewLine );
 
                     return true;
-                    //-----------------
-                    #endregion
                 }
+                //-----------------
+                #endregion
+                #region " SoundDevice.Delay "
+                //-----------------
                 if( 行.StartsWith( "sounddevice.delay", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    #region " SoundDevice.Delay コマンド "
-                    //-----------------
                     string[] items = 行.Split( '=' );
 
                     if( 2 != items.Length )
@@ -455,13 +506,13 @@ namespace SSTFormat.v3
                         現在の.スコア.サウンドデバイス遅延ms = value;
 
                     return true;
-                    //-----------------
-                    #endregion
                 }
+                //-----------------
+                #endregion
+                #region " Level "
+                //----------------
                 if( 行.StartsWith( "level", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    #region " Level コマンド "
-                    //----------------
                     string[] items = 行.Split( '=' );
 
                     if( 2 != items.Length )
@@ -481,13 +532,13 @@ namespace SSTFormat.v3
                     }
 
                     return true;
-                    //----------------
-                    #endregion
                 }
+                //----------------
+                #endregion
+                #region " Video "
+                //----------------
                 if( 行.StartsWith( "video", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    #region " Video コマンド "
-                    //----------------
                     string[] items = 行.Split( '=' );
 
                     if( 2 != items.Length )
@@ -510,9 +561,9 @@ namespace SSTFormat.v3
                     現在の.スコア.背景動画ID = videoId;
 
                     return true;
-                    //----------------
-                    #endregion
                 }
+                //----------------
+                #endregion
 
                 return false;   // 該当なし
             }
@@ -706,24 +757,16 @@ namespace SSTFormat.v3
                             #region " Lane（レーン指定）コマンド（チップ種別の仮決め）"
                             //-----------------
                             {
-                                switch( パラメータ.ToLower() )
+                                var lane = パラメータ.ToLower();
+
+                                if( _レーンプロパティ.TryGetValue( lane, out var プロパティ ) )
                                 {
-                                    case "leftcrash": 現在の.チップ種別 = チップ種別.LeftCrash; break;
-                                    case "ride": 現在の.チップ種別 = チップ種別.Ride; break;
-                                    case "china": 現在の.チップ種別 = チップ種別.China; break;
-                                    case "splash": 現在の.チップ種別 = チップ種別.Splash; break;
-                                    case "hihat": 現在の.チップ種別 = チップ種別.HiHat_Close; break;
-                                    case "snare": 現在の.チップ種別 = チップ種別.Snare; break;
-                                    case "bass": 現在の.チップ種別 = チップ種別.Bass; break;
-                                    case "tom1": 現在の.チップ種別 = チップ種別.Tom1; break;
-                                    case "tom2": 現在の.チップ種別 = チップ種別.Tom2; break;
-                                    case "tom3": 現在の.チップ種別 = チップ種別.Tom3; break;
-                                    case "rightcrash": 現在の.チップ種別 = チップ種別.RightCrash; break;
-                                    case "bpm": 現在の.チップ種別 = チップ種別.BPM; break;
-                                    case "song": 現在の.チップ種別 = チップ種別.背景動画; break;
-                                    default:
-                                        Trace.TraceError( $"Lane（レーン指定）コマンドのパラメータ記述 '{パラメータ}' が不正です。このコマンドをスキップします。[{現在の.行番号}行目]" );
-                                        break;
+                                    現在の.チップ種別 = プロパティ.チップ種別;
+                                    現在の.可視 = プロパティ.可視;
+                                }
+                                else
+                                {
+                                    Trace.TraceError( $"Lane（レーン指定）コマンドのパラメータ記述 '{パラメータ}' が不正です。このコマンドをスキップします。[{現在の.行番号}行目]" );
                                 }
                             }
                             //-----------------
@@ -772,6 +815,7 @@ namespace SSTFormat.v3
                                     チップ種別 = 現在の.チップ種別,
                                     小節解像度 = 現在の.小節解像度,
                                     音量 = チップ.既定音量,
+                                    可視 = 現在の.可視,
                                 };
                                 //-----------------
                                 #endregion
@@ -1434,6 +1478,27 @@ namespace SSTFormat.v3
                 }
 
             }
+
+
+            private static Dictionary<string, (チップ種別 チップ種別, bool 可視)> _レーンプロパティ = new Dictionary<string, (チップ種別 チップ種別, bool 可視)> {
+                #region " *** "
+                //----------------
+                { "leftcrash",  ( チップ種別.LeftCrash,   true  ) },
+                { "ride",       ( チップ種別.Ride,        true  ) },
+                { "china",      ( チップ種別.China,       true  ) },
+                { "splash",     ( チップ種別.Splash,      true  ) },
+                { "hihat",      ( チップ種別.HiHat_Close, true  ) },
+                { "snare",      ( チップ種別.Snare,       true  ) },
+                { "bass",       ( チップ種別.Bass,        true  ) },
+                { "tom1",       ( チップ種別.Tom1,        true  ) },
+                { "tom2",       ( チップ種別.Tom2,        true  ) },
+                { "tom3",       ( チップ種別.Tom3,        true  ) },
+                { "rightcrash", ( チップ種別.RightCrash,  true  ) },
+                { "bpm",        ( チップ種別.BPM,         false ) },
+                { "song",       ( チップ種別.背景動画,    false ) },
+                //----------------
+                #endregion
+            };
         }
     }
 }

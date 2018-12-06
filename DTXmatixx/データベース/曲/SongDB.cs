@@ -134,10 +134,10 @@ namespace DTXmatixx.データベース.曲
                                 score = SSTFormatCurrent.スコア.ファイルから生成する( vpath.変数なしパス );
 
                                 // PreImage カラムの更新。
-                                if( score.プレビューファイル名.Nullでも空でもない() )
+                                if( score.プレビュー画像ファイル名.Nullでも空でもない() )
                                 {
                                     // プレビュー画像は、曲ファイルからの相対パス。
-                                    song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビューファイル名 );
+                                    song02.PreImage = Path.Combine( Path.GetDirectoryName( vpath.変数なしパス ), score.プレビュー画像ファイル名 );
                                 }
                                 else
                                 {

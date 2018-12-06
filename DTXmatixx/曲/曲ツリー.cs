@@ -15,6 +15,9 @@ namespace DTXmatixx.曲
     /// </summary>
     class 曲ツリー : Activity, IDisposable
     {
+        private string[] _対応する拡張子 = { ".sstf", ".dtx", ".gda", ".g2d", "bms", "bme" };
+
+
         // オンメモリ
 
         /// <summary>
@@ -192,7 +195,7 @@ namespace DTXmatixx.曲
                 #region " (B) set.def がなかった場合 → このフォルダにあるすべての曲ファイルを検索して、曲ノードを作成する。"
                 //----------------
                 var fileInfos = dirInfo.GetFiles( "*.*", SearchOption.TopDirectoryOnly )
-                    .Where( ( fileInfo ) => new string[] { ".sstf", ".dtx" }.Any( 拡張子名 => ( Path.GetExtension( fileInfo.Name ).ToLower() == 拡張子名 ) ) );
+                    .Where( ( fileInfo ) => _対応する拡張子.Any( 拡張子名 => ( Path.GetExtension( fileInfo.Name ).ToLower() == 拡張子名 ) ) );
 
                 foreach( var fileInfo in fileInfos )
                 {

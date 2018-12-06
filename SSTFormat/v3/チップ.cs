@@ -99,6 +99,12 @@ namespace SSTFormat.v3
         /// </summary>
         public double BPM { get; set; } = 120.0;
 
+        /// <summary>
+        ///     true であればチップを表示してもよいが、false であれば表示してはならない。
+        ///     ただし、チップが表示不可能なもの（小節の先頭など）である場合は、true/false のいずれであっても表示しなくていい。
+        /// </summary>
+        public bool 可視 { get; set; } = true;
+
 
         // メソッド
 
@@ -186,6 +192,7 @@ namespace SSTFormat.v3
             this.発声時刻sec = v2chip.発声時刻ms / 1000.0;
             this.音量 = v2chip.音量;
             this.BPM = v2chip.BPM;
+            this.可視 = true; // v3で新規追加
         }
 
 
