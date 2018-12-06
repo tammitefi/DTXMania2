@@ -562,6 +562,22 @@ namespace SSTFormat.v3
 
                 現在の.BPM定義マップ[ 現在の.zz36進数 ] = BPM値;  // あれば上書き、なければ追加
             }
+            internal static void _コマンド_AVIzz()
+            {
+                if( -1 == 現在の.zz36進数 )
+                {
+                    Trace.TraceError( $"#AVI のAVI番号の取得に失敗しました。[{現在の.行番号}行]" );
+                    return;
+                }
+                if( 1 > 現在の.zz36進数 || 36 * 36 <= 現在の.zz36進数 )
+                {
+                    Trace.TraceError( $"#AVI のAVI番号に 01～ZZ 以外の値が指定されています。[{現在の.行番号}行]" );
+                    return;
+                }
+
+                // ここでは、PATH_WAV はまだ反映しない。
+                現在の.スコア.AVIリスト[ 現在の.zz36進数 ] = 現在の.パラメータ;   // あれば上書き、なければ追加
+            }
             internal static void _コマンド_オブジェクト記述()
             {
                 #region " 小節番号とチャンネル番号を取得する。"
@@ -884,6 +900,7 @@ namespace SSTFormat.v3
                 { "preview",    ( true,   _コマンド_PREVIEW ) },
                 { "preimage",   ( true,   _コマンド_PREIMAGE ) },
                 { "premovie",   ( true,   _コマンド_PREMOVIE ) },
+                { "avi",        ( true,   _コマンド_AVIzz ) },
                 //----------------
                 #endregion
             };
@@ -1007,102 +1024,6 @@ namespace SSTFormat.v3
                 //----------------
                 #endregion
             };
-
-            /*
-            internal static スコア _全行解析する( ref string 全入力文字列, bool ヘッダだけ )
-            {
-                現在の.状態をリセットする();
-                現在の.スコア = new スコア();
-
-                全入力文字列 = 全入力文字列.Replace( '\t', ' ' );   // TAB は空白に置換しておく。
-
-                using( var sr = new StringReader( 全入力文字列 ) )
-                {
-                    string 行;
-
-                    // １行ずつ処理。
-                    for( 現在の.行番号 = 1; ( 行 = sr.ReadLine() ) != null; 現在の.行番号++ )
-                    {
-                        // 行を、コマンド・パラメータ・コメントに分解。
-                        if( !( _行分解( 行, out string コマンド, out string パラメータ, out string コメント ) ) )
-                        {
-                            Debug.WriteLine( $"行分解に失敗しました。この行を無視します。[{現在の.行番号}行目]" );
-                            continue;
-                        }
-                        if( string.IsNullOrEmpty( コマンド ) )
-                            continue;
-
-
-                        現在の.コマンド = コマンド;
-                        現在の.パラメータ = パラメータ;
-                        現在の.コメント = コメント;
-
-
-                        // ヘッダ解析
-
-                        bool done =
-                            _行解析_TITLE() ||
-                            _行解析_ARTIST() ||
-                            _行解析_COMMENT() ||
-                            _行解析_PREIMAGE() ||
-                            _行解析_BASEBPM() ||
-                            _行解析_BPM() ||
-                            _行解析_BPMzz() ||
-                            _行解析_PATH_WAV() ||
-                            _行解析_DLEVEL_PLAYLEVEL();
-
-                        // 行処理に失敗
-                        //if( !( done ) )
-                        //	Debug.WriteLineIf( Verbose, $"{現在の.行番号}: 未知のコマンドが使用されました。スキップします。[{現在の.コマンド}]" );
-                        //	--> レーン情報とかでいっぱい出るのでコメントアウト
-
-                        if( ヘッダだけ )
-                            continue;   // ヘッダだけならここまで。
-
-
-                        // ヘッダ以外の解析
-
-                        done =
-                            _行解析_WAVPANzz_PANzz() ||
-                            _行解析_WAVVOLzz_VOLUMEzz() ||
-                            _行解析_WAVzz() ||
-                            _行解析_AVIzz() ||
-                            _行解析_オブジェクト記述();
-
-                        // 行処理に失敗
-                        //if( !( done ) )
-                        //	Debug.WriteLineIf( Verbose, $"{現在の.行番号}: 未知のコマンドが使用されました。スキップします。[{現在の.コマンド}]" );
-                        //	--> レーン情報とかでいっぱい出るのでコメントアウト
-                    }
-                }
-
-
-
-
-                var score = 現在の.スコア;
-                現在の.状態をリセットする();
-
-                return score;
-            }
-
-            internal static bool _行解析_AVIzz()
-            {
-                if( !( 現在の.コマンド.ToLower().StartsWith( "avi" ) ) || ( 5 != 現在の.コマンド.Length ) )
-                    return false;
-
-                if( !_36進数2桁の文字列を数値に変換して返す( 現在の.コマンド.Substring( 3, 2 ), out int zz ) || ( 1 > zz ) || ( 36 * 36 <= zz ) )
-                {
-                    Trace.TraceError( $"#AVI のAVI番号の取得に失敗、あるいは 01～ZZ 以外の値が指定されています。[{現在の.行番号}行]" );
-                    return false;
-                }
-
-                // ここでは、PATH_WAV はまだ反映しない。
-                現在の.スコア.AVIリスト[ zz ] = 現在の.パラメータ;   // あれば上書き、なければ追加
-
-                return true;
-            }
-
-            */
         }
     }
 }

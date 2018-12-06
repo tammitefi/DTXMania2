@@ -725,6 +725,29 @@ namespace SSTFormat.v3.Tests
             Assert.AreEqual( ( 220 + 132.4 ), bpmChips.ElementAt( 3 ).BPM );
         }
 
+        [TestMethod()]
+        public void コマンド_AVIzz()
+        {
+            // 基本形
+            var score = スコア.DTX.文字列から生成する( @"
+#avi01: movie1.avi
+#avi02: movie2.mp4
+#00111: 010203
+" );
+            Assert.AreEqual( @"movie1.avi", score.AVIリスト[ 1 ] );
+            Assert.AreEqual( @"movie2.mp4", score.AVIリスト[ 2 ] );
+            this.例外が出れば成功( () => { var p = score.AVIリスト[ 3 ]; } );
+
+            // PATH_WAV はまだどちらにも反映されないこと。
+            score = スコア.DTX.文字列から生成する( @"
+#path_wav: sounds
+#avi01: movie1.avi
+#avi02: movie2.mp4
+#00111: 010203
+" );
+            Assert.AreEqual( @"movie1.avi", score.AVIリスト[ 1 ] );
+            Assert.AreEqual( @"movie2.mp4", score.AVIリスト[ 2 ] );
+        }
 
         [TestMethod()]
         public void 曲データTest()
