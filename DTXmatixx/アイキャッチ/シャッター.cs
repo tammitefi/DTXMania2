@@ -19,6 +19,7 @@ namespace DTXmatixx.アイキャッチ
                 this.子を追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -31,7 +32,7 @@ namespace DTXmatixx.アイキャッチ
                 this._黒ブラシ = new SolidColorBrush( dc, Color4.Black );
                 this._白ブラシ = new SolidColorBrush( dc, Color4.White );
 
-                this._シャッター情報 = new シャッター情報[ シャッター枚数 ] {
+                this._シャッターアニメーション = new シャッター情報[ シャッター枚数 ] {
 				    #region " *** "
 				    //----------------
 				    new シャッター情報() {		// 1
@@ -192,11 +193,11 @@ namespace DTXmatixx.アイキャッチ
                 this._明るいブラシ?.Dispose();
                 this._明るいブラシ = null;
 
-                if( null != this._シャッター情報 )
+                if( null != this._シャッターアニメーション )
                 {
-                    foreach( var s in this._シャッター情報 )
+                    foreach( var s in this._シャッターアニメーション )
                         s.Dispose();
-                    this._シャッター情報 = null;
+                    this._シャッターアニメーション = null;
                 }
 
                 this._ロゴボード?.Dispose();
@@ -206,6 +207,10 @@ namespace DTXmatixx.アイキャッチ
                 this._ロゴ不透明度 = null;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのクローズアニメーションを開始する。
+        /// </summary>
         public override void クローズする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -217,15 +222,15 @@ namespace DTXmatixx.アイキャッチ
 
                 for( int i = 0; i < シャッター枚数; i++ )
                 {
-                    using( var 開閉遷移 = animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッター情報[ i ].開閉時間sec ), finalValue: 1.0 ) )   // 終了値 1.0(完全閉じ)
+                    using( var 開閉遷移 = animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッターアニメーション[ i ].開閉時間sec ), finalValue: 1.0 ) )   // 終了値 1.0(完全閉じ)
                     {
-                        this._シャッター情報[ i ].開to閉割合?.Dispose();
-                        this._シャッター情報[ i ].開to閉割合 = new Variable( animation.Manager, initialValue: 0.0 );    // 初期値 0.0(完全開き)
-                        this._シャッター情報[ i ].ストーリーボード?.Abandon();
-                        this._シャッター情報[ i ].ストーリーボード?.Dispose();
-                        this._シャッター情報[ i ].ストーリーボード = new Storyboard( animation.Manager );
-                        this._シャッター情報[ i ].ストーリーボード.AddTransition( this._シャッター情報[ i ].開to閉割合, 開閉遷移 );
-                        this._シャッター情報[ i ].ストーリーボード.Schedule( start + 秒( this._シャッター情報[ i ].完全開き時刻sec ) );    // 開始時刻: 完全開き時刻
+                        this._シャッターアニメーション[ i ].開to閉割合?.Dispose();
+                        this._シャッターアニメーション[ i ].開to閉割合 = new Variable( animation.Manager, initialValue: 0.0 );    // 初期値 0.0(完全開き)
+                        this._シャッターアニメーション[ i ].ストーリーボード?.Abandon();
+                        this._シャッターアニメーション[ i ].ストーリーボード?.Dispose();
+                        this._シャッターアニメーション[ i ].ストーリーボード = new Storyboard( animation.Manager );
+                        this._シャッターアニメーション[ i ].ストーリーボード.AddTransition( this._シャッターアニメーション[ i ].開to閉割合, 開閉遷移 );
+                        this._シャッターアニメーション[ i ].ストーリーボード.Schedule( start + 秒( this._シャッターアニメーション[ i ].完全開き時刻sec ) );    // 開始時刻: 完全開き時刻
                     }
                 }
 
@@ -241,6 +246,10 @@ namespace DTXmatixx.アイキャッチ
                 this.現在のフェーズ = フェーズ.クローズ;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのオープンアニメーションを開始する。
+        /// </summary>
         public override void オープンする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -250,7 +259,7 @@ namespace DTXmatixx.アイキャッチ
                 var animation = グラフィックデバイス.Instance.Animation;
 
                 double 最も遅い時刻sec = 0.0;
-                foreach( var s in this._シャッター情報 )
+                foreach( var s in this._シャッターアニメーション )
                 {
                     if( 最も遅い時刻sec < s.完全閉じ時刻sec )
                         最も遅い時刻sec = s.完全閉じ時刻sec;
@@ -260,15 +269,15 @@ namespace DTXmatixx.アイキャッチ
 
                 for( int i = 0; i < シャッター枚数; i++ )
                 {
-                    using( var 開閉遷移 = animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッター情報[ i ].開閉時間sec ), finalValue: 0.0 ) )  // 終了値: 0.0(完全開き)
+                    using( var 開閉遷移 = animation.TrasitionLibrary.SmoothStop( maximumDuration: 秒( this._シャッターアニメーション[ i ].開閉時間sec ), finalValue: 0.0 ) )  // 終了値: 0.0(完全開き)
                     {
-                        this._シャッター情報[ i ].開to閉割合?.Dispose();
-                        this._シャッター情報[ i ].開to閉割合 = new Variable( animation.Manager, initialValue: 1.0 );    // 初期値 1.0(完全閉じ)
-                        this._シャッター情報[ i ].ストーリーボード?.Abandon();
-                        this._シャッター情報[ i ].ストーリーボード?.Dispose();
-                        this._シャッター情報[ i ].ストーリーボード = new Storyboard( animation.Manager );
-                        this._シャッター情報[ i ].ストーリーボード.AddTransition( this._シャッター情報[ i ].開to閉割合, 開閉遷移 );
-                        this._シャッター情報[ i ].ストーリーボード.Schedule( end - 秒( this._シャッター情報[ i ].完全閉じ時刻sec ) );   // 開始時刻: 完全閉じ時刻
+                        this._シャッターアニメーション[ i ].開to閉割合?.Dispose();
+                        this._シャッターアニメーション[ i ].開to閉割合 = new Variable( animation.Manager, initialValue: 1.0 );    // 初期値 1.0(完全閉じ)
+                        this._シャッターアニメーション[ i ].ストーリーボード?.Abandon();
+                        this._シャッターアニメーション[ i ].ストーリーボード?.Dispose();
+                        this._シャッターアニメーション[ i ].ストーリーボード = new Storyboard( animation.Manager );
+                        this._シャッターアニメーション[ i ].ストーリーボード.AddTransition( this._シャッターアニメーション[ i ].開to閉割合, 開閉遷移 );
+                        this._シャッターアニメーション[ i ].ストーリーボード.Schedule( end - 秒( this._シャッターアニメーション[ i ].完全閉じ時刻sec ) );   // 開始時刻: 完全閉じ時刻
                     }
                 }
 
@@ -284,6 +293,10 @@ namespace DTXmatixx.アイキャッチ
                 this.現在のフェーズ = フェーズ.オープン;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのアニメーションを進行し、アイキャッチ画像を描画する。
+        /// </summary>
         protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
@@ -292,9 +305,11 @@ namespace DTXmatixx.アイキャッチ
 
                 var pretrans = dc.Transform;
 
+                #region " シャッター "
+                //----------------
                 for( int i = シャッター枚数 - 1; i >= 0; i-- )
                 {
-                    var context = this._シャッター情報[ i ];
+                    var context = this._シャッターアニメーション[ i ];
 
                     if( context.ストーリーボード.Status != StoryboardStatus.Ready )
                         すべて完了 = false;
@@ -312,11 +327,15 @@ namespace DTXmatixx.アイキャッチ
                     dc.FillRectangle( rc, context.ブラシ );
                     dc.DrawRectangle( rc, this._白ブラシ, 3.0f );
                 }
+                //----------------
+                #endregion
 
             } );
 
             if( null != this._ロゴ不透明度 )
             {
+                #region " ロゴ "
+                //----------------
                 if( this._ロゴボード.Status != StoryboardStatus.Ready )
                     すべて完了 = false;
 
@@ -327,6 +346,8 @@ namespace DTXmatixx.アイキャッチ
                     不透明度0to1: (float) this._ロゴ不透明度.Value,
                     X方向拡大率: ( this._ロゴ表示領域.Width / this._ロゴ.サイズ.Width ),
                     Y方向拡大率: ( this._ロゴ表示領域.Height / this._ロゴ.サイズ.Height ) );
+                //----------------
+                #endregion
             }
 
             if( すべて完了 )
@@ -373,7 +394,7 @@ namespace DTXmatixx.アイキャッチ
         }
 
         private const int シャッター枚数 = 14;
-        private シャッター情報[] _シャッター情報 = null;
+        private シャッター情報[] _シャッターアニメーション = null;
 
         private Brush _明るいブラシ = null;
         private Brush _ふつうのブラシ = null;

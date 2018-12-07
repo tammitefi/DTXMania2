@@ -55,6 +55,7 @@ namespace DTXmatixx.アイキャッチ
                 this.子を追加する( this._画面D_アイキャッチ遷移画面2_逆回転中 = new 舞台画像() );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -96,14 +97,18 @@ namespace DTXmatixx.アイキャッチ
                 this._斜めジオメトリマスク?.Dispose();
                 this._斜めジオメトリマスク = null;
 
-                if( null != this._黒幕 )
+                if( null != this._黒幕アニメーション )
                 {
-                    foreach( var b in this._黒幕 )
+                    foreach( var b in this._黒幕アニメーション )
                         b.Dispose();
-                    this._黒幕 = null;
+                    this._黒幕アニメーション = null;
                 }
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのクローズアニメーションを開始する。
+        /// </summary>
         public override void クローズする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -114,13 +119,13 @@ namespace DTXmatixx.アイキャッチ
 
                 this.現在のフェーズ = フェーズ.クローズ;
 
-                if( null != this._黒幕 )
+                if( null != this._黒幕アニメーション )
                 {
-                    foreach( var b in this._黒幕 )
+                    foreach( var b in this._黒幕アニメーション )
                         b.Dispose();
                 }
 
-                this._黒幕 = new 黒幕[ 2 ] {
+                this._黒幕アニメーション = new 黒幕[ 2 ] {
 				    // 上＆左
 				    new 黒幕() {
                         中心位置X = new Variable( animation.Manager, initialValue: 1920.0/2.0 ),	// クローズ初期位置、以下同
@@ -146,7 +151,7 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " ストーリーボードの構築(1) 上→左の黒幕, クローズ割合(便乗) "
                 //----------------
-                var 幕 = this._黒幕[ 0 ];
+                var 幕 = this._黒幕アニメーション[ 0 ];
 
                 // シーン1 細くなりつつ画面中央へ移動。
                 using( var 中心位置Xの遷移 = animation.TrasitionLibrary.Constant( duration: 秒( _シーン1期間 ) ) )
@@ -214,7 +219,7 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " ストーリーボードの構築(2) 下→右の黒幕 "
                 //----------------
-                幕 = this._黒幕[ 1 ];
+                幕 = this._黒幕アニメーション[ 1 ];
 
                 double ずれ = 0.03;
 
@@ -266,14 +271,18 @@ namespace DTXmatixx.アイキャッチ
                 //----------------
                 #endregion
 
-                // アニメ開始
+                // 今すぐ開始。
                 var start = animation.Timer.Time;
-                foreach( var bs in this._黒幕 )
+                foreach( var bs in this._黒幕アニメーション )
                     bs.ストーリーボード.Schedule( start );
 
                 this._初めての進行描画 = true;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのオープンアニメーションを開始する。
+        /// </summary>
         public override void オープンする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -284,13 +293,13 @@ namespace DTXmatixx.アイキャッチ
 
                 this.現在のフェーズ = フェーズ.オープン;
 
-                if( null != this._黒幕 )
+                if( null != this._黒幕アニメーション )
                 {
-                    foreach( var b in this._黒幕 )
+                    foreach( var b in this._黒幕アニメーション )
                         b.Dispose();
                 }
 
-                this._黒幕 = new 黒幕[ 2 ] {
+                this._黒幕アニメーション = new 黒幕[ 2 ] {
 				    // 上＆左
 				    new 黒幕() {
                         中心位置X = new Variable( animation.Manager, initialValue: 0.0 - 200.0 ),	// オープン初期位置、以下同
@@ -316,7 +325,7 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " ストーリーボードの構築(1) 上→左の黒幕, クローズ割合(便乗) "
                 //----------------
-                var 幕 = this._黒幕[ 0 ];
+                var 幕 = this._黒幕アニメーション[ 0 ];
 
                 // シーン3 細くなりつつ画面中央へ移動。
                 using( var 中心位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( _シーン3期間 ), finalValue: 1920.0 / 2.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
@@ -385,7 +394,7 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " ストーリーボードの構築(2) 下＆右の黒幕 "
                 //----------------
-                幕 = this._黒幕[ 1 ];
+                幕 = this._黒幕アニメーション[ 1 ];
 
                 double ずれ = 0.03;
 
@@ -436,14 +445,18 @@ namespace DTXmatixx.アイキャッチ
                 //----------------
                 #endregion
 
-                // アニメ開始
+                // 今すぐ開始。
                 var start = animation.Timer.Time;
-                foreach( var bs in this._黒幕 )
+                foreach( var bs in this._黒幕アニメーション )
                     bs.ストーリーボード.Schedule( start );
 
                 this._初めての進行描画 = true;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのアニメーションを進行し、アイキャッチ画像を描画する。
+        /// </summary>
         protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
@@ -611,7 +624,7 @@ namespace DTXmatixx.アイキャッチ
 
                 for( int i = 0; i < 2; i++ )
                 {
-                    var context = this._黒幕[ i ];
+                    var context = this._黒幕アニメーション[ i ];
 
                     if( context.ストーリーボード.Status != StoryboardStatus.Ready )
                         すべて完了 = false;
@@ -650,6 +663,7 @@ namespace DTXmatixx.アイキャッチ
             }
         }
 
+
         private bool _初めての進行描画 = false;
 
         private class 黒幕 : IDisposable
@@ -682,7 +696,7 @@ namespace DTXmatixx.アイキャッチ
                 this.中心位置X = null;
             }
         }
-        private 黒幕[] _黒幕 = null;
+        private 黒幕[] _黒幕アニメーション = null;
 
         private 画像 _ロゴ = null;
         private readonly RectangleF _ロゴ表示領域 = new RectangleF( ( 1920f - 730f ) / 2f, ( 1080f - 300f ) / 2f, 730f, 300f );

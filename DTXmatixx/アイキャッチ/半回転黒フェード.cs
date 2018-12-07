@@ -19,6 +19,7 @@ namespace DTXmatixx.アイキャッチ
                 this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\タイトルロゴ・影.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -34,10 +35,14 @@ namespace DTXmatixx.アイキャッチ
                 this._黒ブラシ?.Dispose();
                 this._黒ブラシ = null;
 
-                this._アニメ?.Dispose();
-                this._アニメ = null;
+                this._アニメーション?.Dispose();
+                this._アニメーション = null;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのクローズアニメーションを開始する。
+        /// </summary>
         public override void クローズする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -46,69 +51,73 @@ namespace DTXmatixx.アイキャッチ
 
                 var animation = グラフィックデバイス.Instance.Animation;
 
-                this._アニメ?.Dispose();
-                this._アニメ = new アニメ( animation.Manager );
+                this._アニメーション?.Dispose();
+                this._アニメーション = new アニメ( animation.Manager );
 
                 const double 期間sec = 0.4;
 
-                #region " (1) 背景マスク "
+                #region " (1) 背景マスク のアニメーション構築 "
                 //----------------
-                this._アニメ.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                this._アニメーション.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
                 using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.7 ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.背景_不透明度, 不透明度の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.背景_不透明度, 不透明度の遷移 );
                 }
                 //----------------
                 #endregion
-                #region " (2) 黒幕1（左下） "
+                #region " (2) 黒幕1（左下） のアニメーション構築 "
                 //----------------
-                this._アニメ.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: -500.0 );
-                this._アニメ.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75 );
+                this._アニメーション.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: -500.0 );
+                this._アニメーション.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75 );
                 using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.2 ), finalValue: 0.0 ) )
                 using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 ) )
                 using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_回転角rad, 回転角の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕1左下_回転角rad, 回転角の遷移 );
                 }
                 //----------------
                 #endregion
-                #region " (3) 黒幕2（右上）"
+                #region " (3) 黒幕2（右上） のアニメーション構築 "
                 //----------------
-                this._アニメ.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0 );
-                this._アニメ.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75f );
+                this._アニメーション.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0 );
+                this._アニメーション.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: Math.PI * 0.75f );
                 using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.2 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width ) )
                 using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 ) )
                 using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_回転角rad, 回転角の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕2右上_回転角rad, 回転角の遷移 );
                 }
                 //----------------
                 #endregion
-                #region " (4) ロゴ "
+                #region " (4) ロゴ のアニメーション構築 "
                 //----------------
-                this._アニメ.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 - 150.0 );
-                this._アニメ.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                this._アニメーション.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 - 150.0 );
+                this._アニメーション.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
                 using( var 位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec ), finalValue: 1222.0, accelerationRatio: 0.1, decelerationRatio: 0.9 ) )
                 using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 1.0 ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 位置Xの遷移 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_不透明度, 不透明度の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.ロゴ_位置X, 位置Xの遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.ロゴ_不透明度, 不透明度の遷移 );
                 }
                 //----------------
                 #endregion
 
                 using( var 時間稼ぎ = animation.TrasitionLibrary.Constant( duration: 秒( 0.5 ) ) )
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 時間稼ぎ );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.ロゴ_位置X, 時間稼ぎ );
 
                 // 今すぐ開始。
-                this._アニメ.ストーリーボード.Schedule( animation.Timer.Time );
+                this._アニメーション.ストーリーボード.Schedule( animation.Timer.Time );
                 this.現在のフェーズ = フェーズ.クローズ;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのオープンアニメーションを開始する。
+        /// </summary>
         public override void オープンする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -117,65 +126,70 @@ namespace DTXmatixx.アイキャッチ
 
                 var animation = グラフィックデバイス.Instance.Animation;
 
-                this._アニメ?.Dispose();
-                this._アニメ = new アニメ( animation.Manager );
+                this._アニメーション?.Dispose();
+                this._アニメーション = new アニメ( animation.Manager );
 
                 const double 期間sec = 0.6;
 
-                #region " (1) 背景マスク "
+                #region " (1) 背景マスク のアニメーション構築 "
                 //----------------
-                this._アニメ.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
+                this._アニメーション.背景_不透明度 = new Variable( animation.Manager, initialValue: 0.0 );
                 using( var 不透明度の遷移 = animation.TrasitionLibrary.Constant( duration: 秒( 期間sec ) ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.背景_不透明度, 不透明度の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.背景_不透明度, 不透明度の遷移 );
                 }
                 //----------------
                 #endregion
-                #region " (2) 黒幕1（左下）"
+                #region " (2) 黒幕1（左下） のアニメーション構築 "
                 //----------------
-                this._アニメ.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
-                this._アニメ.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
+                this._アニメーション.黒幕1左下_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
+                this._アニメーション.黒幕1左下_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
                 using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: 0.0 ) )
                 using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec * 0.2 ), finalValue: -500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
                 using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: Math.PI * 0.75f ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕1左下_回転角rad, 回転角の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕1左下_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕1左下_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕1左下_回転角rad, 回転角の遷移 );
                 }
                 //----------------
                 #endregion
-                #region " (3) 黒幕2（右上）"
+                #region " (3) 黒幕2（右上） のアニメーション構築 "
                 //----------------
-                this._アニメ.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
-                this._アニメ.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
+                this._アニメーション.黒幕2右上_基点位置X = new Variable( animation.Manager, initialValue: グラフィックデバイス.Instance.設計画面サイズ.Width / 2.0 );
+                this._アニメーション.黒幕2右上_回転角rad = new Variable( animation.Manager, initialValue: 0.0 );
                 using( var 基点位置Xの遷移1 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec * 0.8 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width ) )
                 using( var 基点位置Xの遷移2 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec * 0.2 ), finalValue: グラフィックデバイス.Instance.設計画面サイズ.Width + 500.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
                 using( var 回転角の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: Math.PI * 0.75f ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.黒幕2右上_回転角rad, 回転角の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕2右上_基点位置X, 基点位置Xの遷移1 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕2右上_基点位置X, 基点位置Xの遷移2 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.黒幕2右上_回転角rad, 回転角の遷移 );
                 }
                 //----------------
                 #endregion
-                #region " (4) ロゴ "
+                #region " (4) ロゴ のアニメーション構築 "
                 //----------------
-                this._アニメ.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 );
-                this._アニメ.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 1.0 );
+                this._アニメーション.ロゴ_位置X = new Variable( animation.Manager, initialValue: 1222.0 );
+                this._アニメーション.ロゴ_不透明度 = new Variable( animation.Manager, initialValue: 1.0 );
                 using( var 位置Xの遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 期間sec ), finalValue: 1222.0 - 150.0, accelerationRatio: 0.9, decelerationRatio: 0.1 ) )
                 using( var 不透明度の遷移 = animation.TrasitionLibrary.Linear( duration: 秒( 期間sec ), finalValue: 0.0 ) )
                 {
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_位置X, 位置Xの遷移 );
-                    this._アニメ.ストーリーボード.AddTransition( this._アニメ.ロゴ_不透明度, 不透明度の遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.ロゴ_位置X, 位置Xの遷移 );
+                    this._アニメーション.ストーリーボード.AddTransition( this._アニメーション.ロゴ_不透明度, 不透明度の遷移 );
                 }
                 //----------------
                 #endregion
 
-                this._アニメ.ストーリーボード.Schedule( animation.Timer.Time );
+                // 今すぐ開始。
+                this._アニメーション.ストーリーボード.Schedule( animation.Timer.Time );
                 this.現在のフェーズ = フェーズ.オープン;
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのアニメーションを進行し、アイキャッチ画像を描画する。
+        /// </summary>
         protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
@@ -185,10 +199,10 @@ namespace DTXmatixx.アイキャッチ
                 case フェーズ.クローズ:
                     #region " *** "
                     //----------------
-                    if( this._アニメ.ストーリーボード.Status != StoryboardStatus.Ready )
+                    if( this._アニメーション.ストーリーボード.Status != StoryboardStatus.Ready )
                         すべて完了 = false;
 
-                    if( this._アニメ.ストーリーボード.Status != 描画しないStatus )
+                    if( this._アニメーション.ストーリーボード.Status != 描画しないStatus )
                     {
                         グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
@@ -196,7 +210,7 @@ namespace DTXmatixx.アイキャッチ
 
                             #region " 背景マスク "
                             //----------------
-                            using( var ブラシ = new SolidColorBrush( dc, new Color4( Color3.Black, (float) this._アニメ.背景_不透明度.Value ) ) )
+                            using( var ブラシ = new SolidColorBrush( dc, new Color4( Color3.Black, (float) this._アニメーション.背景_不透明度.Value ) ) )
                             {
                                 dc.FillRectangle( new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Width ), ブラシ );
                             }
@@ -211,10 +225,10 @@ namespace DTXmatixx.アイキャッチ
 
                                 dc.Transform =
                                     Matrix3x2.Rotation( // 上辺中央を中心として回転
-                                        angle: (float) this._アニメ.黒幕1左下_回転角rad.Value,
+                                        angle: (float) this._アニメーション.黒幕1左下_回転角rad.Value,
                                         center: new Vector2( 0f, -rc.Height / 2f ) ) *
                                     Matrix3x2.Translation(  // (基点X, H×3/4) へ移動
-                                        x: (float) this._アニメ.黒幕1左下_基点位置X.Value,
+                                        x: (float) this._アニメーション.黒幕1左下_基点位置X.Value,
                                         y: グラフィックデバイス.Instance.設計画面サイズ.Height ) *
                                     pretrans;
 
@@ -231,10 +245,10 @@ namespace DTXmatixx.アイキャッチ
 
                                 dc.Transform =
                                     Matrix3x2.Rotation( // 下辺中央を中心として回転
-                                        angle: (float) this._アニメ.黒幕2右上_回転角rad.Value,
+                                        angle: (float) this._アニメーション.黒幕2右上_回転角rad.Value,
                                         center: new Vector2( 0f, rc.Height / 2f ) ) *
                                     Matrix3x2.Translation(  // (基点X, H×1/4) へ移動
-                                        x: (float) this._アニメ.黒幕2右上_基点位置X.Value,
+                                        x: (float) this._アニメーション.黒幕2右上_基点位置X.Value,
                                         y: 0f ) *
                                     pretrans;
 
@@ -246,10 +260,10 @@ namespace DTXmatixx.アイキャッチ
                             //----------------
                             dc.Transform =
                                 Matrix3x2.Scaling( 639f / this._ロゴ画像.サイズ.Width, 262f / this._ロゴ画像.サイズ.Height ) *
-                                Matrix3x2.Translation( (float) this._アニメ.ロゴ_位置X.Value, 771f ) *
+                                Matrix3x2.Translation( (float) this._アニメーション.ロゴ_位置X.Value, 771f ) *
                                 pretrans;
 
-                            dc.DrawBitmap( this._ロゴ画像.Bitmap, (float) this._アニメ.ロゴ_不透明度.Value, BitmapInterpolationMode.Linear );
+                            dc.DrawBitmap( this._ロゴ画像.Bitmap, (float) this._アニメーション.ロゴ_不透明度.Value, BitmapInterpolationMode.Linear );
                             //----------------
                             #endregion
 
@@ -265,10 +279,10 @@ namespace DTXmatixx.アイキャッチ
                 case フェーズ.オープン:
                     #region " *** "
                     //----------------
-                    if( this._アニメ.ストーリーボード.Status != StoryboardStatus.Ready )
+                    if( this._アニメーション.ストーリーボード.Status != StoryboardStatus.Ready )
                         すべて完了 = false;
 
-                    if( this._アニメ.ストーリーボード.Status != 描画しないStatus )
+                    if( this._アニメーション.ストーリーボード.Status != 描画しないStatus )
                     {
                         グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
@@ -276,7 +290,7 @@ namespace DTXmatixx.アイキャッチ
 
                             #region " (1) 背景マスク "
                             //----------------
-                            using( var ブラシ = new SolidColorBrush( dc, new Color4( Color3.Black, (float) this._アニメ.背景_不透明度.Value ) ) )
+                            using( var ブラシ = new SolidColorBrush( dc, new Color4( Color3.Black, (float) this._アニメーション.背景_不透明度.Value ) ) )
                             {
                                 dc.FillRectangle( new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Width ), ブラシ );
                             }
@@ -291,10 +305,10 @@ namespace DTXmatixx.アイキャッチ
 
                                 dc.Transform =
                                     Matrix3x2.Rotation( // 上辺中央を中心として回転
-                                        angle: (float) this._アニメ.黒幕1左下_回転角rad.Value,
+                                        angle: (float) this._アニメーション.黒幕1左下_回転角rad.Value,
                                         center: new Vector2( 0f, -rc.Height / 2f ) ) *
                                     Matrix3x2.Translation(  // (基点X, H×3/4) へ移動
-                                        x: (float) this._アニメ.黒幕1左下_基点位置X.Value,
+                                        x: (float) this._アニメーション.黒幕1左下_基点位置X.Value,
                                         y: グラフィックデバイス.Instance.設計画面サイズ.Height ) *
                                     pretrans;
 
@@ -311,10 +325,10 @@ namespace DTXmatixx.アイキャッチ
 
                                 dc.Transform =
                                     Matrix3x2.Rotation( // 下辺中央を中心として回転
-                                        angle: (float) this._アニメ.黒幕2右上_回転角rad.Value,
+                                        angle: (float) this._アニメーション.黒幕2右上_回転角rad.Value,
                                         center: new Vector2( 0f, rc.Height / 2f ) ) *
                                     Matrix3x2.Translation(  // (基点X, H×1/4) へ移動
-                                        x: (float) this._アニメ.黒幕2右上_基点位置X.Value,
+                                        x: (float) this._アニメーション.黒幕2右上_基点位置X.Value,
                                         y: 0f ) *
                                     pretrans;
 
@@ -326,10 +340,10 @@ namespace DTXmatixx.アイキャッチ
                             //----------------
                             dc.Transform =
                                 Matrix3x2.Scaling( 639f / this._ロゴ画像.サイズ.Width, 262f / this._ロゴ画像.サイズ.Height ) *
-                                Matrix3x2.Translation( (float) this._アニメ.ロゴ_位置X.Value, 771f ) *
+                                Matrix3x2.Translation( (float) this._アニメーション.ロゴ_位置X.Value, 771f ) *
                                 pretrans;
 
-                            dc.DrawBitmap( this._ロゴ画像.Bitmap, (float) this._アニメ.ロゴ_不透明度.Value, BitmapInterpolationMode.Linear );
+                            dc.DrawBitmap( this._ロゴ画像.Bitmap, (float) this._アニメーション.ロゴ_不透明度.Value, BitmapInterpolationMode.Linear );
                             //----------------
                             #endregion
 
@@ -355,6 +369,7 @@ namespace DTXmatixx.アイキャッチ
                 }
             }
         }
+
 
         private class アニメ : IDisposable
         {
@@ -400,7 +415,7 @@ namespace DTXmatixx.アイキャッチ
                 this.ロゴ_不透明度 = null;
             }
         }
-        private アニメ _アニメ = null;
+        private アニメ _アニメーション = null;
 
         private 画像 _ロゴ画像 = null;
         private SolidColorBrush _黒ブラシ = null;

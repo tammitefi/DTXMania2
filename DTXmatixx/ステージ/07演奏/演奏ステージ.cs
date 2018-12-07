@@ -80,6 +80,11 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
                 this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
                 this.子を追加する( this._FPS = new FPS() );
+                this.子を追加する( this._数字フォント中グレー48x64 = new 画像フォント(
+                   @"$(System)images\数字フォント中グレー48x64.png",
+                   @"$(System)images\数字フォント中グレー48x64矩形リスト.json",
+                   文字幅補正dpx: -16f,
+                   不透明度: 0.3f ) );
             }
         }
         protected override void On活性化()
@@ -294,7 +299,7 @@ namespace DTXmatixx.ステージ.演奏
 
                     #region " 自動ヒット処理。"
                     //----------------
-                    this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
+                    this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
                         var ユーザ設定 = App.ユーザ管理.ログオン中のユーザ;
                         var ドラムチッププロパティ = ユーザ設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
@@ -411,7 +416,7 @@ namespace DTXmatixx.ステージ.演奏
 
                         #region " 描画範囲内のすべてのチップについて、対応する入力があればヒット処理を行う。"
                         //----------------
-                        this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離 ) => {
+                        this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離 ) => {
 
                             // チップにヒットしている入力を探す。
 
@@ -692,8 +697,8 @@ namespace DTXmatixx.ステージ.演奏
 
                         if( this._動画とBGMの再生開始済み )
                         {
-                            // 背景動画チップがヒット済みなら、背景動画の進行描画を行う。
-
+                            #region " 背景動画チップがヒット済みなら、背景動画の進行描画を行う。"
+                            //----------------
                             // (A) 75%縮小表示
                             {
                                 float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
@@ -720,6 +725,9 @@ namespace DTXmatixx.ステージ.演奏
 
                             // 開始直後のデコードが重たいかもしれないので、演奏時刻をここで更新しておく。	---> 重たくても更新禁止！（譜面スクロールがガタつく原因になる）
                             //演奏時刻sec = this._演奏開始からの経過時間secを返す();
+
+                            //----------------
+                            #endregion
                         }
 
                         this._左サイドクリアパネル.クリアする();
@@ -764,7 +772,7 @@ namespace DTXmatixx.ステージ.演奏
                         {
                             App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
-                            if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.フェーズ.クローズ完了 )
+                            if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.アイキャッチ.フェーズ.クローズ完了 )
                             {
                                 this.現在のフェーズ = フェーズ.キャンセル完了;
                             }
@@ -837,6 +845,7 @@ namespace DTXmatixx.ステージ.演奏
         private 曲別SKILL _曲別SKILL = null;
         private エキサイトゲージ _エキサイトゲージ = null;
         private FPS _FPS = null;
+        private 画像フォント _数字フォント中グレー48x64 = null;
         /// <summary>
         ///		読み込み画面: 0 ～ 1: 演奏画面
         /// </summary>
@@ -868,7 +877,7 @@ namespace DTXmatixx.ステージ.演奏
         ///		引数は、順に、対象のチップ, チップ番号, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx。
         ///		時間と距離はいずれも、負数ならバー未達、0でバー直上、正数でバー通過。
         ///	</param>
-        private void _描画範囲のチップに処理を適用する( double 現在の演奏時刻sec, Action<チップ, int, double, double, double> 適用する処理 )
+        private void _描画範囲内のすべてのチップに対して( double 現在の演奏時刻sec, Action<チップ, int, double, double, double> 適用する処理 )
         {
             var スコア = App.演奏スコア;
             if( null == スコア )
@@ -912,13 +921,20 @@ namespace DTXmatixx.ステージ.演奏
         {
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
-                this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
+                this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
                     if( chip.チップ種別 == チップ種別.小節線 )
                     {
+                        // 小節線
                         float 上位置dpx = (float) ( ヒット判定バーの中央Y座標dpx + ヒット判定バーとの距離dpx - 1f );   // -1f は小節線の厚みの半分。
                         dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._小節線色, strokeWidth: 3f );
+
+                        // 小節番号
+                        float 右位置dpx = 441f + 780f - 64f;   // -64f は適当なマージン。
+                        this._数字フォント中グレー48x64.描画する( dc, 右位置dpx, 上位置dpx - 84f, chip.小節番号.ToString(), 右揃え: true );	// -84f は適当なマージン。
                     }
+
+                    // 拍線
                     else if( chip.チップ種別 == チップ種別.拍線 )
                     {
                         float 上位置dpx = (float) ( ヒット判定バーの中央Y座標dpx + ヒット判定バーとの距離dpx - 1f );   // -1f は拍線の厚みの半分。
@@ -937,7 +953,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             Debug.Assert( null != this._ドラムチップ画像設定 );
 
-            this._描画範囲のチップに処理を適用する( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
+            this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
                 float たて中央位置dpx = (float) ( ヒット判定バーの中央Y座標dpx + ヒット判定バーとの距離dpx );
                 float 消滅割合 = 0f;

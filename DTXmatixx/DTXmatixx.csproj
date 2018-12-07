@@ -197,76 +197,76 @@
     <Compile Include="アイキャッチ\アイキャッチ.cs" />
     <Compile Include="アイキャッチ\シャッター.cs" />
     <Compile Include="アイキャッチ\半回転黒フェード.cs" />
-    <Compile Include="ステージ\オプション設定\曲読み込みフォルダ割り当てダイアログ.cs">
+    <Compile Include="ステージ\05オプション設定\曲読み込みフォルダ割り当てダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ステージ\オプション設定\曲読み込みフォルダ割り当てダイアログ.Designer.cs">
+    <Compile Include="ステージ\05オプション設定\曲読み込みフォルダ割り当てダイアログ.Designer.cs">
       <DependentUpon>曲読み込みフォルダ割り当てダイアログ.cs</DependentUpon>
     </Compile>
-    <Compile Include="ステージ\オプション設定\入力割り当てダイアログ.cs">
+    <Compile Include="ステージ\05オプション設定\入力割り当てダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ステージ\オプション設定\入力割り当てダイアログ.Designer.cs">
+    <Compile Include="ステージ\05オプション設定\入力割り当てダイアログ.Designer.cs">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </Compile>
     <Compile Include="ステージ\ステージ.cs" />
     <Compile Include="ステージ\ステージ管理.cs" />
-    <Compile Include="ステージ\タイトル\タイトルステージ.cs" />
+    <Compile Include="ステージ\02タイトル\タイトルステージ.cs" />
     <Compile Include="アイキャッチ\回転幕.cs" />
     <Compile Include="ステージ\ドラムサウンド.cs" />
     <Compile Include="ステージ\パッド矢印.cs" />
-    <Compile Include="ステージ\起動\起動ステージ.cs" />
-    <Compile Include="ステージ\曲読み込み\プレビュー画像.cs" />
-    <Compile Include="ステージ\曲読み込み\曲読み込みステージ.cs" />
-    <Compile Include="ステージ\曲読み込み\難易度.cs" />
-    <Compile Include="ステージ\演奏\エキサイトゲージ.cs" />
-    <Compile Include="ステージ\演奏\カウントマップライン.cs" />
-    <Compile Include="ステージ\演奏\コンボ表示.cs" />
-    <Compile Include="ステージ\演奏\スコア表示.cs" />
-    <Compile Include="ステージ\演奏\チップの演奏状態.cs" />
-    <Compile Include="ステージ\演奏\チップ光.cs" />
-    <Compile Include="ステージ\演奏\ドラムパッド.cs" />
-    <Compile Include="ステージ\演奏\プレイヤー名表示.cs" />
-    <Compile Include="ステージ\演奏\レーンフラッシュ.cs" />
-    <Compile Include="ステージ\演奏\レーンフレーム.cs" />
-    <Compile Include="ステージ\演奏\判定文字列.cs" />
-    <Compile Include="ステージ\演奏\判定種別.cs" />
-    <Compile Include="ステージ\演奏\右サイドクリアパネル.cs" />
-    <Compile Include="ステージ\演奏\左サイドクリアパネル.cs" />
-    <Compile Include="ステージ\演奏\曲別SKILL.cs" />
-    <Compile Include="ステージ\演奏\曲名パネル.cs" />
-    <Compile Include="ステージ\演奏\演奏ステージ.cs" />
-    <Compile Include="ステージ\演奏\フェーズパネル.cs" />
-    <Compile Include="ステージ\演奏\成績.cs" />
-    <Compile Include="ステージ\演奏\判定パラメータ表示.cs" />
-    <Compile Include="ステージ\演奏\表示チップ種別.cs" />
-    <Compile Include="ステージ\演奏\表示レーン種別.cs" />
-    <Compile Include="ステージ\演奏\譜面スクロール速度表示.cs" />
-    <Compile Include="ステージ\演奏\達成率表示.cs" />
-    <Compile Include="ステージ\終了\終了ステージ.cs" />
-    <Compile Include="ステージ\結果\演奏パラメータ結果.cs" />
-    <Compile Include="ステージ\結果\結果ステージ.cs" />
+    <Compile Include="ステージ\01起動\起動ステージ.cs" />
+    <Compile Include="ステージ\06曲読み込み\プレビュー画像.cs" />
+    <Compile Include="ステージ\06曲読み込み\曲読み込みステージ.cs" />
+    <Compile Include="ステージ\06曲読み込み\難易度.cs" />
+    <Compile Include="ステージ\07演奏\エキサイトゲージ.cs" />
+    <Compile Include="ステージ\07演奏\カウントマップライン.cs" />
+    <Compile Include="ステージ\07演奏\コンボ表示.cs" />
+    <Compile Include="ステージ\07演奏\スコア表示.cs" />
+    <Compile Include="ステージ\07演奏\チップの演奏状態.cs" />
+    <Compile Include="ステージ\07演奏\チップ光.cs" />
+    <Compile Include="ステージ\07演奏\ドラムパッド.cs" />
+    <Compile Include="ステージ\07演奏\プレイヤー名表示.cs" />
+    <Compile Include="ステージ\07演奏\レーンフラッシュ.cs" />
+    <Compile Include="ステージ\07演奏\レーンフレーム.cs" />
+    <Compile Include="ステージ\07演奏\判定文字列.cs" />
+    <Compile Include="ステージ\07演奏\判定種別.cs" />
+    <Compile Include="ステージ\07演奏\右サイドクリアパネル.cs" />
+    <Compile Include="ステージ\07演奏\左サイドクリアパネル.cs" />
+    <Compile Include="ステージ\07演奏\曲別SKILL.cs" />
+    <Compile Include="ステージ\07演奏\曲名パネル.cs" />
+    <Compile Include="ステージ\07演奏\演奏ステージ.cs" />
+    <Compile Include="ステージ\07演奏\フェーズパネル.cs" />
+    <Compile Include="ステージ\07演奏\成績.cs" />
+    <Compile Include="ステージ\07演奏\判定パラメータ表示.cs" />
+    <Compile Include="ステージ\07演奏\表示チップ種別.cs" />
+    <Compile Include="ステージ\07演奏\表示レーン種別.cs" />
+    <Compile Include="ステージ\07演奏\譜面スクロール速度表示.cs" />
+    <Compile Include="ステージ\07演奏\達成率表示.cs" />
+    <Compile Include="ステージ\09終了\終了ステージ.cs" />
+    <Compile Include="ステージ\08結果\演奏パラメータ結果.cs" />
+    <Compile Include="ステージ\08結果\結果ステージ.cs" />
     <Compile Include="ステージ\舞台画像.cs" />
-    <Compile Include="ステージ\オプション設定\パネル.cs" />
-    <Compile Include="ステージ\オプション設定\パネル_システムボタン.cs" />
-    <Compile Include="ステージ\オプション設定\パネル_フォルダ.cs" />
-    <Compile Include="ステージ\オプション設定\パネル_ONOFFトグル.cs" />
-    <Compile Include="ステージ\オプション設定\パネル_文字列リスト.cs" />
-    <Compile Include="ステージ\オプション設定\パネル_譜面スピード.cs" />
-    <Compile Include="ステージ\オプション設定\パネルリスト.cs" />
-    <Compile Include="ステージ\オプション設定\オプション設定ステージ.cs" />
-    <Compile Include="ステージ\認証\ユーザリスト.cs" />
-    <Compile Include="ステージ\認証\認証ステージ_タッチアイコンVer.cs" />
-    <Compile Include="ステージ\認証\認証ステージ.cs" />
-    <Compile Include="ステージ\選曲\BPMパネル.cs" />
-    <Compile Include="ステージ\選曲\曲ステータスパネル.cs" />
-    <Compile Include="ステージ\選曲\曲リスト.cs" />
-    <Compile Include="ステージ\選曲\曲別SKILL.cs" />
-    <Compile Include="ステージ\選曲\表示方法選択パネル.cs" />
-    <Compile Include="ステージ\選曲\選択曲枠ランナー.cs" />
-    <Compile Include="ステージ\選曲\難易度と成績.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_システムボタン.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_フォルダ.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_ONOFFトグル.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_文字列リスト.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_譜面スピード.cs" />
+    <Compile Include="ステージ\05オプション設定\パネルリスト.cs" />
+    <Compile Include="ステージ\05オプション設定\オプション設定ステージ.cs" />
+    <Compile Include="ステージ\03認証\ユーザリスト.cs" />
+    <Compile Include="ステージ\03認証\認証ステージ_タッチアイコンVer.cs" />
+    <Compile Include="ステージ\03認証\認証ステージ.cs" />
+    <Compile Include="ステージ\04選曲\BPMパネル.cs" />
+    <Compile Include="ステージ\04選曲\曲ステータスパネル.cs" />
+    <Compile Include="ステージ\04選曲\曲リスト.cs" />
+    <Compile Include="ステージ\04選曲\曲別SKILL.cs" />
+    <Compile Include="ステージ\04選曲\表示方法選択パネル.cs" />
+    <Compile Include="ステージ\04選曲\選択曲枠ランナー.cs" />
+    <Compile Include="ステージ\04選曲\難易度と成績.cs" />
     <Compile Include="ステージ\青い線.cs" />
-    <Compile Include="ステージ\選曲\選曲ステージ.cs" />
+    <Compile Include="ステージ\04選曲\選曲ステージ.cs" />
     <Compile Include="データベース\ユーザ\old\Record01.cs" />
     <Compile Include="データベース\ユーザ\old\Record02.cs" />
     <Compile Include="データベース\ユーザ\old\Record03.cs" />
@@ -329,10 +329,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ステージ\オプション設定\曲読み込みフォルダ割り当てダイアログ.resx">
+    <EmbeddedResource Include="ステージ\05オプション設定\曲読み込みフォルダ割り当てダイアログ.resx">
       <DependentUpon>曲読み込みフォルダ割り当てダイアログ.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ステージ\オプション設定\入力割り当てダイアログ.resx">
+    <EmbeddedResource Include="ステージ\05オプション設定\入力割り当てダイアログ.resx">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="未処理例外検出ダイアログ.resx">
@@ -786,6 +786,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\選曲\表示方法・評価順.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\数字フォント中グレー48x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\数字フォント中グレー48x64矩形リスト.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

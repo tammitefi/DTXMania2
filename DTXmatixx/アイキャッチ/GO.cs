@@ -18,6 +18,7 @@ namespace DTXmatixx.アイキャッチ
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -26,12 +27,12 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " Go! "
                 //----------------
-                this._文字 = new 文字[ 3 ] {
+                this._文字アニメーション = new 文字[ 3 ] {
 					new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\G.png" ) },
 					new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\O.png" ) },
 					new 文字() { 画像 = new 画像( @"$(System)images\アイキャッチ\!.png" ) },
 				};
-                foreach( var s in this._文字 )
+                foreach( var s in this._文字アニメーション )
                 {
                     s.画像.加算合成 = true;
                     this.子を追加する( s.画像 );
@@ -41,25 +42,25 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " ぐるぐる棒 "
                 //----------------
-                this._ぐるぐる棒s = new ぐるぐる棒[ 12 ];
+                this._ぐるぐる棒アニメーション = new ぐるぐる棒[ 12 ];
 
-                for( int i = 0; i < this._ぐるぐる棒s.Length; i++ )
-                    this._ぐるぐる棒s[ i ] = new ぐるぐる棒();
+                for( int i = 0; i < this._ぐるぐる棒アニメーション.Length; i++ )
+                    this._ぐるぐる棒アニメーション[ i ] = new ぐるぐる棒();
                 //----------------
                 #endregion
 
                 #region " フラッシュオーバー棒 "
                 //----------------
-                this._フラッシュオーバー棒s = new フラッシュオーバー棒[ 6 ];
+                this._フラッシュオーバー棒アニメーション = new フラッシュオーバー棒[ 6 ];
 
-                for( int i = 0; i < this._フラッシュオーバー棒s.Length; i++ )
-                    this._フラッシュオーバー棒s[ i ] = new フラッシュオーバー棒();
+                for( int i = 0; i < this._フラッシュオーバー棒アニメーション.Length; i++ )
+                    this._フラッシュオーバー棒アニメーション[ i ] = new フラッシュオーバー棒();
                 //----------------
                 #endregion
 
                 #region " フェードイン "
                 //----------------
-                this._フェードイン = new フェードイン();
+                this._フェードインアニメーション = new フェードイン();
                 //----------------
                 #endregion
             }
@@ -70,48 +71,52 @@ namespace DTXmatixx.アイキャッチ
             {
                 #region " Go! "
                 //----------------
-                if( null != this._文字 )
+                if( null != this._文字アニメーション )
                 {
-                    foreach( var s in this._文字 )
+                    foreach( var s in this._文字アニメーション )
                     {
                         this.子を削除する( s.画像 );
                         s.Dispose();
                     }
-                    this._文字 = null;
+                    this._文字アニメーション = null;
                 }
                 //----------------
                 #endregion
 
                 #region " ぐるぐる棒 "
                 //----------------
-                if( null != this._ぐるぐる棒s )
+                if( null != this._ぐるぐる棒アニメーション )
                 {
-                    foreach( var b in this._ぐるぐる棒s )
+                    foreach( var b in this._ぐるぐる棒アニメーション )
                         b.Dispose();
-                    this._ぐるぐる棒s = null;
+                    this._ぐるぐる棒アニメーション = null;
                 }
                 //----------------
                 #endregion
 
                 #region " フラッシュオーバー棒 "
                 //----------------
-                if( null != this._フラッシュオーバー棒s )
+                if( null != this._フラッシュオーバー棒アニメーション )
                 {
-                    foreach( var b in this._フラッシュオーバー棒s )
+                    foreach( var b in this._フラッシュオーバー棒アニメーション )
                         b.Dispose();
-                    this._フラッシュオーバー棒s = null;
+                    this._フラッシュオーバー棒アニメーション = null;
                 }
                 //----------------
                 #endregion
 
                 #region " フェードイン "
                 //----------------
-                this._フェードイン?.Dispose();
-                this._フェードイン = null;
+                this._フェードインアニメーション?.Dispose();
+                this._フェードインアニメーション = null;
                 //----------------
                 #endregion
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのクローズアニメーションを開始する。
+        /// </summary>
         public override void クローズする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -126,10 +131,10 @@ namespace DTXmatixx.アイキャッチ
                 var basetime = animation.Timer.Time;
                 var start = basetime;
 
-                #region " 「G」のストーリーボード構築 "
+                #region " 「G」のアニメーション構築 "
                 //----------------
                 {
-                    var 文字 = this._文字[ (int) 文字名.G ];
+                    var 文字 = this._文字アニメーション[ (int) 文字名.G ];
 
                     文字.Dispose();
 
@@ -152,10 +157,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " 「O」のストーリーボード構築 "
+                #region " 「O」のアニメーション構築 "
                 //----------------
                 {
-                    var 文字 = this._文字[ (int) 文字名.O ];
+                    var 文字 = this._文字アニメーション[ (int) 文字名.O ];
 
                     文字.Dispose();
 
@@ -178,10 +183,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " 「!」のストーリーボード構築 "
+                #region " 「!」のアニメーション構築 "
                 //----------------
                 {
-                    var 文字 = this._文字[ (int) 文字名.Exc ];
+                    var 文字 = this._文字アニメーション[ (int) 文字名.Exc ];
 
                     文字.Dispose();
 
@@ -213,10 +218,10 @@ namespace DTXmatixx.アイキャッチ
                 // ぐるぐる棒
                 start = basetime + 秒( 0.2 );
 
-                #region " [0] 上側１番目の青 "
+                #region " [0] 上側１番目の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 0 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 0 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -249,10 +254,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [1] 上側１番目の白 "
+                #region " [1] 上側１番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 1 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 1 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -285,10 +290,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [2] 上側２番目の青 "
+                #region " [2] 上側２番目の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 2 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 2 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -321,10 +326,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [3] 上側２番目の白 "
+                #region " [3] 上側２番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 3 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 3 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -357,10 +362,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [4] 上側３番目の青 "
+                #region " [4] 上側３番目の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 4 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 4 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -393,10 +398,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [5] 上側３番目の白 "
+                #region " [5] 上側３番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 5 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 5 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -429,10 +434,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [6] 下側１番目の青 "
+                #region " [6] 下側１番目の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 6 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 6 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -465,10 +470,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [7] 下側１番目の白 "
+                #region " [7] 下側１番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 7 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 7 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -501,10 +506,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [8] 下側２番目の青 "
+                #region " [8] 下側２番目の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 8 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 8 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -537,10 +542,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [9] 下側２番目の白 "
+                #region " [9] 下側２番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 9 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 9 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -573,10 +578,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [10] 下側３番目の青 "
+                #region " [10] 下側３番目の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 10 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 10 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -609,10 +614,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [11] 下側３番目の白 "
+                #region " [11] 下側３番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._ぐるぐる棒s[ 11 ];
+                    var bar = this._ぐるぐる棒アニメーション[ 11 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -649,10 +654,10 @@ namespace DTXmatixx.アイキャッチ
                 // フラッシュオーバー棒
                 start = basetime + 秒( 0.55 );
 
-                #region " [0] 上側１番目の白 "
+                #region " [0] 上側１番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._フラッシュオーバー棒s[ 0 ];
+                    var bar = this._フラッシュオーバー棒アニメーション[ 0 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -671,10 +676,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [1] 上側２番目の白 "
+                #region " [1] 上側２番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._フラッシュオーバー棒s[ 1 ];
+                    var bar = this._フラッシュオーバー棒アニメーション[ 1 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -693,10 +698,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [2] 下側１番目の白 "
+                #region " [2] 下側１番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._フラッシュオーバー棒s[ 2 ];
+                    var bar = this._フラッシュオーバー棒アニメーション[ 2 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -715,10 +720,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [3] 下側２番目の白 "
+                #region " [3] 下側２番目の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._フラッシュオーバー棒s[ 3 ];
+                    var bar = this._フラッシュオーバー棒アニメーション[ 3 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -737,10 +742,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [4] 真ん中の白 "
+                #region " [4] 真ん中の白 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._フラッシュオーバー棒s[ 4 ];
+                    var bar = this._フラッシュオーバー棒アニメーション[ 4 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -759,10 +764,10 @@ namespace DTXmatixx.アイキャッチ
                 }
                 //----------------
                 #endregion
-                #region " [5] 真ん中の青 "
+                #region " [5] 真ん中の青 のアニメーション構築 "
                 //----------------
                 {
-                    var bar = this._フラッシュオーバー棒s[ 5 ];
+                    var bar = this._フラッシュオーバー棒アニメーション[ 5 ];
                     bar.Dispose();
 
                     bar.中心位置X = 1920.0 / 2.0;
@@ -782,11 +787,15 @@ namespace DTXmatixx.アイキャッチ
                 //----------------
                 #endregion
 
-                // フェードイン → 未使用
-                this._フェードイン?.Dispose();
-                this._フェードイン = null;
+                // フェードイン → 使わない
+                this._フェードインアニメーション?.Dispose();
+                this._フェードインアニメーション = null;
             }
         }
+        
+        /// <summary>
+        ///     アイキャッチのオープンアニメーションを開始する。
+        /// </summary>
         public override void オープンする( float 速度倍率 = 1.0f )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -798,32 +807,35 @@ namespace DTXmatixx.アイキャッチ
                 this.現在のフェーズ = フェーズ.オープン;
                 var basetime = animation.Timer.Time;
 
-                // Go! → 未使用
-                foreach( var s in this._文字 )
+                // Go! → 使わない
+                foreach( var s in this._文字アニメーション )
                     s.Dispose();
 
-                // ぐるぐる棒 → 未使用
-                foreach( var b in this._ぐるぐる棒s )
+                // ぐるぐる棒 → 使わない
+                foreach( var b in this._ぐるぐる棒アニメーション )
                     b.Dispose();
 
-                // フラッシュオーバー棒 → 未使用
-                foreach( var b in this._フラッシュオーバー棒s )
+                // フラッシュオーバー棒 → 使わない
+                foreach( var b in this._フラッシュオーバー棒アニメーション )
                     b.Dispose();
 
                 // フェードイン
                 var start = basetime;
-                this._フェードイン?.Dispose();
-                this._フェードイン = new フェードイン() {
+                this._フェードインアニメーション?.Dispose();
+                this._フェードインアニメーション = new フェードイン() {
                     不透明度 = new Variable( animation.Manager, initialValue: 1.0 ),
                     ストーリーボード = new Storyboard( animation.Manager ),
                 };
                 using( var 不透明度の遷移 = animation.TrasitionLibrary.AccelerateDecelerate( duration: 秒( 0.8 ), finalValue: 0.0, accelerationRatio: 0.5, decelerationRatio: 0.5 ) )
-                {
-                    this._フェードイン.ストーリーボード.AddTransition( this._フェードイン.不透明度, 不透明度の遷移 );
-                }
-                this._フェードイン.ストーリーボード.Schedule( start );
+                    this._フェードインアニメーション.ストーリーボード.AddTransition( this._フェードインアニメーション.不透明度, 不透明度の遷移 );
+
+                this._フェードインアニメーション.ストーリーボード.Schedule( start );
             }
         }
+
+        /// <summary>
+        ///     アイキャッチのアニメーションを進行し、アイキャッチ画像を描画する。
+        /// </summary>
         protected override void 進行描画する( DeviceContext1 dc, StoryboardStatus 描画しないStatus )
         {
             bool すべて完了 = true;
@@ -834,9 +846,9 @@ namespace DTXmatixx.アイキャッチ
 
                 #region " ぐるぐる棒 "
                 //----------------
-                for( int i = 0; i < this._ぐるぐる棒s.Length; i++ )
+                for( int i = 0; i < this._ぐるぐる棒アニメーション.Length; i++ )
                 {
-                    var context = this._ぐるぐる棒s[ i ];
+                    var context = this._ぐるぐる棒アニメーション[ i ];
 
                     if( null == context || null == context.ストーリーボード )
                         continue;
@@ -857,18 +869,18 @@ namespace DTXmatixx.アイキャッチ
 
                     var rc = ( context.辺の種類 == 辺の種類.上辺 ) ?
                         new RectangleF( -contextの幅 / 2f, -( contextの高さ + (float) context.棒の太さ ) / 2f, contextの幅, (float) context.棒の太さ ) :   // 上辺
-                        new RectangleF( -contextの幅 / 2f, ( contextの高さ - (float) context.棒の太さ ) / 2f, contextの幅, (float) context.棒の太さ ); // 下辺
+                        new RectangleF( -contextの幅 / 2f, +( contextの高さ - (float) context.棒の太さ ) / 2f, contextの幅, (float) context.棒の太さ );    // 下辺
 
                     dc.FillRectangle( rc, context.ブラシ );
                 }
                 //----------------
                 #endregion
 
-                #region " フラッシュオーバー棒[0～4] "
+                #region " フラッシュオーバー棒（[0～4]の5本）"
                 //----------------
                 for( int i = 0; i <= 4; i++ )
                 {
-                    var context = this._フラッシュオーバー棒s[ i ];
+                    var context = this._フラッシュオーバー棒アニメーション[ i ];
 
                     if( null == context || null == context.ストーリーボード )
                         continue;
@@ -889,7 +901,7 @@ namespace DTXmatixx.アイキャッチ
 
                     var rc = ( context.辺の種類 == 辺の種類.上辺 ) ?
                         new RectangleF( -contextの幅 / 2f, -( contextの高さ + (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value ) :   // 上辺
-                        new RectangleF( -contextの幅 / 2f, ( contextの高さ - (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value ); // 下辺
+                        new RectangleF( -contextの幅 / 2f, +( contextの高さ - (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value );    // 下辺
 
                     dc.FillRectangle( rc, context.ブラシ );
                 }
@@ -900,7 +912,7 @@ namespace DTXmatixx.アイキャッチ
 
             #region " Go! "
             //----------------
-            foreach( var context in this._文字 )
+            foreach( var context in this._文字アニメーション )
             {
                 if( null == context.ストーリーボード )
                     continue;
@@ -924,10 +936,10 @@ namespace DTXmatixx.アイキャッチ
 
                 var pretrans = dc.Transform;
 
-                #region " フラッシュオーバー棒[5] ... Go! の上にかぶせる"
+                #region " フラッシュオーバー棒（[5]の1本）... Go! の上にかぶせる"
                 //----------------
                 {
-                    var context = this._フラッシュオーバー棒s[ 5 ];
+                    var context = this._フラッシュオーバー棒アニメーション[ 5 ];
 
                     if( null != context.ストーリーボード && context.ストーリーボード.Status != 描画しないStatus )
                     {
@@ -943,8 +955,8 @@ namespace DTXmatixx.アイキャッチ
                         float contextの高さ = (float) context.太さ.Value;
 
                         var rc = ( context.辺の種類 == 辺の種類.上辺 ) ?
-                            new RectangleF( -contextの幅 / 2f, -( contextの高さ + (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value ) :  // 上辺
-                            new RectangleF( -contextの幅 / 2f, ( contextの高さ - (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value ); // 下辺
+                            new RectangleF( -contextの幅 / 2f, -( contextの高さ + (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value ) :   // 上辺
+                            new RectangleF( -contextの幅 / 2f, +( contextの高さ - (float) context.棒の太さ.Value ) / 2f, contextの幅, (float) context.棒の太さ.Value );    // 下辺
 
                         dc.FillRectangle( rc, context.ブラシ );
                     }
@@ -955,7 +967,7 @@ namespace DTXmatixx.アイキャッチ
                 #region " フェードイン "
                 //----------------
                 {
-                    var context = this._フェードイン;
+                    var context = this._フェードインアニメーション;
 
                     if( null != context && null != context.ストーリーボード && context.ストーリーボード.Status != 描画しないStatus )
                     {
@@ -965,9 +977,7 @@ namespace DTXmatixx.アイキャッチ
                         dc.Transform = pretrans;
 
                         using( var ブラシ = new SolidColorBrush( dc, new Color4( 0.5f, 0.5f, 1f, (float) context.不透明度.Value ) ) )
-                        {
                             dc.FillRectangle( new RectangleF( 0f, 0f, 1920f, 1080f ), ブラシ );
-                        }
                     }
                 }
                 //----------------
@@ -988,6 +998,10 @@ namespace DTXmatixx.アイキャッチ
             }
         }
 
+
+        /// <summary>
+        ///     G, O, ! のアニメーション情報
+        /// </summary>
         protected class 文字 : IDisposable
         {
             public 画像 画像 = null;
@@ -1012,9 +1026,12 @@ namespace DTXmatixx.アイキャッチ
                 this.中心位置X = null;
             }
         }
-        private 文字[] _文字 = null;
+        private 文字[] _文字アニメーション = null;
         private enum 文字名 { G = 0, O = 1, Exc = 2 };
 
+        /// <summary>
+        ///     ぐるぐる棒のアニメーション情報
+        /// </summary>
         private class ぐるぐる棒 : IDisposable
         {
             public double 中心位置X;
@@ -1043,9 +1060,12 @@ namespace DTXmatixx.アイキャッチ
                 this.回転角rad = null;
             }
         }
-        private ぐるぐる棒[] _ぐるぐる棒s = null;
+        private ぐるぐる棒[] _ぐるぐる棒アニメーション = null;
         private enum 辺の種類 { 上辺, 下辺 }
 
+        /// <summary>
+        ///     フラッシュオーバー棒のアニメーション情報
+        /// </summary>
         private class フラッシュオーバー棒 : IDisposable
         {
             public double 中心位置X;
@@ -1074,8 +1094,11 @@ namespace DTXmatixx.アイキャッチ
                 this.太さ = null;
             }
         }
-        private フラッシュオーバー棒[] _フラッシュオーバー棒s = null;
+        private フラッシュオーバー棒[] _フラッシュオーバー棒アニメーション = null;
 
+        /// <summary>
+        ///     フェードインのアニメーション情報
+        /// </summary>
         private class フェードイン : IDisposable
         {
             public Variable 不透明度 = null;
@@ -1092,6 +1115,6 @@ namespace DTXmatixx.アイキャッチ
                 this.ストーリーボード = null;
             }
         }
-        private フェードイン _フェードイン = null;
+        private フェードイン _フェードインアニメーション = null;
     }
 }
