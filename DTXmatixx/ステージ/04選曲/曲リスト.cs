@@ -15,10 +15,8 @@ namespace DTXmatixx.ステージ.選曲
 {
     /// <summary>
     ///		曲のリスト表示、選択、スクロール。
-    /// </summary>
-    /// <remarks>
     ///		画面に表示される曲は8行だが、スクロールを勘案して上下に１行ずつ追加し、計10行として扱う。
-    /// </remarks>
+    /// </summary>
     class 曲リスト : Activity
     {
         public 曲リスト()
@@ -27,6 +25,7 @@ namespace DTXmatixx.ステージ.選曲
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -88,6 +87,7 @@ namespace DTXmatixx.ステージ.選曲
                 this._選択ノードの表示オフセットのストーリーボード = null;
             }
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             // 進行
@@ -173,28 +173,37 @@ namespace DTXmatixx.ステージ.選曲
                 描画するノード = 描画するノード.次のノード;
             }
         }
+
         public void 前のノードを選択する()
         {
             this._カーソル位置--;     // 下限なし
+
             App.曲ツリー.前のノードをフォーカスする();
+
             this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
         }
         public void 次のノードを選択する()
         {
             this._カーソル位置++;     // 上限なし
+
             App.曲ツリー.次のノードをフォーカスする();
+
             this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
         }
         public void BOXに入る()
         {
             this._カーソル位置 = 4;
+
             this._曲リスト全体のY軸移動オフセット = 0;
+
             App.曲ツリー.フォーカスする( App.曲ツリー.フォーカスノード.子ノードリスト[ 0 ] );
         }
         public void BOXから出る()
         {
             this._カーソル位置 = 4;
+
             this._曲リスト全体のY軸移動オフセット = 0;
+
             App.曲ツリー.フォーカスする( App.曲ツリー.フォーカスノード.親ノード );
         }
         public void 難易度アンカをひとつ増やす()

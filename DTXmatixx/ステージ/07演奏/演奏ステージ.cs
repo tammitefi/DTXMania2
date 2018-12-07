@@ -41,18 +41,10 @@ namespace DTXmatixx.ステージ.演奏
             protected set;
         }
 
-        public Bitmap キャプチャ画面
-        {
-            get;
-            set;
-        } = null;
-        public 成績 成績
-        {
-            get;
-            protected set;
-        } = null;
-        public 動画とBGM 動画とBGM
-            => this._動画とBGM;
+        public Bitmap キャプチャ画面 { get; set; } = null;
+        public 成績 成績 { get; protected set; } = null;
+        public 動画とBGM 動画とBGM { get; protected set; } = null;
+
 
         public 演奏ステージ()
         {
@@ -87,6 +79,7 @@ namespace DTXmatixx.ステージ.演奏
                    不透明度: 0.3f ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -105,7 +98,7 @@ namespace DTXmatixx.ステージ.演奏
 
                 this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
-                this._動画とBGM = null;
+                this.動画とBGM = null;
                 this._動画とBGMの再生開始済み = false;
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
 
@@ -134,7 +127,7 @@ namespace DTXmatixx.ステージ.演奏
 										try
 										{
 											var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
-											this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
+											this.動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
 											this._背景動画forDTX = null;
 											Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
 										}
@@ -162,7 +155,7 @@ namespace DTXmatixx.ステージ.演奏
                         #region " (B) SST準拠の動画とBGM（ローカルファイル）"
                         //----------------
                         var file = new VariablePath( App.演奏スコア.背景動画ファイル名 );
-                        this._動画とBGM = new 動画とBGM( file, App.サウンドデバイス );
+                        this.動画とBGM = new 動画とBGM( file, App.サウンドデバイス );
                         this._背景動画forDTX = null;
                         Log.Info( $"背景動画とBGMを読み込みました。[{file.変数付きパス}]" );
                         //----------------
@@ -180,7 +173,7 @@ namespace DTXmatixx.ステージ.演奏
 						{
 							this.子を追加する( this._背景動画forDTX = new Video( path ) );
 
-							this._動画とBGM = null;
+							this.動画とBGM = null;
 							Log.Info( $"背景動画を読み込みました。[{path.変数付きパス}]" );
 						}
 						catch
@@ -244,8 +237,8 @@ namespace DTXmatixx.ステージ.演奏
 				//this._動画とBGM?.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
 				//App.WAV管理?.Dispose();	
 				//App.WAV管理 = null;
-				if( null != this._動画とBGM )
-					this._動画とBGM.ビデオをキャンセルする();	// ビデオが詰まってしまうのでオーディオのみ再生を続ける
+				if( null != this.動画とBGM )
+					this.動画とBGM.ビデオをキャンセルする();	// ビデオが詰まってしまうのでオーディオのみ再生を続ける
 
                 foreach( var kvp in this._チップの演奏状態 )
                     kvp.Value.Dispose();
@@ -261,6 +254,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.キャプチャ画面 = null;
             }
         }
+
         /// <summary>
         ///		進行と入力。
         /// </summary>
@@ -269,6 +263,7 @@ namespace DTXmatixx.ステージ.演奏
             if( this._初めての進行描画 )
             {
                 App.サウンドタイマ.リセットする();       // カウント開始
+
                 this._フェードインカウンタ = new Counter( 0, 100, 10 );
                 this._初めての進行描画 = false;
             }
@@ -294,6 +289,7 @@ namespace DTXmatixx.ステージ.演奏
                 case フェーズ.表示:
 
                     double 現在の演奏時刻sec = this._演奏開始からの経過時間secを返す();
+
 
                     // AutoPlay 判定
 
@@ -598,6 +594,7 @@ namespace DTXmatixx.ステージ.演奏
                     break;
             }
         }
+        
         /// <summary>
         ///		描画。
         /// </summary>
@@ -703,7 +700,7 @@ namespace DTXmatixx.ステージ.演奏
                             {
                                 float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
                                 float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
-                                var video = this._動画とBGM?.Video ?? this._背景動画forDTX;
+                                var video = this.動画とBGM?.Video ?? this._背景動画forDTX;
 
                                 video?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );  // 全体
 
@@ -792,6 +789,7 @@ namespace DTXmatixx.ステージ.演奏
                     break;
             }
         }
+
         public void 演奏を停止する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -804,6 +802,7 @@ namespace DTXmatixx.ステージ.演奏
                 //this._コンボ.COMBO値 = 0;
             }
         }
+
         /// <remarks>
         ///		演奏クリア時には、次の結果ステージに入ってもBGMが鳴り続ける。
         ///		そのため、後からBGMだけを別個に停止するためのメソッドが必要になる。
@@ -812,10 +811,11 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._動画とBGM?.Dispose();
-                this._動画とBGM = null;
+                this.動画とBGM?.Dispose();
+                this.動画とBGM = null;
             }
         }
+
         public void BGMのキャッシュを解放する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -823,6 +823,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.BGMを停止する();
             }
         }
+
 
         private bool _初めての進行描画 = true;
         private 画像 _背景画像 = null;
@@ -846,6 +847,7 @@ namespace DTXmatixx.ステージ.演奏
         private エキサイトゲージ _エキサイトゲージ = null;
         private FPS _FPS = null;
         private 画像フォント _数字フォント中グレー48x64 = null;
+
         /// <summary>
         ///		読み込み画面: 0 ～ 1: 演奏画面
         /// </summary>
@@ -1132,8 +1134,8 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         private Video _背景動画forDTX = null; // DTXの動画はこっち
-        private 動画とBGM _動画とBGM = null;  // SSTFの動画とBGMはこっち
         private bool _動画とBGMの再生開始済み = false;
+
 
         private void _チップのヒット処理を行う( チップ chip, 判定種別 judge, bool 再生, bool 判定, bool 非表示, double ヒット判定バーと発声との時間sec )
         {
@@ -1207,7 +1209,7 @@ namespace DTXmatixx.ステージ.演奏
                     // (A-a) 背景動画
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._動画とBGM?.再生を開始する();
+                    this.動画とBGM?.再生を開始する();
                     this._動画とBGMの再生開始済み = true;
 
                     App.サウンドタイマ.再開する();

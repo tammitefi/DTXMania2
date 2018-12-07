@@ -14,6 +14,9 @@ namespace DTXmatixx.データベース
     /// </summary>
     abstract class SQLiteDBBase : IDisposable
     {
+        /// <summary>
+        ///     データベースの user_version プロパティ。
+        /// </summary>
         public long UserVersion
         {
             get
@@ -22,21 +25,18 @@ namespace DTXmatixx.データベース
             set
                 => this.DataContext.ExecuteCommand( $"PRAGMA user_version = {value}" );
         }
-        public SQLiteConnection Connection
-        {
-            get;
-            protected set;
-        } = null;
-        public DataContext DataContext
-        {
-            get;
-            protected set;
-        } = null;
+
+        public SQLiteConnection Connection { get; protected set; } = null;
+        public DataContext DataContext { get; protected set; } = null;
+
 
         public SQLiteDBBase( VariablePath DBファイルパス, long Version )
         {
             if( 0 == Version )
                 throw new Exception( "Version = 0 は予約されています。" );
+
+
+            // DBへ接続し、開く。
 
             this._DBファイルパス = DBファイルパス;
             this._DB接続文字列 = new SQLiteConnectionStringBuilder() { DataSource = this._DBファイルパス.変数なしパス }.ToString();
@@ -46,25 +46,28 @@ namespace DTXmatixx.データベース
 
             this.DataContext = new DataContext( this.Connection );
 
+
             // マイグレーションが必要？
 
             var 実DBのバージョン = this.UserVersion;   // DBが存在しない場合は 0 。
 
-            // (A) マイグレーション不要。
             if( 実DBのバージョン == Version )
             {
+                // (A) マイグレーション不要。
             }
-
-            // (B) 実DBが存在していない　→　作成する。
             else if( 実DBのバージョン == 0 )
             {
+                #region " (B) 実DBが存在していない　→　作成する。"
+                //----------------
                 this.テーブルがなければ作成する();
                 this.UserVersion = Version;
+                //----------------
+                #endregion
             }
-
-            // (C) 実DBが下位バージョンである　→　アップグレードする。
             else if( 実DBのバージョン < Version )
             {
+                #region " (C) 実DBが下位バージョンである　→　アップグレードする。"
+                //----------------
                 try
                 {
                     while( 実DBのバージョン < Version )
@@ -81,16 +84,20 @@ namespace DTXmatixx.データベース
                 {
                     Log.ERROR( ex.Message );
                 }
+                //----------------
+                #endregion
             }
-
-            // (D) 実DBが上位バージョンである　→　例外発出。上位互換はなし。
             else
             {
+                // (D) 実DBが上位バージョンである　→　例外発出。上位互換はなし。
                 throw new Exception( $"データベースが未知のバージョン({実DBのバージョン})です。" );
             }
         }
+
         public void Dispose()
         {
+            // DB接続を閉じる。
+
             //this.DataContext?.SubmitChanges();	--> Submit していいとは限らない。
             this.DataContext?.Dispose();
 
@@ -98,22 +105,18 @@ namespace DTXmatixx.データベース
             this.Connection?.Dispose();
         }
 
+
         protected VariablePath _DBファイルパス;
         protected string _DB接続文字列;
 
+
         // 以下、派生クラスで実装する。
 
-        protected virtual void テーブルがなければ作成する()
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract void テーブルがなければ作成する();
 
         /// <summary>
         ///		{移行元DBバージョン} から {移行元DBバージョン+1} へ、１つだけマイグレーションする。
         /// </summary>
-        protected virtual void データベースのアップグレードマイグレーションを行う( long 移行元DBバージョン )
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract void データベースのアップグレードマイグレーションを行う( long 移行元DBバージョン );
     }
 }

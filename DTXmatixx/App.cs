@@ -30,6 +30,7 @@ namespace DTXmatixx
     {
         public static int リリース番号
             => int.TryParse( Application.ProductVersion.Split( '.' ).ElementAt( 0 ), out int release ) ? release : throw new Exception( "アセンブリのプロダクトバージョンに記載ミスがあります。" );
+
         public static T 属性<T>() where T : Attribute
             => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
@@ -40,26 +41,37 @@ namespace DTXmatixx
         ///		SharpDX で定義する追加の拡張メソッド（NextFloatなど）を使えるようになる。
         /// </remarks>
         public static Random 乱数 { get; protected set; }
+
         public static システム設定 システム設定 { get; protected set; }
+
         public static 入力管理 入力管理 { get; set; }
+
         public static ステージ管理 ステージ管理 { get; protected set; }
+
         public static 曲ツリー 曲ツリー { get; set; }
+
         public static SoundDevice サウンドデバイス { get; protected set; }
+
         public static SoundTimer サウンドタイマ { get; protected set; }
+
         public static ドラムサウンド ドラムサウンド { get; protected set; }
+
         public static ユーザ管理 ユーザ管理 { get; protected set; }
 
         public static スコア 演奏スコア { get; set; }
+
         public static WAV管理 WAV管理 { get; set; }
 
         public static bool ウィンドウがアクティブである { get; set; } = false;
-		public static bool ウィンドウがアクティブではない
+
+        public static bool ウィンドウがアクティブではない
 		{
 			get
 				=> !( App.ウィンドウがアクティブである );
 			set
 				=> App.ウィンドウがアクティブである = !( value );
 		}
+
 
 		public App()
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
@@ -118,6 +130,7 @@ namespace DTXmatixx
                 App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
             }
         }
+
         protected override void Dispose( bool disposing )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -163,6 +176,7 @@ namespace DTXmatixx
                 base.Dispose( disposing );
             }
         }
+
         public override void Run()
         {
             RenderLoop.Run( this, () => {
@@ -194,6 +208,7 @@ namespace DTXmatixx
 
             } );
         }
+
         protected override void OnClosing( CancelEventArgs e )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -273,6 +288,7 @@ namespace DTXmatixx
         //----------------
         #endregion
 
+
         // ※ Form イベントの override メソッドは描画スレッドで実行されるため、処理中に進行タスクが呼び出されると困る場合には、進行タスクとの lock を忘れないこと。
         private readonly object _高速進行と描画の同期 = new object();
 
@@ -286,6 +302,7 @@ namespace DTXmatixx
         private TriStateEvent _高速進行ステータス;
 
         private bool _Dispose済み = false;
+
 
         /// <summary>
         ///		グローバルリソースのうち、グラフィックリソースを持つものについて、活性化がまだなら活性化する。

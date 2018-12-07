@@ -22,11 +22,7 @@ namespace DTXmatixx.ステージ.オプション設定
             確定,
             キャンセル,
         }
-        public フェーズ 現在のフェーズ
-        {
-            get;
-            protected set;
-        }
+        public フェーズ 現在のフェーズ { get; protected set; }
 
         /// <summary>
         ///		パネルの識別に <see cref="パネル.パネル名"/> を使う場合、
@@ -40,6 +36,7 @@ namespace DTXmatixx.ステージ.オプション設定
             public const string 設定完了_戻る = "設定完了（戻る）";
         }
 
+
         public オプション設定ステージ()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -49,6 +46,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 //this.子を追加する( this._ルートパネルフォルダ = new パネル_フォルダ( "Root", null, null ) ); --> 活性化のたびに、子パネルとまとめて動的に追加する。
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -266,6 +264,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._ルートパネルフォルダ = null;
             }
         }
+
         public override void 進行描画する( DeviceContext1 dc )
         {
             // 進行描画。
@@ -392,6 +391,7 @@ namespace DTXmatixx.ステージ.オプション設定
                     break;
             }
         }
+
 
         private bool _初めての進行描画 = true;
         private 舞台画像 _舞台画像 = null;

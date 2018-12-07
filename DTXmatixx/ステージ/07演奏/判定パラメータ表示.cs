@@ -21,6 +21,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -32,9 +33,9 @@ namespace DTXmatixx.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                base.On非活性化();
             }
         }
+
         public virtual void 描画する( DeviceContext1 dc, float x, float y, 成績 現在の成績 )
         {
             var scaling = Matrix3x2.Scaling( 1.0f, 1.4f );
@@ -108,6 +109,7 @@ namespace DTXmatixx.ステージ.演奏
             } );
 
         }
+
         public void パラメータを一行描画する( DeviceContext1 dc, float x, float y, 判定種別 judge, int ヒット数, int ヒット割合, float 不透明度 = 1.0f )
         {
             var 矩形 = FDKUtilities.JsonToRectangleF( this._判定種別文字設定[ "矩形リスト" ][ judge.ToString() ] );
@@ -120,12 +122,14 @@ namespace DTXmatixx.ステージ.演奏
             this._パラメータ文字.描画する( dc, x + _dp, y, "%" );
         }
 
+
         protected const float _dr = 78f;       // 割合(%)までのXオフセット[dpx]
         protected const float _dp = 131f;      // "%" 文字までのXオフセット[dpx]
         protected const float _改行幅dpx = 40f;
         protected 画像フォント _パラメータ文字 = null;
         protected 画像 _判定種別文字 = null;
         protected JObject _判定種別文字設定 = null;
+
 
         protected void 数値を描画する( DeviceContext1 dc, float x, float y, int 描画する数値, int 桁数, float 不透明度 = 1.0f )
         {

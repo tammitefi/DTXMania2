@@ -205,6 +205,7 @@ namespace DTXmatixx.設定
                 throw;
             }
         }
+
         /// <summary>
         ///		指定したユーザID＆曲ファイルハッシュに対応するレコードがデータベースになければレコードを追加し、
         ///		あればそのレコードを（最高記録であれば）更新する。
@@ -247,6 +248,7 @@ namespace DTXmatixx.設定
             }
         }
 
+
         private static Dictionary<表示レーン種別, int> _ノーツ数を算出して返す( SSTFormatCurrent.スコア score, ユーザ設定 ユーザ設定 )
         {
             var ノーツ数 = new Dictionary<表示レーン種別, int>();
@@ -273,6 +275,7 @@ namespace DTXmatixx.設定
 
             return ノーツ数;
         }
+
         private static string _ファイルのハッシュを算出して返す( VariablePath 曲ファイルパス )
         {
             var sha512 = new SHA512CryptoServiceProvider();
@@ -295,6 +298,7 @@ namespace DTXmatixx.設定
                 throw;
             }
         }
+
         private static (double 最小BPM, double 最大BPM) _最小最大BPMを調べて返す( SSTFormatCurrent.スコア score )
         {
             var result = (最小BPM: double.MaxValue, 最大BPM: double.MinValue);

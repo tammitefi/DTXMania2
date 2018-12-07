@@ -20,6 +20,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -58,13 +59,14 @@ namespace DTXmatixx.ステージ.演奏
         }
 
         /// <param name="ゲージ量">
-        ///		0.0で0%、1.0で100%。
+        ///		0～1。 0.0で0%、1.0で100%。
         /// </param>
         public void 進行描画する( DeviceContext1 dc, double ゲージ量 )
         {
             ゲージ量 = Math.Max( Math.Min( ゲージ量, 1f ), 0f );
 
             var MAXゲージ領域 = new RectangleF( 557f, 971f, 628f, 26f );
+
 
             if( this._初めての進行描画 )
             {
@@ -73,7 +75,9 @@ namespace DTXmatixx.ステージ.演奏
                 this._初めての進行描画 = false;
             }
 
+
             // 枠を描画。
+
             if( 0.25 > this._ゲージ量.Value )
             {
                 this._ゲージ枠DANGER.描画する( dc, 540f, 955f );
@@ -83,12 +87,16 @@ namespace DTXmatixx.ステージ.演奏
                 this._ゲージ枠通常.描画する( dc, 540f, 955f );
             }
 
-            // ゲージ量のゴールが動くたび、新しいアニメーションで追従する。
+
+            // ゲージの進行。
+            // ゲージ量のゴールが動くたび、アニメーションを開始して追従する。
+
             if( ゲージ量 != this._ゲージ量.FinalValue )
             {
                 var animation = グラフィックデバイス.Instance.Animation;
 
                 this._ゲージ量のストーリーボード = new Storyboard( animation.Manager );
+
                 using( var 移動遷移 = animation.TrasitionLibrary.Linear( duration: 0.4, finalValue: ゲージ量 ) )
                 using( var 跳ね返り遷移1 = animation.TrasitionLibrary.Reversal( duration: 0.2 ) )
                 using( var 跳ね返り遷移2 = animation.TrasitionLibrary.Reversal( duration: 0.2 ) )
@@ -97,10 +105,13 @@ namespace DTXmatixx.ステージ.演奏
                     this._ゲージ量のストーリーボード.AddTransition( this._ゲージ量, 跳ね返り遷移1 );
                     this._ゲージ量のストーリーボード.AddTransition( this._ゲージ量, 跳ね返り遷移2 );
                 }
+
                 this._ゲージ量のストーリーボード.Schedule( animation.Timer.Time );
             }
 
-            // ゲージを描画。
+            
+            // ゲージの描画。
+
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var ゲージ領域 = MAXゲージ領域;
@@ -108,13 +119,13 @@ namespace DTXmatixx.ステージ.演奏
 
                 var ブラシ =
                     ( 0.25 > this._ゲージ量.Value ) ? this._DANGERブラシ :
-                    ( 1.0 <= this._ゲージ量.Value ) ? this._MAXブラシ :
-                    this._通常ブラシ;
+                    ( 1.0 <= this._ゲージ量.Value ) ? this._MAXブラシ : this._通常ブラシ;
 
                 dc.FillRectangle( ゲージ領域, ブラシ );
 
             } );
         }
+
 
         private bool _初めての進行描画 = true;
         private 画像 _ゲージ枠通常 = null;

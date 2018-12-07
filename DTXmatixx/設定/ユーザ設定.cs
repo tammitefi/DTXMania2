@@ -22,16 +22,10 @@ namespace DTXmatixx.設定
         ///		ユーザID。
         ///		null ならこのインスタンスはどのユーザにも割り当てられていないことを示す。
         /// </summary>
-        public string ユーザID
-        {
-            get
-                => this._User.Id;
-        }
-        public string ユーザ名
-        {
-            get
-                => this._User.Name;
-        }
+        public string ユーザID => this._User.Id;
+
+        public string ユーザ名 => this._User.Name;
+
         public bool 全画面モードである
         {
             get
@@ -39,6 +33,7 @@ namespace DTXmatixx.設定
             set
                 => this._User.Fullscreen = value ? 1 : 0;
         }
+
         public double 譜面スクロール速度
         {
             get
@@ -46,6 +41,7 @@ namespace DTXmatixx.設定
             set
                 => this._User.ScrollSpeed = value;
         }
+
         public bool シンバルフリーモードである
         {
             get
@@ -53,6 +49,7 @@ namespace DTXmatixx.設定
             set
                 => this._User.CymbalFree = value ? 1 : 0;
         }
+
         public bool AutoPlayがすべてONである
         {
             get
@@ -65,24 +62,16 @@ namespace DTXmatixx.設定
                 return すべてON;
             }
         }
-        public HookedDictionary<AutoPlay種別, bool> AutoPlay
-        {
-            get;
-            protected set;
-        } = null;
+
+        public HookedDictionary<AutoPlay種別, bool> AutoPlay { get; protected set; } = null;
+
         /// <summary>
         ///		チップがヒット判定バーから（上または下に）どれだけ離れていると Perfect ～ Ok 判定になるのかの定義。秒単位。
         /// </summary>
-        public HookedDictionary<判定種別, double> 最大ヒット距離sec
-        {
-            get;
-            set;
-        } = null;
-        public ドラムチッププロパティ管理 ドラムチッププロパティ管理
-        {
-            get;
-            protected set;
-        } = null;
+        public HookedDictionary<判定種別, double> 最大ヒット距離sec { get; set; } = null;
+
+        public ドラムチッププロパティ管理 ドラムチッププロパティ管理 { get; protected set; } = null;
+
         public PlayMode 演奏モード
         {
             get
@@ -90,6 +79,7 @@ namespace DTXmatixx.設定
             set
                 => this._User.PlayMode = (int) value;
         }
+
         public 表示レーンの左右 表示レーンの左右
         {
             get
@@ -107,6 +97,7 @@ namespace DTXmatixx.設定
                 this._User.SplashLeft = ( value.Splashは左 ) ? 1 : 0;
             }
         }
+
         public bool ユーザ入力によるドラムの音を発声する
         {
             get
@@ -114,6 +105,7 @@ namespace DTXmatixx.設定
             set
                 => this._User.DrumSound = value ? 1 : 0;
         }
+
         public string レーン配置
         {
             get
@@ -121,6 +113,7 @@ namespace DTXmatixx.設定
             set
                 => this._User.LaneType = value;
         }
+
 
         public ユーザ設定()
         {
@@ -138,6 +131,7 @@ namespace DTXmatixx.設定
                 this._Userに依存するメンバを初期化する();
             }
         }
+
         /// <summary>
         ///		指定したユーザIDをデータベースから検索し、その情報でインスタンスを初期化する。
         ///		検索で見つからなければ、<see cref="ユーザID"/> が null となる。。
@@ -165,6 +159,7 @@ namespace DTXmatixx.設定
                 }
             }
         }
+
         /// <summary>
         ///		指定したユーザ情報を新しいユーザとしてデータベースに登録し、
         ///		その情報で初期化したインスタンスを返す。
@@ -201,6 +196,7 @@ namespace DTXmatixx.設定
                 }
             }
         }
+
         public void 保存する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -218,9 +214,11 @@ namespace DTXmatixx.設定
                 }
             }
         }
+
         public override string ToString()
             => this._User.ToString();
 
+        
         private User _User = null;
 
         private void _Userに依存するメンバを初期化する()

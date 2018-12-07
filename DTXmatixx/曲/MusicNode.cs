@@ -20,29 +20,17 @@ namespace DTXmatixx.曲
         /// <summary>
         ///		この曲ノードに対応する曲ファイル。
         /// </summary>
-        public VariablePath 曲ファイルパス
-        {
-            get;
-            protected set;
-        } = null;
+        public VariablePath 曲ファイルパス { get; protected set; } = null;
 
         /// <summary>
         ///		この曲ノードに対応する曲ファイルのハッシュ値。
         /// </summary>
-        public string 曲ファイルハッシュ
-        {
-            get;
-            protected set;
-        } = null;
+        public string 曲ファイルハッシュ { get; protected set; } = null;
 
         /// <summary>
         ///		この曲ノードに対応する動画ファイル。
         /// </summary>
-        public VariablePath 動画ファイルパス
-        {
-            get;
-            protected set;
-        } = null;
+        public VariablePath 動画ファイルパス { get; protected set; } = null;
 
 
         public MusicNode( VariablePath 曲ファイルパス, Node 親ノード )

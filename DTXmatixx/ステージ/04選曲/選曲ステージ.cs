@@ -5,7 +5,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
-using SharpDX.DirectInput;
 using FDK;
 using FDK.メディア;
 using SSTFormat.v3;
@@ -25,11 +24,8 @@ namespace DTXmatixx.ステージ.選曲
             確定_設定,
             キャンセル,
         }
-        public フェーズ 現在のフェーズ
-        {
-            get;
-            protected set;
-        }
+        public フェーズ 現在のフェーズ { get; protected set; }
+
 
         public 選曲ステージ()
         {
@@ -55,6 +51,7 @@ namespace DTXmatixx.ステージ.選曲
                 this._難易度と成績.青い線を取得する = () => this._青い線;
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -104,6 +101,7 @@ namespace DTXmatixx.ステージ.選曲
                 this._灰透過 = null;
             }
         }
+
         public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
@@ -113,11 +111,13 @@ namespace DTXmatixx.ステージ.選曲
                 this._初めての進行描画 = false;
             }
 
+            
             // 進行描画
 
             if( null != App.曲ツリー.フォーカスノード )
             {
                 // (A) 曲がある場合
+
                 this._舞台画像.進行描画する( dc );
                 this._曲リスト.進行描画する( dc );
                 this._その他パネルを描画する( dc );
@@ -135,12 +135,14 @@ namespace DTXmatixx.ステージ.選曲
             else
             {
                 // (B) 曲が１つもない場合
+
                 this._舞台画像.進行描画する( dc );
                 this._表示方法選択パネル.進行描画する( dc );
                 this._ステージタイマー.描画する( dc, 1689f, 37f );
                 this._SongNotFound.描画する( dc, 1150f, 400f );
             }
 
+        
             // 入力
 
             App.入力管理.すべての入力デバイスをポーリングする();
@@ -261,6 +263,7 @@ namespace DTXmatixx.ステージ.選曲
                     break;
             }
         }
+
 
         private bool _初めての進行描画 = true;
         private 舞台画像 _舞台画像 = null;

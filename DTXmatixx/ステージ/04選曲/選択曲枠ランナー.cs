@@ -9,6 +9,9 @@ using FDK.カウンタ;
 
 namespace DTXmatixx.ステージ.選曲
 {
+    /// <summary>
+    ///     一定時間ごとに、選択曲を囲む枠の上下辺を右から左へすーっと走る光。
+    /// </summary>
     class 選択曲枠ランナー : Activity
     {
         public 選択曲枠ランナー()
@@ -18,6 +21,7 @@ namespace DTXmatixx.ステージ.選曲
                 this.子を追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲\枠ランナー.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -30,6 +34,7 @@ namespace DTXmatixx.ステージ.選曲
             {
             }
         }
+
         public void リセットする()
         {
             this._カウンタ = new LoopCounter( 0, 2300, 1 ); // 2秒ごとに300ms のループ

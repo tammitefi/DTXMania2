@@ -17,11 +17,7 @@ namespace DTXmatixx.ステージ.終了
             表示中,
             確定,
         }
-        public フェーズ 現在のフェーズ
-        {
-            get;
-            protected set;
-        }
+        public フェーズ 現在のフェーズ { get; protected set; }
 
         public 終了ステージ()
         {
@@ -30,6 +26,7 @@ namespace DTXmatixx.ステージ.終了
                 this.子を追加する( this._背景画像 = new 画像( @"$(System)images\終了\終了画面.jpg" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -43,6 +40,7 @@ namespace DTXmatixx.ステージ.終了
             {
             }
         }
+
         public override void 進行描画する( DeviceContext1 dc )
         {
             switch( this.現在のフェーズ )
@@ -65,6 +63,7 @@ namespace DTXmatixx.ステージ.終了
                     break;
             }
         }
+
 
         private 画像 _背景画像 = null;
         private Counter _カウンタ = null;

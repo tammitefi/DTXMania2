@@ -15,26 +15,21 @@ namespace DTXmatixx.ステージ.オプション設定
     /// </summary>
     class パネル : Activity
     {
-        public string パネル名
-        {
-            get;
-            protected set;
-        } = "";
+        public string パネル名 { get; protected set; } = "";
+
         /// <summary>
         ///		パネル全体のサイズ。static。
         /// </summary>
-        public static Size2F サイズ
-            => new Size2F( 642f, 96f );
+        public static Size2F サイズ => new Size2F( 642f, 96f );
+
         public class ヘッダ色種別
         {
             public static readonly Color4 青 = new Color4( 0xff725031 );   // ABGR
             public static readonly Color4 赤 = new Color4( 0xff315072 );
         }
-        public Color4 ヘッダ色
-        {
-            get;
-            set;
-        } = ヘッダ色種別.青;
+
+        public Color4 ヘッダ色 { get; set; } = ヘッダ色種別.青;
+
 
         public パネル( string パネル名, Action<パネル> 値の変更処理 = null )
         {
@@ -46,6 +41,33 @@ namespace DTXmatixx.ステージ.オプション設定
                 this.子を追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
             }
         }
+
+        // ※派生クラスから呼び出すのを忘れないこと。
+        protected override void On活性化()
+        {
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._パネルの高さ割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 1.0 );
+                this._パネルのストーリーボード = null;
+            }
+        }
+
+        // ※派生クラスから呼び出すのを忘れないこと。
+        protected override void On非活性化()
+        {
+            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._パネルのストーリーボード?.Abandon();
+
+                this._パネルのストーリーボード?.Dispose();
+                this._パネルのストーリーボード = null;
+
+                this._パネルの高さ割合?.Dispose();
+                this._パネルの高さ割合 = null;
+            }
+        }
+
+
         public void フェードインを開始する( double 遅延sec, double 速度倍率 = 1.0 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -100,29 +122,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._パネルのストーリーボード.Schedule( animation.Timer.Time );
             }
         }
-        // ※派生クラスから呼び出すのを忘れないこと。
-        protected override void On活性化()
-        {
-            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-                this._パネルの高さ割合 = new Variable( グラフィックデバイス.Instance.Animation.Manager, initialValue: 1.0 );
-                this._パネルのストーリーボード = null;
-            }
-        }
-        // ※派生クラスから呼び出すのを忘れないこと。
-        protected override void On非活性化()
-        {
-            //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-                this._パネルのストーリーボード?.Abandon();
 
-                this._パネルのストーリーボード?.Dispose();
-                this._パネルのストーリーボード = null;
-
-                this._パネルの高さ割合?.Dispose();
-                this._パネルの高さ割合 = null;
-            }
-        }
         public virtual void 確定キーが入力された()
         {
             // 必要あれば、派生クラスで実装すること。
@@ -144,7 +144,6 @@ namespace DTXmatixx.ステージ.オプション設定
         public virtual void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             float 拡大率Y = (float) this._パネルの高さ割合.Value;
-
             float パネルとヘッダの上下マージン = サイズ.Height * ( 1f - 拡大率Y ) / 2f;
             float テキストの上下マージン = 76f * ( 1f - 拡大率Y ) / 2f;
             var パネル矩形 = new RectangleF( left, top + パネルとヘッダの上下マージン, サイズ.Width, サイズ.Height * 拡大率Y );
@@ -180,8 +179,10 @@ namespace DTXmatixx.ステージ.オプション設定
                 X方向拡大率: 拡大率X,
                 Y方向拡大率: 拡大率Y );
         }
+
         public override string ToString()
             => $"{this.パネル名}";
+
 
         protected 文字列画像 _パネル名画像 = null;
         protected Action<パネル> _値の変更処理 = null;

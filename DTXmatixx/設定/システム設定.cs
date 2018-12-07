@@ -31,11 +31,7 @@ namespace DTXmatixx.設定
         ///		キーバインディングは全ユーザで共通。
         /// </remarks>
         [DataMember( Name = "KeyBindings", Order = 100 )]
-        public キーバインディング キーバインディング
-        {
-            get;
-            set;
-        } = null;
+        public キーバインディング キーバインディング { get; set; } = null;
 
         /// <summary>
         ///		曲ファイルを検索するフォルダのリスト。
@@ -43,21 +39,13 @@ namespace DTXmatixx.設定
         /// <remarks>
         ///		シリアライゼーションでは、これを直接使わずに、<see cref="_曲検索フォルダProxy"/> を仲介する。
         /// </remarks>
-        public List<VariablePath> 曲検索フォルダ
-        {
-            get;
-            protected set;
-        } = null;
+        public List<VariablePath> 曲検索フォルダ { get; protected set; } = null;
 
         /// <summary>
         ///     1～10?
         /// </summary>
         [DataMember( Name = "WorkThreadSleep", Order = 10 )]
-        public int 入力発声スレッドのスリープ量ms
-        {
-            get;
-            set;
-        }
+        public int 入力発声スレッドのスリープ量ms { get; set; }
 
 
         public システム設定()
@@ -130,6 +118,7 @@ namespace DTXmatixx.設定
 				}
 			}
         }
+
         public void 保存する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -145,6 +134,7 @@ namespace DTXmatixx.設定
                 }
             }
         }
+
 
         private static readonly VariablePath _ファイルパス = @"$(AppData)Configuration.json";
 

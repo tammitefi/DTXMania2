@@ -22,6 +22,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -29,16 +30,16 @@ namespace DTXmatixx.ステージ.演奏
                 this._放射光設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\チップ光.json" ).変数なしパス ) );
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
-                    { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },
-                    { 表示レーン種別.LeftCymbal, new 表示レーンステータス( 表示レーン種別.LeftCymbal ) },
-                    { 表示レーン種別.HiHat, new 表示レーンステータス( 表示レーン種別.HiHat ) },
-                    { 表示レーン種別.Foot, new 表示レーンステータス( 表示レーン種別.Foot ) },
-                    { 表示レーン種別.Snare, new 表示レーンステータス( 表示レーン種別.Snare ) },
-                    { 表示レーン種別.Bass, new 表示レーンステータス( 表示レーン種別.Bass ) },
-                    { 表示レーン種別.Tom1, new 表示レーンステータス( 表示レーン種別.Tom1 ) },
-                    { 表示レーン種別.Tom2, new 表示レーンステータス( 表示レーン種別.Tom2 ) },
-                    { 表示レーン種別.Tom3, new 表示レーンステータス( 表示レーン種別.Tom3 ) },
-                    { 表示レーン種別.RightCymbal, new 表示レーンステータス( 表示レーン種別.RightCymbal ) },
+                    { 表示レーン種別.Unknown,      new 表示レーンステータス( 表示レーン種別.Unknown ) },
+                    { 表示レーン種別.LeftCymbal,   new 表示レーンステータス( 表示レーン種別.LeftCymbal ) },
+                    { 表示レーン種別.HiHat,        new 表示レーンステータス( 表示レーン種別.HiHat ) },
+                    { 表示レーン種別.Foot,         new 表示レーンステータス( 表示レーン種別.Foot ) },
+                    { 表示レーン種別.Snare,        new 表示レーンステータス( 表示レーン種別.Snare ) },
+                    { 表示レーン種別.Bass,         new 表示レーンステータス( 表示レーン種別.Bass ) },
+                    { 表示レーン種別.Tom1,         new 表示レーンステータス( 表示レーン種別.Tom1 ) },
+                    { 表示レーン種別.Tom2,         new 表示レーンステータス( 表示レーン種別.Tom2 ) },
+                    { 表示レーン種別.Tom3,         new 表示レーンステータス( 表示レーン種別.Tom3 ) },
+                    { 表示レーン種別.RightCymbal,  new 表示レーンステータス( 表示レーン種別.RightCymbal ) },
                 };
             }
         }
@@ -52,12 +53,14 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoステータス = null;
             }
         }
+
         public void 表示を開始する( 表示レーン種別 lane )
         {
             var status = this._レーンtoステータス[ lane ];
 
             status.現在の状態 = 表示レーンステータス.状態.表示開始;  // 描画スレッドへ通知。
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             foreach( 表示レーン種別 レーン in Enum.GetValues( typeof( 表示レーン種別 ) ) )
@@ -82,7 +85,7 @@ namespace DTXmatixx.ステージ.演奏
 
                             double 期間sec;
 
-                            #region " (1) 放射光 "
+                            #region " (1) 放射光 アニメーションの構築 "
                             //----------------
                             {
                                 // シーン1. 回転しつつ拡大縮小
@@ -106,7 +109,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             #endregion
 
-                            #region " (2) 光輪 "
+                            #region " (2) 光輪 アニメーションの構築 "
                             //----------------
                             {
                                 // シーン1. ある程度まで拡大
@@ -130,7 +133,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             #endregion
 
-                            // 開始
+                            // アニメーション 開始。
                             status.ストーリーボード.Schedule( animation.Timer.Time );
                             status.現在の状態 = 表示レーンステータス.状態.表示中;
                         }
@@ -142,7 +145,7 @@ namespace DTXmatixx.ステージ.演奏
                         #region " 表示中 "
                         //----------------
 
-                        // (1) 放射光
+                        // (1) 放射光 の進行描画。
                         {
                             var 転送元矩形dpx = FDKUtilities.JsonToRectangleF( this._放射光設定[ "矩形リスト" ][ レーン.ToString() ] );
                             var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
@@ -156,7 +159,7 @@ namespace DTXmatixx.ステージ.演奏
                             this._放射光.描画する( dc, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: 不透明度 );
                         }
 
-                        // (2) 光輪
+                        // (2) 光輪 の進行描画。
                         {
                             var 転送元矩形dpx = FDKUtilities.JsonToRectangleF( this._放射光設定[ "矩形リスト" ][ レーン.ToString() ] );
                             var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
@@ -183,6 +186,7 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
+
         private 画像 _放射光 = null;
         private 画像 _光輪 = null;
         private JObject _放射光設定 = null;
@@ -201,6 +205,7 @@ namespace DTXmatixx.ステージ.演奏
                 表示中,     // 描画スレッドが設定
             }
             public 状態 現在の状態 = 状態.非表示;
+
             public readonly Vector2 表示中央位置dpx;
             public Variable 放射光の回転角 = null;
             public Variable 放射光の拡大率 = null;

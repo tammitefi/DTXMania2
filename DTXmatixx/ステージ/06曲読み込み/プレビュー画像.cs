@@ -18,6 +18,7 @@ namespace DTXmatixx.ステージ.曲読み込み
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -30,6 +31,7 @@ namespace DTXmatixx.ステージ.曲読み込み
             {
             }
         }
+
         public void 描画する( DeviceContext1 dc )
         {
             var 選択曲 = App.曲ツリー.フォーカス曲ノード;
@@ -54,6 +56,7 @@ namespace DTXmatixx.ステージ.曲読み込み
 
             preimage.描画する( 変換行列 );
         }
+
 
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 150f, 117f, 0f );
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 576f, 576f, 0f );

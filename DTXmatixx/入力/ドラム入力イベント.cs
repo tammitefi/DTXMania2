@@ -16,18 +16,10 @@ namespace DTXmatixx.入力
     class ドラム入力イベント
     {
         // Key
-        public InputEvent InputEvent
-        {
-            get;
-            protected set;
-        } = null;
+        public InputEvent InputEvent { get; protected set; } = null;
 
         // Value
-        public ドラム入力種別 Type
-        {
-            get;
-            protected set;
-        } = ドラム入力種別.Unknown;
+        public ドラム入力種別 Type { get; protected set; } = ドラム入力種別.Unknown;
 
 
         public ドラム入力イベント( InputEvent 入力イベント, ドラム入力種別 ドラム入力種別 )

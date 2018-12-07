@@ -22,11 +22,8 @@ namespace DTXmatixx.ステージ.曲読み込み
             完了,
             キャンセル,
         }
-        public フェーズ 現在のフェーズ
-        {
-            get;
-            protected set;
-        }
+        public フェーズ 現在のフェーズ { get; protected set; }
+
 
         public 曲読み込みステージ()
         {
@@ -58,6 +55,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                 this.子を追加する( this._難易度 = new 難易度() );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -78,6 +76,7 @@ namespace DTXmatixx.ステージ.曲読み込み
             {
             }
         }
+
         public override void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )
@@ -116,6 +115,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                     break;
             }
         }
+
 
         private bool _初めての進行描画 = true;
         private 舞台画像 _舞台画像 = null;

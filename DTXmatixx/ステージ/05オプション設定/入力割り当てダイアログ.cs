@@ -233,6 +233,7 @@ namespace DTXmatixx.ステージ.オプション設定
             }
         }
 
+
         /// <summary>
         ///     <see cref="listView入力リスト"/> 用の ListViewItem 拡張。
         ///     表示テキストのほかに、入力情報も持つ。

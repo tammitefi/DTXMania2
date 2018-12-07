@@ -28,6 +28,7 @@ namespace DTXmatixx.データベース.曲
         {
         }
 
+
         protected override void テーブルがなければ作成する()
         {
             using( var transaction = this.Connection.BeginTransaction() )
@@ -48,6 +49,7 @@ namespace DTXmatixx.データベース.曲
                 }
             }
         }
+
         protected override void データベースのアップグレードマイグレーションを行う( long 移行元DBバージョン )
         {
             switch( 移行元DBバージョン )
@@ -168,6 +170,7 @@ namespace DTXmatixx.データベース.曲
                     throw new Exception( $"移行元DBのバージョン({移行元DBバージョン})がマイグレーションに未対応です。" );
             }
         }
+
 
         private readonly string[] _対応するサムネイル画像名 = { "thumb.png", "thumb.bmp", "thumb.jpg", "thumb.jpeg" };
     }

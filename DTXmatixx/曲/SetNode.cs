@@ -47,9 +47,11 @@ namespace DTXmatixx.曲
             }
         }
 
+
         public SetNode()
         {
         }
+
         public SetNode( SetDef.Block block, VariablePath 基点フォルダパス, Node 親ノード )
             : this()
         {
@@ -93,6 +95,7 @@ namespace DTXmatixx.曲
             }
         }
 
+
         protected override void On活性化()
         {
             foreach( var node in this.MusicNodes )
@@ -114,7 +117,9 @@ namespace DTXmatixx.曲
             base.On非活性化();
         }
 
+
         private テクスチャ _ノード画像 = null;
+
         private readonly string[] _対応するサムネイル画像名 = { "thumb.png", "thumb.bmp", "thumb.jpg", "thumb.jpeg" };
     }
 }

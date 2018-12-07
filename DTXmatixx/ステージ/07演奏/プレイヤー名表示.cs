@@ -17,12 +17,14 @@ namespace DTXmatixx.ステージ.演奏
     {
         public string 名前 { get; set; }
 
+
         public プレイヤー名表示()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -81,6 +83,7 @@ namespace DTXmatixx.ステージ.演奏
 
             this._前回表示した名前 = this.名前;
         }
+
 
         private string _前回表示した名前;
         private TextFormat _TextFormat;

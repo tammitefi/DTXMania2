@@ -19,9 +19,10 @@ namespace DTXmatixx.ステージ.演奏
         /// <summary>
         ///		画面全体に対する、レーンフレームの表示位置と範囲。
         /// </summary>
-        public static RectangleF 領域
-            => new RectangleF( 445f, 0f, 778f, 938f );
+        public static RectangleF 領域 => new RectangleF( 445f, 0f, 778f, 938f );
+
         public static Dictionary<string, レーン配置> レーン配置リスト;
+
 
         public class レーン配置
         {
@@ -29,29 +30,17 @@ namespace DTXmatixx.ステージ.演奏
             ///     配置名。
             ///     「$(System)images\レーン配置\"配置名".json」ファイルがあれば、それがこのインスタンスの設定ファイルになる。
             /// </summary>
-            public string 配置名
-            {
-                get;
-                set;
-            }
+            public string 配置名 { get; set; }
 
             /// <summary>
             ///		表示レーンの左端X位置を、レーンフレームの左端からの相対位置で示す。
             /// </summary>
-            public Dictionary<表示レーン種別, float> 表示レーンの左端位置dpx
-            {
-                get;
-                set;
-            }
+            public Dictionary<表示レーン種別, float> 表示レーンの左端位置dpx { get; set; }
 
             /// <summary>
             ///		表示レーンの幅。
             /// </summary>
-            public Dictionary<表示レーン種別, float> 表示レーンの幅dpx
-            {
-                get;
-                set;
-            }
+            public Dictionary<表示レーン種別, float> 表示レーンの幅dpx { get; set; }
 
             /// <summary>
             ///		レーンラインの領域。
@@ -62,8 +51,8 @@ namespace DTXmatixx.ステージ.演奏
             public Color4 レーン色;
             public Color4 レーンライン色;
         }
-        public static レーン配置 現在のレーン配置
-            => _現在のレーン配置;
+        public static レーン配置 現在のレーン配置 { get; private set; }
+
 
         public static void 初期化する()
         {
@@ -117,7 +106,7 @@ namespace DTXmatixx.ステージ.演奏
             {
                 if( レーン配置リスト.ContainsKey( レーン配置名 ) )
                 {
-                    _現在のレーン配置 = レーン配置リスト[ レーン配置名 ];
+                    現在のレーン配置 = レーン配置リスト[ レーン配置名 ];
                 }
                 else
                 {
@@ -125,8 +114,8 @@ namespace DTXmatixx.ステージ.演奏
 
                     if( 0 < レーン配置リスト.Count )
                     {
-                        _現在のレーン配置 = レーン配置リスト.ElementAt( 0 ).Value;
-                        Log.WARNING( $"既定のレーン配置名「{_現在のレーン配置.配置名}」を選択しました。" );
+                        現在のレーン配置 = レーン配置リスト.ElementAt( 0 ).Value;
+                        Log.WARNING( $"既定のレーン配置名「{現在のレーン配置.配置名}」を選択しました。" );
                     }
                     else
                     {
@@ -134,7 +123,7 @@ namespace DTXmatixx.ステージ.演奏
                     }
                 }
 
-                Log.Info( $"レーン配置「{_現在のレーン配置.配置名}」を選択しました。" );
+                Log.Info( $"レーン配置「{現在のレーン配置.配置名}」を選択しました。" );
             }
         }
 
@@ -162,7 +151,5 @@ namespace DTXmatixx.ステージ.演奏
 
             } );
         }
-
-        private static レーン配置 _現在のレーン配置;
     }
 }

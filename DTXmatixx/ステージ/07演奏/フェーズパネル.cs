@@ -25,6 +25,7 @@ namespace DTXmatixx.ステージ.演奏
                 => this._現在位置 = Math.Min( Math.Max( 0.0f, value ), 1.0f );
         }
 
+
         public フェーズパネル()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -32,6 +33,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._演奏位置カーソル画像 = new 画像( @"$(System)images\演奏\演奏位置カーソル.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -47,6 +49,7 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             if( this._初めての進行描画 )

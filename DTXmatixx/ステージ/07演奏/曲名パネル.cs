@@ -40,6 +40,7 @@ namespace DTXmatixx.ステージ.演奏
                 } );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -57,6 +58,7 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
+
         public void 描画する( DeviceContext1 dc )
         {
             this._パネル.描画する( dc, 1458f, 3f );
@@ -64,6 +66,7 @@ namespace DTXmatixx.ステージ.演奏
             this._曲名を描画する( dc );
             this._サブタイトルを描画する( dc );
         }
+
 
         private 画像 _パネル = null;
         private 文字列画像 _曲名画像 = null;

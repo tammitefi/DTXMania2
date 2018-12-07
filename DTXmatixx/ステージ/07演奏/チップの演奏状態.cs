@@ -11,44 +11,15 @@ namespace DTXmatixx.ステージ.演奏
     /// </summary>
     class チップの演奏状態 : ICloneable, IDisposable
     {
-        public bool 可視
-        {
-            get;
-            set;
-        } = true;
-        public bool 不可視
-        {
-            get
-                => !this.可視;
-            set
-                => this.可視 = !value;
-        }
+        public bool 可視 { get; set; } = true;
+        public bool 不可視 { get => !this.可視; set => this.可視 = !value; }
 
-        public bool ヒット済みである
-        {
-            get;
-            set;
-        } = false;
-        public bool ヒットされていない
-        {
-            get
-                => !this.ヒット済みである;
-            set 
-                => this.ヒット済みである = !value;
-        }
+        public bool ヒット済みである { get; set; } = false;
+        public bool ヒットされていない { get => !this.ヒット済みである; set => this.ヒット済みである = !value; }
 
-        public bool 発声済みである
-        {
-            get;
-            set;
-        } = false;
-        public bool 発声されていない
-        {
-            get
-                => !this.発声済みである;
-            set
-                => this.発声済みである = !value;
-        }
+        public bool 発声済みである { get; set; } = false;
+        public bool 発声されていない { get => !this.発声済みである; set => this.発声済みである = !value; }
+
 
         public チップの演奏状態( チップ chip )
         {
@@ -59,6 +30,7 @@ namespace DTXmatixx.ステージ.演奏
         {
             this._chip = null;
         }
+
         public void ヒット前の状態にする()
         {
             this.可視 = ( App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ this._chip.チップ種別 ].表示チップ種別 != 表示チップ種別.Unknown );
@@ -74,9 +46,14 @@ namespace DTXmatixx.ステージ.演奏
 
         // IClonable 実装
         public チップの演奏状態 Clone()
-            => (チップの演奏状態) this.MemberwiseClone();
+        {
+            return (チップの演奏状態) this.MemberwiseClone();
+        }
         object ICloneable.Clone()
-            => this.Clone();
+        {
+            return this.Clone();
+        }
+
 
         protected チップ _chip = null;
     }

@@ -21,6 +21,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\演奏\レーンフラッシュ.png" ) { 加算合成 = true } );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -47,10 +48,12 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoレーンContext.Clear();
             }
         }
+
         public void 開始する( 表示レーン種別 lane )
         {
             this._レーンtoレーンContext[ lane ].アニメカウンタ.開始する( 0, 250, 1 );
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
@@ -67,6 +70,7 @@ namespace DTXmatixx.ステージ.演奏
                 }
             }
         }
+
 
         private struct レーンContext
         {

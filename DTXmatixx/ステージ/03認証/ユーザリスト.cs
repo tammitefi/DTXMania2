@@ -11,17 +11,22 @@ using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ.認証
 {
+    /// <summary>
+    ///     ユーザリストパネルの表示とユーザの選択。
+    ///     ユーザリストは <see cref="App.ユーザ管理"/> が保持している。
+    /// </summary>
     class ユーザリスト : Activity
     {
         /// <summary>
         ///		現在選択中のユーザ。
-        ///		0 ～ App.ユーザ管理.ユーザリスト.Count-1。
+        ///		0 ～ <see cref="App.ユーザ管理.ユーザリスト.Count"/>-1。
         /// </summary>
         public int 選択中のユーザ
         {
             get;
             protected set;
         } = 0;
+
 
         public ユーザリスト()
         {
@@ -60,6 +65,7 @@ namespace DTXmatixx.ステージ.認証
                 } );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -73,24 +79,41 @@ namespace DTXmatixx.ステージ.認証
             {
             }
         }
+
+        /// <summary>
+        ///     ユーザリスト上で、選択されているユーザのひとつ前のユーザを選択する。
+        /// </summary>
         public void 前のユーザを選択する()
         {
-            this.選択中のユーザ = ( this.選択中のユーザ - 1 + App.ユーザ管理.ユーザリスト.Count ) % App.ユーザ管理.ユーザリスト.Count;
+            this.選択中のユーザ = ( this.選択中のユーザ - 1 + App.ユーザ管理.ユーザリスト.Count ) % App.ユーザ管理.ユーザリスト.Count;  // 前がないなら末尾へ
+
+            // アニメーションリセット
             this._光彩アニメカウンタ = new LoopCounter( 0, 200, 5 );
         }
+
+        /// <summary>
+        ///     ユーザリスト上で、選択されているユーザのひとつ前のユーザを選択する。
+        /// </summary>
         public void 次のユーザを選択する()
         {
-            this.選択中のユーザ = ( this.選択中のユーザ + 1 ) % App.ユーザ管理.ユーザリスト.Count;
+            this.選択中のユーザ = ( this.選択中のユーザ + 1 ) % App.ユーザ管理.ユーザリスト.Count;   // 次がないなら先頭へ
+
+            // アニメーションリセット
             this._光彩アニメカウンタ = new LoopCounter( 0, 200, 5 );
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             var 描画位置 = new Vector2( 569f, 188f );
-            float リストの改行幅 = 160f;
+            const float リストの改行幅 = 160f;
+
 
             // 選択中のパネルの光彩アニメーションの進行。
+
             float 不透明度 = 0f;
+
             var 割合 = this._光彩アニメカウンタ.現在値の割合;
+
             if( 0.5f > 割合 )
             {
                 不透明度 = 1.0f - ( 割合 * 2.0f );     // 1→0
@@ -100,10 +123,10 @@ namespace DTXmatixx.ステージ.認証
                 不透明度 = ( 割合 - 0.5f ) * 2.0f;     // 0→1
             }
 
-            // ユーザリストを描画する。
 
-            // HACK: 現状は最大５人までとする。
-            int 表示人数 = Math.Min( 5, App.ユーザ管理.ユーザリスト.Count );
+            // ユーザリストを描画する。
+            
+            int 表示人数 = Math.Min( 5, App.ユーザ管理.ユーザリスト.Count );   // HACK: 現状は最大５人までとする。
 
             for( int i = 0; i < 表示人数; i++ )
             {

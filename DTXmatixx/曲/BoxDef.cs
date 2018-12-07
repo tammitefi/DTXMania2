@@ -17,20 +17,12 @@ namespace DTXmatixx.曲
         /// <summary>
         ///		BOX名。
         /// </summary>
-        public string TITLE
-        {
-            get;
-            set;
-        } = null;
+        public string TITLE { get; set; } = null;
 
         /// <summary>
         ///		制作者名など。
         /// </summary>
-        public string ARTIST
-        {
-            get;
-            set;
-        } = null;
+        public string ARTIST { get; set; } = null;
 
 
         public BoxDef()

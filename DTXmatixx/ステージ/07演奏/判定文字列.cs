@@ -21,6 +21,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -28,16 +29,16 @@ namespace DTXmatixx.ステージ.演奏
                 this._判定文字列画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\判定文字列.json" ).変数なしパス ) );
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
-                    { 表示レーン種別.Unknown, new 表示レーンステータス( 表示レーン種別.Unknown ) },
-                    { 表示レーン種別.LeftCymbal, new 表示レーンステータス( 表示レーン種別.LeftCymbal ) },
-                    { 表示レーン種別.HiHat, new 表示レーンステータス( 表示レーン種別.HiHat ) },
-                    { 表示レーン種別.Foot, new 表示レーンステータス( 表示レーン種別.Foot ) },
-                    { 表示レーン種別.Snare, new 表示レーンステータス( 表示レーン種別.Snare ) },
-                    { 表示レーン種別.Bass, new 表示レーンステータス( 表示レーン種別.Bass ) },
-                    { 表示レーン種別.Tom1, new 表示レーンステータス( 表示レーン種別.Tom1 ) },
-                    { 表示レーン種別.Tom2, new 表示レーンステータス( 表示レーン種別.Tom2 ) },
-                    { 表示レーン種別.Tom3, new 表示レーンステータス( 表示レーン種別.Tom3 ) },
-                    { 表示レーン種別.RightCymbal, new 表示レーンステータス( 表示レーン種別.RightCymbal ) },
+                    { 表示レーン種別.Unknown,      new 表示レーンステータス( 表示レーン種別.Unknown ) },
+                    { 表示レーン種別.LeftCymbal,   new 表示レーンステータス( 表示レーン種別.LeftCymbal ) },
+                    { 表示レーン種別.HiHat,        new 表示レーンステータス( 表示レーン種別.HiHat ) },
+                    { 表示レーン種別.Foot,         new 表示レーンステータス( 表示レーン種別.Foot ) },
+                    { 表示レーン種別.Snare,        new 表示レーンステータス( 表示レーン種別.Snare ) },
+                    { 表示レーン種別.Bass,         new 表示レーンステータス( 表示レーン種別.Bass ) },
+                    { 表示レーン種別.Tom1,         new 表示レーンステータス( 表示レーン種別.Tom1 ) },
+                    { 表示レーン種別.Tom2,         new 表示レーンステータス( 表示レーン種別.Tom2 ) },
+                    { 表示レーン種別.Tom3,         new 表示レーンステータス( 表示レーン種別.Tom3 ) },
+                    { 表示レーン種別.RightCymbal,  new 表示レーンステータス( 表示レーン種別.RightCymbal ) },
                 };
             }
         }
@@ -51,6 +52,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._レーンtoステータス = null;
             }
         }
+
         public void 表示を開始する( 表示レーン種別 lane, 判定種別 judge )
         {
             var status = this._レーンtoステータス[ lane ];
@@ -58,6 +60,7 @@ namespace DTXmatixx.ステージ.演奏
             status.判定種別 = judge;
             status.現在の状態 = 表示レーンステータス.状態.表示開始;  // 描画スレッドへ通知。
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             foreach( 表示レーン種別 レーン in Enum.GetValues( typeof( 表示レーン種別 ) ) )
@@ -74,7 +77,7 @@ namespace DTXmatixx.ステージ.演奏
 
                             var animation = グラフィックデバイス.Instance.Animation;
 
-                            #region " (1) 光 "
+                            #region " (1) 光 アニメーションを構築 "
                             //----------------
                             if( status.判定種別 == 判定種別.PERFECT )   // 今のところ、光はPERFECT時のみ表示。
                             {
@@ -114,7 +117,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             #endregion
 
-                            #region " (2) 判定文字（影）"
+                            #region " (2) 判定文字（影）アニメーションを構築 "
                             //----------------
                             {
                                 // 初期状態
@@ -150,7 +153,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             #endregion
 
-                            #region " (3) 判定文字（本体）"
+                            #region " (3) 判定文字（本体）アニメーションを構築 "
                             //----------------
                             {
                                 // 初期状態
@@ -243,7 +246,7 @@ namespace DTXmatixx.ステージ.演奏
                         #region " 開始完了、表示中 "
                         //----------------
                         {
-                            #region " (1) 光 "
+                            #region " (1) 光 の進行描画 "
                             //----------------
                             if( null != status.光のストーリーボード )
                             {
@@ -267,7 +270,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             #endregion
 
-                            #region " (2) 判定文字列（影）"
+                            #region " (2) 判定文字列（影）の進行描画"
                             //----------------
                             if( null != status.文字列影のストーリーボード )
                             {
@@ -287,7 +290,7 @@ namespace DTXmatixx.ステージ.演奏
                             //----------------
                             #endregion
 
-                            #region " (3) 判定文字列（本体）"
+                            #region " (3) 判定文字列（本体）の進行描画 "
                             //----------------
                             if( null != status.文字列本体のストーリーボード )
                             {
@@ -329,7 +332,9 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
+
         private 画像 _判定文字列画像 = null;
+
         private JObject _判定文字列画像設定 = null;
 
         /// <summary>
@@ -347,39 +352,54 @@ namespace DTXmatixx.ステージ.演奏
                 表示中,        // 描画スレッドが設定
             }
             public 状態 現在の状態 = 状態.非表示;
+
             public 判定種別 判定種別 = 判定種別.PERFECT;
+
             public readonly Vector2 表示中央位置dpx;
+            
             /// <summary>
             ///		判定文字列（本体）の表示されるY座標のオフセット。
             ///		表示中央位置dpx.Y からの相対値[dpx]。
             /// </summary>
             public Variable 文字列本体の相対Y位置dpx = null;
+            
             /// <summary>
             ///		判定文字列（本体）の不透明度。
             ///		0 で完全透明、1 で完全不透明。
             /// </summary>
             public Variable 文字列本体の不透明度 = null;
+
             public Variable 文字列本体のX方向拡大率 = null;
+
             public Variable 文字列本体のY方向拡大率 = null;
+
             public Storyboard 文字列本体のストーリーボード = null;
+            
             /// <summary>
             ///		判定文字列（影）の表示されるY座標のオフセット。
             ///		表示中央位置dpx.Y からの相対値[dpx]。
             /// </summary>
             public Variable 文字列影の相対Y位置dpx = null;
+
             /// <summary>
             ///		判定文字列（影）の不透明度。
             ///		0 で完全透明、1 で完全不透明。
             /// </summary>
             public Variable 文字列影の不透明度 = null;
+
             public Storyboard 文字列影のストーリーボード = null;
+
             /// <summary>
             ///		単位は度（degree）、時計回りを正とする。
             /// </summary>
             public Variable 光の回転角 = null;
+
             public Variable 光のX方向拡大率 = null;
+
             public Variable 光のY方向拡大率 = null;
+
             public Storyboard 光のストーリーボード = null;
+
 
             public 表示レーンステータス( 表示レーン種別 lane )
             {
@@ -401,11 +421,13 @@ namespace DTXmatixx.ステージ.演奏
                     default: this.表示中央位置dpx = new Vector2( x, -100f ); break;
                 }
             }
+
             public void Dispose()
             {
                 this.アニメ用メンバを解放する();
                 this.現在の状態 = 状態.非表示;
             }
+
             public void アニメ用メンバを解放する()
             {
                 this.文字列本体のストーリーボード?.Abandon();
@@ -445,6 +467,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.光の回転角 = null;
             }
         }
+
         private Dictionary<表示レーン種別, 表示レーンステータス> _レーンtoステータス = null;
     }
 }

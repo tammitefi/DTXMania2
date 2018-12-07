@@ -19,6 +19,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._達成率ロゴ画像 = new 画像( @"$(System)images\達成率ロゴ.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -31,6 +32,7 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
+
         public void 描画する( DeviceContext1 dc, float 達成率 )
         {
             var 描画領域 = new RectangleF( 220f, 650f, 165f, 80f );
@@ -68,6 +70,7 @@ namespace DTXmatixx.ステージ.演奏
 
             } );
         }
+
 
         private 画像フォント _数字画像 = null;
         private 画像 _達成率ロゴ画像 = null;

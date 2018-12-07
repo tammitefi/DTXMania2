@@ -11,7 +11,7 @@ namespace DTXmatixx.ステージ
     /// <summary>
     ///		全ステージに共通する機能。
     /// </summary>
-    class ステージ : Activity
+    abstract class ステージ : Activity
     {
         /// <summary>
         ///		ステージの進行処理のうち、高速に行うべき処理を行う。

@@ -26,6 +26,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._スコア数字画像 = new 画像( @"$(System)images\演奏\スコア数字.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -61,12 +62,12 @@ namespace DTXmatixx.ステージ.演奏
         /// </param>
         public void 進行描画する( DeviceContext1 dc, アニメーション管理 am, Vector2 全体の中央位置, 成績 現在の成績 )
         {
-            // 追っかけ
+            // 進行。
+
             if( this._現在表示中のスコア < 現在の成績.Score )
             {
                 int 増分 = 現在の成績.Score - this._現在表示中のスコア;
                 int 追っかけ分 = Math.Max( (int) ( 増分 * 0.75 ), 1 ); // VPS に依存するけどまあいい
-
                 this._現在表示中のスコア = Math.Min( this._現在表示中のスコア + 追っかけ分, 現在の成績.Score );
             }
 
@@ -75,7 +76,8 @@ namespace DTXmatixx.ステージ.演奏
             string 数字 = スコア値.ToString().PadLeft( 9 ); // 右詰め9桁、余白は ' '。
             var 全体のサイズ = new Vector2( 62f * 9f, 99f );  // 固定とする
 
-            // 1桁ずつ表示。
+
+            // 1桁ずつ描画。
 
             var 文字間隔補正 = -10f;
             var 文字の位置 = new Vector2( -( 全体のサイズ.X / 2f ), 0f );
@@ -113,17 +115,24 @@ namespace DTXmatixx.ステージ.演奏
             this._前回表示した数字 = 数字;
         }
 
+
         /// <summary>
         ///		<see cref="進行描画する(DeviceContext1, Vector2)"/> で更新される。
         /// </summary>
         private int _現在表示中のスコア = 0;
+        
         /// <summary>
         ///		<see cref="進行描画する(DeviceContext1, Vector2)"/> で更新される。
         /// </summary>
         private int _前回表示したスコア = 0;
+
         private 画像 _スコア数字画像 = null;
         private JObject _スコア数字画像設定 = null;
         private Dictionary<判定種別, int> _判定toヒット数 = null;
+        private string _前回表示した数字 = "        0";
+
+        // 桁ごとのアニメーション
+
         private class 各桁のアニメ : IDisposable
         {
             public Storyboard ストーリーボード = null;
@@ -138,6 +147,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.ストーリーボード?.Dispose();
                 this.Yオフセット?.Dispose();
             }
+
             public void 跳ね開始( アニメーション管理 am, double 遅延sec )
             {
                 this.Dispose();
@@ -159,6 +169,5 @@ namespace DTXmatixx.ステージ.演奏
             }
         };
         private 各桁のアニメ[] _各桁のアニメ = null;
-        private string _前回表示した数字 = "        0";
     }
 }

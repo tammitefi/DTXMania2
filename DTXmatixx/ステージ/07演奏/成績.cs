@@ -16,43 +16,31 @@ namespace DTXmatixx.ステージ.演奏
     /// </summary>
     internal class 成績 : Record
     {
-        public int Combo
-        {
-            get;
-            protected set;
-        } = 0;
-        public int MaxCombo
-        {
-            get;
-            protected set;
-        } = 0;
+        public int Combo { get; protected set; } = 0;
+
+        public int MaxCombo { get; protected set; } = 0;
+        
         /// <summary>
         ///		0.0で0%、1.0で100%。
         /// </summary>
-        public float エキサイトゲージ量
-        {
-            get;
-            protected set;
-        }
+        public float エキサイトゲージ量 { get; protected set; }
+        
         /// <summary>
         ///		現在の設定において、ヒット対象になるノーツの数を返す。
         /// </summary>
-        public int 総ノーツ数
-        {
-            get;
-            protected set;
-        } = 0;
+        public int 総ノーツ数 { get; protected set; } = 0;
+        
         /// <summary>
         ///		判定種別ごとのヒット数。
         /// </summary>
-        public IReadOnlyDictionary<判定種別, int> 判定toヒット数
-            => this._判定toヒット数;
+        public IReadOnlyDictionary<判定種別, int> 判定toヒット数 => this._判定toヒット数;
+        
         /// <summary>
         ///		現在の <see cref="判定toヒット数"/> から、判定種別ごとのヒット割合を算出して返す。
         ///		判定種別のヒット割合は、すべて合計すればちょうど 100 になる。
         /// </summary>
-        public IReadOnlyDictionary<判定種別, int> 判定toヒット割合
-            => this._ヒット割合を算出して返す();
+        public IReadOnlyDictionary<判定種別, int> 判定toヒット割合 => this._ヒット割合を算出して返す();
+
 
         public 成績()
         {
@@ -78,11 +66,13 @@ namespace DTXmatixx.ステージ.演奏
                 this._譜面レベル = 0.5;
             }
         }
+
         public void スコアと設定を反映する( SSTFormatCurrent.スコア 譜面, ユーザ設定 設定 )
         {
             this.総ノーツ数 = ( null != 譜面 && null != 設定 ) ? this._総ノーツ数を算出して返す( 譜面, 設定 ) : 0;
             this._譜面レベル = 譜面?.難易度 ?? 0.5;
         }
+
         /// <summary>
         ///		ヒット数を加算し、各プロパティを更新する。
         /// </summary>
@@ -128,6 +118,7 @@ namespace DTXmatixx.ステージ.演奏
 
             // (6) エキサイトゲージ → ここからは呼び出さない。（AutoPlayと区別がつかないため）
         }
+
         /// <summary>
         ///		判定に応じてエキサイトゲージを加減する。
         /// </summary>
@@ -145,17 +136,19 @@ namespace DTXmatixx.ステージ.演奏
             this.エキサイトゲージ量 = Math.Max( Math.Min( this.エキサイトゲージ量, 1.0f ), 0.0f );
         }
 
+
         private Dictionary<判定種別, int> _判定toヒット数 = null;
         private Dictionary<判定種別, int> _最後にスコアを更新したときの判定toヒット数 = null;
         private readonly Dictionary<判定種別, double> _判定値表 = new Dictionary<判定種別, double>() {
             { 判定種別.PERFECT, 1.0 },
-            { 判定種別.GREAT, 0.5 },
-            { 判定種別.GOOD, 0.2 },
-            { 判定種別.OK, 0.0 },
-            { 判定種別.MISS, 0.0 },
+            { 判定種別.GREAT,   0.5 },
+            { 判定種別.GOOD,    0.2 },
+            { 判定種別.OK,      0.0 },
+            { 判定種別.MISS,    0.0 },
         };
         private double _オプション補正 = 1.0;
         private double _譜面レベル = 5.0;
+
 
         private IReadOnlyDictionary<判定種別, int> _ヒット割合を算出して返す()
         {
@@ -256,6 +249,7 @@ namespace DTXmatixx.ステージ.演奏
 
             return ヒット割合_整数;
         }
+
         private int _総ノーツ数を算出して返す( SSTFormatCurrent.スコア score, ユーザ設定 options )
         {
             int 総ノーツ数 = 0;

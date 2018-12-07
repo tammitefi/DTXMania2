@@ -23,6 +23,16 @@ namespace DTXmatixx.ステージ.オプション設定
                 Log.Info( $"譜面スピードパネルを生成しました。[{this}]" );
             }
         }
+
+        protected override void On活性化()
+        {
+            base.On活性化();   //忘れないこと
+        }
+        protected override void On非活性化()
+        {
+            base.On非活性化();   //忘れないこと
+        }
+
         public override void 左移動キーが入力された()
         {
             // 譜面スクロールを減速
@@ -44,14 +54,7 @@ namespace DTXmatixx.ステージ.オプション設定
             if( 最大倍率 < App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 )
                 App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 = 最小倍率;
         }
-        protected override void On活性化()
-        {
-            base.On活性化();   //忘れないこと
-        }
-        protected override void On非活性化()
-        {
-            base.On非活性化();   //忘れないこと
-        }
+
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。

@@ -11,11 +11,8 @@ namespace DTXmatixx.ステージ.演奏
 {
     class 右サイドクリアパネル : Activity
     {
-        public 描画可能テクスチャ クリアパネル
-        {
-            get;
-            protected set;
-        } = null;
+        public 描画可能テクスチャ クリアパネル { get; protected set; } = null;
+
 
         public 右サイドクリアパネル()
         {
@@ -25,6 +22,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this.クリアパネル = new 描画可能テクスチャ( new Size2F( 500, 990 ) ) );  // this._背景.サイズはまだ設定されていない。
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -49,6 +47,7 @@ namespace DTXmatixx.ステージ.演奏
                 dcp.DrawBitmap( this._背景.Bitmap, opacity: 1f, interpolationMode: InterpolationMode.Linear );
             } );
         }
+
         public void 描画する( DeviceContext1 dc )
         {
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
@@ -65,6 +64,7 @@ namespace DTXmatixx.ステージ.演奏
 
             this.クリアパネル.描画する( 変換行列 );
         }
+
 
         private 画像 _背景 = null;
     }

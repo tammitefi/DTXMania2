@@ -20,6 +20,7 @@ namespace DTXmatixx.ステージ.曲読み込み
                 this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -35,13 +36,20 @@ namespace DTXmatixx.ステージ.曲読み込み
                 this._見出し用TextFormat = null;
             }
         }
+
         public void 描画する( DeviceContext1 dc )
         {
             var 見出し描画領域 = new RectangleF( 783f, 117f, 414f, 63f );
             var 数値描画領域 = new RectangleF( 783f, 180f, 414f, 213f );
 
+
+            // 現在のフォーカスノードとアンカー値。
+
             var node = App.曲ツリー.フォーカス曲ノード;
             var anker = App.曲ツリー.フォーカス難易度;
+
+
+            // 難易度のラベルと値を取得する。
 
             (string label, float level) 難易度;
             if( node.親ノード is SetNode )
@@ -53,6 +61,9 @@ namespace DTXmatixx.ステージ.曲読み込み
             {
                 難易度 = node.難易度[ anker ];
             }
+
+
+            // 難易度のラベルと値を描画する。
 
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
@@ -93,6 +104,7 @@ namespace DTXmatixx.ステージ.曲読み込み
 
             } );
         }
+
 
         private 画像フォント _数字画像 = null;
         //private string _難易度文字列 = "5.00";

@@ -41,8 +41,8 @@ namespace DTXmatixx.データベース.ユーザ
         [Column( DbType = "INT", CanBeNull = false )]
         public int Fullscreen { get; set; }
 
-        #region " AutoPlay "
-        //----------------
+        // AutoPlay
+
         /// <summary>
         ///		左シンバルレーンの AutoPlay 。
         ///		0: OFF, その他: ON。
@@ -105,11 +105,9 @@ namespace DTXmatixx.データベース.ユーザ
         /// </summary>
         [Column( DbType = "INT", CanBeNull = false )]
         public int AutoPlay_RightCymbal { get; set; }
-        //----------------
-        #endregion
 
-        #region " 最大ヒット距離 "
-        //----------------
+        // 最大ヒット距離
+
         /// <summary>
         ///		Perfect の最大ヒット距離[秒]。
         /// </summary>
@@ -133,8 +131,7 @@ namespace DTXmatixx.データベース.ユーザ
         /// </summary>
         [Column( DbType = "REAL", CanBeNull = false )]
         public double MaxRange_Ok { get; set; }
-        //----------------
-        #endregion
+
 
         /// <summary>
         ///		シンバルフリーモード。

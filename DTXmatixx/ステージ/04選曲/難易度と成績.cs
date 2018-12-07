@@ -8,8 +8,6 @@ using SharpDX.DirectWrite;
 using FDK;
 using FDK.メディア;
 using DTXmatixx.曲;
-using DTXmatixx.設定;
-using DTXmatixx.データベース.曲;
 
 namespace DTXmatixx.ステージ.選曲
 {
@@ -18,6 +16,7 @@ namespace DTXmatixx.ステージ.選曲
         // 外部接続アクション
         public Func<青い線> 青い線を取得する = null;
 
+
         public 難易度と成績()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -25,6 +24,7 @@ namespace DTXmatixx.ステージ.選曲
                 this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.json", 文字幅補正dpx: 0f ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -41,30 +41,34 @@ namespace DTXmatixx.ステージ.選曲
                 this._見出し用TextFormat = null;
             }
         }
+
         /// <param name="選択している難易度">
         ///		0:BASIC～4:ULTIMATE
         ///	</param>
         public void 描画する( DeviceContext1 dc, int 選択している難易度 )
         {
-            #region " ノードが変更されていたら、情報を更新する。"
-            //----------------
             if( App.曲ツリー.フォーカスノード != this._現在表示しているノード )
             {
-                this._現在表示しているノード = App.曲ツリー.フォーカスノード;  // フォーカス曲ノードではない → このクラスではMusicNode以外も表示できる　というかSetNodeな。
+                #region " フォーカスノードが変更されたので情報を更新する。"
+                //----------------
+                // フォーカス曲ノードではない → このクラスではMusicNode以外も表示できる　というかSetNodeな。
+                this._現在表示しているノード = App.曲ツリー.フォーカスノード;
+                //----------------
+                #endregion
             }
-            //----------------
-            #endregion
+
 
             var node = this._現在表示しているノード;
 
             bool 表示可能ノードである = ( node is MusicNode ) || ( node is SetNode );
 
+
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
-                // 難易度パネルを描画する。
-
+                #region " 難易度パネルを描画する。"
+                //----------------
                 var 領域dpx = new RectangleF( 642f, 529f, 338f, 508f );
 
                 using( var 黒ブラシ = new SolidColorBrush( dc, Color4.Black ) )
@@ -97,25 +101,33 @@ namespace DTXmatixx.ステージ.選曲
                         this._難易度パネルを１つ描画する( dc, pretrans, 領域dpx.X + 156f, 領域dpx.Y + 417f, node.難易度[ 0 ].label, node.難易度[ 0 ].level, 白ブラシ, BASIC色ブラシ, 黒ブラシ );
                     }
                 }
+                //----------------
+                #endregion
 
             } );
 
-            // 選択枠を描画する。
+
             if( 表示可能ノードである )
             {
+                #region " 選択枠を描画する。"
+                //----------------
                 var 青い線 = this.青い線を取得する();
+
                 if( null != 青い線 )
                 {
                     var 領域dpx = new RectangleF( 642f + 10f, 529f + 5f + ( 4 - 選択している難易度 ) * 101f, 338f - 20f, 100f );
                     var 太さdpx = 青い線.太さdpx;
 
                     青い線.描画する( dc, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Top ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );      // 上辺
-                    青い線.描画する( dc, new Vector2( 領域dpx.Left, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );        // 左辺
-                    青い線.描画する( dc, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Bottom ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );       // 下辺
-                    青い線.描画する( dc, new Vector2( 領域dpx.Right, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );   // 右辺
+                    青い線.描画する( dc, new Vector2( 領域dpx.Left, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );   // 左辺
+                    青い線.描画する( dc, new Vector2( 領域dpx.Left - 太さdpx / 4f, 領域dpx.Bottom ), 幅dpx: 領域dpx.Width + 太さdpx / 2f );   // 下辺
+                    青い線.描画する( dc, new Vector2( 領域dpx.Right, 領域dpx.Top - 太さdpx / 4f ), 高さdpx: 領域dpx.Height + 太さdpx / 2f );  // 右辺
                 }
+                //----------------
+                #endregion
             }
         }
+
 
         private 画像フォント _数字画像 = null;
         private Node _現在表示しているノード = null;
@@ -125,11 +137,15 @@ namespace DTXmatixx.ステージ.選曲
         {
             dc.Transform = trans;
 
+
             dc.FillRectangle( new RectangleF( 基点X, 基点Y, 157f, 20f ), 見出し背景ブラシ );
             dc.FillRectangle( new RectangleF( 基点X, 基点Y + 20f, 157f, 66f ), 数値背景ブラシ );
 
+
             this._見出し用TextFormat.TextAlignment = TextAlignment.Trailing;
+
             dc.DrawText( 難易度ラベル, this._見出し用TextFormat, new RectangleF( 基点X + 4f, 基点Y, 157f - 8f, 18f ), 文字ブラシ );
+
 
             if( 難易度ラベル.Nullでも空でもない() && 0.00 != 難易度値 )
             {

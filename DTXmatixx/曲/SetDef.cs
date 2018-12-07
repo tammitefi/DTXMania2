@@ -45,6 +45,7 @@ namespace DTXmatixx.曲
             /// </summary>
             public string[] Label { get; set; }
 
+
             public Block()
             {
                 this.Title = "(no title)";
@@ -56,6 +57,7 @@ namespace DTXmatixx.曲
         }
 
         public List<Block> Blocks = new List<Block>();
+
 
         public SetDef()
         {
@@ -224,6 +226,7 @@ namespace DTXmatixx.曲
             return setDef;
         }
 
+
         private static void _FILEの指定があるのにLxLABELが省略されているときはデフォルトの名前をセットする( Block block )
         {
             var デフォルトのラベル = new string[] { "BASIC", "ADVANCED", "EXTREME", "MASTER", "ULTIMATE" };
@@ -237,6 +240,7 @@ namespace DTXmatixx.曲
                 }
             }
         }
+
         private static void _LxLABELの指定があるのにFILEが省略されているときはなかったものとする( Block block )
         {
             for( int i = 0; i < 5; i++ )

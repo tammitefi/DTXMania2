@@ -11,20 +11,13 @@ namespace DTXmatixx.入力
 {
     class 入力管理 : IDisposable
     {
-        // 外部依存アクション
-        public Func<キーバインディング> キーバインディングを取得する = null;
-        public Action キーバインディングを保存する = null;
+        public Func<キーバインディング> キーバインディングを取得する = null;   // 外部依存アクション
 
-        public Keyboard Keyboard
-        {
-            get;
-            protected set;
-        } = null;
-        public MidiIn MidiIn
-        {
-            get;
-            protected set;
-        } = null;
+        public Action キーバインディングを保存する = null;    // 外部依存アクション
+
+        public Keyboard Keyboard { get; protected set; } = null;
+
+        public MidiIn MidiIn { get; protected set; } = null;
 
         /// <summary>
         ///		全デバイスの入力イベントをドラム入力イベントに変換し、それを集めたリスト。
@@ -34,10 +27,7 @@ namespace DTXmatixx.入力
         ///		その時点における、前回のポーリング以降の入力イベントで再構築される。
         ///		ただし、キーとして登録されていない入力イベントは含まれない。
         /// </remarks>
-        public List<ドラム入力イベント> ポーリング結果
-        {
-            get;
-        } = new List<ドラム入力イベント>();
+        public List<ドラム入力イベント> ポーリング結果 { get; } = new List<ドラム入力イベント>();
 
 
         /// <summary>
@@ -81,7 +71,6 @@ namespace DTXmatixx.入力
                         デバイスリスト.Add( i, this.MidiIn.DeviceName[ i ] );
                     //----------------
                     #endregion
-
                     #region " (2) キーバインディングのデバイスリストとマージして、新しいデバイスリストを作成する。"
                     //----------------
                     foreach( var kvp in キーバインディング.MIDIデバイス番号toデバイス名 )
@@ -100,7 +89,6 @@ namespace DTXmatixx.入力
                     }
                     //----------------
                     #endregion
-
                     #region " (3) キーバインディングのデバイスから新しいデバイスへ、キーのIDを付け直す。"
                     //----------------
                     var 中間バッファ = new Dictionary<キーバインディング.IdKey, ドラム入力種別>();
@@ -127,7 +115,6 @@ namespace DTXmatixx.入力
                     }
                     //----------------
                     #endregion
-
                     #region " (4) 新しいデバイスリストをキーバインディングに格納して、保存する。"
                     //----------------
                     キーバインディング.MIDIデバイス番号toデバイス名.Clear();
@@ -470,6 +457,7 @@ namespace DTXmatixx.入力
             return true;
         }
 
+
         /// <summary>
         ///		これまでにポーリングで取得された入力の履歴。
         /// </summary>
@@ -480,12 +468,10 @@ namespace DTXmatixx.入力
         private List<ドラム入力イベント> _入力履歴 = null;
 
         private int _最大入力履歴数 = 32;
+
         private IntPtr _hWindow;
-        private bool _入力履歴を記録中である
-        {
-            get;
-            set;
-        } = true;
+
+        private bool _入力履歴を記録中である = true;
         private bool _入力履歴の記録を中断している
         {
             get
@@ -493,10 +479,12 @@ namespace DTXmatixx.入力
             set
                 => this._入力履歴を記録中である = !( value );
         }
+
         /// <summary>
         ///		null なら、入力履歴に追加された入力がまだないことを示す。
         /// </summary>
         private double? _前回の入力履歴の追加時刻sec = null;
+
 
         /// <summary>
         ///		単一の IInputDevice をポーリングし、対応表に従ってドラム入力へ変換して、ポーリング結果 に追加登録する。
@@ -509,6 +497,7 @@ namespace DTXmatixx.入力
             入力デバイス.ポーリングする();
 
             // ポーリングされた入力イベントのうち、キーバインディングに登録されているイベントだけを ポーリング結果 に追加する。
+
             foreach( var ev in 入力デバイス.入力イベントリスト )
             {
                 // キーバインディングを使って、入力イベント ev をドラム入力 evKey にマッピングする。

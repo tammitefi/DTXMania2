@@ -16,16 +16,14 @@ namespace DTXmatixx.ステージ.演奏
         ///		インデックスが小さいほど曲の前方に位置する。
         ///		カウント値の値域は 0～12。今のところは 0 で非表示、1 で水色、2～12で黄色表示。
         /// </summary>
-        public int[] カウントマップ
-        {
-            get;
-            protected set;
-        } = null;
+        public int[] カウントマップ { get; protected set; } = null;
 
         /// <summary>
-        ///		全曲の最大カウントを 768 とするので、カウントマップリストの要素数は、768÷12 = 64 個が最大となる。
+        ///		全曲の最大カウントを 768 とするので、
+        ///		カウントマップリストの要素数は 768÷12 = 64 個が最大となる。
         /// </summary>
         public const int カウントマップの最大要素数 = 768 / 12;
+
 
         public カウントマップライン()
         {
@@ -33,6 +31,7 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -53,6 +52,7 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
+
         /// <summary>
         ///		初期化。
         /// </summary>
@@ -63,6 +63,7 @@ namespace DTXmatixx.ステージ.演奏
             this._過去最大のカウントマップ = new int[ カウントマップ.Length ];
             カウントマップ.CopyTo( this._過去最大のカウントマップ, 0 );    // コピー
         }
+        
         /// <summary>
         ///		指定された位置における現在の成績から、対応するカウント値を算出し、反映する。
         /// </summary>
@@ -92,6 +93,7 @@ namespace DTXmatixx.ステージ.演奏
             foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
                 this._最後にカウント値を設定したときの成績[ judge ] = 判定toヒット数[ judge ];
         }
+
         public void 進行描画する( DeviceContext1 dc )
         {
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
@@ -103,7 +105,9 @@ namespace DTXmatixx.ステージ.演奏
                     var 過去最高のライン全体の矩形 = new RectangleF( 1371f, 108f, 6f, 768f );
                     const float 単位幅 = 12f;
 
+
                     // (1) 今回のカウントマップラインを描画する。
+
                     for( int i = 0; i < this.カウントマップ.Length; i++ )
                     {
                         if( 0 == this.カウントマップ[ i ] )
@@ -114,7 +118,9 @@ namespace DTXmatixx.ステージ.演奏
                             ( 2 <= this.カウントマップ[ i ] ) ? 黄色ブラシ : 水色ブラシ );
                     }
 
+
                     // (2) 過去の最高カウントマップラインを描画する。
+
                     if( null != this._過去最大のカウントマップ )
                     {
                         for( int i = 0; i < this._過去最大のカウントマップ.Length; i++ )
@@ -131,6 +137,7 @@ namespace DTXmatixx.ステージ.演奏
 
             } );
         }
+
 
         private int[] _過去最大のカウントマップ = null;
         private float _最後にカウント値を設定した位置 = 0f;

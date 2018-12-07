@@ -22,28 +22,29 @@ namespace DTXmatixx.ステージ.選曲
                 this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json", 文字幅補正dpx: 0f ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                base.On活性化();
             }
         }
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                base.On非活性化();
             }
         }
+
         public void 描画する( DeviceContext1 dc )
         {
             var 領域 = new RectangleF( 78f, 455f, 357f, 55f );
 
-            #region " ノードが変更されていたら情報を更新する。"
-            //----------------
+
             if( App.曲ツリー.フォーカスノード != this._現在表示しているノード )
             {
+                #region " フォーカスノードが変更されたので情報を更新する。"
+                //----------------
                 this._現在表示しているノード = App.曲ツリー.フォーカス曲ノード; // MusicNode 以外は null が返される
 
                 this._最小BPM = 120.0;
@@ -62,13 +63,15 @@ namespace DTXmatixx.ステージ.選曲
                         }
                     }
                 }
+                //----------------
+                #endregion
             }
-            //----------------
-            #endregion
 
-            bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
 
             this._BPMパネル.描画する( dc, 領域.X - 5f, 領域.Y - 4f );
+
+
+            bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
 
             if( 表示可能ノードである )
             {
@@ -84,6 +87,7 @@ namespace DTXmatixx.ステージ.選曲
                 }
             }
         }
+
 
         private 画像 _BPMパネル = null;
         private 画像フォント _パラメータ文字 = null;

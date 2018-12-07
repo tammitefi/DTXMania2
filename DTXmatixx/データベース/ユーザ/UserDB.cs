@@ -33,6 +33,7 @@ namespace DTXmatixx.データベース.ユーザ
         {
         }
 
+
         protected override void テーブルがなければ作成する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -57,6 +58,7 @@ namespace DTXmatixx.データベース.ユーザ
                 }
             }
         }
+
         protected override void データベースのアップグレードマイグレーションを行う( long 移行元DBバージョン )
         {
             switch( 移行元DBバージョン )

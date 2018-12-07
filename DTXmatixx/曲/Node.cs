@@ -23,11 +23,7 @@ namespace DTXmatixx.曲
         ///		難易度それぞれのカラー。
         ///		具体的には難易度ラベルの背景の色。
         /// </summary>
-        public static IReadOnlyDictionary<int, Color4> 難易度色
-        {
-            get;
-            protected set;
-        } = new Dictionary<int, Color4>() {
+        public static IReadOnlyDictionary<int, Color4> 難易度色 { get; protected set; } = new Dictionary<int, Color4>() {
             [ 0 ] = new Color4( 0xfffe9551 ),   // BASIC 相当
             [ 1 ] = new Color4( 0xff00aaeb ),   // ADVANCED 相当
             [ 2 ] = new Color4( 0xff7d5cfe ),   // EXTREME 相当
@@ -42,31 +38,20 @@ namespace DTXmatixx.曲
         ///		ノードのタイトル。
         ///		曲名、BOX名など。
         /// </summary>
-        public string タイトル
-        {
-            get;
-            set;
-        } = "(no title)";
+        public string タイトル { get; set; } = "(no title)";
 
         /// <summary>
         ///		ノードのサブタイトル。
         ///		制作者名など。
         /// </summary>
-        public string サブタイトル
-        {
-            get;
-            set;
-        } = "";
+        public string サブタイトル { get; set; } = "";
 
         /// <summary>
         ///		難易度ラベルとその値（0.00～9.99）。
         ///		必要あれば、派生クラスで設定すること。
         ///		なお、配列は5要素で固定とする（0:BASIC～4:ULTIMATE）
         /// </summary>
-        public (string label, float level)[] 難易度
-        {
-            get;
-        } = new(string, float)[ 5 ];
+        public (string label, float level)[] 難易度 { get; } = new (string, float)[ 5 ];
 
 
         // 曲ツリー関連
@@ -74,21 +59,14 @@ namespace DTXmatixx.曲
         /// <summary>
         ///		曲ツリー階層において、親となるノード。
         /// </summary>
-        public Node 親ノード
-        {
-            get;
-            set;
-        } = null;
+        public Node 親ノード { get; set; } = null;
 
         /// <summary>
         ///		曲ツリー階層において、このノードが持つ子ノードのリスト。
         ///		子ノードを持たない場合は空リスト。
         ///		null 不可。
         /// </summary>
-        public SelectableList<Node> 子ノードリスト
-        {
-            get;
-        } = new SelectableList<Node>();
+        public SelectableList<Node> 子ノードリスト { get; } = new SelectableList<Node>();
 
         /// <summary>
         ///		このノードの１つ前に位置する兄弟ノードを示す。
@@ -141,11 +119,7 @@ namespace DTXmatixx.曲
         ///		ノードの全体サイズ（設計単位）。
         ///		すべてのノードで同一、固定値。
         /// </summary>
-        public static Size2F 全体サイズ
-        {
-            get
-                => new Size2F( 314f, 220f );
-        }
+        public static Size2F 全体サイズ => new Size2F( 314f, 220f );
 
         /// <summary>
         ///		ノードを表す画像。
@@ -156,11 +130,7 @@ namespace DTXmatixx.曲
         ///		<see cref="SetNode"/> の場合のみ、扱いが異なる。
         ///		詳細は<see cref="SetNode.ノード画像"/>を参照のこと。
         /// </remarks>
-        public virtual テクスチャ ノード画像
-        {
-            get;
-            protected set;
-        } = null;
+        public virtual テクスチャ ノード画像 { get; protected set; } = null;
 
         /// <summary>
         ///		ノードを表す画像の既定画像。static。
@@ -169,11 +139,7 @@ namespace DTXmatixx.曲
         ///		<see cref="ノード画像"/>が null の再に、代わりに表示される。
         ///		static であり、全ノードで１つのインスタンスを共有する。
         /// </remarks>
-        public static テクスチャ 既定のノード画像
-        {
-            get;
-            protected set;
-        } = null;
+        public static テクスチャ 既定のノード画像 { get; protected set; } = null;
 
 
         public Node()
@@ -230,6 +196,7 @@ namespace DTXmatixx.曲
                 this._曲名テクスチャ.描画する( ワールド変換行列, new RectangleF( 0f, 138f, Node.全体サイズ.Width, Node.全体サイズ.Height - 138f + 27f ) );
             }
         }
+
 
         protected 曲名 _曲名テクスチャ = null;
     }

@@ -25,6 +25,7 @@ namespace DTXmatixx.ステージ.オプション設定
             //        Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX横 ),
             //        Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX縦 ) ) );
         }
+
         public bool 表示する()
         {
 			using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -93,7 +94,9 @@ namespace DTXmatixx.ステージ.オプション設定
 			}
         }
 
+
         private bool _変更あり;
+
         private void _FormClosing( object sender, FormClosingEventArgs e )
         {
             // ※ウィンドウを閉じようとした時も Cancel になる。

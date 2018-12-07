@@ -15,16 +15,8 @@ namespace DTXmatixx.ステージ.オプション設定
     /// </summary>
     class パネル_文字列リスト : パネル
     {
-        public int 現在選択されている選択肢の番号
-        {
-            get;
-            protected set;
-        } = 0;
-        public List<string> 選択肢リスト
-        {
-            get;
-            protected set;
-        } = new List<string>();
+        public int 現在選択されている選択肢の番号 { get; protected set; } = 0;
+        public List<string> 選択肢リスト { get; protected set; } = new List<string>();
 
         public パネル_文字列リスト( string パネル名, int 初期選択肢番号 = 0, IEnumerable<string> 選択肢初期値s = null, Action<パネル> 値の変更処理 = null )
             : base( パネル名, 値の変更処理 )
@@ -43,18 +35,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 Log.Info( $"文字列リストパネルを生成しました。[{this}]" );
             }
         }
-        public override void 左移動キーが入力された()
-        {
-            this.現在選択されている選択肢の番号 = ( this.現在選択されている選択肢の番号 - 1 + this.選択肢リスト.Count ) % this.選択肢リスト.Count;
-            this._値の変更処理?.Invoke( this );
-        }
-        public override void 右移動キーが入力された()
-        {
-            this.現在選択されている選択肢の番号 = ( this.現在選択されている選択肢の番号 + 1 ) % this.選択肢リスト.Count;
-            this._値の変更処理?.Invoke( this );
-        }
-        public override void 確定キーが入力された()
-            => this.右移動キーが入力された();
+
         protected override void On活性化()
         {
             Trace.Assert( 0 < this.選択肢リスト.Count, "リストが空です。活性化するより先に設定してください。" );
@@ -85,6 +66,20 @@ namespace DTXmatixx.ステージ.オプション設定
 
             base.On非活性化();   //忘れないこと
         }
+
+        public override void 左移動キーが入力された()
+        {
+            this.現在選択されている選択肢の番号 = ( this.現在選択されている選択肢の番号 - 1 + this.選択肢リスト.Count ) % this.選択肢リスト.Count;
+            this._値の変更処理?.Invoke( this );
+        }
+        public override void 右移動キーが入力された()
+        {
+            this.現在選択されている選択肢の番号 = ( this.現在選択されている選択肢の番号 + 1 ) % this.選択肢リスト.Count;
+            this._値の変更処理?.Invoke( this );
+        }
+        public override void 確定キーが入力された()
+            => this.右移動キーが入力された();
+
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。
@@ -112,8 +107,10 @@ namespace DTXmatixx.ステージ.オプション設定
                 X方向拡大率: 拡大率X,
                 Y方向拡大率: 拡大率Y );
         }
+
         public override string ToString()
             => $"{this.パネル名}, 選択肢: [{string.Join( ",", this.選択肢リスト )}]";
+
 
         private Dictionary<string, 文字列画像> _選択肢画像リスト = null;
     }

@@ -15,20 +15,13 @@ namespace DTXmatixx.曲
         /// <summary>
         ///		このメンバを set すれば、次回の進行描画時に画像が更新される。
         /// </summary>
-        public string タイトル
-        {
-            get;
-            set;
-        } = null;
+        public string タイトル { get; set; } = null;
 
         /// <summary>
         ///		このメンバを set すれば、次回の進行描画時に画像が更新される。
         /// </summary>
-        public string サブタイトル
-        {
-            get;
-            set;
-        } = null;
+        public string サブタイトル { get; set; } = null;
+
 
         public 曲名()
             : base( Node.全体サイズ )
@@ -42,6 +35,7 @@ namespace DTXmatixx.曲
             this._fontSizePt = 20f;
             this._textAlignment = TextAlignment.Leading;
         }
+
         protected override void On活性化()
         {
             base.On活性化();  // 忘れずに。サイズメンバを確定させるために、先に呼び出す。
@@ -76,6 +70,7 @@ namespace DTXmatixx.曲
 
             base.On非活性化(); // 忘れずに。
         }
+
         public new void 描画する( Matrix ワールド行列変換, RectangleF? レイアウト矩形 = null )
         {
             Debug.Assert( this.活性化している );
@@ -145,6 +140,7 @@ namespace DTXmatixx.曲
             // テクスチャを描画する。
             base.描画する( ワールド行列変換 );
         }
+
 
         private string _前回のタイトル = null;
         private string _前回のサブタイトル = null;

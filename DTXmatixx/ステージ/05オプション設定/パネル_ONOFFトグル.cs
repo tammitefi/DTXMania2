@@ -24,6 +24,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 Log.Info( $"ONOFFトグルパネルを生成しました。[{this}]" );
             }
         }
+
         public override string ToString()
             => $"{this.パネル名}, 初期状態: {( this.ONである ? "ON" : "OFF" ) }";
     }

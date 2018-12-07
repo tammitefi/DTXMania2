@@ -30,6 +30,7 @@ namespace DTXmatixx.曲
                 this.初期化する();
             }
         }
+
         public void 初期化する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -37,6 +38,7 @@ namespace DTXmatixx.曲
                 this._WavContexts = new Dictionary<int, WavContext>();
             }
         }
+
         public void Dispose()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -60,6 +62,7 @@ namespace DTXmatixx.曲
                 this._WavContexts = null;
             }
         }
+
         /// <summary>
         ///		WAVファイルを登録する。
         /// </summary>
@@ -114,6 +117,7 @@ namespace DTXmatixx.曲
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
         }
+
         /// <summary>
         ///		指定した番号のWAVを、指定したチップ種別として発声する。
         /// </summary>
@@ -138,11 +142,13 @@ namespace DTXmatixx.曲
             // 発声する。
             this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量 );
         }
+
         public void すべての発声を停止する()
         {
             foreach( var kvp in this._WavContexts )
                 kvp.Value.Dispose();
         }
+
 
         /// <summary>
         ///		１つの WAV に相当する管理情報。
@@ -165,21 +171,19 @@ namespace DTXmatixx.曲
             /// </summary>
             public Sound[] Sounds;
 
-            public 消音グループ種別 最後に発声したときの消音グループ種別
-            {
-                get;
-                protected set;
-            } = 消音グループ種別.Unknown;
+            public 消音グループ種別 最後に発声したときの消音グループ種別 { get; protected set; } = 消音グループ種別.Unknown;
+
 
             public WavContext( int wav番号, int 多重度 )
             {
-                if( ( 0 > wav番号 ) || ( 1295 < wav番号 ) )
+                if( ( 0 > wav番号 ) || ( 36 * 36 <= wav番号 ) )
                     throw new ArgumentOutOfRangeException( "WAV番号が不正です。" );
 
                 this.WAV番号 = wav番号;
                 this.SampleSource = null;
                 this.Sounds = new Sound[ 多重度 ];
             }
+
             public void Dispose()
             {
                 foreach( var sd in this.Sounds )
@@ -189,6 +193,7 @@ namespace DTXmatixx.曲
                 this.SampleSource?.Dispose();
                 this.SampleSource = null;
             }
+
             /// <summary>
             ///		指定したチップ種別扱いでWAVを発声する。
             /// </summary>
@@ -208,8 +213,10 @@ namespace DTXmatixx.曲
                 this.次に再生するSound番号 = ( this.次に再生するSound番号 + 1 ) % this.Sounds.Length;
             }
 
+
             private int 次に再生するSound番号 = 0;
         }
+
         /// <summary>
         ///		全WAVの管理DB。KeyはWAV番号。
         /// </summary>

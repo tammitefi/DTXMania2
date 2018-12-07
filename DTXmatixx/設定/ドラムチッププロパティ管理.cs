@@ -17,17 +17,12 @@ namespace DTXmatixx.設定
         /// <summary>
         ///		チップ種別をキーとする対応表。
         /// </summary>
-        public Dictionary<チップ種別, ドラムチッププロパティ> チップtoプロパティ
-        {
-            get;
-            protected set;
-        }
+        public Dictionary<チップ種別, ドラムチッププロパティ> チップtoプロパティ { get; protected set; }
 
         /// <summary>
         ///     インデクサによるプロパティの取得。
         /// </summary>
-        public ドラムチッププロパティ this[ チップ種別 chipType ]
-            => this.チップtoプロパティ[ chipType ];
+        public ドラムチッププロパティ this[ チップ種別 chipType ] => this.チップtoプロパティ[ chipType ];
 
 
         /// <summary>
@@ -1279,8 +1274,11 @@ namespace DTXmatixx.設定
             }
         }
 
+
         private PlayMode _演奏モード;
+
         private 表示レーンの左右 _表示レーンの左右;
+
         private 入力グループプリセット種別 _入力グループプリセット種別;
     }
 }

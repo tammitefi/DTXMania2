@@ -19,6 +19,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -31,6 +32,7 @@ namespace DTXmatixx.ステージ.演奏
             {
             }
         }
+
         public void 進行描画する( DeviceContext1 dc, double? スキル値 )
         {
             if( null == スキル値 )
@@ -70,6 +72,7 @@ namespace DTXmatixx.ステージ.演奏
 
             } );
         }
+
 
         private 画像フォント _数字画像 = null;
         private 画像 _ロゴ画像 = null;

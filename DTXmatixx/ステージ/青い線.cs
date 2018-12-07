@@ -14,11 +14,7 @@ namespace DTXmatixx.ステージ
     /// </summary>
     class 青い線 : Activity
     {
-        public float 太さdpx
-        {
-            get;
-            protected set;
-        } = 26f;
+        public float 太さdpx { get; protected set; } = 26f;
 
         public 青い線()
         {
@@ -26,6 +22,7 @@ namespace DTXmatixx.ステージ
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -61,6 +58,7 @@ namespace DTXmatixx.ステージ
                 this._線グラ頂点集合 = null;
             }
         }
+        
         /// <summary>
         /// 	よこ線（左→右）か、たて線（上→下）のいずれかを描画できる。
         /// 	よこ線を描画したい場合は<paramref name="幅dpx"/>を指定し、
@@ -72,9 +70,7 @@ namespace DTXmatixx.ステージ
         public void 描画する( DeviceContext1 dc, Vector2 開始位置dpx, float 幅dpx = -1f, float 高さdpx = -1f )
         {
             var check = ( 幅dpx * 高さdpx );
-
             Debug.Assert( 0f >= check, "幅か高さが両方指定されていないか、両方指定されています。どちらか一方だけを指定してください。" );
-
             if( 0f == check )
                 return; // 面積ゼロ
 

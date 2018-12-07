@@ -19,6 +19,7 @@ namespace DTXmatixx.ステージ.結果
             {
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -124,6 +125,7 @@ namespace DTXmatixx.ステージ.結果
 
             } );
         }
+
 
         private class パラメータアニメ : IDisposable
         {

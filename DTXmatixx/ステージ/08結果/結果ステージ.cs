@@ -23,15 +23,16 @@ namespace DTXmatixx.ステージ.結果
             フェードアウト,
             確定,
         }
-        public フェーズ 現在のフェーズ
-        {
-            get;
-            protected set;
-        }
+
+        public フェーズ 現在のフェーズ { get; protected set; }
+
 
         // 外部依存アクション; ステージ管理クラスで接続。
+
         internal Func<成績> 結果を取得する = null;
+
         internal Action BGMを停止する = null;
+
 
         public 結果ステージ()
         {
@@ -62,6 +63,7 @@ namespace DTXmatixx.ステージ.結果
                 this.子を追加する( this._演奏パラメータ結果 = new 演奏パラメータ結果() );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -101,8 +103,11 @@ namespace DTXmatixx.ステージ.結果
                 App.WAV管理 = null;
             }
         }
+
         public override void 進行描画する( DeviceContext1 dc )
         {
+            // 進行描画
+
             if( this._初めての進行描画 )
             {
                 this._背景.ぼかしと縮小を適用する( 0.0 );    // 即時適用
@@ -118,6 +123,9 @@ namespace DTXmatixx.ステージ.結果
             this._曲名を描画する( dc );
             this._サブタイトルを描画する( dc );
             this._演奏パラメータ結果.描画する( dc, 1317f, 716f, this._結果 );
+
+
+            // 入力
 
             App.入力管理.すべての入力デバイスをポーリングする();
 
@@ -145,7 +153,9 @@ namespace DTXmatixx.ステージ.結果
             }
         }
 
+
         private bool _初めての進行描画 = true;
+
         private 成績 _結果 = null;
         private 舞台画像 _背景 = null;
         private 画像 _曲名パネル = null;
@@ -156,6 +166,7 @@ namespace DTXmatixx.ステージ.結果
         private SolidColorBrush _プレビュー枠ブラシ = null;
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 668f, 194f, 0f );
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 574f, 574f, 0f );
+
 
         private void _プレビュー画像を描画する( DeviceContext1 dc )
         {
@@ -194,6 +205,7 @@ namespace DTXmatixx.ステージ.結果
 
             preimage.描画する( 変換行列 );
         }
+
         private void _曲名を描画する( DeviceContext1 dc )
         {
             var 表示位置dpx = new Vector2( 690f, 820f );
@@ -207,6 +219,7 @@ namespace DTXmatixx.ステージ.結果
                 表示位置dpx.Y,
                 X方向拡大率: ( this._曲名画像.画像サイズdpx.Width <= 最大幅dpx ) ? 1f : 最大幅dpx / this._曲名画像.画像サイズdpx.Width );
         }
+
         private void _サブタイトルを描画する( DeviceContext1 dc )
         {
             var 表示位置dpx = new Vector2( 690f, 820f + 60f );

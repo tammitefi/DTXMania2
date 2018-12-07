@@ -11,11 +11,16 @@ using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ
 {
+    /// <summary>
+    ///     SSTフォーマットにおける既定のドラムサウンド。
+    ///     
+    /// </summary>
     class ドラムサウンド : IDisposable
     {
         public ドラムサウンド()
         {
         }
+
         public void Dispose()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -32,6 +37,7 @@ namespace DTXmatixx.ステージ
                 }
             }
         }
+
         /// <summary>
         ///		サブチップID = 0（SSTの規定ドラムサウンド）以外をクリアする。
         /// </summary>
@@ -47,7 +53,7 @@ namespace DTXmatixx.ステージ
                             kvp.Value.Dispose();
                     }
 
-                    this._チップtoコンテキスト = new Dictionary<(チップ種別 chipType, int サブチップID), SoundContext>();
+                    this._チップtoコンテキスト = new Dictionary<(チップ種別 chipType, int サブチップID), ドラムサウンド情報>();
 
                     // SSTの既定のサウンドを、subChipId = 0 としてプリセット登録する。
                     this.登録する( チップ種別.LeftCrash, 0, @"$(System)sounds\drums\LeftCrash.wav" );
@@ -76,51 +82,67 @@ namespace DTXmatixx.ステージ
                 }
             }
         }
+
+        /// <summary>
+        ///     チップ種別とサブチップIDの組に対応するドラムサウンドファイルを登録する。
+        /// </summary>
+        /// <param name="chipType">登録するチップ種別。</param>
+        /// <param name="subChipId">登録するサブチップID。</param>
+        /// <param name="サウンドファイルパス">割り当てるドラムサウンドファイルのパス。</param>
         public void 登録する( チップ種別 chipType, int subChipId, VariablePath サウンドファイルパス )
         {
-            if( File.Exists( サウンドファイルパス.変数なしパス ) )
-            {
-                lock( this._Sound利用権 )
-                {
-                    // すでに辞書に存在してるなら、解放して削除する。
-                    if( this._チップtoコンテキスト.ContainsKey( (chipType, subChipId) ) )
-                    {
-                        this._チップtoコンテキスト[ (chipType, subChipId) ]?.Dispose();
-                        this._チップtoコンテキスト.Remove( (chipType, subChipId) );
-                    }
-
-                    // コンテキストを作成する。
-                    var context = new SoundContext( this._多重度 );
-
-                    // サウンドファイルを読み込んでデコードする。
-                    context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
-
-                    // 多重度分のサウンドを生成する。
-                    for( int i = 0; i < context.Sounds.Length; i++ )
-                        context.Sounds[ i ] = new Sound( App.サウンドデバイス, context.SampleSource );
-
-                    // コンテキストを辞書に追加する。
-                    this._チップtoコンテキスト.Add( (chipType, subChipId), context );
-
-                    Log.Info( $"ドラムサウンドを生成しました。[({chipType.ToString()},{subChipId}) = {サウンドファイルパス.変数付きパス}]" );
-                }
-            }
-            else
+            if( !( File.Exists( サウンドファイルパス.変数なしパス ) ) )
             {
                 Log.ERROR( $"サウンドファイルが存在しません。[{サウンドファイルパス.変数付きパス}]" );
+                return;
+            }
+
+            lock( this._Sound利用権 )
+            {
+                // すでに辞書に存在してるなら、解放してから削除する。
+                if( this._チップtoコンテキスト.ContainsKey( (chipType, subChipId) ) )
+                {
+                    this._チップtoコンテキスト[ (chipType, subChipId) ]?.Dispose();
+                    this._チップtoコンテキスト.Remove( (chipType, subChipId) );
+                }
+
+                // コンテキストを作成する。
+                var context = new ドラムサウンド情報( this._多重度 );
+
+                // サウンドファイルを読み込んでデコードする。
+                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
+
+                // 多重度分のサウンドを生成する。
+                for( int i = 0; i < context.Sounds.Length; i++ )
+                    context.Sounds[ i ] = new Sound( App.サウンドデバイス, context.SampleSource );
+
+                // コンテキストを辞書に追加する。
+                this._チップtoコンテキスト.Add( (chipType, subChipId), context );
+
+                Log.Info( $"ドラムサウンドを生成しました。[({chipType.ToString()},{subChipId}) = {サウンドファイルパス.変数付きパス}]" );
             }
         }
-        public void 発声する( チップ種別 chipType, int subChipId, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量0to1 = 1f )
+
+        /// <summary>
+        ///     指定したチップ種別・サブチップIDの組に対応するドラムサウンドを再生する。
+        /// </summary>
+        /// <remarks>
+        ///     <paramref name="発声前に消音する"/> を true にすると、ドラムサウンドは多重再生されなくなる。
+        ///     この場合、現在再生しているサウンドを停止（消音）してから再生することになるが、
+        ///     <paramref name="消音グループ種別"/> で指定されたグループ種別と同じグループ種別に属する
+        ///     ドラムサウンドが停止の対象となる。
+        /// </remarks>
+        public void 発声する( チップ種別 chipType, int subChipId, bool 発声前に消音する = false, 消音グループ種別 消音グループ種別 = 消音グループ種別.Unknown, float 音量0to1 = 1f )
         {
             lock( this._Sound利用権 )
             {
-                if( this._チップtoコンテキスト.TryGetValue( (chipType, subChipId), out SoundContext context ) )
+                if( this._チップtoコンテキスト.TryGetValue( (chipType, subChipId), out ドラムサウンド情報 context ) )
                 {
                     // 必要あれば消音する。
-                    if( 発声前に消音する && muteGroupType != 消音グループ種別.Unknown )
+                    if( 発声前に消音する && 消音グループ種別 != 消音グループ種別.Unknown )
                     {
-                        // 指定された消音グループ種別に属する Sound をすべて停止する。
-                        var 停止するSoundContexts = this._チップtoコンテキスト.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
+                        // 指定された消音グループ種別に属するドラムサウンドをすべて停止する。
+                        var 停止するSoundContexts = this._チップtoコンテキスト.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == 消音グループ種別 ) );
 
                         foreach( var wavContext in 停止するSoundContexts )
                             foreach( var sound in wavContext.Value.Sounds )
@@ -128,7 +150,7 @@ namespace DTXmatixx.ステージ
                     }
 
                     // 発声する。
-                    context.発声する( muteGroupType, 音量0to1 );
+                    context.発声する( 消音グループ種別, 音量0to1 );
                 }
                 else
                 {
@@ -137,17 +159,14 @@ namespace DTXmatixx.ステージ
             }
         }
 
-        private class SoundContext : IDisposable
+
+        private class ドラムサウンド情報 : IDisposable
         {
             public ISampleSource SampleSource = null;
             public Sound[] Sounds = null;
-            public 消音グループ種別 最後に発声したときの消音グループ種別
-            {
-                get;
-                protected set;
-            } = 消音グループ種別.Unknown;
+            public 消音グループ種別 最後に発声したときの消音グループ種別 { get; protected set; } = 消音グループ種別.Unknown;
 
-            public SoundContext( int 多重度 = 4 )
+            public ドラムサウンド情報( int 多重度 = 4 )
             {
                 this._多重度 = 多重度;
                 this.Sounds = new Sound[ this._多重度 ];
@@ -166,11 +185,12 @@ namespace DTXmatixx.ステージ
                 this.SampleSource?.Dispose();
                 this.SampleSource = null;
             }
-            public void 発声する( 消音グループ種別 muteGroupType, float 音量 )
-            {
-                this.最後に発声したときの消音グループ種別 = muteGroupType;
 
-                // 発声。
+            public void 発声する( 消音グループ種別 消音グループ種別, float 音量 )
+            {
+                this.最後に発声したときの消音グループ種別 = 消音グループ種別;
+
+                // サウンドを再生する。
                 if( null != this.Sounds[ this._次に再生するSound番号 ] )
                 {
                     音量 = 
@@ -189,7 +209,8 @@ namespace DTXmatixx.ステージ
         };
 
         private readonly int _多重度 = 4;
-        private Dictionary<(チップ種別 chipType, int サブチップID), SoundContext> _チップtoコンテキスト = null;
+        private Dictionary<(チップ種別 chipType, int サブチップID), ドラムサウンド情報> _チップtoコンテキスト = null;
+
         private readonly object _Sound利用権 = new object();
     }
 }

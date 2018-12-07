@@ -22,6 +22,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\演奏\コンボ文字.png" ) );
             }
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -60,17 +61,18 @@ namespace DTXmatixx.ステージ.演奏
             if( Combo値 < 10 )
                 return; // 10未満は表示しない。
 
-            // 100を超えるたびアニメ開始。
+
+            // 進行。
+
             if( ( this._前回表示した値 % 100 ) > ( Combo値 % 100 ) )
             {
+                // 100を超えるたびアニメ開始。
                 this._百ごとのアニメ.開始( am );
             }
 
             var 数字 = Combo値.ToString().PadLeft( 4 ).Replace( ' ', 'o' ); // 右詰め4桁、余白は 'o'。
-
             var 画像矩形から表示矩形への拡大率 = new Vector2( 264f / ( 142f * 4f ), 140f / 188f );
             var 文字間隔補正 = -10f;
-
             var 全体の拡大率 = new Vector2( (float) ( this._百ごとのアニメ.拡大率?.Value ?? 1.0 ) );
 
             // 全体のサイズを算出。
@@ -92,47 +94,55 @@ namespace DTXmatixx.ステージ.演奏
                 全体の中央位置.Y += App.乱数.NextFloat( -振動幅, +振動幅 );
             }
 
-            // １桁ずつ表示。
+            
+            // １桁ずつ描画。
 
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
 
-                var 文字の位置 = new Vector2( -( 全体のサイズ.X / 2f ), 0f );
-
-                for( int i = 0; i < 数字.Length; i++ )
+                #region " 数字を描画。"
+                //----------------
                 {
-                    if( 数字[ i ] != this._前回表示した数字[ i ] )
+                    var 文字の位置 = new Vector2( -( 全体のサイズ.X / 2f ), 0f );
+
+                    for( int i = 0; i < 数字.Length; i++ )
                     {
-                        // 桁アニメーション開始
-                        this._各桁のアニメ[ i ].落下開始( am );
-
-                        // 1の位以外は、自分より上位の桁を順番に跳ねさせる。
-                        if( 3 > i )
+                        if( 数字[ i ] != this._前回表示した数字[ i ] )
                         {
-                            for( int p = ( i - 1 ); p >= 0; p-- )
-                                this._各桁のアニメ[ p ].跳ね開始( am, 0.05 * ( ( i - 1 ) - p + 1 ) );
+                            // 桁アニメーション開始
+                            this._各桁のアニメ[ i ].落下開始( am );
+
+                            // 1の位以外は、自分より上位の桁を順番に跳ねさせる。
+                            if( 3 > i )
+                            {
+                                for( int p = ( i - 1 ); p >= 0; p-- )
+                                    this._各桁のアニメ[ p ].跳ね開始( am, 0.05 * ( ( i - 1 ) - p + 1 ) );
+                            }
                         }
+
+                        var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
+
+                        dc.Transform =
+                            Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
+                            Matrix3x2.Translation( 文字の位置.X, 文字の位置.Y + (float) ( this._各桁のアニメ[ i ].Yオフセット?.Value ?? 0.0f ) ) *
+                            Matrix3x2.Scaling( 全体の拡大率.X, 全体の拡大率.Y, center: new Vector2( 0f, 全体のサイズ.Y / 2f ) ) *
+                            Matrix3x2.Translation( 全体の中央位置 ) *
+                            pretrans;
+
+                        dc.DrawBitmap( this._コンボ文字画像.Bitmap, (float) ( this._各桁のアニメ[ i ].不透明度?.Value ?? 1.0f ), BitmapInterpolationMode.Linear, 転送元矩形 );
+
+                        文字の位置.X += ( 転送元矩形.Width + 文字間隔補正 ) * 画像矩形から表示矩形への拡大率.X;
                     }
-
-                    var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
-
-                    dc.Transform =
-                        Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
-                        Matrix3x2.Translation( 文字の位置.X, 文字の位置.Y + (float) ( this._各桁のアニメ[ i ].Yオフセット?.Value ?? 0.0f ) ) *
-                        Matrix3x2.Scaling( 全体の拡大率.X, 全体の拡大率.Y, center: new Vector2( 0f, 全体のサイズ.Y / 2f ) ) *
-                        Matrix3x2.Translation( 全体の中央位置 ) *
-                        pretrans;
-
-                    dc.DrawBitmap( this._コンボ文字画像.Bitmap, (float) ( this._各桁のアニメ[ i ].不透明度?.Value ?? 1.0f ), BitmapInterpolationMode.Linear, 転送元矩形 );
-
-                    文字の位置.X += ( 転送元矩形.Width + 文字間隔補正 ) * 画像矩形から表示矩形への拡大率.X;
                 }
+                //----------------
+                #endregion
 
-                // "Combo"
+                #region " Combo を描画。"
+                //----------------
                 {
                     var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ "Combo" ] );
-                    文字の位置 = new Vector2( 0f, 130f );
+                    var 文字の位置 = new Vector2( 0f, 130f );
 
                     dc.Transform =
                         Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
@@ -143,6 +153,8 @@ namespace DTXmatixx.ステージ.演奏
 
                     dc.DrawBitmap( this._コンボ文字画像.Bitmap, 1.0f, BitmapInterpolationMode.Linear, 転送元矩形 );
                 }
+                //----------------
+                #endregion
 
             } );
 
@@ -151,10 +163,14 @@ namespace DTXmatixx.ステージ.演奏
             this._前回表示した数字 = 数字;
         }
 
+
         private int _前回表示した値 = 0;
         private string _前回表示した数字 = "    ";
         private 画像 _コンボ文字画像 = null;
         private JObject _コンボ文字設定 = null;
+
+        
+        // 桁ごとのアニメーション
 
         private class 各桁のアニメ : IDisposable
         {
@@ -172,6 +188,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.Yオフセット?.Dispose();
                 this.不透明度?.Dispose();
             }
+
             public void 落下開始( アニメーション管理 am )
             {
                 this.Dispose();
@@ -215,6 +232,9 @@ namespace DTXmatixx.ステージ.演奏
         };
         private 各桁のアニメ[] _各桁のアニメ = null;
 
+
+        // 百ごとのアニメーション
+
         private class 百ごとのアニメ : IDisposable
         {
             public Storyboard ストーリーボード = null;
@@ -231,6 +251,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.拡大率?.Dispose();
                 this.振動幅?.Dispose();
             }
+
             public void 開始( アニメーション管理 am )
             {
                 this.ストーリーボード = new Storyboard( am.Manager );

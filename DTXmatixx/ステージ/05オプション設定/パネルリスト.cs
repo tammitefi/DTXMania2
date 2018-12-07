@@ -25,10 +25,11 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._現在のパネルフォルダ = null;
             }
         }
+
         public void パネルリストを登録する( パネル_フォルダ root )
         {
-            this._ルートパネルフォルダ =
-                this._現在のパネルフォルダ = root;
+            this._ルートパネルフォルダ = root;
+            this._現在のパネルフォルダ = root;
         }
         public void フェードインを開始する( double 速度倍率 = 1.0 )
         {
@@ -74,6 +75,7 @@ namespace DTXmatixx.ステージ.オプション設定
 
             this._現在のパネルフォルダ = this._現在のパネルフォルダ.子パネルリスト.SelectedItem as パネル_フォルダ;
         }
+
         protected override void On活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -91,6 +93,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._現在のパネルフォルダ = null;    //
             }
         }
+
         public void 進行描画する( DeviceContext1 dc, float left, float top )
         {
             const float パネルの下マージン = 4f;
@@ -123,6 +126,7 @@ namespace DTXmatixx.ステージ.オプション設定
             this._パッド矢印.描画する( dc, パッド矢印.種類.上_Tom1, new Vector2( left, パネルの高さ * 3f ) );
             this._パッド矢印.描画する( dc, パッド矢印.種類.下_Tom2, new Vector2( left, パネルの高さ * 4f ) );
         }
+
 
         private パネル_フォルダ _ルートパネルフォルダ = null;
         private パネル_フォルダ _現在のパネルフォルダ = null;

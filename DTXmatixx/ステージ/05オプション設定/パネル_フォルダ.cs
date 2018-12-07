@@ -16,11 +16,8 @@ namespace DTXmatixx.ステージ.オプション設定
         /// <summary>
         ///		null ならルート階層。
         /// </summary>
-        public パネル_フォルダ 親パネル
-        {
-            get;
-            protected set;
-        } = null;
+        public パネル_フォルダ 親パネル { get; protected set; } = null;
+
         public SelectableList<パネル> 子パネルリスト
         {
             get
@@ -31,6 +28,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._子パネルリスト.SelectFirst();
             }
         }
+
 
         public パネル_フォルダ( string パネル名, パネル_フォルダ 親パネル, IEnumerable<パネル> 初期子パネルリスト = null )
             : base( パネル名 )
@@ -51,6 +49,7 @@ namespace DTXmatixx.ステージ.オプション設定
                 Log.Info( $"フォルダパネルを生成しました。[{this}]" );
             }
         }
+
         protected override void On活性化()
         {
             base.On活性化();   // 忘れないこと
@@ -65,12 +64,13 @@ namespace DTXmatixx.ステージ.オプション設定
 
             base.On非活性化();  // 忘れないこと
         }
+
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             // パネルの共通部分を描画。
             base.進行描画する( dc, left, top, 選択中 );
 
-            // 項目部分はなし。
+            // 項目部分の描画はなし。
         }
 
         protected SelectableList<パネル> _子パネルリスト = null;

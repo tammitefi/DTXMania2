@@ -13,11 +13,7 @@ namespace DTXmatixx.設定
     /// </summary>
     class ユーザ管理 : IDisposable
     {
-        public SelectableList<ユーザ設定> ユーザリスト
-        {
-            get;
-            protected set;
-        } = null;
+        public SelectableList<ユーザ設定> ユーザリスト { get; protected set; } = null;
 
         /// <summary>
         ///		現在ログオンしているユーザ。
@@ -25,6 +21,7 @@ namespace DTXmatixx.設定
         /// </summary>
         public ユーザ設定 ログオン中のユーザ
             => ( 0 <= this.ユーザリスト.SelectedIndex ) ? this.ユーザリスト[ this.ユーザリスト.SelectedIndex ] : null;
+
 
         public ユーザ管理()
         {
@@ -73,6 +70,7 @@ namespace DTXmatixx.設定
                     this.ユーザリスト.Add( user );
             }
         }
+
         public void Dispose()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
