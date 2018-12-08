@@ -45,6 +45,7 @@ namespace DTXmatixx.ステージ.演奏
         public 動画とBGM 動画とBGM { get; protected set; } = null;
 
 
+
         public 演奏ステージ()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -66,7 +67,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.子を追加する( this._カウントマップライン = new カウントマップライン() );
                 this.子を追加する( this._スコア表示 = new スコア表示() );
                 this.子を追加する( this._プレイヤー名表示 = new プレイヤー名表示() );
-                this.子を追加する( this._譜面スクロール速度表示 = new 譜面スクロール速度表示() );
+                this.子を追加する( this._譜面スクロール速度 = new 譜面スクロール速度() );
                 this.子を追加する( this._達成率表示 = new 達成率表示() );
                 this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
                 this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
@@ -92,7 +93,6 @@ namespace DTXmatixx.ステージ.演奏
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
                 this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムチップ.json" ).変数なしパス ) );
-                this._現在進行描画中の譜面スクロール速度の倍率 = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
                 this.動画とBGM = null;
                 this._動画とBGMの再生開始済み = false;
@@ -246,9 +246,6 @@ namespace DTXmatixx.ステージ.演奏
             }
         }
 
-        /// <summary>
-        ///		進行、入力、発声。
-        /// </summary>
         public override void 高速進行する()
         {
             if( this._初めての進行描画 )
@@ -585,10 +582,7 @@ namespace DTXmatixx.ステージ.演奏
                     break;
             }
         }
-        
-        /// <summary>
-        ///		描画。
-        /// </summary>
+
         public override void 進行描画する( DeviceContext1 dc )
         {
             // 進行描画
@@ -616,7 +610,7 @@ namespace DTXmatixx.ステージ.演奏
                         this._レーンフレーム.描画する( dc );
                         this._ドラムパッド.進行描画する( dc );
                         this._背景画像.描画する( dc, 0f, 0f );
-                        this._譜面スクロール速度表示.進行描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
+                        this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
 
                         this._カウントマップライン.進行描画する( dc );
@@ -632,55 +626,7 @@ namespace DTXmatixx.ステージ.演奏
                     {
                         double 演奏時刻sec = this._演奏開始からの経過時間secを返す() + グラフィックデバイス.Instance.次のDComp表示までの残り時間sec;
 
-                        #region " 譜面スクロール速度が変化している → 追い付き進行 "
-                        //----------------
-                        {
-                            double 倍率 = this._現在進行描画中の譜面スクロール速度の倍率;
-
-                            if( 倍率 < App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 )
-                            {
-                                if( 0 > this._スクロール倍率追い付き用_最後の値 )
-                                {
-                                    this._スクロール倍率追い付き用カウンタ = new LoopCounter( 0, 1000, 10 );    // 0→100; 全部で10×1000 = 10000ms = 10sec あれば十分だろう
-                                    this._スクロール倍率追い付き用_最後の値 = 0;
-                                }
-                                else
-                                {
-                                    while( this._スクロール倍率追い付き用_最後の値 < this._スクロール倍率追い付き用カウンタ.現在値 )
-                                    {
-                                        倍率 += 0.025;
-                                        this._スクロール倍率追い付き用_最後の値++;
-                                    }
-
-                                    this._現在進行描画中の譜面スクロール速度の倍率 = Math.Min( 倍率, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
-                                }
-                            }
-                            else if( 倍率 > App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 )
-                            {
-                                if( 0 > this._スクロール倍率追い付き用_最後の値 )
-                                {
-                                    this._スクロール倍率追い付き用カウンタ = new LoopCounter( 0, 1000, 10 );    // 0→100; 全部で10×1000 = 10000ms = 10sec あれば十分だろう
-                                    this._スクロール倍率追い付き用_最後の値 = 0;
-                                }
-                                else
-                                {
-                                    while( this._スクロール倍率追い付き用_最後の値 < this._スクロール倍率追い付き用カウンタ.現在値 )
-                                    {
-                                        倍率 -= 0.025;
-                                        this._スクロール倍率追い付き用_最後の値++;
-                                    }
-
-                                    this._現在進行描画中の譜面スクロール速度の倍率 = Math.Max( 倍率, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
-                                }
-                            }
-                            else
-                            {
-                                this._スクロール倍率追い付き用_最後の値 = -1;
-                                this._スクロール倍率追い付き用カウンタ = null;
-                            }
-                        }
-                        //----------------
-                        #endregion
+                        this._譜面スクロール速度.進行する( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );  // チップの表示より前に進行だけ行う
 
                         if( this._動画とBGMの再生開始済み )
                         {
@@ -738,7 +684,7 @@ namespace DTXmatixx.ステージ.演奏
                         this._レーンフレーム.描画する( dc );
                         this._ドラムパッド.進行描画する( dc );
                         this._背景画像.描画する( dc, 0f, 0f );
-                        this._譜面スクロール速度表示.進行描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
+                        this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
 
                         double 曲の長さsec = App.演奏スコア.チップリスト[ App.演奏スコア.チップリスト.Count - 1 ].描画時刻sec;
@@ -837,7 +783,7 @@ namespace DTXmatixx.ステージ.演奏
 
         private ドラムパッド _ドラムパッド = null;
 
-        private 譜面スクロール速度表示 _譜面スクロール速度表示 = null;
+        private 譜面スクロール速度 _譜面スクロール速度 = null;
 
         private エキサイトゲージ _エキサイトゲージ = null;
 
@@ -880,95 +826,12 @@ namespace DTXmatixx.ステージ.演奏
 
         private 画像フォント _数字フォント中グレー48x64 = null;
 
-
-        // 譜面スクロール
-
-        private double _現在進行描画中の譜面スクロール速度の倍率 = 1.0;
-
-        private LoopCounter _スクロール倍率追い付き用カウンタ = null;
-
-        private int _スクロール倍率追い付き用_最後の値 = -1;
-
-        
-        // 演奏状態
-
-        /// <summary>
-        ///		<see cref="スコア表示.チップリスト"/> のうち、描画を始めるチップのインデックス番号。
-        ///		未演奏時・演奏終了時は -1 。
-        /// </summary>
-        /// <remarks>
-        ///		演奏開始直後は 0 で始まり、対象番号のチップが描画範囲を流れ去るたびに +1 される。
-        ///		このメンバの更新は、高頻度進行タスクではなく、進行描画メソッドで行う。（低精度で構わないので）
-        /// </remarks>
-        private int _描画開始チップ番号 = -1;
-
-        private Dictionary<チップ, チップの演奏状態> _チップの演奏状態 = null;
-
-        private double _演奏開始からの経過時間secを返す()
-            => App.サウンドタイマ.現在時刻sec;
-
-
-
-        // ステージ切り替え（特別にアイキャッチを使わないパターン）
-
-        /// <summary>
-        ///		読み込み画面: 0 ～ 1: 演奏画面
-        /// </summary>
-        private Counter _フェードインカウンタ = null;
-
-
-
-
-
-
-
-
-
-        /// <summary>
-        ///		<see cref="_描画開始チップ番号"/> から画面上端にはみ出すまでの間の各チップに対して、指定された処理を適用する。
-        /// </summary>
-        /// <param name="適用する処理">
-        ///		引数は、順に、対象のチップ, チップ番号, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx。
-        ///		時間と距離はいずれも、負数ならバー未達、0でバー直上、正数でバー通過。
-        ///	</param>
-        private void _描画範囲内のすべてのチップに対して( double 現在の演奏時刻sec, Action<チップ, int, double, double, double> 適用する処理 )
-        {
-            var スコア = App.演奏スコア;
-            if( null == スコア )
-                return;
-
-            for( int i = this._描画開始チップ番号; ( 0 <= i ) && ( i < スコア.チップリスト.Count ); i++ )
-            {
-                var チップ = スコア.チップリスト[ i ];
-
-                // ヒット判定バーとチップの間の、時間 と 距離 を算出。→ いずれも、負数ならバー未達、0でバー直上、正数でバー通過。
-                double ヒット判定バーと描画との時間sec = 現在の演奏時刻sec - チップ.描画時刻sec;
-                double ヒット判定バーと発声との時間sec = 現在の演奏時刻sec - チップ.発声時刻sec;
-                double ヒット判定バーとの距離dpx = this._指定された時間secに対応する符号付きピクセル数を返す( this._現在進行描画中の譜面スクロール速度の倍率, ヒット判定バーと描画との時間sec );
-
-                // 終了判定。
-                bool チップは画面上端より上に出ている = ( ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx ) < -40.0 );   // -40 はチップが隠れるであろう適当なマージン。
-                if( チップは画面上端より上に出ている )
-                    break;
-
-                // 処理実行。開始判定（描画開始チップ番号の更新）もこの中で。
-                適用する処理( チップ, i, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx );
-            }
-        }
-
-        private double _指定された時間secに対応する符号付きピクセル数を返す( double speed, double 指定時間sec )
-        {
-            const double _1ミリ秒あたりのピクセル数 = 0.14625 * 2.25 * 1000.0;    // これを変えると、speed あたりの速度が変わる。
-
-            return ( 指定時間sec * _1ミリ秒あたりのピクセル数 * speed );
-        }
-
-
-        // 小節線・拍線 と チップ は描画階層（奥行き）が異なるので、別々のメソッドに分ける。
         private SolidColorBrush _小節線色 = null;
         private SolidColorBrush _拍線色 = null;
         private void _小節線拍線を描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
+            // 小節線・拍線 と チップ は描画階層（奥行き）が異なるので、別々のメソッドに分ける。
+
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
@@ -1042,15 +905,15 @@ namespace DTXmatixx.ステージ.演奏
                 if( this._チップの演奏状態[ chip ].不可視 )
                     return;
 
-				// チップの大きさを計算する。
-				float 大きさ0to1 = 1.0f;
-				if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
-				{
-					// 音量により大きさ可変。
-					大きさ0to1 = Math.Max( 0.3f, Math.Min( 1.0f, chip.音量 / (float) チップ.既定音量 ) );	// 既定音量未満は大きさを小さくするが、既定音量以上は大きさ1.0のままとする。最小は 0.3。
-					if( chip.チップ種別 == チップ種別.Snare_Ghost )	// Ghost は対象外
-						大きさ0to1 = 1.0f;
-				}
+                // チップの大きさを計算する。
+                float 大きさ0to1 = 1.0f;
+                if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                {
+                    // 音量により大きさ可変。
+                    大きさ0to1 = Math.Max( 0.3f, Math.Min( 1.0f, chip.音量 / (float) チップ.既定音量 ) );   // 既定音量未満は大きさを小さくするが、既定音量以上は大きさ1.0のままとする。最小は 0.3。
+                    if( chip.チップ種別 == チップ種別.Snare_Ghost )   // Ghost は対象外
+                        大きさ0to1 = 1.0f;
+                }
 
                 // チップ種別 から、表示レーン種別 と 表示チップ種別 を取得。
                 var 表示レーン種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
@@ -1101,10 +964,10 @@ namespace DTXmatixx.ステージ.演奏
                                     //----------------
                                     {
                                         float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-										
-										//変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 大きさ0to1, 矩形中央 );
-										変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 1.0f, 矩形中央 );		// チップ背景は大きさを変えない
-									}
+
+                                        //変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 大きさ0to1, 矩形中央 );
+                                        変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 1.0f, 矩形中央 );       // チップ背景は大きさを変えない
+                                    }
                                     //----------------
                                     #endregion
                                     break;
@@ -1115,19 +978,19 @@ namespace DTXmatixx.ステージ.演奏
                                     {
                                         float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
                                         変換行列2D = 変換行列2D *
-											//Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
-											Matrix3x2.Scaling( 1f, 1f, 矩形中央 ) * // チップ背景は大きさを変えない
-											Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
+                                            //Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
+                                            Matrix3x2.Scaling( 1f, 1f, 矩形中央 ) * // チップ背景は大きさを変えない
+                                            Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
                                     }
                                     //----------------
                                     #endregion
                                     break;
                             }
 
-							// 変換(2) 移動
-							変換行列2D = 変換行列2D *
-								//Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 大きさ0to1 ) );
-								Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 1.0f ) );       // チップ背景は大きさを変えない
+                            // 変換(2) 移動
+                            変換行列2D = 変換行列2D *
+                                //Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 大きさ0to1 ) );
+                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 1.0f ) );       // チップ背景は大きさを変えない
 
                             // 描画。
                             if( 表示チップ種別 != 表示チップ種別.HiHat &&         // 暫定処置：これらでは背景画像を表示しない 
@@ -1158,20 +1021,20 @@ namespace DTXmatixx.ステージ.演奏
 
                             // 変換。
                             var 変換行列2D =
-								( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
-								Matrix3x2.Scaling( 0.6f + ( 0.4f * 大きさ0to1 ), 大きさ0to1, 矩形中央 ) *		// 大きさ: 0→1 のとき、幅 x0.6→x1.0
-								Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
+                                ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
+                                Matrix3x2.Scaling( 0.6f + ( 0.4f * 大きさ0to1 ), 大きさ0to1, 矩形中央 ) *     // 大きさ: 0→1 のとき、幅 x0.6→x1.0
+                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
 
-							// スネアとタムのみ不透明度を反映。
-							float 不透明度 = ( chip.チップ種別 == チップ種別.Snare || chip.チップ種別 == チップ種別.Tom1 || chip.チップ種別 == チップ種別.Tom2 || chip.チップ種別 == チップ種別.Tom3 ) ?
-								( 0.4f + ( 0.6f * 大きさ0to1 ) ) : 1f;
+                            // スネアとタムのみ不透明度を反映。
+                            float 不透明度 = ( chip.チップ種別 == チップ種別.Snare || chip.チップ種別 == チップ種別.Tom1 || chip.チップ種別 == チップ種別.Tom2 || chip.チップ種別 == チップ種別.Tom3 ) ?
+                                ( 0.4f + ( 0.6f * 大きさ0to1 ) ) : 1f;
 
-							// 描画。
-							this._ドラムチップ画像.描画する(
-								dc,
-								変換行列2D,
-								転送元矩形: 矩形,
-								不透明度0to1: Math.Max( 0f, 不透明度 - 消滅割合 ) );
+                            // 描画。
+                            this._ドラムチップ画像.描画する(
+                                dc,
+                                変換行列2D,
+                                転送元矩形: 矩形,
+                                不透明度0to1: Math.Max( 0f, 不透明度 - 消滅割合 ) );
                         }
                     }
                     //----------------
@@ -1180,6 +1043,80 @@ namespace DTXmatixx.ステージ.演奏
 
             } );
         }
+
+        
+        // 演奏状態
+
+        /// <summary>
+        ///		<see cref="スコア表示.チップリスト"/> のうち、描画を始めるチップのインデックス番号。
+        ///		未演奏時・演奏終了時は -1 。
+        /// </summary>
+        /// <remarks>
+        ///		演奏開始直後は 0 で始まり、対象番号のチップが描画範囲を流れ去るたびに +1 される。
+        ///		このメンバの更新は、高頻度進行タスクではなく、進行描画メソッドで行う。（低精度で構わないので）
+        /// </remarks>
+        private int _描画開始チップ番号 = -1;
+
+        private Dictionary<チップ, チップの演奏状態> _チップの演奏状態 = null;
+
+        private double _演奏開始からの経過時間secを返す()
+            => App.サウンドタイマ.現在時刻sec;
+
+
+
+        // ステージ切り替え（特別にアイキャッチを使わないパターン）
+
+        /// <summary>
+        ///		読み込み画面: 0 ～ 1: 演奏画面
+        /// </summary>
+        private Counter _フェードインカウンタ = null;
+
+
+
+
+
+        /// <summary>
+        ///		<see cref="_描画開始チップ番号"/> から画面上端にはみ出すまでの間の各チップに対して、指定された処理を適用する。
+        /// </summary>
+        /// <param name="適用する処理">
+        ///		引数は、順に、対象のチップ, チップ番号, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx。
+        ///		時間と距離はいずれも、負数ならバー未達、0でバー直上、正数でバー通過。
+        ///	</param>
+        private void _描画範囲内のすべてのチップに対して( double 現在の演奏時刻sec, Action<チップ, int, double, double, double> 適用する処理 )
+        {
+            var スコア = App.演奏スコア;
+            if( null == スコア )
+                return;
+
+            for( int i = this._描画開始チップ番号; ( 0 <= i ) && ( i < スコア.チップリスト.Count ); i++ )
+            {
+                var チップ = スコア.チップリスト[ i ];
+
+                // ヒット判定バーとチップの間の、時間 と 距離 を算出。→ いずれも、負数ならバー未達、0でバー直上、正数でバー通過。
+                double ヒット判定バーと描画との時間sec = 現在の演奏時刻sec - チップ.描画時刻sec;
+                double ヒット判定バーと発声との時間sec = 現在の演奏時刻sec - チップ.発声時刻sec;
+                double 倍率 = this._譜面スクロール速度.補間付き速度;
+                double ヒット判定バーとの距離dpx = this._指定された時間secに対応する符号付きピクセル数を返す( 倍率, ヒット判定バーと描画との時間sec );
+
+                // 終了判定。
+                bool チップは画面上端より上に出ている = ( ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx ) < -40.0 );   // -40 はチップが隠れるであろう適当なマージン。
+                if( チップは画面上端より上に出ている )
+                    break;
+
+                // 処理実行。開始判定（描画開始チップ番号の更新）もこの中で。
+                適用する処理( チップ, i, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx );
+            }
+        }
+
+        private double _指定された時間secに対応する符号付きピクセル数を返す( double speed, double 指定時間sec )
+        {
+            const double _1ミリ秒あたりのピクセル数 = 0.14625 * 2.25 * 1000.0;    // これを変えると、speed あたりの速度が変わる。
+
+            return ( 指定時間sec * _1ミリ秒あたりのピクセル数 * speed );
+        }
+
+
+
 
         private Video _背景動画forDTX = null; // DTXの動画はこっち
         private bool _動画とBGMの再生開始済み = false;

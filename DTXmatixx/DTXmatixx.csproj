@@ -242,7 +242,7 @@
     <Compile Include="ステージ\07演奏\判定パラメータ表示.cs" />
     <Compile Include="ステージ\07演奏\表示チップ種別.cs" />
     <Compile Include="ステージ\07演奏\表示レーン種別.cs" />
-    <Compile Include="ステージ\07演奏\譜面スクロール速度表示.cs" />
+    <Compile Include="ステージ\07演奏\譜面スクロール速度.cs" />
     <Compile Include="ステージ\07演奏\達成率表示.cs" />
     <Compile Include="ステージ\09終了\終了ステージ.cs" />
     <Compile Include="ステージ\08結果\演奏パラメータ結果.cs" />
