@@ -171,9 +171,9 @@ namespace DTXmatixx.ステージ.オプション設定
                 this._ルートパネルフォルダ.子パネルリスト.Add(
                     new パネル_ONOFFトグル(
                         パネル名: "ドラムサウンド",
-                        初期状態はON: user.ユーザ入力によるドラムの音を発声する,
+                        初期状態はON: user.ドラムの音を発声する,
                         値の変更処理: new Action<パネル>( ( panel ) => {
-                            user.ユーザ入力によるドラムの音を発声する = ( (パネル_ONOFFトグル) panel ).ONである;
+                            user.ドラムの音を発声する = ( (パネル_ONOFFトグル) panel ).ONである;
                         } ) ) );
                 //----------------
                 #endregion

@@ -209,6 +209,7 @@
     <Compile Include="ステージ\05オプション設定\入力割り当てダイアログ.Designer.cs">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </Compile>
+    <Compile Include="ステージ\07演奏\ヒットバー.cs" />
     <Compile Include="ステージ\ステージ.cs" />
     <Compile Include="ステージ\ステージ管理.cs" />
     <Compile Include="ステージ\02タイトル\タイトルステージ.cs" />

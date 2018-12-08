@@ -98,7 +98,7 @@ namespace DTXmatixx.設定
             }
         }
 
-        public bool ユーザ入力によるドラムの音を発声する
+        public bool ドラムの音を発声する
         {
             get
                 => ( 0 != this._User.DrumSound );
