@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CSCore;
-using FDK.メディア.サウンド;
-using FDK.メディア.ビデオ;
-using FDK.メディア.ストリーミング;
 
-namespace FDK.メディア
+namespace FDK
 {
 	public class 動画とBGM : IDisposable
 	{

@@ -9,7 +9,7 @@ using CSCore.CoreAudioAPI;
 using CSCore.SoundOut;
 using CSCore.Win32;
 
-namespace FDK.メディア.サウンド
+namespace FDK
 {
     public class SoundDevice : IDisposable
     {

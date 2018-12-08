@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage.Streams;
 
-namespace FDK.メディア.ストリーミング
+namespace FDK
 {
     /// <summary>
     ///     実際には読み取りしかできない <see cref="Windows.Storage.Streams.IRandomAccessStream"/> 。

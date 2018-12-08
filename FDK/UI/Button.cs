@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SharpDX;
-using SharpDX.Animation;
-using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using FDK.メディア;
-using FDK.カウンタ;
 
 namespace FDK.UI
 {

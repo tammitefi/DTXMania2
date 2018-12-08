@@ -6,7 +6,7 @@ using System.Linq;
 using CSCore;
 using NVorbis;
 
-namespace FDK.メディア.サウンド.Sources
+namespace FDK
 {
     /// <summary>
     ///		指定されたメディアファイル（動画, 音楽）を Vorbis としてデコードして、<see cref="CSCore.ISampleSource"/> オブジェクトを生成する。

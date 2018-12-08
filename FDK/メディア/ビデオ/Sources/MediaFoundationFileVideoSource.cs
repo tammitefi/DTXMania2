@@ -6,9 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using SharpDX;
 using SharpDX.MediaFoundation;
-using FDK.メディア.ストリーミング;
 
-namespace FDK.メディア.ビデオ.Sources
+namespace FDK
 {
     public class MediaFoundationFileVideoSource : IVideoSource
     {

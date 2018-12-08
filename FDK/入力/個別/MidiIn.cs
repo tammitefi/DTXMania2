@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using FDK.カウンタ;
 
-namespace FDK.入力
+namespace FDK
 {
     using MIDIINHANDLE = System.UInt32;
 
@@ -143,7 +142,7 @@ namespace FDK.入力
                             ( 0 <= this.HiHatNotes.FindIndex( ( hh ) => ( hh == this.入力イベントリスト[ pos ].Key ) ) ) )
                         {
                             long 時刻差ct = Math.Abs( this.入力イベントリスト[ fppos ].TimeStamp - this.入力イベントリスト[ pos ].TimeStamp );
-                            double 時刻差 = (double) 時刻差ct / (double) カウンタ.QPCTimer.周波数;
+                            double 時刻差 = (double) 時刻差ct / (double) QPCTimer.周波数;
                             if( しきい値 >= 時刻差 )
                             {
                                 this.入力イベントリスト[ pos ].Key = -1;       // 無効印

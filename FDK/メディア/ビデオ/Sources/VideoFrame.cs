@@ -5,7 +5,7 @@ using System.Linq;
 using SharpDX.Direct2D1;
 using SharpDX.MediaFoundation;
 
-namespace FDK.メディア.ビデオ
+namespace FDK
 {
     public class VideoFrame : IDisposable
     {

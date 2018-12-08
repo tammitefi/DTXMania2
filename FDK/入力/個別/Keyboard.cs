@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using SharpDX;
 using SharpDX.DirectInput;
-using FDK.カウンタ;
 
-namespace FDK.入力
+namespace FDK
 {
     public class Keyboard : IInputDevice, IDisposable
     {

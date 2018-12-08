@@ -4,11 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using SharpDX.DirectInput;
 using FDK;
-using FDK.メディア;
-using FDK.入力;
-using DTXmatixx.設定;
 using DTXmatixx.入力;
 
 namespace DTXmatixx.ステージ.オプション設定

@@ -6,9 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using FDK.同期;
 
-namespace FDK.メディア.サウンド.Sources
+namespace FDK
 {
     /// <summary>
     ///		指定されたメディアファイル（動画, 音楽）をバックグラウンドで読み込む <see cref="CSCore.IWaveSource"/> オブジェクトを生成する。

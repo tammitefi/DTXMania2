@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using CSCore;
 
-namespace FDK.メディア.サウンド
+namespace FDK
 {
     public class Sound : ISampleSource
     {

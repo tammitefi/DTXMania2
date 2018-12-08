@@ -7,8 +7,6 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using FDK;
-using FDK.メディア;
-using DTXmatixx.曲;
 using SSTFormat.v3;
 
 namespace DTXmatixx.ステージ.曲読み込み

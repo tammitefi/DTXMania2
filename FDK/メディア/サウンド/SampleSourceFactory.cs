@@ -4,9 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CSCore;
-using FDK.メディア.サウンド.Sources;
 
-namespace FDK.メディア.サウンド
+namespace FDK
 {
     public static class SampleSourceFactory
     {

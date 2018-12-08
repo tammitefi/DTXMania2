@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FDK.入力
+namespace FDK
 {
     /// <summary>
     ///		全入力デバイスが実装して提供しなければならないインターフェース。

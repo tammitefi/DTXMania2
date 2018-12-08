@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace FDK.同期
+namespace FDK
 {
     /// <summary>
     ///     ブロック可能なキュー。

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using SharpDX;
 using SharpDX.Direct2D1;
-using FDK.メディア;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     /// <summary>
     ///		FPS（１秒間の進行処理回数）と VPS（１秒間の描画処理回数）を計測する。

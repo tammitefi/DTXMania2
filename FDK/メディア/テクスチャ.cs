@@ -8,7 +8,7 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		Direct3D の D3DTexture を使って描画する画像。

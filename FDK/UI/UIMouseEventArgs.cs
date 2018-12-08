@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Direct2D1;
-using FDK.メディア;
 
 namespace FDK.UI
 {

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using FDK.メディア;
-using FDK.カウンタ;
-using System.Windows.Forms;
 
 namespace FDK.UI
 {

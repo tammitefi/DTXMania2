@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SharpDX.Animation;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     public class アニメーション管理 : IDisposable
     {

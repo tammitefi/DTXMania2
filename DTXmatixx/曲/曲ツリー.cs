@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FDK;
-using FDK.メディア;
 
 namespace DTXmatixx.曲
 {

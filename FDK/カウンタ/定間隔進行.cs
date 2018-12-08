@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     /// <summary>
     ///		一定間隔ごとの進行処理を実現するクラス。

@@ -6,7 +6,7 @@ using System.Linq;
 using SharpDX;
 using Newtonsoft.Json.Linq;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		任意個の文字を格納した一枚のテクスチャ画像と、それぞれの文字領域の矩形リストから、

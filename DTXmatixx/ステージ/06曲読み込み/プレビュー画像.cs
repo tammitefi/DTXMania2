@@ -5,7 +5,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
-using FDK.メディア;
 using DTXmatixx.曲;
 
 namespace DTXmatixx.ステージ.曲読み込み

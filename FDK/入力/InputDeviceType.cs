@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FDK.入力
+namespace FDK
 {
     public enum InputDeviceType
     {

@@ -6,7 +6,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.WIC;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		Direct2D の Bitmap を使って描画する画像。

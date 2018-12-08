@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
-using FDK.メディア;
 
 namespace FDK.UI
 {

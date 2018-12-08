@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     /// <summary>
     ///		ある int 型整数を、開始値から終了値まで、一定間隔で単純増加させるカウンタ。

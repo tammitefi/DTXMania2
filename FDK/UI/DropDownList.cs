@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FDK.メディア;
 using SharpDX;
 using SharpDX.Direct2D1;
 

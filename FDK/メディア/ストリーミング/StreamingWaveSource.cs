@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CSCore;
-using FDK.同期;
 
-namespace FDK.メディア.ストリーミング
+namespace FDK
 {
     /// <summary>
     ///     Read と排他的に Write ができる WaveSource 。

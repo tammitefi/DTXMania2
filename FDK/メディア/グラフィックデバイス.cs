@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using SharpDX;
 
-namespace FDK.メディア
+namespace FDK
 {
     public class グラフィックデバイス
     {
@@ -85,7 +85,7 @@ namespace FDK.メディア
 
         public SharpDX.Direct3D11.DeviceDebug D3DDeviceDebug { get; private set; } = null;
 
-        public FDK.カウンタ.アニメーション管理 Animation { get; private set; } = null;
+        public FDK.アニメーション管理 Animation { get; private set; } = null;
 
         public SharpDX.Direct3D11.Device D3DDevice { get; protected set; }
         //----------------
@@ -399,7 +399,7 @@ namespace FDK.メディア
 
             テクスチャ.全インスタンスで共有するリソースを作成する();
 
-            this.Animation = new カウンタ.アニメーション管理();
+            this.Animation = new アニメーション管理();
         }
         private void _スワップチェーンに依存しないグラフィックリソースを解放する()
         {

@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using SharpDX;
 using SharpDX.Direct2D1;
-using FDK.カウンタ;
-using FDK.メディア.ビデオ.Sources;
 
-namespace FDK.メディア.ビデオ
+namespace FDK
 {
     public class Video : Activity
     {

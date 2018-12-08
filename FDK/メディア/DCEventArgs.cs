@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using SharpDX.Direct2D1;
 
-namespace FDK.メディア
+namespace FDK
 {
     public class DCEventArgs
     {

@@ -7,7 +7,6 @@ using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.DirectInput;
 using FDK;
-using FDK.メディア;
 using DTXmatixx.曲;
 using DTXmatixx.設定;
 using DTXmatixx.アイキャッチ;

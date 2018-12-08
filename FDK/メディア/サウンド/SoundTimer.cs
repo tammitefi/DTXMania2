@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FDK.メディア.サウンド
+namespace FDK
 {
     public class SoundTimer : IDisposable
     {

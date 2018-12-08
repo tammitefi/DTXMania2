@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     public class 経過時間測定
     {

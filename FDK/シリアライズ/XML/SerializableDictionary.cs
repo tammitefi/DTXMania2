@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Schema;
 
-namespace FDK.シリアライズ.XML
+namespace FDK
 {
     /// <summary>
     ///		XmlSerialize 可能な Dictionary。

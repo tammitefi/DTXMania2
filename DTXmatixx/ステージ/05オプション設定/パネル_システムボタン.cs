@@ -5,7 +5,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
-using FDK.メディア;
 
 namespace DTXmatixx.ステージ.オプション設定
 {

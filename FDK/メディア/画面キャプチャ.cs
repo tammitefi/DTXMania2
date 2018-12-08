@@ -6,9 +6,8 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using FDK.メディア;
 
-namespace FDK.メディア
+namespace FDK
 {
     public class 画面キャプチャ
     {

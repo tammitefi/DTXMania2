@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace FDK.同期
+namespace FDK
 {
     /// <summary>
     ///     読み込みと書き込みを別々のスレッドから行えるキュー。

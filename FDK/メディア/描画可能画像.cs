@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SharpDX;
 using SharpDX.Direct2D1;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		レンダーターゲットとしても描画可能なビットマップを扱うクラス。

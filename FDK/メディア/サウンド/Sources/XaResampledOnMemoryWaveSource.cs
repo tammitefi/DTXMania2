@@ -5,7 +5,7 @@ using System.Linq;
 using CSCore;
 using CSCore.DSP;
 
-namespace FDK.メディア.サウンド.Sources
+namespace FDK
 {
     /// <summary>
     ///		指定されたメディアファイルを XA としてデコードして、<see cref="CSCore.IWaveSource"/> オブジェクトを生成する。

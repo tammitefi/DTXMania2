@@ -7,8 +7,6 @@ using SharpDX.Animation;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using FDK;
-using FDK.メディア;
-using FDK.カウンタ;
 using DTXmatixx.曲;
 
 namespace DTXmatixx.ステージ.選曲

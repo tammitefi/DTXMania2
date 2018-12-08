@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using FDK;
 using DTXmatixx.データベース.曲;
-using FDK.メディア;
 using SharpDX;
 
 namespace DTXmatixx.曲

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		この名前空間で使用するXML用の各種文字列定数。nameof() と一緒に使う。

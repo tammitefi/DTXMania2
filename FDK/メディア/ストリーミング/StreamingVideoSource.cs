@@ -5,11 +5,8 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.MediaFoundation;
-using FDK.メディア.ビデオ;
-using FDK.メディア.ビデオ.Sources;
-using FDK.同期;
 
-namespace FDK.メディア.ストリーミング
+namespace FDK
 {
     /// <summary>
     ///     Read と排他的に Write ができる VideoSource 。

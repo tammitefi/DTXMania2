@@ -6,7 +6,6 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Animation;
 using FDK;
-using FDK.メディア;
 
 namespace DTXmatixx.ステージ.演奏
 {

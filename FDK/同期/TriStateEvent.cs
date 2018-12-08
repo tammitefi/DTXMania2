@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace FDK.同期
+namespace FDK
 {
     /// <summary>
     ///		ON, OFF, 無効 の３状態を持つイベント。

@@ -9,13 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using CSCore;
 using SharpDX;
-using SharpDX.Direct2D1;
 using SharpDX.MediaFoundation;
-using FDK.カウンタ;
-using FDK.メディア.ビデオ;
-using FDK.メディア.ビデオ.Sources;
 
-namespace FDK.メディア.ストリーミング
+namespace FDK
 {
     public class MediaFoundationStreamingSources : IDisposable
     {

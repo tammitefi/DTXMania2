@@ -8,7 +8,7 @@ using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
 using Factory = SharpDX.Direct2D1.Factory;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///     縁取り文字やドロップシャドウなどに対応した、自分用のTextRenderer。

@@ -5,9 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using SharpDX.DirectInput;
 using FDK;
-using FDK.メディア;
-using FDK.入力;
-using FDK.カウンタ;
 using DTXmatixx.設定;
 using DTXmatixx.入力;
 

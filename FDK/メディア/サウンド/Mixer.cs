@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using CSCore;
 
-namespace FDK.メディア.サウンド
+namespace FDK
 {
     /// <summary>
     ///		オーディオミキサー。

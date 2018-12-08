@@ -6,7 +6,6 @@ using System.Linq;
 using SharpDX.Direct3D11;
 using SSTFormat.v3;
 using FDK;
-using FDK.メディア;
 using DTXmatixx.設定;
 using DTXmatixx.データベース.曲;
 

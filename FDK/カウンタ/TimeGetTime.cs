@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     /// <summary>
     ///		::timeGetTime のラッパ 兼 PerformanceCounter との相互変換機能。

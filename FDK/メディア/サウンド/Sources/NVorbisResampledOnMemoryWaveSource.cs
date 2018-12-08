@@ -7,7 +7,7 @@ using CSCore;
 using CSCore.DSP;
 using NVorbis;
 
-namespace FDK.メディア.サウンド.Sources
+namespace FDK
 {
     /// <summary>
     ///		指定されたメディアファイル（動画, 音楽）を Vorbis としてデコードして、<see cref="CSCore.IWaveSource"/> オブジェクトを生成する。

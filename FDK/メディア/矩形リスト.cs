@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using SharpDX;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		任意の文字列から任意の矩形を引き当てるための辞書。

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FDK.入力;
+using FDK;
 
 namespace DTXmatixx.入力
 {

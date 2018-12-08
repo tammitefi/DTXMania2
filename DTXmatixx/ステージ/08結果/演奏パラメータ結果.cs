@@ -5,7 +5,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using FDK;
-using FDK.メディア;
 using SharpDX.Direct2D1;
 using DTXmatixx.ステージ.演奏;
 

@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using SharpDX.Direct2D1;
 using FDK;
-using FDK.メディア;
-using FDK.カウンタ;
 
 namespace DTXmatixx.ステージ.選曲
 {

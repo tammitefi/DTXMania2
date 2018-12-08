@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using SharpDX;
 
-namespace FDK.メディア.ビデオ.Sources
+namespace FDK
 {
     public interface IVideoSource : IDisposable
     {

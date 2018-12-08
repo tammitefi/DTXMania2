@@ -8,7 +8,6 @@ using SharpDX.DirectInput;
 using SharpDX.Direct2D1;
 using SharpDX.Direct2D1.Effects;
 using FDK;
-using FDK.メディア;
 using DTXmatixx.アイキャッチ;
 
 namespace DTXmatixx.ステージ.タイトル

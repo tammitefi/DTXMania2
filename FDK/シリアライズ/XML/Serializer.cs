@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace FDK.シリアライズ.XML
+namespace FDK
 {
     /// <summary>
     ///		XmlSerializer を使った XML 入出力機能を提供する。

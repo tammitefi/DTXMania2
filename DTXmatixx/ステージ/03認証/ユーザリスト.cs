@@ -5,8 +5,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
-using FDK.メディア;
-using FDK.カウンタ;
 using DTXmatixx.設定;
 
 namespace DTXmatixx.ステージ.認証

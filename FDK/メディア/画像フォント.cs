@@ -7,7 +7,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using Newtonsoft.Json.Linq;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		任意個の文字を格納した一枚の画像と、それぞれの文字領域の矩形リストから、文字列を連続するD2D画像で表示する。

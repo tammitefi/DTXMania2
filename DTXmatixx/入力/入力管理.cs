@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FDK;
-using FDK.入力;
 using SSTFormat.v3;
 using DTXmatixx.設定;
 
@@ -518,7 +517,7 @@ namespace DTXmatixx.入力
                 {
                     const double _連続入力だとみなす最大の間隔sec = 0.5;
 
-                    double 入力時刻sec = FDK.カウンタ.QPCTimer.生カウント相対値を秒へ変換して返す( ev.TimeStamp );   // 相対か絶対か、どっちかに統一さえされていればいい。
+                    double 入力時刻sec = QPCTimer.生カウント相対値を秒へ変換して返す( ev.TimeStamp );   // 相対か絶対か、どっちかに統一さえされていればいい。
 
                     // 容量がいっぱいなら、古い履歴から削除する。
                     if( this._入力履歴.Count >= this._最大入力履歴数 )

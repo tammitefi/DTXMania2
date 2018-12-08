@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
-using FDK.メディア;
 
 namespace FDK.UI
 {

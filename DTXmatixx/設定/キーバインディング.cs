@@ -34,7 +34,7 @@ namespace DTXmatixx.設定
                 this.deviceId = deviceId;
                 this.key = key;
             }
-            public IdKey( FDK.入力.InputEvent ie )
+            public IdKey( InputEvent ie )
             {
                 this.deviceId = ie.DeviceID;
                 this.key = ie.Key;

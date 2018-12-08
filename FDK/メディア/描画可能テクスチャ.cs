@@ -6,7 +6,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		D3Dテクスチャとメモリを共有するD2Dビットマップを持つテクスチャ。

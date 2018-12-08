@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace FDK.カウンタ
+namespace FDK
 {
     /// <summary>
     ///		パフォーマンスカウンタを使用した高精度タイマ。

@@ -6,7 +6,7 @@ using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using FDK;
 
-namespace FDK.メディア
+namespace FDK
 {
     /// <summary>
     ///		DirectWrite を使った Direct2D1ビットマップ。

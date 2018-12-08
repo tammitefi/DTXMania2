@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
-using FDK.メディア;
 
 namespace DTXmatixx.ステージ.起動
 {
