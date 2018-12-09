@@ -339,6 +339,9 @@
     <EmbeddedResource Include="未処理例外検出ダイアログ.resx">
       <DependentUpon>未処理例外検出ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="App.IDTXManiaService.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
