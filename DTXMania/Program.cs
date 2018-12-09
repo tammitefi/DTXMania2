@@ -13,6 +13,7 @@ namespace DTXMania
 {
     static class Program
     {
+        public static App App { get; private set; }
         public const int ログファイルの最大保存日数 = 30;
         public static string ログファイル名 = "";
 
@@ -52,7 +53,7 @@ namespace DTXMania
                 Log.WriteLine( "" );
 
                 // アプリを初期化する。
-                using( var app = new App( args ) )
+                using( Program.App = new App( args ) )
                 {
                     var WCFサービスホスト = (ServiceHost) null;
 
@@ -64,7 +65,7 @@ namespace DTXMania
                     string endPointUri = $"{serviceUri}/{endPointName}";
 
                     // アプリのWCFサービスホストを生成する。
-                    WCFサービスホスト = new ServiceHost( app, new Uri( serviceUri ) );
+                    WCFサービスホスト = new ServiceHost( Program.App, new Uri( serviceUri ) );
 
                     // 名前付きパイプにバインドしたエンドポイントをサービスホストへ追加する。
                     WCFサービスホスト.AddServiceEndpoint(
@@ -90,7 +91,7 @@ namespace DTXMania
                     try
                     {
                         // アプリを実行する。
-                        app.Run();
+                        Program.App.Run();
                     }
                     finally
                     {

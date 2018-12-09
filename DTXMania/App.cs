@@ -31,8 +31,6 @@ namespace DTXMania
         public static T 属性<T>() where T : Attribute
             => (T) Attribute.GetCustomAttribute( Assembly.GetExecutingAssembly(), typeof( T ) );
 
-        public static App Instance { get; protected set; }
-
         public static bool ビュアーモードである { get; protected set; }
 
         /// <remarks>
@@ -71,8 +69,22 @@ namespace DTXMania
 				=> App.ウィンドウがアクティブである = !( value );
 		}
 
+        /// <summary>
+        ///		ウィンドウの表示モード（全画面 or ウィンドウ）を示す。
+        ///		true なら全画面モード、false ならウィンドウモードである。
+        ///		値を set することで、モードを変更することもできる。
+        /// </summary>
+        /// <remarks>
+        ///		正確には、「全画面(fullscreen)」ではなく「最大化(maximize)」。
+        /// </remarks>
+        public new static bool 全画面モード
+        {
+            get => ( (ApplicationForm) Program.App ).全画面モード;
+            set => ( (ApplicationForm) Program.App ).全画面モード = value;
+        }
 
-		public App( string[] args )
+
+        public App( string[] args )
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -90,8 +102,6 @@ namespace DTXMania
 
                 if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
                     Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
-
-                App.Instance = this;
 
                 #region " ビュアーモード？ "
                 //----------------
@@ -183,8 +193,6 @@ namespace DTXMania
 
                     App.システム設定.保存する();
                     App.システム設定 = null;
-
-                    App.Instance = null;
                 }
 
                 base.Dispose( disposing );
@@ -243,8 +251,8 @@ namespace DTXMania
         {
             if( e.KeyCode == Keys.F11 )
             {
-                this.全画面モード = !( this.全画面モード );
-                App.ユーザ管理.ログオン中のユーザ.全画面モードである = this.全画面モード;
+                App.全画面モード = !( App.全画面モード );
+                App.ユーザ管理.ログオン中のユーザ.全画面モードである = App.全画面モード;
             }
 
             base.OnKeyDown( e );

@@ -200,9 +200,9 @@ namespace DTXMania.ステージ.オプション設定
 
 						Cursor.Show();
 
-						dr = this.ShowDialog( App.Instance );
+                        dr = this.ShowDialog( Program.App );
 
-						if( App.Instance.全画面モード )
+                        if( App.全画面モード )
 							Cursor.Hide();
 
 						timer.Stop();
@@ -221,7 +221,7 @@ namespace DTXMania.ステージ.オプション設定
 					}
 
 					// メインウィンドウ用の入力管理を復活。
-					App.入力管理 = new 入力管理( App.Instance.Handle ) {
+					App.入力管理 = new 入力管理( Program.App.Handle ) {
 						キーバインディングを取得する = () => App.システム設定.キーバインディング,
 						キーバインディングを保存する = () => App.システム設定.保存する(),
 					};
