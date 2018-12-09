@@ -17,7 +17,7 @@ namespace DTXMania
         public static string ログファイル名 = "";
 
         [STAThread]
-        static void Main()
+        static void Main( string[] args )
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
@@ -52,7 +52,7 @@ namespace DTXMania
                 Log.WriteLine( "" );
 
                 // アプリを初期化する。
-                using( var app = new App() )
+                using( var app = new App( args ) )
                 {
                     var WCFサービスホスト = (ServiceHost) null;
 

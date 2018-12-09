@@ -33,6 +33,8 @@ namespace DTXMania
 
         public static App Instance { get; protected set; }
 
+        public static bool ビュアーモードである { get; protected set; }
+
         /// <remarks>
         ///		SharpDX.Mathematics パッケージを参照し、かつ SharpDX 名前空間を using しておくと、
         ///		SharpDX で定義する追加の拡張メソッド（NextFloatなど）を使えるようになる。
@@ -70,7 +72,7 @@ namespace DTXMania
 		}
 
 
-		public App()
+		public App( string[] args )
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -90,6 +92,21 @@ namespace DTXMania
                     Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
 
                 App.Instance = this;
+
+                #region " ビュアーモード？ "
+                //----------------
+                App.ビュアーモードである = false;
+
+                foreach( var arg in args )
+                {
+                    if( ( "-v" == arg.ToLower() ) || ( "-viewer" == arg.ToLower() ) )
+                    {
+                        App.ビュアーモードである = true;
+                        break;
+                    }
+                }
+                //----------------
+                #endregion
 
                 App.乱数 = new Random( DateTime.Now.Millisecond );
 
