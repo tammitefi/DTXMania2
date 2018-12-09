@@ -110,27 +110,33 @@ namespace FDK
                 }
 
                 // ブレンドモードをD2Dレンダーターゲットに設定する。
+
                 dc.PrimitiveBlend = ( this.加算合成 ) ? PrimitiveBlend.Add : PrimitiveBlend.SourceOver;
 
-                using( var layer = new Layer( dc ) )
+
+                // レイヤーパラメータの指定があれば、描画前に Layer を作成して、Push する。
+
+                var layer = (Layer) null;
+                if( レイヤーパラメータ.HasValue )
                 {
-                    // レイヤーパラメータの指定があれば、描画前に Push する。
-                    if( null != レイヤーパラメータ )
-                        dc.PushLayer( (LayerParameters1) レイヤーパラメータ, layer );
-
-                    // D2Dレンダーターゲットに Bitmap を描画する。
-                    dc.DrawBitmap(
-                        bitmap: this._Bitmap,
-                        destinationRectangle: 転送先矩形,
-                        opacity: 不透明度0to1,
-                        interpolationMode: this.補正モード,
-                        sourceRectangle: 転送元矩形,
-                        erspectiveTransformRef: 変換行列3D ); // null 指定可。
-
-                    // レイヤーパラメータの指定があれば、描画後に Pop する。
-                    if( null != レイヤーパラメータ )
-                        dc.PopLayer();
+                    layer = new Layer( dc );    // 因果関係は分からないが、同じBOX内の曲が増えるとこの行の負荷が増大するので、必要時にしか生成しないこと。
+                    dc.PushLayer( レイヤーパラメータ.Value, layer );
                 }
+
+                // D2Dレンダーターゲットに Bitmap を描画する。
+                dc.DrawBitmap(
+                    bitmap: this._Bitmap,
+                    destinationRectangle: 転送先矩形,
+                    opacity: 不透明度0to1,
+                    interpolationMode: this.補正モード,
+                    sourceRectangle: 転送元矩形,
+                    erspectiveTransformRef: 変換行列3D ); // null 指定可。
+
+                // レイヤーパラメータの指定があれば、描画後に Pop する。
+                if( null != layer )
+                    dc.PopLayer();
+
+                layer?.Dispose();
 
             } );
         }

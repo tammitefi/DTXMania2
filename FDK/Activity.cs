@@ -70,8 +70,6 @@ namespace FDK
         /// </summary>
         public virtual void 活性化する()
         {
-            var gd = グラフィックデバイス.Instance;
-
             if( this.活性化している )
                 return;
 
@@ -90,8 +88,6 @@ namespace FDK
         /// </summary>
         public virtual void 非活性化する()
         {
-            var gd = グラフィックデバイス.Instance;
-
             if( this.活性化していない )
                 return;
 

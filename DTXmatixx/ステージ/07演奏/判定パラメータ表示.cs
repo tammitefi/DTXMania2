@@ -105,6 +105,7 @@ namespace DTXmatixx.ステージ.演奏
                 this.数値を描画する( dc, 0f, 0f, MaxCombo, 桁数: 4 );
                 this.数値を描画する( dc, _dr, 0f, (int) Math.Floor( 100.0 * MaxCombo / 合計 ), 桁数: 3 );    // 切り捨てでいいやもう
                 this._パラメータ文字.描画する( dc, _dp, 0f, "%" );
+
             } );
 
         }

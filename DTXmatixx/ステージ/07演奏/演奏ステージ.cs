@@ -659,7 +659,7 @@ namespace DTXmatixx.ステージ.演奏
 
                         this._左サイドクリアパネル.クリアする();
                         this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
-                            this._プレイヤー名表示.進行描画する(  dcp );
+                            this._プレイヤー名表示.進行描画する( dcp );
                             this._スコア表示.進行描画する( dcp, グラフィックデバイス.Instance.Animation, new Vector2( +280f, +120f ), this.成績 );
                             this._達成率表示.描画する( dcp, (float) this.成績.Achievement );
                             this._判定パラメータ表示.描画する( dcp, +118f, +372f, this.成績 );
@@ -692,6 +692,7 @@ namespace DTXmatixx.ステージ.演奏
                         this._チップを描画する( dc, 演奏時刻sec );
                         this._チップ光.進行描画する( dc );
                         this._判定文字列.進行描画する( dc );
+
                         this._FPS.VPSをカウントする();
                         this._FPS.描画する( dc, 0f, 0f );
 
@@ -718,6 +719,7 @@ namespace DTXmatixx.ステージ.演奏
                 case フェーズ.クリア:
                     break;
             }
+
         }
 
         public void 演奏を停止する()

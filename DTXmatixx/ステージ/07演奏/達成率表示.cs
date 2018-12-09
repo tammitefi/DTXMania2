@@ -68,6 +68,7 @@ namespace DTXmatixx.ステージ.演奏
                 this._数字画像.描画する( dc, 0f, 0f, 達成率文字列.Substring( 0, 3 ) );
 
             } );
+
         }
 
 
