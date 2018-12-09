@@ -66,6 +66,11 @@ namespace DTXMania.ステージ.起動
                 case フェーズ.開始:
                     #region " 曲検索タスクを起動し、構築中フェーズへ遷移する。"
                     //----------------
+                    if( App.ビュアーモードである )
+                    {
+                        // ビュアーモードならスキップ。
+                    }
+                    else
                     {
                         App.曲ツリー.非活性化する();
                         App.曲ツリー = new 曲.曲ツリー();
@@ -85,11 +90,9 @@ namespace DTXMania.ステージ.起動
                             }
 
                         } );
-
-                        // 構築タスクの終了を待たずに次のフェーズへ。
-
-                        this.現在のフェーズ = フェーズ.曲ツリー構築中;
                     }
+
+                    this.現在のフェーズ = フェーズ.曲ツリー構築中;
                     //----------------
                     #endregion
                     break;
@@ -97,6 +100,13 @@ namespace DTXMania.ステージ.起動
                 case フェーズ.曲ツリー構築中:
                     #region " 曲ツリー構築タスクの進捗情報を画面に表示する。"
                     //----------------
+                    if( App.ビュアーモードである )
+                    {
+                        // ビュアーモードならスキップ。
+                        this._コンソールフォント.描画する( dc, 0f, 96f, $"Loading and decoding sounds ..." );
+                        this.現在のフェーズ = フェーズ.ドラムサウンド構築中;
+                    }
+                    else
                     {
                         // 構築タスクの進捗表示。
                         this._コンソールフォント.描画する( dc, 0f, 96f, $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}" );

@@ -44,8 +44,10 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var 選択曲 = App.曲ツリー.フォーカス曲ノード;
-                Debug.Assert( null != 選択曲 );
+                if( null == App.演奏曲ノード )
+                    return;
+
+                var 選択曲 = App.演奏曲ノード;
 
                 this._曲名画像.表示文字列 = 選択曲.タイトル;
                 this._サブタイトル画像.表示文字列 = 選択曲.サブタイトル;
@@ -78,8 +80,10 @@ namespace DTXMania.ステージ.演奏
 
         private void _サムネイルを描画する( DeviceContext1 dc )
         {
-            var 選択曲 = App.曲ツリー.フォーカス曲ノード;
-            Debug.Assert( null != 選択曲 );
+            var 選択曲 = App.演奏曲ノード;
+
+            if( null == 選択曲 )
+                return;
 
             var サムネイル画像 = 選択曲.ノード画像 ?? Node.既定のノード画像;
             Debug.Assert( null != サムネイル画像 );

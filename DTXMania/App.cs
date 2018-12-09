@@ -54,12 +54,16 @@ namespace DTXMania
 
         public static MusicNode ビュアー用曲ノード { get; set; } // ビュアーモードでのみ使用。
 
+        public static MusicNode 演奏曲ノード
+            => App.ビュアーモードである ? App.ビュアー用曲ノード : App.曲ツリー.フォーカス曲ノード; // MusicNode 以外は null が返される
+
         public static スコア 演奏スコア { get; set; }
 
         public static WAV管理 WAV管理 { get; set; }
 
 
         public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
+
         public static bool ウィンドウがアクティブではない
         {
             get
@@ -92,16 +96,6 @@ namespace DTXMania
                 SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
                 SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
 #endif
-                this.Text = Application.ProductName + " " + App.リリース番号.ToString( "000" );
-
-                var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-                VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
-                VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
-                VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMania\" ) );
-
-                if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
-                    Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
-
                 #region " ビュアーモード？ "
                 //----------------
                 App.ビュアーモードである = false;
@@ -116,6 +110,17 @@ namespace DTXMania
                 }
                 //----------------
                 #endregion
+
+                this.Text = "DTXMania " + App.リリース番号.ToString( "000" ) + ( App.ビュアーモードである ? " [Viewer]" : "" );
+
+
+                var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
+                VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
+                VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
+                VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMania\" ) );
+
+                if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
+                    Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
 
                 App.乱数 = new Random( DateTime.Now.Millisecond );
 
@@ -149,9 +154,15 @@ namespace DTXMania
                 App.WAV管理 = null;
 
 
+                App.サービスメッセージキュー = new ServiceMessageQueue();
+
+                App.最後に取得したビュアーメッセージ = null;
+
+
                 this._活性化する();
 
-                base.全画面モード = App.ユーザ管理.ログオン中のユーザ.全画面モードである;
+                // 全画面モード； ビュアーモードでは常にウィンドウモードで起動。
+                base.全画面モード = (App.ビュアーモードである)  ? false : App.ユーザ管理.ログオン中のユーザ.全画面モードである;
 
                 // 最初のステージへ遷移する。
                 App.ステージ管理.ステージを遷移する( App.ステージ管理.最初のステージ名 );
@@ -250,6 +261,7 @@ namespace DTXMania
                 }
             }
         }
+
         protected override void OnKeyDown( KeyEventArgs e )
         {
             if( e.KeyCode == Keys.F11 )
@@ -260,14 +272,16 @@ namespace DTXMania
 
             base.OnKeyDown( e );
         }
-		protected override void OnActivated( EventArgs e )
+
+        protected override void OnActivated( EventArgs e )
 		{
 			App.ウィンドウがアクティブである = true;
 			Log.Info( "ウィンドウがアクティブ化されました。" );
 
 			base.OnActivated( e );
 		}
-		protected override void OnDeactivate( EventArgs e )
+
+        protected override void OnDeactivate( EventArgs e )
 		{
 			App.ウィンドウがアクティブではない = true;
 			Log.Info( "ウィンドウが非アクティブ化されました。" );
@@ -394,7 +408,16 @@ namespace DTXMania
                         //----------------
                         if( stage.現在のフェーズ == ステージ.起動.起動ステージ.フェーズ.確定 )
                         {
-                            App.ステージ管理.ステージを遷移する( nameof( ステージ.タイトル.タイトルステージ ) );
+                            if( App.ビュアーモードである )
+                            {
+                                // (A) 演奏ステージへ
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.演奏.演奏ステージ ) );
+                            }
+                            else
+                            {
+                                // (B) タイトルステージへ
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.タイトル.タイトルステージ ) );
+                            }
                         }
                         //----------------
                         #endregion
@@ -513,7 +536,12 @@ namespace DTXMania
                         //----------------
                         if( stage.現在のフェーズ == ステージ.演奏.演奏ステージ.フェーズ.クリア )
                         {
-                            App.ステージ管理.ステージを遷移する( nameof( ステージ.結果.結果ステージ ) );
+                            if( App.ビュアーモードである )
+                            {
+                                // ビュアーモードならクリアフェーズを維持。（サービスメッセージ待ち。）
+                            }
+                            else
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.結果.結果ステージ ) );
                         }
                         //----------------
                         #endregion

@@ -78,31 +78,81 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                Debug.Assert( null != App.演奏スコア, "演奏スコアが指定されていません。" );
-
                 this.キャプチャ画面 = null;
-                this.成績 = new 成績();
-                this.成績.スコアと設定を反映する( App.演奏スコア, App.ユーザ管理.ログオン中のユーザ );
-                this._描画開始チップ番号 = -1;
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
                 this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムチップ.json" ).変数なしパス ) );
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
-                this.動画とBGM = null;
-                this._動画とBGMの再生開始済み = false;
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
                 レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
-                this._チップの演奏状態 = new Dictionary<チップ, チップの演奏状態>();
+                this._フェードインカウンタ = new Counter( 0, 100, 10 );
+
+                this._演奏状態を初期化する();
+
+                if( App.ビュアーモードである )
+                    this.現在のフェーズ = フェーズ.クリア;    // ビュアーモードではいきなりクリアフェーズへ。
+                else
+                    this.現在のフェーズ = フェーズ.フェードイン;
+            }
+        }
+
+        protected override void On非活性化()
+        {
+            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            {
+                this._演奏状態を終了する();
+
+                #region " 現在の譜面スクロール速度をDBに保存。"
+                //----------------
+                using( var userdb = new UserDB() )
+                {
+                    var user = userdb.Users.Where( ( r ) => ( r.Id == App.ユーザ管理.ログオン中のユーザ.ユーザID ) ).SingleOrDefault();
+                    if( null != user )
+                    {
+                        user.ScrollSpeed = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
+                        userdb.DataContext.SubmitChanges();
+                        Log.Info( $"現在の譜面スクロール速度({App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度})をDBに保存しました。[{user}]" );
+                    }
+                }
+                //----------------
+                #endregion
+
+                this._拍線色?.Dispose();
+                this._拍線色 = null;
+
+                this._小節線色?.Dispose();
+                this._小節線色 = null;
+
+                this.キャプチャ画面?.Dispose();
+                this.キャプチャ画面 = null;
+            }
+        }
+
+        private void _演奏状態を初期化する()
+        {
+            this.成績 = new 成績();
+            this.成績.スコアと設定を反映する( App.演奏スコア, App.ユーザ管理.ログオン中のユーザ );
+
+            this._描画開始チップ番号 = -1;
+
+            this.BGMを停止する();
+            this._動画とBGMの再生開始済み = false;
+
+            this._チップの演奏状態 = new Dictionary<チップ, チップの演奏状態>();
+
+            if( null != App.演奏スコア )
+            {
                 foreach( var chip in App.演奏スコア.チップリスト )
                     this._チップの演奏状態.Add( chip, new チップの演奏状態( chip ) );
 
                 #region " 背景動画とBGMを生成する。"
                 //----------------
-                if( App.演奏スコア.背景動画ID.Nullでも空でもない() )
+                if( App.演奏スコア.背景動画ID.Nullでも空でもない() && !App.ビュアーモードである ) // ビュアーモードでは背景動画IDは無効。
                 {
                     #region " (A) SSTF準拠のストリーミング動画 "
                     //----------------
                     var items = App.演奏スコア.背景動画ID.Split( ':' );
+
                     if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
                     {
                         switch( items[ 0 ].ToLower() )
@@ -141,8 +191,11 @@ namespace DTXMania.ステージ.演奏
                     #region " (B) SST準拠の動画とBGM（ローカルファイル）"
                     //----------------
                     var file = new VariablePath( App.演奏スコア.背景動画ファイル名 );
+
+                    this.動画とBGM?.Dispose();
                     this.動画とBGM = new 動画とBGM( file, App.サウンドデバイス );
                     this._背景動画forDTX = null;
+
                     Log.Info( $"背景動画とBGMを読み込みました。[{file.変数付きパス}]" );
                     //----------------
                     #endregion
@@ -159,12 +212,15 @@ namespace DTXMania.ステージ.演奏
                     {
                         this.子を追加する( this._背景動画forDTX = new Video( path ) );
 
+                        this.動画とBGM?.Dispose();
                         this.動画とBGM = null;
+
                         Log.Info( $"背景動画を読み込みました。[{path.変数付きパス}]" );
                     }
                     catch
                     {
                         this._背景動画forDTX = null;    // 生成失敗
+
                         Log.ERROR( $"背景動画の読み込みに失敗しました。[{path.変数付きパス}]" );
                     }
                     //----------------
@@ -179,6 +235,7 @@ namespace DTXMania.ステージ.演奏
 
                 #region " WAVを生成する（ある場合）。"
                 //----------------
+                App.WAV管理?.Dispose();
                 App.WAV管理 = new 曲.WAV管理();
 
                 foreach( var kvp in App.演奏スコア.WAVリスト )
@@ -188,65 +245,37 @@ namespace DTXMania.ステージ.演奏
                 }
                 //----------------
                 #endregion
-
-                this.現在のフェーズ = フェーズ.フェードイン;
-                this._初めての進行描画 = true;
             }
+
+            this._初めての進行描画 = true;
         }
-        protected override void On非活性化()
+
+        private void _演奏状態を終了する()
         {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
+            // DTX用背景動画を生成した場合は子リストから削除。
+            if( null != this._背景動画forDTX )
             {
-                #region " 現在の譜面スクロール速度をDBに保存。"
-                //----------------
-                using( var userdb = new UserDB() )
-                {
-                    var user = userdb.Users.Where( ( r ) => ( r.Id == App.ユーザ管理.ログオン中のユーザ.ユーザID ) ).SingleOrDefault();
-                    if( null != user )
-                    {
-                        user.ScrollSpeed = App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度;
-                        userdb.DataContext.SubmitChanges();
-                        Log.Info( $"現在の譜面スクロール速度({App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度})をDBに保存しました。[{user}]" );
-                    }
-                }
-				//----------------
-				#endregion
-
-				// 背景動画を生成した場合は子リストから削除。
-				if( null != this._背景動画forDTX )
-				{
-					this.子を削除する( this._背景動画forDTX );
-					this._背景動画forDTX = null;
-				}
-
-				//this._動画とBGM?.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
-				//App.WAV管理?.Dispose();	
-				//App.WAV管理 = null;
-				if( null != this.動画とBGM )
-					this.動画とBGM.ビデオをキャンセルする();	// ビデオが詰まってしまうのでオーディオのみ再生を続ける
-
-                foreach( var kvp in this._チップの演奏状態 )
-                    kvp.Value.Dispose();
-                this._チップの演奏状態 = null;
-
-                this._拍線色?.Dispose();
-                this._拍線色 = null;
-
-                this._小節線色?.Dispose();
-                this._小節線色 = null;
-
-                this.キャプチャ画面?.Dispose();
-                this.キャプチャ画面 = null;
+                this.子を削除する( this._背景動画forDTX );
+                this._背景動画forDTX = null;
             }
+
+            // SSTF用背景動画を生成した場合
+            //this._動画とBGM?.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
+            //App.WAV管理?.Dispose();	
+            //App.WAV管理 = null;
+            if( null != this.動画とBGM )
+                this.動画とBGM.ビデオをキャンセルする();  // ビデオが詰まってしまうのでオーディオのみ再生を続ける。
+
+            this._チップの演奏状態 = null;
         }
 
         public override void 高速進行する()
         {
             if( this._初めての進行描画 )
             {
-                //App.サウンドタイマ.リセットする();       --> カウント開始はフェードイン完了後
+                if( App.ビュアーモードである )
+                    App.サウンドタイマ.リセットする();       // 通常モードでは、カウント開始はフェードイン完了後。
 
-                this._フェードインカウンタ = new Counter( 0, 100, 10 );
                 this._初めての進行描画 = false;
             }
 
@@ -259,19 +288,27 @@ namespace DTXMania.ステージ.演奏
                 case フェーズ.フェードイン:
                     if( this._フェードインカウンタ.終了値に達した )
                     {
-                        // フェードインが終わってから演奏開始。
+                        #region " フェードインが終わったので、演奏開始。 "
+                        //----------------
                         Log.Info( "演奏を開始します。" );
+
                         this._描画開始チップ番号 = 0; // -1 から 0 に変われば演奏開始。
+
                         App.サウンドタイマ.リセットする();
 
                         this.現在のフェーズ = フェーズ.表示;
-                        // ここで break; すると、次の表示フェーズまで１フレーム分時間が経過してしまう。
+
+                        // ここで break; すると、次の表示フェーズまで１フレーム分の時間（数ミリ秒）が空いてしまう。
                         // なので、フレームが空かないように、ここですぐさま最初の表示フェーズを実行する。
                         this.高速進行する();
+                        //----------------
+                        #endregion
                     }
                     break;
 
                 case フェーズ.表示:
+
+                    // ※注:クリアや失敗の判定は、ここではなく、進行描画側で行っている。
 
                     double 現在の演奏時刻sec = this._演奏開始からの経過時間secを返す();
 
@@ -292,16 +329,10 @@ namespace DTXMania.ステージ.演奏
                         bool チップは描画についてヒット判定バーを通過した = ( 0 <= ヒット判定バーと描画との時間sec );
                         bool チップは発声についてヒット判定バーを通過した = ( 0 <= ヒット判定バーと発声との時間sec );
 
-                        // → 発声がまだかもしれないので、ここでヒット済みのチェックをしてはならない。
-                        //if( チップはヒット済みである )
-                        //{
-                        //	// 何もしない。
-                        //	return;
-                        //}
-
                         if( チップはまだヒットされていない && チップはMISSエリアに達している )
                         {
-                            // MISS判定。
+                            #region " MISS判定。"
+                            //----------------
                             if( AutoPlay && ドラムチッププロパティ.AutoPlayON_Miss判定 )
                             {
                                 this._チップのヒット処理を行う( 
@@ -330,23 +361,29 @@ namespace DTXMania.ステージ.演奏
                             {
                                 // 通過。
                             }
+                            //----------------
+                            #endregion
                         }
 
                         // ヒット処理(1) 発声時刻
                         if( チップは発声についてヒット判定バーを通過した )    // ヒット済みかどうかには関係ない
                         {
-                            // 自動ヒット判定。
+                            #region " 自動ヒット判定。"
+                            //----------------
                             if( ( AutoPlay && ドラムチッププロパティ.AutoPlayON_自動ヒット_再生 ) ||
                                 ( !AutoPlay && ドラムチッププロパティ.AutoPlayOFF_自動ヒット_再生 ) )
                             {
                                 this._チップの発声がまだなら発声を行う( chip, ヒット判定バーと発声との時間sec );
                             }
+                            //----------------
+                            #endregion
                         }
 
                         // ヒット処理(2) 描画時刻
                         if( チップはまだヒットされていない && チップは描画についてヒット判定バーを通過した )
                         {
-                            // 自動ヒット判定。
+                            #region " 自動ヒット判定。"
+                            //----------------
                             if( AutoPlay && ドラムチッププロパティ.AutoPlayON_自動ヒット )
                             {
                                 this._チップのヒット処理を行う(
@@ -377,6 +414,8 @@ namespace DTXMania.ステージ.演奏
                             {
                                 // 通過。
                             }
+                            //----------------
+                            #endregion
                         }
 
                     } );
@@ -577,6 +616,16 @@ namespace DTXMania.ステージ.演奏
                         #endregion
                     }
                     break;
+
+                case フェーズ.キャンセル完了:
+                case フェーズ.キャンセル時フェードアウト:
+                case フェーズ.キャンセル通知:
+                    break;
+
+                case フェーズ.クリア:
+                    if( App.ビュアーモードである )
+                        this._サービスメッセージが届いていれば対応する処理を行う();
+                    break;
             }
         }
 
@@ -590,6 +639,7 @@ namespace DTXMania.ステージ.演奏
             switch( this.現在のフェーズ )
             {
                 case フェーズ.フェードイン:
+                case フェーズ.キャンセル完了:
                     {
                         this._左サイドクリアパネル.クリアする();
                         this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
@@ -616,6 +666,10 @@ namespace DTXMania.ステージ.演奏
                         this._ヒットバー.描画する( dc );
                         this._キャプチャ画面を描画する( dc, ( 1.0f - this._フェードインカウンタ.現在値の割合 ) );
                     }
+                    break;
+
+                case フェーズ.クリア:
+                    this._背景画像.描画する( dc, 0f, 0f );
                     break;
 
                 case フェーズ.表示:
@@ -692,7 +746,7 @@ namespace DTXMania.ステージ.演奏
                         this._フェーズパネル.進行描画する( dc );
                         this._曲名パネル.描画する( dc );
                         this._ヒットバー.描画する( dc );
-                        this._チップを描画する( dc, 演奏時刻sec );
+                        this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
                         this._チップ光.進行描画する( dc );
                         this._判定文字列.進行描画する( dc );
 
@@ -714,12 +768,6 @@ namespace DTXMania.ステージ.演奏
                 case フェーズ.キャンセル通知:
                     App.ステージ管理.アイキャッチを選択しクローズする( nameof( アイキャッチ.半回転黒フェード ) );
                     this.現在のフェーズ = フェーズ.キャンセル時フェードアウト;
-                    break;
-
-                case フェーズ.キャンセル完了:
-                    break;
-
-                case フェーズ.クリア:
                     break;
             }
 
@@ -756,15 +804,6 @@ namespace DTXMania.ステージ.演奏
                 this.動画とBGM = null;
             }
         }
-
-        public void BGMのキャッシュを解放する()
-        {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-                this.BGMを停止する();
-            }
-        }
-
 
 
         // 画面を構成するもの 
@@ -1115,8 +1154,6 @@ namespace DTXMania.ステージ.演奏
         }
 
 
-
-
         private Video _背景動画forDTX = null; // DTXの動画はこっち
         private bool _動画とBGMの再生開始済み = false;
 
@@ -1276,6 +1313,38 @@ namespace DTXMania.ステージ.演奏
                     BitmapInterpolationMode.Linear );
             } );
         }
+
+        private void _サービスメッセージが届いていれば対応する処理を行う()
+        {
+            var msg = App.サービスメッセージキュー.取得する();
+
+            if( null == msg )
+                return; // メッセージはない
+
+
+            App.最後に取得したビュアーメッセージ = msg;
+
+            switch( msg.種別 )
+            {
+                case API.ServiceMessage.指示種別.指示なし:
+                    Log.Info( $"サービスメッセージを受信しました。\n[{msg.ToString()}]" );
+                    break;
+
+                case API.ServiceMessage.指示種別.演奏開始:
+                    Log.Info( $"サービスメッセージを受信しました。\n[{msg.ToString()}]" );
+                    this._演奏状態を終了する();
+                    App.ビュアー用曲ノード = new 曲.MusicNode( msg.演奏対象曲のファイルパス, null );
+                    this._演奏状態を初期化する();
+                    this.現在のフェーズ = フェーズ.表示;
+                    break;
+
+                case API.ServiceMessage.指示種別.演奏停止:
+                    Log.Info( $"サービスメッセージを受信しました。\n[{msg.ToString()}]" );
+                    this._演奏状態を終了する();
+                    break;
+            }
+        }
+
 
         private bool _初めての進行描画 = true;
     }

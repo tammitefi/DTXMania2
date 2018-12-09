@@ -9,7 +9,7 @@ namespace DTXMania.ステージ.演奏
     /// <summary>
     ///		チップに対応する、チップの演奏情報。
     /// </summary>
-    class チップの演奏状態 : ICloneable, IDisposable
+    class チップの演奏状態 : ICloneable
     {
         public bool 可視 { get; set; } = true;
         public bool 不可視 { get => !this.可視; set => this.可視 = !value; }
@@ -25,10 +25,6 @@ namespace DTXMania.ステージ.演奏
         {
             this._chip = chip;
             this.ヒット前の状態にする();
-        }
-        public void Dispose()
-        {
-            this._chip = null;
         }
 
         public void ヒット前の状態にする()
