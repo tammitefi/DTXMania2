@@ -17,8 +17,6 @@ namespace DTXMania.曲
         private string[] _対応する拡張子 = { ".sstf", ".dtx", ".gda", ".g2d", "bms", "bme" };
 
 
-        // オンメモリ
-
         /// <summary>
         ///		曲ツリーのルートを表すノード。
         ///		フォーカスリストやフォーカスノードも、このツリーの中に実態がある。

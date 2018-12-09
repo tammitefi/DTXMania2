@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 
-namespace DTXMania.Viewer
+namespace DTXMania.API
 {
     /// <summary>
     ///		DTXMania が WCF を使ってサービスとして公開するインターフェースを定義する。
@@ -14,7 +14,7 @@ namespace DTXMania.Viewer
     {
         /// <summary>
         ///		曲を読み込み、演奏を開始する。
-        ///		ビュアーモードのときのみ有効。
+        ///		DTXManiaがビュアーモードで起動されているときのみ有効。
         /// </summary>
         /// <param name="path">曲ファイルパス</param>
         /// <param name="startPart">演奏開始小節番号(0～)</param>
@@ -24,7 +24,7 @@ namespace DTXMania.Viewer
 
         /// <summary>
         ///		現在の演奏を停止する。
-        ///		ビュアーモードのときのみ有効。
+        ///		DTXManiaがビュアーモードで起動されているときのみ有効。
         /// </summary>
         [OperationContract]
         void ViewerStop();

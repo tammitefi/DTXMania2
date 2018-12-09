@@ -12,7 +12,6 @@ namespace DTXMania.曲
 {
     /// <summary>
     ///		主にDTXファイルの #WAV サウンドを管理する。
-    ///		SSTファイルのドラムサウンドは、ここではなく <see cref="DTXMania.ステージ.ドラムサウンド"/> で管理する。
     /// </summary>
     class WAV管理 : IDisposable
     {
@@ -26,14 +25,6 @@ namespace DTXMania.曲
 
                 this._既定の多重度 = 多重度;
 
-                this.初期化する();
-            }
-        }
-
-        public void 初期化する()
-        {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
                 this._WavContexts = new Dictionary<int, WavContext>();
             }
         }
@@ -43,27 +34,15 @@ namespace DTXMania.曲
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 foreach( var kvp in this._WavContexts )
-                {
-                    var context = kvp.Value;
+                    kvp.Value.Dispose();
 
-                    // Sound[] を解放。
-                    if( null != context.Sounds )
-                    {
-                        foreach( var sd in context.Sounds )
-                            sd.Stop();
-                        context.Sounds = null;
-                    }
-
-                    // Source を解放。
-                    context.SampleSource?.Dispose();
-                }
                 this._WavContexts.Clear();
                 this._WavContexts = null;
             }
         }
 
         /// <summary>
-        ///		WAVファイルを登録する。
+        ///		指定したWAV番号にサウンドファイルを登録する。
         /// </summary>
         /// <param name="wav番号">登録する番号。0～1295。すでに登録されている場合は上書き更新される。</param>
         /// <param name="サウンドファイル">登録するサウンドファイルのパス。</param>
@@ -74,8 +53,8 @@ namespace DTXMania.曲
             if( null == device )
                 throw new ArgumentNullException();
 
-            if( ( 0 > wav番号 ) || ( 1295 < wav番号 ) )
-                throw new ArgumentOutOfRangeException( $"WAV番号が範囲を超えています。[{wav番号}]" );
+            if( ( 0 > wav番号 ) || ( 36 * 36 <= wav番号 ) )
+                throw new ArgumentOutOfRangeException( $"WAV番号が範囲(0～1295)を超えています。[{wav番号}]" );
 
             if( !( File.Exists( サウンドファイル.変数なしパス ) ) )
             {
@@ -99,20 +78,19 @@ namespace DTXMania.曲
 
             // すでに登録済みなら解放する。
             if( this._WavContexts.ContainsKey( wav番号 ) )
-            {
                 this._WavContexts[ wav番号 ].Dispose();
-                this._WavContexts.Remove( wav番号 );
-            }
 
             // 新しいContextを生成して登録する。
-            var context = new WavContext( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
+            {
+                var context = new WavContext( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
 
-            context.SampleSource = sampleSource;
+                context.SampleSource = sampleSource;
 
-            for( int i = 0; i < context.Sounds.Length; i++ )
-                context.Sounds[ i ] = new Sound( device, context.SampleSource );
+                for( int i = 0; i < context.Sounds.Length; i++ )
+                    context.Sounds[ i ] = new Sound( device, context.SampleSource );
 
-            this._WavContexts.Add( wav番号, context );
+                this._WavContexts[ wav番号 ] = context;
+            }
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
         }
@@ -127,12 +105,11 @@ namespace DTXMania.曲
             if( !( this._WavContexts.ContainsKey( WAV番号 ) ) )
                 return;
 
-            // 必要あれば消音する。
+            // 消音する（必要あれば）。
             if( 発声前に消音する && muteGroupType != 消音グループ種別.Unknown )
             {
-                // 指定された消音グループ種別に属する Sound をすべて停止する。
+                // 発生時に指定された消音グループ種別に属するWAVサウンドをすべて停止する。
                 var 停止するWavContexts = this._WavContexts.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
-
                 foreach( var wavContext in 停止するWavContexts )
                     foreach( var sound in wavContext.Value.Sounds )
                         sound.Stop();
@@ -185,16 +162,19 @@ namespace DTXMania.曲
 
             public void Dispose()
             {
-                foreach( var sd in this.Sounds )
-                    sd.Dispose();
-                this.Sounds = null;
+                if( null != this.Sounds )
+                {
+                    foreach( var sd in this.Sounds )
+                        sd.Dispose();
+                    this.Sounds = null;
+                }
 
                 this.SampleSource?.Dispose();
                 this.SampleSource = null;
             }
 
             /// <summary>
-            ///		指定したチップ種別扱いでWAVを発声する。
+            ///		指定したチップ種別扱いでWAVサウンドを発声する。
             /// </summary>
             /// <param name="音量">0:無音～1:原音</param>
             public void 発声する( 消音グループ種別 muteGroupType, float 音量 )
@@ -205,15 +185,15 @@ namespace DTXMania.曲
                 音量 = 
                     ( 0f > 音量 ) ? 0f : 
                     ( 1f < 音量 ) ? 1f : 音量;
-                this.Sounds[ this.次に再生するSound番号 ].Volume = 音量;
-                this.Sounds[ this.次に再生するSound番号 ].Play( 0 );
+                this.Sounds[ this._次に再生するSound番号 ].Volume = 音量;
+                this.Sounds[ this._次に再生するSound番号 ].Play( 0 );
 
                 // サウンドローテーション。
-                this.次に再生するSound番号 = ( this.次に再生するSound番号 + 1 ) % this.Sounds.Length;
+                this._次に再生するSound番号 = ( this._次に再生するSound番号 + 1 ) % this.Sounds.Length;
             }
 
 
-            private int 次に再生するSound番号 = 0;
+            private int _次に再生するSound番号 = 0;
         }
 
         /// <summary>

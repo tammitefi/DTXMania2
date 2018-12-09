@@ -7,7 +7,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Windows.Forms;
 using FDK;
-using DTXMania.Viewer;
+using DTXMania.API;
 
 namespace DTXMania
 {

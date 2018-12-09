@@ -18,7 +18,7 @@ using DTXMania.ステージ;
 using DTXMania.曲;
 using DTXMania.設定;
 using DTXMania.入力;
-using DTXMania.Viewer;
+using DTXMania.API;
 
 namespace DTXMania
 {
@@ -33,10 +33,6 @@ namespace DTXMania
 
         public static bool ビュアーモードである { get; protected set; }
 
-        /// <remarks>
-        ///		SharpDX.Mathematics パッケージを参照し、かつ SharpDX 名前空間を using しておくと、
-        ///		SharpDX で定義する追加の拡張メソッド（NextFloatなど）を使えるようになる。
-        /// </remarks>
         public static Random 乱数 { get; protected set; }
 
         public static システム設定 システム設定 { get; protected set; }
@@ -44,8 +40,6 @@ namespace DTXMania
         public static 入力管理 入力管理 { get; set; }
 
         public static ステージ管理 ステージ管理 { get; protected set; }
-
-        public static 曲ツリー 曲ツリー { get; set; }
 
         public static SoundDevice サウンドデバイス { get; protected set; }
 
@@ -55,19 +49,24 @@ namespace DTXMania
 
         public static ユーザ管理 ユーザ管理 { get; protected set; }
 
+
+        public static 曲ツリー 曲ツリー { get; set; }   // ビュアーモード時は未使用。
+
+        public static MusicNode ビュアー用曲ノード { get; set; } // ビュアーモードでのみ使用。
+
         public static スコア 演奏スコア { get; set; }
 
         public static WAV管理 WAV管理 { get; set; }
 
-        public static bool ウィンドウがアクティブである { get; set; } = false;
 
+        public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
         public static bool ウィンドウがアクティブではない
-		{
-			get
-				=> !( App.ウィンドウがアクティブである );
-			set
-				=> App.ウィンドウがアクティブである = !( value );
-		}
+        {
+            get
+                => !( App.ウィンドウがアクティブである );
+            set
+                => App.ウィンドウがアクティブである = !( value );
+        }
 
         /// <summary>
         ///		ウィンドウの表示モード（全画面 or ウィンドウ）を示す。
@@ -130,12 +129,6 @@ namespace DTXMania
 
                 App.ステージ管理 = new ステージ管理();
 
-                App.曲ツリー = new 曲ツリー();
-
-                App.演奏スコア = null;
-
-                App.WAV管理 = null;
-
                 App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
                 App.サウンドデバイス.音量 = 0.5f;
 
@@ -145,6 +138,16 @@ namespace DTXMania
 
                 App.ユーザ管理 = new ユーザ管理();
                 App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
+
+
+                App.曲ツリー = new 曲ツリー();
+
+                App.ビュアー用曲ノード = null;
+
+                App.演奏スコア = null;
+
+                App.WAV管理 = null;
+
 
                 this._活性化する();
 

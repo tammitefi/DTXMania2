@@ -186,13 +186,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ServiceMessage.cs" />
+    <Compile Include="API\ServiceMessageQueue.cs" />
     <Compile Include="App.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="Viewer\IDTXManiaService.cs" />
+    <Compile Include="API\IDTXManiaService.cs" />
     <Compile Include="アイキャッチ\GO.cs" />
     <Compile Include="アイキャッチ\アイキャッチ.cs" />
     <Compile Include="アイキャッチ\シャッター.cs" />
