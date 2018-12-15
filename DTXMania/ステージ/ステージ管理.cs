@@ -53,7 +53,7 @@ namespace DTXMania.ステージ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                // 全ステージの初期化
+                // 現在のステージの初期化
                 if( this.現在のステージ?.活性化していない ?? false )
                     this.現在のステージ?.活性化する();
 
@@ -84,11 +84,12 @@ namespace DTXMania.ステージ
 
         public string 最初のステージ名
             => this.ステージリスト.ElementAt( 0 ).Value.GetType().Name;
+
         public ステージ 現在のステージ { get; private set; }
 
         /// <summary>
         ///		全ステージのリスト。
-        ///		新しいステージができたら、ここに追加すること。
+        ///		新しいステージができたら、ここに名前とインスタンスを追加すること。
         /// </summary>
         public Dictionary<string, ステージ> ステージリスト = new Dictionary<string, ステージ>() {
             { nameof( 起動.起動ステージ ),          new 起動.起動ステージ() },
@@ -140,7 +141,7 @@ namespace DTXMania.ステージ
         /// </summary>
         /// <remarks>
         ///     クローズしたアイキャッチをオープンする際には、クローズしたときと同じアイキャッチを使う必要がある。
-        ///     指定したアイキャッチは <see cref="現在のアイキャッチ"/> に保存されるので、
+        ///     ここで指定したアイキャッチは <see cref="現在のアイキャッチ"/> に保存されるので、
         ///     遷移先のステージでオープンするアイキャッチには、これを使用すること。
         /// </remarks>
         public void アイキャッチを選択しクローズする( string 名前 )
@@ -149,6 +150,10 @@ namespace DTXMania.ステージ
             this.現在のアイキャッチ.クローズする();
         }
 
+        /// <summary>
+        ///     全アイキャッチのリスト。
+        ///		新しいアイキャッチができたら、ここに名前とインスタンスを追加すること。
+        /// </summary>
         private Dictionary<string, アイキャッチ.アイキャッチ> _アイキャッチリスト = new Dictionary<string, アイキャッチ.アイキャッチ>() {
             { nameof( アイキャッチ.シャッター ),       new アイキャッチ.シャッター() },
             { nameof( アイキャッチ.回転幕 ),           new アイキャッチ.回転幕() },

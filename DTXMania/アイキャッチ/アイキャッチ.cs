@@ -25,11 +25,7 @@ namespace DTXMania.アイキャッチ
             クローズ完了,
             オープン完了
         }
-        public フェーズ 現在のフェーズ
-        {
-            get;
-            protected set;
-        } = フェーズ.未定;
+        public フェーズ 現在のフェーズ { get; protected set; } = フェーズ.未定;
 
         protected override void On活性化()
         {

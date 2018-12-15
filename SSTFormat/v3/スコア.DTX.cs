@@ -43,9 +43,11 @@ namespace SSTFormat.v3
                     string ファイルの拡張子 = Path.GetExtension( ファイルパス ).ToLower();
 
                     // マップから、拡張子に対応するデータ種別を取得する。
-
                     if( !( 拡張子toデータ種別マップ.TryGetValue( ファイルの拡張子, out データ種別 確定したデータ種別 ) ) )
-                        確定したデータ種別 = データ種別.DTX;   // マップにない拡張子はすべて DTX とみなす。
+                    {
+                        // マップにない拡張子はすべて DTX とみなす。
+                        確定したデータ種別 = データ種別.DTX;
+                    }
 
                     データ種別 = 確定したデータ種別;
                     //----------------
@@ -55,7 +57,6 @@ namespace SSTFormat.v3
                 string 全入力文字列 = null;
 
                 // ファイルの内容を一気読み。
-
                 using( var sr = new StreamReader( ファイルパス, Encoding.GetEncoding( 932/*Shift-JIS*/ ) ) )
                     全入力文字列 = sr.ReadToEnd();
 

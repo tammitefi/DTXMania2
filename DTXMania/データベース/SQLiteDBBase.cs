@@ -27,6 +27,7 @@ namespace DTXMania.データベース
         }
 
         public SQLiteConnection Connection { get; protected set; } = null;
+
         public DataContext DataContext { get; protected set; } = null;
 
 

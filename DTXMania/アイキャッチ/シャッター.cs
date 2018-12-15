@@ -160,9 +160,9 @@ namespace DTXMania.アイキャッチ
                         完全開き時刻sec = 0.40,
                         開閉時間sec = 0.2,
                     },
-				    //----------------
-				    #endregion
-			    };
+                    //----------------
+                    #endregion
+                };
 
                 //for( int i = 0; i < シャッター枚数; i++ )
                 //	this._シャッター情報[ i ].開to閉割合 = new Variable( gd.Animation.Manager, initialValue: 0.0 );

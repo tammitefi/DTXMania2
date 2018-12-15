@@ -8,14 +8,28 @@ using DTXMania.設定;
 
 namespace DTXMania.入力
 {
+    /// <summary>
+    ///     入力デバイスと、その入力データの管理。
+    /// </summary>
+    /// <remarks>
+    ///     入力デバイスを初期化し、入力されたデータをキューイングする。
+    ///     デバイスからの入力データは、仮想的なドラムの入力に変換し、提供される。
+    ///     また、単発の入力だけでなく、複数の入力を１つの「シーケンス」として提供する機能も持つ。
+    /// </remarks>
     class 入力管理 : IDisposable
     {
         public Func<キーバインディング> キーバインディングを取得する = null;   // 外部依存アクション
 
         public Action キーバインディングを保存する = null;    // 外部依存アクション
 
+        /// <summary>
+        ///     キーボードデバイス。
+        /// </summary>
         public Keyboard Keyboard { get; protected set; } = null;
 
+        /// <summary>
+        ///     MIDI入力デバイス。
+        /// </summary>
         public MidiIn MidiIn { get; protected set; } = null;
 
         /// <summary>

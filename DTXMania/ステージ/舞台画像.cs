@@ -97,6 +97,7 @@ namespace DTXMania.ステージ
             {
                 if( 0.0 == 完了までの最大時間sec )
                 {
+                    // (A) アニメーションなしで即適用
                     this._ストーリーボード?.Abandon();
                     this._ストーリーボード?.Dispose();
                     this._ストーリーボード = null;
@@ -105,13 +106,14 @@ namespace DTXMania.ステージ
                 }
                 else
                 {
+                    // (B) アニメーションを付けて徐々に適用
                     using( var 割合遷移 = animation.TrasitionLibrary.SmoothStop( 完了までの最大時間sec, finalValue: 1.0 ) )
                     {
                         this._ストーリーボード?.Abandon();
                         this._ストーリーボード?.Dispose();
                         this._ストーリーボード = new Storyboard( animation.Manager );
                         this._ストーリーボード.AddTransition( this._ぼかしと縮小割合, 割合遷移 );
-                        this._ストーリーボード.Schedule( animation.Timer.Time ); // 今すぐ開始
+                        this._ストーリーボード.Schedule( animation.Timer.Time ); // 今すぐアニメーション開始
                     }
                 }
                 this.ぼかしと縮小を適用中 = true;
@@ -127,6 +129,7 @@ namespace DTXMania.ステージ
             {
                 if( 0.0 == 完了までの最大時間sec )
                 {
+                    // (A) アニメーションなしで即適用
                     this._ストーリーボード?.Abandon();
                     this._ストーリーボード?.Dispose();
                     this._ストーリーボード = null;
@@ -135,13 +138,14 @@ namespace DTXMania.ステージ
                 }
                 else
                 {
+                    // (B) アニメーションを付けて徐々に適用
                     using( var 割合遷移 = animation.TrasitionLibrary.SmoothStop( 完了までの最大時間sec, finalValue: 0.0 ) )
                     {
                         this._ストーリーボード?.Abandon();
                         this._ストーリーボード?.Dispose();
                         this._ストーリーボード = new Storyboard( animation.Manager );
                         this._ストーリーボード.AddTransition( this._ぼかしと縮小割合, 割合遷移 );
-                        this._ストーリーボード.Schedule( animation.Timer.Time );    // 今すぐ開始
+                        this._ストーリーボード.Schedule( animation.Timer.Time );    // 今すぐアニメーション開始
                     }
                 }
                 this.ぼかしと縮小を適用中 = false;
