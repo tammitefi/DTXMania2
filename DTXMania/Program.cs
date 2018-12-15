@@ -17,6 +17,12 @@ namespace DTXMania
         public const int ログファイルの最大保存日数 = 30;
         public static string ログファイル名 = "";
 
+        // WCFサービスのエンドポイントとURI。
+        public static readonly string serviceUri = "net.pipe://localhost/DTXMania";
+        public static readonly string endPointName = "Viewer";
+        public static readonly string endPointUri = $"{serviceUri}/{endPointName}";
+
+        // メインエントリ。
         [STAThread]
         static void Main( string[] args )
         {
@@ -52,61 +58,43 @@ namespace DTXMania
                 Log.システム情報をログ出力する();
                 Log.WriteLine( "" );
 
-                // アプリを初期化する。
-                using( Program.App = new App( args ) )
+
+                var options = new CommandLineOptions();
+
+                #region " コマンドライン引数を解析する。"
+                //----------------
+                if( !options.解析する( args ) )
                 {
-                    var WCFサービスホスト = (ServiceHost) null;
+                    // 利用法を表示して終了。
+                    Log.WriteLine( options.Usage );     // ログと
+                    Console.WriteLine( options.Usage ); // 標準出力の両方へ
+                    return;
+                }
+                //----------------
+                #endregion
 
-                    #region " WCFサービスホストを起動する。ついでに二重起動チェックも行う。"
-                    //----------------
-                    // WCFサービスのエンドポイントとURI。
-                    string serviceUri = "net.pipe://localhost/DTXMania";
-                    string endPointName = "Viewer";
-                    string endPointUri = $"{serviceUri}/{endPointName}";
+                bool ビュアーモードである = ( options.再生開始 || options.再生停止 );
 
-                    // アプリのWCFサービスホストを生成する。
-                    WCFサービスホスト = new ServiceHost( Program.App, new Uri( serviceUri ) );
 
-                    // 名前付きパイプにバインドしたエンドポイントをサービスホストへ追加する。
-                    WCFサービスホスト.AddServiceEndpoint(
-                        typeof( IDTXManiaService ),     // 公開するインターフェース
-                        new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ),   // 名前付きパイプ
-                        endPointName ); // 公開するエンドポイント
-
-                    // WCFサービスの受付を開始する。
-                    try
+                if( ビュアーモードである )
+                {
+                    if( _WCFサービスを取得する( 1, out var factory, out var service, out var serviceChannel ) )
                     {
-                        WCFサービスホスト.Open();
-                        Log.Info( $"WCF サービスの受付を開始しました。[{endPointUri}]" );
+                        // (A) すでに起動しているアプリへ処理を委託。
+                        _起動済みのアプリケーションに処理を委託する( service, options );
+                        _WCFサービスを解放する( factory, service, serviceChannel );
                     }
-                    catch( AddressAlreadyInUseException )
+                    else
                     {
-                        // エンドポイントが使用中なら、アプリの二重起動とみなして終了。
-                        MessageBox.Show( "DTXMania はすでに起動しています。多重起動はできません。", "DTXMania Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
-                        return;
-                    }
-                    //----------------
-                    #endregion
-
-                    try
-                    {
-                        // アプリを実行する。
-                        Program.App.Run();
-                    }
-                    finally
-                    {
-                        #region " WCFサービスホストを終了する。"
-                        //----------------
-                        WCFサービスホスト.Close( new TimeSpan( 0, 0, 2 ) );   // 最大2sec待つ
-                        Log.Info( $"WCF サービス {endPointUri} の受付を終了しました。" );
-                        //----------------
-                        #endregion
+                        // (B) 自分がビュアーとして起動し、処理を自分へ委託。
+                        _アプリケーションをビュアーモードで起動する( options );
                     }
                 }
-                Log.Header( "アプリケーションを終了しました。" );
-
-                Log.WriteLine( "" );
-                Log.WriteLine( "遊んでくれてありがとう！" );
+                else
+                {
+                    // (C) 通常起動する。
+                    _アプリケーションを通常起動する();
+                }
             }
 #if !DEBUG
             catch( Exception e )
@@ -127,6 +115,134 @@ namespace DTXMania
                 // DEBUG 時には、未処理の例外が発出されてもcatchしない。（デバッガでキャッチすることを想定。）
             }
 #endif
+        }
+
+
+        static bool _WCFサービスを取得する( int 最大リトライ回数, out ChannelFactory<IDTXManiaService> factory, out IDTXManiaService service, out IClientChannel serviceChannel )
+        {
+            for( int retry = 1; retry <= 最大リトライ回数; retry++ )
+            {
+                try
+                {
+                    factory = new ChannelFactory<IDTXManiaService>( new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ) );
+                    service = factory.CreateChannel( new EndpointAddress( endPointUri ) );
+                    serviceChannel = service as IClientChannel; // サービスとチャンネルは同じオブジェクト。
+                    serviceChannel.Open();
+                    return true;    // 取得成功。
+                }
+                catch
+                {
+                    // 取得失敗。少し待ってからリトライする。
+                    if( 最大リトライ回数 != retry )
+                        System.Threading.Thread.Sleep( 500 );
+                    continue;
+                }
+            }
+
+            serviceChannel = null;
+            service = null;
+            factory = null;
+            return false;   // 取得失敗。
+        }
+
+        static void _WCFサービスを解放する( ChannelFactory<IDTXManiaService> factory, IDTXManiaService service, IClientChannel serviceChannel )
+        {
+            serviceChannel?.Close();
+            factory?.Close();
+        }
+
+        static bool _WCFサービスホストを起動する( out ServiceHost serviceHost )
+        {
+            // アプリのWCFサービスホストを生成する。
+            serviceHost = new ServiceHost( Program.App, new Uri( serviceUri ) );
+
+            // 名前付きパイプにバインドしたエンドポイントをサービスホストへ追加する。
+            serviceHost.AddServiceEndpoint(
+                typeof( IDTXManiaService ),     // 公開するインターフェース
+                new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ),   // 名前付きパイプ
+                endPointName ); // 公開するエンドポイント
+
+            // WCFサービスの受付を開始する。
+            try
+            {
+                serviceHost.Open();
+                Log.Info( $"WCF サービスの受付を開始しました。[{endPointUri}]" );
+            }
+            catch( AddressAlreadyInUseException )
+            {
+                // エンドポイントが使用中なら、アプリの二重起動とみなして終了。
+                MessageBox.Show( "DTXMania はすでに起動しています。多重起動はできません。", "DTXMania Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                return false;
+            }
+
+            return true;
+        }
+
+        static void _WCFサービスホストを終了する( ServiceHost serviceHost )
+        {
+            serviceHost.Close( new TimeSpan( 0, 0, 2 ) );   // 最大2sec待つ
+
+            Log.Info( $"WCF サービス {endPointUri} の受付を終了しました。" );
+        }
+
+        static void _アプリケーションを通常起動する()
+        {
+            using( Program.App = new App( ビュアーモードである: false ) )
+            {
+                var WCFサービスホスト = (ServiceHost) null;
+
+                _WCFサービスホストを起動する( out WCFサービスホスト );
+
+                try
+                {
+                    // アプリを実行する。
+                    Program.App.Run();
+                }
+                finally
+                {
+                    _WCFサービスホストを終了する( WCFサービスホスト );
+                }
+            }
+            Log.Header( "アプリケーションを終了しました。" );
+
+            Log.WriteLine( "" );
+            Log.WriteLine( "遊んでくれてありがとう！" );
+        }
+
+        static void _アプリケーションをビュアーモードで起動する( CommandLineOptions options )
+        {
+            using( Program.App = new App( ビュアーモードである: true ) )
+            {
+                var WCFサービスホスト = (ServiceHost) null;
+
+                _WCFサービスホストを起動する( out WCFサービスホスト );
+
+                try
+                {
+                    // 自分へ処理委託。
+                    _起動済みのアプリケーションに処理を委託する( Program.App, options );
+
+                    // アプリを実行する。
+                    Program.App.Run();
+                }
+                finally
+                {
+                    _WCFサービスホストを終了する( WCFサービスホスト );
+                }
+            }
+            Log.Header( "アプリケーションを終了しました。" );
+        }
+
+        static void _起動済みのアプリケーションに処理を委託する( IDTXManiaService service, CommandLineOptions options )
+        {
+            if( options.再生開始 )
+            {
+                service.ViewerPlay( options.Filename, options.再生開始小節番号, options.ドラム音を発声する );
+            }
+            else if( options.再生停止 )
+            {
+                service.ViewerStop();
+            }
         }
     }
 }

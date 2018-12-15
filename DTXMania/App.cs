@@ -87,7 +87,7 @@ namespace DTXMania
         }
 
 
-        public App( string[] args )
+        public App( bool ビュアーモードである )
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -96,20 +96,7 @@ namespace DTXMania
                 SharpDX.Configuration.EnableReleaseOnFinalizer = true;          // ファイナライザの実行中、未解放のCOMを見つけたら解放を試みる。
                 SharpDX.Configuration.EnableTrackingReleaseOnFinalizer = true;  // その際には Trace にメッセージを出力する。
 #endif
-                #region " ビュアーモード？ "
-                //----------------
-                App.ビュアーモードである = false;
-
-                foreach( var arg in args )
-                {
-                    if( ( "-v" == arg.ToLower() ) || ( "-viewer" == arg.ToLower() ) )
-                    {
-                        App.ビュアーモードである = true;
-                        break;
-                    }
-                }
-                //----------------
-                #endregion
+                App.ビュアーモードである = ビュアーモードである;
 
                 this.Text = "DTXMania " + App.リリース番号.ToString( "000" ) + ( App.ビュアーモードである ? " [Viewer]" : "" );
 
@@ -404,7 +391,7 @@ namespace DTXMania
                 switch( App.ステージ管理.現在のステージ )
                 {
                     case ステージ.起動.起動ステージ stage:
-                        #region " 確定 → タイトルステージへ "
+                        #region " 確定 → タイトルステージ（通常時）または演奏ステージ（ビュアー時）へ "
                         //----------------
                         if( stage.現在のフェーズ == ステージ.起動.起動ステージ.フェーズ.確定 )
                         {
