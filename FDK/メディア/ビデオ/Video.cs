@@ -24,7 +24,6 @@ namespace FDK
         }
         protected override void On活性化()
         {
-            base.On活性化();
         }
         protected override void On非活性化()
         {
@@ -32,8 +31,6 @@ namespace FDK
 
             this._MFFileVideoSource?.Dispose();
             this._MFFileVideoSource = null;
-
-            base.On非活性化();
         }
         public void 再生を開始する()
         {

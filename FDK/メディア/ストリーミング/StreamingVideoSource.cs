@@ -15,11 +15,13 @@ namespace FDK
     {
         public Size2F フレームサイズ { get; protected set; }
 
+
         public StreamingVideoSource( Size2F フレームサイズ )
         {
             this.フレームサイズ = フレームサイズ;
             this._FrameQueue = new BlockingQueue<VideoFrame>( 3 );
         }
+
         public void Dispose()
         {
             this.Cancel();
@@ -100,7 +102,9 @@ namespace FDK
             }
         }
 
+
         private BlockingQueue<VideoFrame> _FrameQueue = null;
+
         private bool _キャンセル済み = false;
     }
 }

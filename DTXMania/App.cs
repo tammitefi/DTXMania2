@@ -143,8 +143,6 @@ namespace DTXMania
 
                 App.サービスメッセージキュー = new ServiceMessageQueue();
 
-                App.最後に取得したビュアーメッセージ = null;
-
 
                 this._活性化する();
 
@@ -397,8 +395,8 @@ namespace DTXMania
                         {
                             if( App.ビュアーモードである )
                             {
-                                // (A) 演奏ステージへ
-                                App.ステージ管理.ステージを遷移する( nameof( ステージ.演奏.演奏ステージ ) );
+                                // (A) 演奏ステージ（ビュアーモード）へ
+                                App.ステージ管理.ステージを遷移する( nameof( ステージ.演奏.演奏ステージ_ビュアーモード ) );
                             }
                             else
                             {
@@ -532,6 +530,9 @@ namespace DTXMania
                         }
                         //----------------
                         #endregion
+                        break;
+
+                    case ステージ.演奏.演奏ステージ_ビュアーモード stage:
                         break;
 
                     case ステージ.結果.結果ステージ stage:

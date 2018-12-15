@@ -17,8 +17,6 @@ namespace DTXMania
     {
         public static API.ServiceMessageQueue サービスメッセージキュー { get; protected set; }
 
-        public static API.ServiceMessage 最後に取得したビュアーメッセージ { get; set; } = null;
-
         
         /// <summary>
         ///		曲を読み込み、演奏を開始する。

@@ -12,7 +12,9 @@ namespace FDK
     public class MediaFoundationFileVideoSource : IVideoSource
     {
         public Size2F フレームサイズ { get; protected set; }
+
         public bool ループ再生する { get; set; } = false;
+
 
         public MediaFoundationFileVideoSource( VariablePath ファイルパス )
         {
@@ -65,17 +67,15 @@ namespace FDK
 
             this._VideoSource = new StreamingVideoSource( this.フレームサイズ );
 
-            #region " デコード開始。"
-            //----------------
+            // デコード開始。
             this._デコードキャンセル = new CancellationTokenSource();
             this._デコード起動完了通知 = new ManualResetEvent( false );
             this._デコードタスク = Task.Factory.StartNew( this._デコードタスクエントリ, this._デコードキャンセル.Token );
             this._デコード起動完了通知.WaitOne();
-            //----------------
-            #endregion
 
             Thread.Sleep( 500 );    // デコードデータが蓄積されるまで待機（手抜き
         }
+
         public void Dispose()
         {
             #region " デコードタスクが稼働してたら停止する。"
@@ -105,12 +105,14 @@ namespace FDK
             this._SourceReaderEx?.Dispose();
             this._SourceReaderEx = null;
         }
+
         /// <summary>
         ///     次に読みだされるフレームがあれば、その表示予定時刻[100ns単位]を返す。
         ///     フレームがなければ、ブロックせずにすぐ 負数 を返す。
         /// </summary>
         public long Peek()
             => this._VideoSource.Peek();
+        
         /// <summary>
         ///     フレームを１つ読みだす。
         ///     再生中の場合、フレームが取得できるまでブロックする。
@@ -120,14 +122,21 @@ namespace FDK
         public VideoFrame Read()
             => this._VideoSource.Read();
 
+
         private SourceReaderEx _SourceReaderEx = null;
+
         private double _長さsec = 0.0;
+
         private MediaType _VideoのMediaType = null;
+
         private StreamingVideoSource _VideoSource = null;
 
         private Task _デコードタスク = null;
+
         private CancellationTokenSource _デコードキャンセル = null;
+
         private ManualResetEvent _デコード起動完了通知 = null;
+
 
         private void _デコードタスクエントリ()
         {
