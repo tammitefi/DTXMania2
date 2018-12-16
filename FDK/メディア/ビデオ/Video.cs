@@ -39,9 +39,31 @@ namespace FDK
             this._MFFileVideoSource = null;
         }
 
-        public void 再生を開始する()
+        public void 再生を開始する( double 再生開始時刻sec = 0.0 )
         {
+            if( 0.0 < 再生開始時刻sec )
+            {
+                #region " 再生開始時刻までフレームをスキップする。"
+                //----------------
+                double 再生開始時刻ns = FDKUtilities.変換_sec単位から100ns単位へ( 再生開始時刻sec );
+
+                long 次のフレームの表示予定時刻100ns;
+
+                while( true )
+                {
+                    次のフレームの表示予定時刻100ns = this._VideoSource.Peek(); // なければ負数
+
+                    if( 0 > 次のフレームの表示予定時刻100ns || 再生開始時刻ns <= 次のフレームの表示予定時刻100ns )
+                        break;
+
+                    this._VideoSource.Read().Dispose(); // 破棄して次へ。
+                }
+                //----------------
+                #endregion
+            }
+
             this._再生タイマ = new QPCTimer();
+            this._再生タイマ.リセットする( QPCTimer.秒をカウントに変換して返す( 再生開始時刻sec ) );
 
             this.再生中 = true;
         }
