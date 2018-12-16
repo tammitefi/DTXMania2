@@ -60,6 +60,7 @@ namespace FDK
             {
                 var fi = new FileInfo( ファイルパス.変数なしパス );
 
+                /*
                 if( 1 * 1024 * 1024 < fi.Length )   // 1MB 以上ならストリーミング再生
                 {
                     return new MediaFoundationOnStreamingWaveSource( ファイルパス, device.WaveFormat )
@@ -70,6 +71,12 @@ namespace FDK
                     return new MediaFoundationOnMemoryWaveSource( ファイルパス, device.WaveFormat )
                         .ToSampleSource();
                 }
+                */
+
+                // すべてオンメモリ
+                return new MediaFoundationOnMemoryWaveSource( ファイルパス, device.WaveFormat )
+                    .ToSampleSource();
+
             }
             catch
             {

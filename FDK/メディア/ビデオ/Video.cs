@@ -12,6 +12,8 @@ namespace FDK
     {
         public bool 加算合成 { get; set; } = false;
 
+        public bool 再生中 { get; protected set; } = false;
+
 
         public Video( VariablePath ファイルパス )
         {
@@ -40,12 +42,16 @@ namespace FDK
         public void 再生を開始する()
         {
             this._再生タイマ = new QPCTimer();
+
+            this.再生中 = true;
         }
 
         public void 再生を終了する()
         {
             this._最後のフレーム?.Dispose();
             this._最後のフレーム = null;
+
+            this.再生中 = false;
         }
 
         public void 描画する( DeviceContext1 dc, RectangleF 描画先矩形, float 不透明度0to1 = 1.0f )

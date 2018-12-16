@@ -217,7 +217,6 @@
     <Compile Include="メディア\ビデオ\Sources\IVideoSource.cs" />
     <Compile Include="メディア\ビデオ\Sources\MediaFoundationFileVideoSource.cs" />
     <Compile Include="メディア\ビデオ\Sources\VideoFrame.cs" />
-    <Compile Include="メディア\動画とBGM.cs" />
     <Compile Include="同期\BlockingQueue.cs" />
     <Compile Include="メディア\ストリーミング\HttpRandomAccessStream.cs" />
     <Compile Include="メディア\ビデオ\Video.cs" />

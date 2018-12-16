@@ -18,6 +18,7 @@ namespace DTXMania.ステージ.演奏
 {
     class 演奏ステージ_ビュアーモード : ステージ
     {
+        /*
         public const float ヒット判定位置Ydpx = 847f;
 
 
@@ -1119,5 +1120,6 @@ namespace DTXMania.ステージ.演奏
 
             return 一番近いチップ;
         }
+        */
     }
 }

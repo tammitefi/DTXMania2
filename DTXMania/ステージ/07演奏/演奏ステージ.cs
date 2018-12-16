@@ -32,6 +32,10 @@ namespace DTXMania.ステージ.演奏
         }
         public フェーズ 現在のフェーズ { get; protected set; }
 
+        /// <summary>
+        ///     フェードインアイキャッチの遷移元画面。
+        ///     活性化前に、外部から設定される。
+        /// </summary>
         public Bitmap キャプチャ画面 { get; set; } = null;
 
         public 成績 成績 { get; protected set; } = null;
@@ -75,7 +79,6 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.キャプチャ画面 = null;
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
                 this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムチップ.json" ).変数なしパス ) );
@@ -111,6 +114,15 @@ namespace DTXMania.ステージ.演奏
                 //----------------
                 #endregion
 
+                this._動画?.非活性化する();
+                this._動画 = null;
+
+                this._BGM?.Dispose();
+                this._BGM = null;
+
+                this._BGMsource?.Dispose();
+                this._BGMsource = null;
+
                 this._拍線色?.Dispose();
                 this._拍線色 = null;
 
@@ -122,126 +134,120 @@ namespace DTXMania.ステージ.演奏
             }
         }
 
+        /// <summary>
+        ///     <see cref="App.演奏スコア"/> に対して、ステージを初期化する。
+        /// </summary>
         private void _演奏状態を初期化する()
         {
+            // スコアに依存するデータを初期化する。
+
             this.成績 = new 成績();
             this.成績.スコアと設定を反映する( App.演奏スコア, App.ユーザ管理.ログオン中のユーザ );
 
+            this._カウントマップライン.非活性化する();
+            this._カウントマップライン.活性化する();
+
             this._描画開始チップ番号 = -1;
 
-            this.BGMを停止する();
-
             this._チップの演奏状態 = new Dictionary<チップ, チップの演奏状態>();
+            foreach( var chip in App.演奏スコア.チップリスト )
+                this._チップの演奏状態.Add( chip, new チップの演奏状態( chip ) );
 
-            if( null != App.演奏スコア )
+
+            // 背景動画とBGMを生成する。
+
+            if( App.演奏スコア.背景動画ID.Nullでも空でもない() )
             {
-                foreach( var chip in App.演奏スコア.チップリスト )
-                    this._チップの演奏状態.Add( chip, new チップの演奏状態( chip ) );
-
-                #region " 背景動画とBGMを生成する。"
+                #region " (A) SSTF準拠のストリーミング動画 --> 今は凍結中 "
                 //----------------
-                if( App.演奏スコア.背景動画ID.Nullでも空でもない() )
-                {
-                    #region " (A) SSTF準拠のストリーミング動画 "
-                    //----------------
-                    var items = App.演奏スコア.背景動画ID.Split( ':' );
+                //var items = App.演奏スコア.背景動画ID.Split( ':' );
 
-                    if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
-                    {
-                        switch( items[ 0 ].ToLower() )
-                        {
-                            case "nicovideo":
-                                {
-                                    var vpath = new VariablePath( @"$(AppData)nicovideo.json" );
-                                    try
-                                    {
-                                        var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
-                                        this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
-                                        Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
-                                    }
-                                    catch( Exception )
-                                    {
-                                        Log.ERROR( $"nicovideo.json の読み込みに失敗しました。[{vpath.変数付きパス}]" );
-                                    }
-                                }
-                                break;
+                //if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
+                //{
+                //    switch( items[ 0 ].ToLower() )
+                //    {
+                //        case "nicovideo":
+                //            {
+                //                var vpath = new VariablePath( @"$(AppData)nicovideo.json" );
+                //                try
+                //                {
+                //                    var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
+                //                    this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
+                //                    Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
+                //                }
+                //                catch( Exception )
+                //                {
+                //                    Log.ERROR( $"nicovideo.json の読み込みに失敗しました。[{vpath.変数付きパス}]" );
+                //                }
+                //            }
+                //            break;
 
-                            default:
-                                Log.ERROR( $"対応していない動画プロトコルが指定されています。無視します。[{App.演奏スコア.背景動画ID}]" );
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.背景動画ID}]" );
-                    }
-                    //----------------
-                    #endregion
-                }
-                else if( App.演奏スコア.背景動画ファイル名.Nullでも空でもない() )
-                {
-                    #region " (B) SST準拠の動画とBGM（ローカルファイル）"
-                    //----------------
-                    var path = new VariablePath( App.演奏スコア.背景動画ファイル名 );
-
-                    this._動画とBGM?.Dispose();
-                    this._動画とBGM = new 動画とBGM( path, App.サウンドデバイス );
-
-                    Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
-                    //----------------
-                    #endregion
-                }
-                else if( 0 < App.演奏スコア.AVIリスト.Count )
-                {
-                    #region " (C) DTX準拠の動画 "
-                    //----------------
-                    // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
-                    var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.AVIリスト.ElementAt( 0 ).Value ) );
-
-                    this._動画とBGM?.Dispose();
-                    this._動画とBGM = new 動画とBGM( path, App.サウンドデバイス );
-
-                    Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
-                    //----------------
-                    #endregion
-                }
-                else
-                {
-                    Log.WARNING( "このスコアには、背景動画とBGMの指定がありません。" );
-                }
-                //----------------
-                #endregion
-
-                #region " WAVを生成する（ある場合）。"
-                //----------------
-                App.WAV管理?.Dispose();
-                App.WAV管理 = new 曲.WAV管理();
-
-                foreach( var kvp in App.演奏スコア.WAVリスト )
-                {
-                    var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value.ファイルパス );
-                    App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, kvp.Value.多重再生する );
-                }
+                //        default:
+                //            Log.ERROR( $"対応していない動画プロトコルが指定されています。無視します。[{App.演奏スコア.背景動画ID}]" );
+                //            break;
+                //    }
+                //}
+                //else
+                //{
+                //    Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.背景動画ID}]" );
+                //}
                 //----------------
                 #endregion
             }
+            else if( App.演奏スコア.背景動画ファイル名.Nullでも空でもない() )
+            {
+                #region " (B) SST準拠の背景動画 "
+                //----------------
+                var path = new VariablePath( App.演奏スコア.背景動画ファイル名 );
+
+                this._動画 = new Video( path );
+                this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
+                this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+
+                Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
+                //----------------
+                #endregion
+            }
+            else if( 0 < App.演奏スコア.AVIリスト.Count )
+            {
+                #region " (C) DTX準拠の動画 "
+                //----------------
+                // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
+                var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.AVIリスト.ElementAt( 0 ).Value ) );
+
+                this._動画 = new Video( path );
+
+                Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
+                //----------------
+                #endregion
+            }
+            else
+            {
+                Log.WARNING( "このスコアには、背景動画とBGMの指定がありません。" );
+            }
+
+
+            // WAVを生成する（ある場合）。
+
+            App.WAV管理?.Dispose();
+            App.WAV管理 = new 曲.WAV管理();
+
+            foreach( var kvp in App.演奏スコア.WAVリスト )
+            {
+                var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value.ファイルパス );
+                App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, kvp.Value.多重再生する );
+            }
+
 
             this._初めての進行描画 = true;
         }
 
         private void _演奏状態を終了する()
         {
-            // 動画とBGM, WAV管理は、いずれもここではまだ解放しない。結果ステージの非活性化時に解放する。
-
-            //this._動画とBGM.再生を終了する();
-            //this._動画とBGM?.Dispose();
+            this._動画.再生を終了する();
+            //this._BGM.Stop();         --> BGM, WAV ともに、結果ステージから BGMを停止する() が呼び出されるまで鳴らし続ける。
             //App.WAV管理?.Dispose();	
             //App.WAV管理 = null;
-
-            // でもこのままだとビデオのキューが詰まってしまうので、ビデオのデコードをとめて、オーディオのみ再生を続ける。
-            this._動画とBGM?.ビデオをキャンセルする();
-
-            this._チップの演奏状態 = null;
         }
 
         public override void 高速進行する()
@@ -654,7 +660,7 @@ namespace DTXMania.ステージ.演奏
 
                         this._譜面スクロール速度.進行する( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );  // チップの表示より前に進行だけ行う
 
-                        if( this._動画とBGM?.再生中 ?? false )
+                        if( this._動画?.再生中 ?? false )
                         {
                             #region " 背景動画チップがヒット済みなら、背景動画の進行描画を行う。"
                             //----------------
@@ -663,16 +669,14 @@ namespace DTXMania.ステージ.演奏
                                 float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
                                 float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
 
-                                var video = this._動画とBGM?.Video;
-
                                 // (1) 画面いっぱいに描画。
-                                video?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                this._動画?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
 
                                 float 拡大縮小率 = 0.75f;
                                 float 上移動 = 100.0f;
 
                                 // (2) ちょっと縮小して描画。
-                                video?.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
+                                this._動画?.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
                                     w * ( 1f - 拡大縮小率 ) / 2f,
                                     h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
                                     w * 拡大縮小率,
@@ -680,9 +684,10 @@ namespace DTXMania.ステージ.演奏
                             }
                             // (B) 100%全体表示のみ --> 今は未対応
                             {
-                                //this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Height ), 1.0f );
+                                //float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
+                                //float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+                                //this._動画?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
                             }
-
 
                             // 開始直後のデコードが重たいかもしれないので、演奏時刻をここで更新しておく。	---> 重たくても更新禁止！（譜面スクロールがガタつく原因になる）
                             //演奏時刻sec = this._演奏開始からの経過時間secを返す();
@@ -750,18 +755,6 @@ namespace DTXMania.ステージ.演奏
 
         }
 
-        public void 演奏を停止する()
-        {
-            using( Log.Block( FDKUtilities.現在のメソッド名 ) )
-            {
-                this._描画開始チップ番号 = -1;   // 描画開始チップ番号を -1 にすることで、演奏が停止される。
-
-                this.BGMを停止する();        // BGM も即停止する。
-
-                //this._コンボ.COMBO値 = 0;
-            }
-        }
-
         /// <remarks>
         ///		演奏クリア時には、次の結果ステージに入ってもBGMが鳴り続ける。
         ///		そのため、後からBGMだけを別個に停止するためのメソッドが必要になる。
@@ -770,11 +763,18 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._動画とBGM?.再生を終了する();
-                this._動画とBGM?.Dispose();
-                this._動画とBGM = null;
+                this._BGM?.Stop();
+                this._BGM?.Dispose();
+                this._BGM = null;
             }
         }
+
+
+        // 背景動画とBGM
+
+        private Video _動画 = null; // SSTFの背景動画, DTX他の#AVI。
+        private Sound _BGM = null;  // SSTFの背景動画から抽出された音声。（DTX他のBGMは WAV管理 に含まれている。）
+        private ISampleSource _BGMsource = null;    // _BGMのサンプルソース
 
 
         // 画面を構成するもの
@@ -782,7 +782,6 @@ namespace DTXMania.ステージ.演奏
         private 画像 _背景画像 = null;
         private 曲名パネル _曲名パネル = null;
         private FPS _FPS = null;
-        private 動画とBGM _動画とBGM = null;
         private レーンフレーム _レーンフレーム = null;
         private ヒットバー _ヒットバー = null;
         private ドラムパッド _ドラムパッド = null;
@@ -1166,7 +1165,8 @@ namespace DTXMania.ステージ.演奏
 
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._動画とBGM?.再生を開始する();
+                    this._動画?.再生を開始する();
+                    this._BGM?.Play();
 
                     App.サウンドタイマ.再開する();
                 }
@@ -1188,7 +1188,7 @@ namespace DTXMania.ステージ.演奏
 
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._動画とBGM?.再生を開始する();
+                    this._動画?.再生を開始する();
 
                     App.サウンドタイマ.再開する();
                 }
