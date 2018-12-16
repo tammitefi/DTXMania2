@@ -29,6 +29,7 @@ namespace FDK
 
         public bool ループ再生する { get; set; } = false;
 
+
         public static MediaFoundationStreamingSources CreateFromFile( VariablePath ファイルパス, WaveFormat soundDeviceFormat )
         {
             var sources = new MediaFoundationStreamingSources();
@@ -67,6 +68,7 @@ namespace FDK
 
             return sources;
         }
+
         public static MediaFoundationStreamingSources CreateFromニコ動( string user_id, string password, string video_id, WaveFormat soundDeviceFormat )
         {
             var sources = new MediaFoundationStreamingSources();
@@ -166,7 +168,7 @@ namespace FDK
             //----------------
             try
             {
-                for( int index = 0; index < 10; index++ )
+                for( int index = 0; true; index++ ) // 例外が発生するまでループ
                 {
                     using( var mediaType = this._SourceReaderEx.GetCurrentMediaType( index ) )
                     {
@@ -196,7 +198,9 @@ namespace FDK
             #endregion
 
             this._SourceReaderEx.SetStreamSelection( SourceReaderIndex.AllStreams, false );
-            this._長さsec = FDKUtilities.変換_100ns単位からsec単位へ( this._SourceReaderEx.GetPresentationAttribute( SourceReaderIndex.MediaSource, PresentationDescriptionAttributeKeys.Duration ) );
+
+            this._長さsec = FDKUtilities.変換_100ns単位からsec単位へ(
+                this._SourceReaderEx.GetPresentationAttribute( SourceReaderIndex.MediaSource, PresentationDescriptionAttributeKeys.Duration ) );
 
             if( 0 <= this._Videoのストリーム番号 )
             {
@@ -235,11 +239,10 @@ namespace FDK
                 // 部分メディアタイプを設定する。
                 var wf = SharpDX.Multimedia.WaveFormat.CreateIeeeFloatWaveFormat( this._Audioのフォーマット.SampleRate, this._Audioのフォーマット.Channels );
                 MediaFactory.CreateAudioMediaType( ref wf, out AudioMediaType audioMediaType );
+
+                // 作成した部分メディアタイプを SourceReader にセットする。必要なデコーダが見つからなかったら、ここで例外が発生する。
                 using( audioMediaType )
-                {
-                    // 作成した部分メディアタイプを SourceReader にセットする。必要なデコーダが見つからなかったら、ここで例外が発生する。
                     this._SourceReaderEx.SetCurrentMediaType( this._Audioのストリーム番号, audioMediaType );
-                }
 
                 // 完成されたメディアタイプを取得する。
                 this._AudioのMediaType = this._SourceReaderEx.GetCurrentMediaType( this._Audioのストリーム番号 );
@@ -263,11 +266,14 @@ namespace FDK
             //----------------
             #endregion
 
-            Thread.Sleep( 500 );    // デコードデータが蓄積されるまで待機（手抜き
+            //Thread.Sleep( 500 );    // デコードデータが蓄積されるまで待機（手抜き
         }
+
+        // インスタンスの直接生成禁止
         protected MediaFoundationStreamingSources()
         {
         }
+
         public void Dispose()
         {
             #region " デコードタスクが稼働してたら停止する。"
@@ -278,7 +284,7 @@ namespace FDK
                 this._VideoSource?.Cancel();
                 this._WaveSource?.Cancel();
 
-                this._デコードタスク.Wait( 5000 );
+                this._デコードタスク.Wait( 5000 ); // 最大 5000ms 待つ
                 this._デコードタスク = null;
             }
             //----------------
@@ -314,19 +320,19 @@ namespace FDK
             this._ByteStream?.Dispose();
             this._ByteStream = null;
 
-            //_HttpClient?.Dispose();   --> ひとつのインスタンスを使いまわすので開放しない。
+            //_HttpClient?.Dispose();   --> アプリ全体でひとつのインスタンスを使いまわすので、解放しない。
             //_HttpClient = null;
         }
 
+        /// <summary>
+        ///     ビデオのデコードをキャンセルし、オーディオのデコードのみ続ける。
+        /// </summary>
 		public void ビデオをキャンセルする()
 		{
 			this._オーディオのみ.Set();
 			this._VideoSource.Cancel(); // ビデオのみキャンセル
 		}
-		private ManualResetEventSlim _オーディオのみ = new ManualResetEventSlim( false );
 
-		private StreamingVideoSource _VideoSource = null;
-        private StreamingWaveSource _WaveSource = null;
 
         private SourceReaderEx _SourceReaderEx = null;
         private double _長さsec = 0.0;
@@ -337,15 +343,27 @@ namespace FDK
         private WaveFormat _Audioのフォーマット = new WaveFormat();
         private MediaType _AudioのMediaType = null;
 
+        private StreamingVideoSource _VideoSource = null;
+        private StreamingWaveSource _WaveSource = null;
+
+        // HTTPストリーム関連
+
         private static HttpClient _HttpClient = null;       // static にして使いまわす
         private ByteStream _ByteStream = null;
         private HttpRandomAccessStream _HttpRandomAccessStream = null;
         private ComObject _unkHttpRandomAccessStream = null;
         private MediaSource _MediaSource = null;
 
+
+        // デコード関連
+
         private Task _デコードタスク = null;
         private CancellationTokenSource _デコードキャンセル = null;
         private ManualResetEvent _デコード起動完了通知 = null;
+        /// <summary>
+        ///     これが Set されていると、Video のデコードを行わず、Sound のデコードのみ行う。
+        /// </summary>
+        private ManualResetEventSlim _オーディオのみ = new ManualResetEventSlim( false );
 
         private void _デコードタスクエントリ()
         {
@@ -358,10 +376,11 @@ namespace FDK
                 if( this._デコードキャンセル.Token.IsCancellationRequested )
                 {
                     Log.Info( $"キャンセル通知を受信しました。" );
-                    break;
+                    break;  // 終了
                 }
 
-                // 次のサンプルをひとつデコードする。
+                // (1) 次のサンプルをひとつデコードする。
+
                 var サンプル = this._SourceReaderEx.ReadSample(
                     SourceReaderIndex.AnyStream,
                     SourceReaderControlFlags.None,
@@ -369,7 +388,6 @@ namespace FDK
                     out var ストリームフラグ,
                     out long サンプルの表示時刻100ns );
 
-                // デコード結果を確認する。
                 if( ストリームフラグ.HasFlag( SourceReaderFlags.Endofstream ) )
                 {
                     Log.Info( $"ストリームが終了しました。" );
@@ -397,6 +415,9 @@ namespace FDK
                     break;
                 }
 
+
+                // (2) サンプルをそれぞれのストリームに書き込む。
+
 				if( ストリーム番号 == this._Videoのストリーム番号 )
 				{
 					if( this._オーディオのみ.IsSet )
@@ -405,8 +426,9 @@ namespace FDK
 					}
 					else
 					{
-						// ビデオフレームを生成してキューに格納。キューがいっぱいならブロックする。
-						this._VideoSource?.Write( new VideoFrame() {
+                        // ビデオフレームを生成してキューに格納。キューがいっぱいならブロックする。
+
+                        this._VideoSource?.Write( new VideoFrame() {
 							Sample = サンプル,
 							Bitmap = this._VideoSource.サンプルからビットマップを取得する( サンプル ),
 							表示時刻100ns = サンプルの表示時刻100ns,
@@ -415,16 +437,18 @@ namespace FDK
 				}
 				else if( ストリーム番号 == this._Audioのストリーム番号 )
 				{
-					// サンプルをロックし、オーディオデータへのポインタを取得して、オーディオデータをキューに書き込む。キューはいっぱいにならない前提なので常にブロックしない。
-					using( var mediaBuffer = サンプル.ConvertToContiguousBuffer() )
+                    // サンプルをロックし、オーディオデータへのポインタを取得して、オーディオデータをキューに書き込む。
+
+                    using( var mediaBuffer = サンプル.ConvertToContiguousBuffer() )
 					{
 						var audioData = mediaBuffer.Lock( out _, out int cbCurrentLength );
 						try
 						{
 							var dstData = new byte[ cbCurrentLength ];
 							Marshal.Copy( audioData, dstData, 0, cbCurrentLength );
-							this._WaveSource.Write( dstData, 0, cbCurrentLength );
-						}
+
+                            this._WaveSource.Write( dstData, 0, cbCurrentLength );  // キューはいっぱいにならない前提なので常にブロックしない。
+                        }
 						finally
 						{
 							mediaBuffer.Unlock();

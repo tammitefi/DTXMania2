@@ -55,6 +55,13 @@ namespace FDK
                 => this._Volume = Math.Max( value, 0 );
         }
 
+
+        public Sound( SoundDevice device, ISampleSource sampleSource )
+            : this( device )
+        {
+            this._BaseSampleSource = sampleSource ?? throw new ArgumentNullException();
+        }
+
         protected Sound( SoundDevice device )
         {
             if( null == device )
@@ -62,11 +69,7 @@ namespace FDK
 
             this._DeviceRef = new WeakReference<SoundDevice>( device );
         }
-        public Sound( SoundDevice device, ISampleSource sampleSource )
-            : this( device )
-        {
-            this._BaseSampleSource = sampleSource ?? throw new ArgumentNullException();
-        }
+
         public void Dispose()
         {
             this.Stop();
@@ -76,6 +79,7 @@ namespace FDK
 
             this._DeviceRef = null;
         }
+
         public void Play( long 再生開始位置frame = 0 )
         {
             if( null == this._BaseSampleSource )
@@ -98,15 +102,20 @@ namespace FDK
                 device.Mixer.AddSound( this );
             }
         }
+
         public void Play( double 再生開始位置sec )
             => this.Play( this._秒ToFrame( 再生開始位置sec ) );
+
         public int Read( float[] buffer, int offset, int count )
         {
             if( null == this._BaseSampleSource )
                 return 0;
 
-            if( this._BaseSampleSource.Length == this._Position )
-                return 0;   // 同じ場合でも Read() が 2 とか返してきて永遠に終わらないことがあるので、ここで阻止する。
+            if( this._BaseSampleSource.Length == this._Position )   // 最後まで再生済み、または次のストリームデータが届いていない
+            {
+                Array.Clear( buffer, offset, count );   // 全部ゼロで埋めて返す。
+                return count;
+            }
 
             // １つの BaseSampleSource を複数の Sound で共有するために、Position は Sound ごとに管理している。
             this._BaseSampleSource.Position = this._Position;
@@ -115,6 +124,7 @@ namespace FDK
 
             return readCount;
         }
+
         public void Stop()
         {
             if( ( null != this._DeviceRef ) && this._DeviceRef.TryGetTarget( out SoundDevice device ) )
@@ -123,10 +133,15 @@ namespace FDK
             }
         }
 
+
         private WeakReference<SoundDevice> _DeviceRef = null;
+
         private ISampleSource _BaseSampleSource = null;
+
         private long _Position = 0;
+
         private float _Volume = 1.0f;
+
 
         private long _秒ToFrame( double 時間sec )
         {
@@ -136,6 +151,7 @@ namespace FDK
             var wf = this._BaseSampleSource.WaveFormat;
             return (long) ( 時間sec * wf.SampleRate + 0.5 ); // +0.5 で四捨五入ができる
         }
+
         private double _FrameTo秒( long 時間frame )
         {
             if( null == this._BaseSampleSource )

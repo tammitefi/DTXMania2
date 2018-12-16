@@ -780,61 +780,36 @@ namespace DTXMania.ステージ.演奏
         // 画面を構成するもの
 
         private 画像 _背景画像 = null;
-
         private 曲名パネル _曲名パネル = null;
-
         private FPS _FPS = null;
-
         private 動画とBGM _動画とBGM = null;
-
-
         private レーンフレーム _レーンフレーム = null;
-
         private ヒットバー _ヒットバー = null;
-
         private ドラムパッド _ドラムパッド = null;
-
         private 譜面スクロール速度 _譜面スクロール速度 = null;
-
         private エキサイトゲージ _エキサイトゲージ = null;
-
-
         private フェーズパネル _フェーズパネル = null;
-
         private カウントマップライン _カウントマップライン = null;
-
-
         private 左サイドクリアパネル _左サイドクリアパネル = null;
-
         private 右サイドクリアパネル _右サイドクリアパネル = null;
-
 
         // 左サイドクリアパネル内に表示されるもの
 
         private スコア表示 _スコア表示 = null;
-
         private プレイヤー名表示 _プレイヤー名表示 = null;
-
         private 判定パラメータ表示 _判定パラメータ表示 = null;
-
         private 達成率表示 _達成率表示 = null;
-
         private 曲別SKILL _曲別SKILL = null;
-
 
         // 右サイドクリアパネル内に表示されるもの
 
         private コンボ表示 _コンボ表示 = null;
 
-
         // 譜面上に表示されるもの
 
         private レーンフラッシュ _レーンフラッシュ = null;
-
         private 判定文字列 _判定文字列 = null;
-
         private チップ光 _チップ光 = null;
-
         private 画像フォント _数字フォント中グレー48x64 = null;
 
         private SolidColorBrush _小節線色 = null;
@@ -1055,7 +1030,6 @@ namespace DTXMania.ステージ.演奏
             } );
         }
 
-
         // 演奏状態
 
         /// <summary>
@@ -1072,7 +1046,6 @@ namespace DTXMania.ステージ.演奏
 
         private double _演奏開始からの経過時間secを返す()
             => App.サウンドタイマ.現在時刻sec;
-
 
 
         // ステージ切り替え（特別にアイキャッチを使わないパターン）

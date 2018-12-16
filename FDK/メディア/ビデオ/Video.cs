@@ -28,6 +28,7 @@ namespace FDK
         protected override void On活性化()
         {
         }
+
         protected override void On非活性化()
         {
             this.再生を終了する();
