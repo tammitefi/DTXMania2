@@ -70,10 +70,12 @@ namespace FDK
                 // データが足りないなら、そろうまでブロックする。
                 while( this.読み出し可能サイズ < count )
                 {
+                    // lock を解放してウェイトに入る。戻ってきたときには lock が再取得されている。
                     Monitor.Wait( this._Stream排他 );
 
+                    // ブロックが解除されたとき、既にキャンセル済みだったら何もせず戻る。
                     if( this._Canceled )
-                        return default; // ブロックが解除されたとき、キャンセル済みだったら何もせず戻る。
+                        return default;
                 }
 
                 this.Position = this.読み出し位置;
@@ -91,6 +93,7 @@ namespace FDK
 
         /// <summary>
         ///     ストリームの現在の読み込み位置からデータを読み出す。
+        ///     データが足りないときにブロックするか否かは引数で指定できる。
         /// </summary>
         /// <param name="buffer">読み込んだデータを格納する配列。</param>
         /// <param name="offset">格納を開始する <paramref name="buffer"/> の位置。0 から始まるインデックス値。</param>
@@ -154,6 +157,7 @@ namespace FDK
 
         /// <summary>
         ///     <see cref="Read"/> あるいは <see cref="Write(byte[], int, int)"/> でブロックしているスレッドにキャンセルを通知してブロックを解除する。
+        ///     その後、Read も Write も無効とする。
         /// </summary>
         public void Cancel()
         {
@@ -166,9 +170,13 @@ namespace FDK
             }
         }
 
+
         private long _読み出し位置 = 0;
+
         private long _書き込み位置 = 0;
+
         private object _Stream排他 = new object();
+
         private bool _Canceled = false;
     }
 }

@@ -36,9 +36,6 @@ namespace DTXMania.ステージ.演奏
 
         public 成績 成績 { get; protected set; } = null;
 
-        public 動画とBGM 動画とBGM { get; protected set; } = null;
-
-
 
         public 演奏ステージ()
         {
@@ -133,7 +130,6 @@ namespace DTXMania.ステージ.演奏
             this._描画開始チップ番号 = -1;
 
             this.BGMを停止する();
-            this._動画とBGMの再生開始済み = false;
 
             this._チップの演奏状態 = new Dictionary<チップ, チップの演奏状態>();
 
@@ -160,8 +156,7 @@ namespace DTXMania.ステージ.演奏
                                     try
                                     {
                                         var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
-                                        this.動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
-                                        this._背景動画forDTX = null;
+                                        this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
                                         Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
                                     }
                                     catch( Exception )
@@ -187,13 +182,12 @@ namespace DTXMania.ステージ.演奏
                 {
                     #region " (B) SST準拠の動画とBGM（ローカルファイル）"
                     //----------------
-                    var file = new VariablePath( App.演奏スコア.背景動画ファイル名 );
+                    var path = new VariablePath( App.演奏スコア.背景動画ファイル名 );
 
-                    this.動画とBGM?.Dispose();
-                    this.動画とBGM = new 動画とBGM( file, App.サウンドデバイス );
-                    this._背景動画forDTX = null;
+                    this._動画とBGM?.Dispose();
+                    this._動画とBGM = new 動画とBGM( path, App.サウンドデバイス );
 
-                    Log.Info( $"背景動画とBGMを読み込みました。[{file.変数付きパス}]" );
+                    Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
                     //----------------
                     #endregion
                 }
@@ -204,22 +198,10 @@ namespace DTXMania.ステージ.演奏
                     // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
                     var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.AVIリスト.ElementAt( 0 ).Value ) );
 
-                    // 動画を子リストに追加。
-                    try
-                    {
-                        this.子を追加する( this._背景動画forDTX = new Video( path ) );
+                    this._動画とBGM?.Dispose();
+                    this._動画とBGM = new 動画とBGM( path, App.サウンドデバイス );
 
-                        this.動画とBGM?.Dispose();
-                        this.動画とBGM = null;
-
-                        Log.Info( $"背景動画を読み込みました。[{path.変数付きパス}]" );
-                    }
-                    catch
-                    {
-                        this._背景動画forDTX = null;    // 生成失敗
-
-                        Log.ERROR( $"背景動画の読み込みに失敗しました。[{path.変数付きパス}]" );
-                    }
+                    Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
                     //----------------
                     #endregion
                 }
@@ -249,19 +231,15 @@ namespace DTXMania.ステージ.演奏
 
         private void _演奏状態を終了する()
         {
-            // DTX用背景動画を生成した場合は子リストから削除。
-            if( null != this._背景動画forDTX )
-            {
-                this.子を削除する( this._背景動画forDTX );
-                this._背景動画forDTX = null;
-            }
+            // 動画とBGM, WAV管理は、いずれもここではまだ解放しない。結果ステージの非活性化時に解放する。
 
-            // SSTF用背景動画を生成した場合
-            //this._動画とBGM?.Dispose();   --> ここではまだ解放しない。結果ステージの非活性化時に解放する。
+            //this._動画とBGM.再生を終了する();
+            //this._動画とBGM?.Dispose();
             //App.WAV管理?.Dispose();	
             //App.WAV管理 = null;
-            if( null != this.動画とBGM )
-                this.動画とBGM.ビデオをキャンセルする();  // ビデオが詰まってしまうのでオーディオのみ再生を続ける。
+
+            // でもこのままだとビデオのキューが詰まってしまうので、ビデオのデコードをとめて、オーディオのみ再生を続ける。
+            this._動画とBGM?.ビデオをキャンセルする();
 
             this._チップの演奏状態 = null;
         }
@@ -367,7 +345,14 @@ namespace DTXMania.ステージ.演奏
                             if( ( AutoPlay && ドラムチッププロパティ.AutoPlayON_自動ヒット_再生 ) ||
                                 ( !AutoPlay && ドラムチッププロパティ.AutoPlayOFF_自動ヒット_再生 ) )
                             {
-                                this._チップの発声がまだなら発声を行う( chip, ヒット判定バーと発声との時間sec );
+                                // チップの発声がまだなら発声を行う。
+
+                                if( !( this._チップの演奏状態[ chip ].発声済みである ) )
+                                {
+                                    this._チップの発声を行う( chip, ヒット判定バーと発声との時間sec );
+                                    this._チップの演奏状態[ chip ].発声済みである = true;
+                                }
+
                             }
                             //----------------
                             #endregion
@@ -669,7 +654,7 @@ namespace DTXMania.ステージ.演奏
 
                         this._譜面スクロール速度.進行する( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );  // チップの表示より前に進行だけ行う
 
-                        if( this._動画とBGMの再生開始済み )
+                        if( this._動画とBGM?.再生中 ?? false )
                         {
                             #region " 背景動画チップがヒット済みなら、背景動画の進行描画を行う。"
                             //----------------
@@ -677,21 +662,23 @@ namespace DTXMania.ステージ.演奏
                             {
                                 float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
                                 float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
-                                var video = this.動画とBGM?.Video ?? this._背景動画forDTX;
 
-                                video?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );  // 全体
+                                var video = this._動画とBGM?.Video;
+
+                                // (1) 画面いっぱいに描画。
+                                video?.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
 
                                 float 拡大縮小率 = 0.75f;
                                 float 上移動 = 100.0f;
 
-                                // 進行描画せず、直前に取得したフレームをそのまま描画する。
-                                video?.最後のフレームを再描画する( dc, new RectangleF(
+                                // (2) ちょっと縮小して描画。
+                                video?.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
                                     w * ( 1f - 拡大縮小率 ) / 2f,
                                     h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
                                     w * 拡大縮小率,
                                     h * 拡大縮小率 ) );
                             }
-                            // (B) 100%全体表示
+                            // (B) 100%全体表示のみ --> 今は未対応
                             {
                                 //this._背景動画?.描画する( dc, new RectangleF( 0f, 0f, グラフィックデバイス.Instance.設計画面サイズ.Width, グラフィックデバイス.Instance.設計画面サイズ.Height ), 1.0f );
                             }
@@ -767,16 +754,9 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                // 描画開始チップ番号を -1 にすることで、演奏が停止される。
+                this._描画開始チップ番号 = -1;   // 描画開始チップ番号を -1 にすることで、演奏が停止される。
 
-                this._描画開始チップ番号 = -1;
-
-
-                // BGM も即停止する。
-
-                this.BGMを停止する();
-                this._動画とBGMの再生開始済み = false;
-
+                this.BGMを停止する();        // BGM も即停止する。
 
                 //this._コンボ.COMBO値 = 0;
             }
@@ -790,19 +770,22 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.動画とBGM?.Dispose();
-                this.動画とBGM = null;
+                this._動画とBGM?.再生を終了する();
+                this._動画とBGM?.Dispose();
+                this._動画とBGM = null;
             }
         }
 
 
-        // 画面を構成するもの 
+        // 画面を構成するもの
 
         private 画像 _背景画像 = null;
 
         private 曲名パネル _曲名パネル = null;
 
         private FPS _FPS = null;
+
+        private 動画とBGM _動画とBGM = null;
 
 
         private レーンフレーム _レーンフレーム = null;
@@ -1072,7 +1055,7 @@ namespace DTXMania.ステージ.演奏
             } );
         }
 
-        
+
         // 演奏状態
 
         /// <summary>
@@ -1098,9 +1081,6 @@ namespace DTXMania.ステージ.演奏
         ///		読み込み画面: 0 ～ 1: 演奏画面
         /// </summary>
         private Counter _フェードインカウンタ = null;
-
-
-
 
 
         /// <summary>
@@ -1144,10 +1124,6 @@ namespace DTXMania.ステージ.演奏
         }
 
 
-        private Video _背景動画forDTX = null; // DTXの動画はこっち
-        private bool _動画とBGMの再生開始済み = false;
-
-
         private void _チップのヒット処理を行う( チップ chip, 判定種別 judge, bool 再生, bool 判定, bool 非表示, double ヒット判定バーと発声との時間sec )
         {
             this._チップの演奏状態[ chip ].ヒット済みである = true;
@@ -1158,7 +1134,11 @@ namespace DTXMania.ステージ.演奏
                 //----------------
                 // チップの発声時刻は、描画時刻と同じかそれより過去に位置するので、ここに来た時点で未発声なら発声していい。
                 // というか発声時刻が過去なのに未発声というならここが最後のチャンスなので、必ず発声しないといけない。
-                 this._チップの発声がまだなら発声を行う( chip, ヒット判定バーと発声との時間sec );
+                if( !( this._チップの演奏状態[ chip ].発声済みである ) )
+                {
+                    this._チップの発声を行う( chip, ヒット判定バーと発声との時間sec );
+                    this._チップの演奏状態[ chip ].発声済みである = true;
+                }
                 //----------------
                 #endregion
             }
@@ -1170,7 +1150,7 @@ namespace DTXMania.ステージ.演奏
 
                 if( judge != 判定種別.MISS )
                 {
-                    // PERFECT～OK
+                    // MISS以外（PERFECT～OK）
                     this._チップ光.表示を開始する( 対応表.表示レーン種別 );
                     this._ドラムパッド.ヒットする( 対応表.表示レーン種別 );
                     this._レーンフラッシュ.開始する( 対応表.表示レーン種別 );
@@ -1185,51 +1165,41 @@ namespace DTXMania.ステージ.演奏
             {
                 #region " チップを非表示にする。"
                 //----------------
-                if( judge != 判定種別.MISS )
+                if( judge == 判定種別.MISS )
                 {
-                    this._チップの演奏状態[ chip ].可視 = false;        // PERFECT～POOR チップは非表示。
+                    // MISSチップは最後まで表示し続ける。
                 }
                 else
                 {
-                    // MISSチップは最後まで表示し続ける。
+                    // PERFECT～POOR チップは非表示。
+                    this._チップの演奏状態[ chip ].可視 = false;
                 }
                 //----------------
                 #endregion
             }
         }
 
-        private void _チップの発声がまだなら発声を行う( チップ chip, double 再生開始位置sec )
-        {
-            if( !( this._チップの演奏状態[ chip ].発声済みである ) )
-            {
-                this._チップの演奏状態[ chip ].発声済みである = true;
-
-                this._チップの発声を行う( chip, 再生開始位置sec );
-            }
-        }
         private void _チップの発声を行う( チップ chip, double 再生開始位置sec )
         {
             var prop = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ[ chip.チップ種別 ];
 
             if( 0 == chip.チップサブID )
             {
-                #region " (A) SSTF 準拠のチップ "
+                #region " (A) SSTF 準拠のチップの発声 "
                 //----------------
                 if( chip.チップ種別 == チップ種別.背景動画 )
                 {
-                    // (A-a) 背景動画
+                    // (A-a) 背景動画チップの場合 → 動画とBGMの再生を開始する。
+
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this.動画とBGM?.再生を開始する();
-                    this._動画とBGMの再生開始済み = true;
+                    this._動画とBGM?.再生を開始する();
 
                     App.サウンドタイマ.再開する();
                 }
                 else
                 {
-                    // (A-b) ドラムサウンド
-
-                    // BGM以外のサウンドについては、常に最初から再生する。
+                    // (A-b) その他のチップの場合 → ドラムサウンドを持つチップなら発声する。（持つかどうかはこのメソッド↓内で判定される。）
                     App.ドラムサウンド.発声する( chip.チップ種別, 0, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
                 }
                 //----------------
@@ -1237,21 +1207,21 @@ namespace DTXMania.ステージ.演奏
             }
             else
             {
-                #region " (B) DTX 準拠のチップ "
+                #region " (B) DTX 準拠のチップの発声 "
                 //----------------
                 if( chip.チップ種別 == チップ種別.背景動画 )
                 {
-                    // (B-a) 背景動画
+                    // (B-a) 背景動画チップの場合 → 動画の再生を開始する（BGMはない）。
+
                     App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    this._背景動画forDTX?.再生を開始する();
-                    this._動画とBGMの再生開始済み = true;
+                    this._動画とBGM?.再生を開始する();
 
                     App.サウンドタイマ.再開する();
                 }
                 else
                 {
-                    // (B-b) その他サウンド
+                    // (B-b) その他のチップの場合 → WAVを持つチップなら発声する。（持つかどうかはこのメソッド↓内で判定される。）
                     App.WAV管理.発声する( chip.チップサブID, chip.チップ種別, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
                 }
                 //----------------

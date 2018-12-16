@@ -12,16 +12,19 @@ namespace FDK
     {
         public bool 加算合成 { get; set; } = false;
 
+
         public Video( VariablePath ファイルパス )
         {
             this._MFFileVideoSource = new MediaFoundationFileVideoSource( ファイルパス );
             this._VideoSource = this._MFFileVideoSource;
         }
+
         public Video( IVideoSource videoSource )
         {
             this._MFFileVideoSource = null;
             this._VideoSource = videoSource;
         }
+
         protected override void On活性化()
         {
         }
@@ -32,15 +35,18 @@ namespace FDK
             this._MFFileVideoSource?.Dispose();
             this._MFFileVideoSource = null;
         }
+
         public void 再生を開始する()
         {
             this._再生タイマ = new QPCTimer();
         }
+
         public void 再生を終了する()
         {
             this._最後のフレーム?.Dispose();
             this._最後のフレーム = null;
         }
+
         public void 描画する( DeviceContext1 dc, RectangleF 描画先矩形, float 不透明度0to1 = 1.0f )
         {
             if( null == this._VideoSource )
@@ -52,6 +58,7 @@ namespace FDK
 
             this.描画する( dc, 変換行列2D, 不透明度0to1 );
         }
+
         public void 描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
             if( null == this._VideoSource )
@@ -83,6 +90,7 @@ namespace FDK
                 // (D) デコードが追い付いてない、またはループせず再生が終わっている　→ 何も表示しない。デコードが追い付いてないなら点滅するだろう。
             }
         }
+
         public void 最後のフレームを再描画する( DeviceContext1 dc, RectangleF 描画先矩形, float 不透明度0to1 = 1.0f )
         {
             if( null == this._VideoSource )
@@ -94,16 +102,22 @@ namespace FDK
 
             this.最後のフレームを再描画する( dc, 変換行列2D, 不透明度0to1 );
         }
+
         public void 最後のフレームを再描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
             if( null != this._最後のフレーム )
                 this._指定されたフレームを描画する( dc, 変換行列2D, this._最後のフレーム, 不透明度0to1 );
         }
 
+
         private IVideoSource _VideoSource = null;
+
         private MediaFoundationFileVideoSource _MFFileVideoSource = null;
+
         private VideoFrame _最後のフレーム = null;
+
         private QPCTimer _再生タイマ = null;
+
 
         private void _次のフレームを描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
@@ -117,6 +131,7 @@ namespace FDK
 
             this._指定されたフレームを描画する( dc, 変換行列2D, 次のフレーム, 不透明度0to1 );
         }
+
         private void _指定されたフレームを描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, VideoFrame 描画するフレーム, float 不透明度 )
         {
             if( null == 描画するフレーム )

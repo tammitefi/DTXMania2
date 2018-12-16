@@ -9,19 +9,23 @@ namespace FDK
     /// <summary>
     ///     Read と排他的に Write ができる WaveSource 。
     /// </summary>
-    public class StreamingWaveSource : IWaveSource
+    public class StreamingWaveSource :IWaveSource
     {
         public bool CanSeek => true;
+
         public WaveFormat WaveFormat { get; protected set; }
+
         public long Position { get; set; }
-        public long Length
-            => this._FrameQueue.Length;
+
+        public long Length => this._FrameQueue.Length;
+
 
         public StreamingWaveSource( WaveFormat waveFormat )
         {
             this.WaveFormat = waveFormat;
             this._FrameQueue = new QueueMemoryStream();
         }
+
         public void Dispose()
         {
             this.Cancel();
@@ -29,8 +33,9 @@ namespace FDK
             this._FrameQueue?.Dispose();
             this._FrameQueue = null;
         }
+        
         /// <summary>
-        ///		連続したデータを読み込む。
+        ///		連続したバイトデータを読み込む。
         ///		データが不足していれば、その分は 0 で埋めて返す。
         /// </summary>
         /// <param name="buffer">読み込んだデータを格納するための配列。</param>
@@ -52,10 +57,16 @@ namespace FDK
 
             return count;
         }
+
+        /// <summary>
+        ///     連続したバイトデータを書き込む。
+        ///     バッファサイズは理論上無限なので、空き不足でブロックすることはない。
+        /// </summary>
         public void Write( byte[] buffer, int offset, int count )
         {
             this._FrameQueue.Write( buffer, offset, count );
         }
+
         public void Cancel()
         {
             if( !( this._キャンセル済み ) )
@@ -65,7 +76,9 @@ namespace FDK
             }
         }
 
+
         private QueueMemoryStream _FrameQueue = null;
+
         private bool _キャンセル済み = false;
     }
 }
