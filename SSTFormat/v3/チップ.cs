@@ -125,6 +125,27 @@ namespace SSTFormat.v3
             return dst;
         }
 
+        /// <summary>
+        ///     チップの内容を自身にコピーする。
+        /// </summary>
+        public void CopyFrom( チップ src )
+        {
+            this.チップ種別 = src.チップ種別;
+
+            this.小節番号 = src.小節番号;
+            this.小節解像度 = src.小節解像度;
+            this.小節内位置 = src.小節内位置;
+
+            this.描画時刻sec = src.描画時刻sec;
+            this.発声時刻sec = src.発声時刻sec;
+
+            this.チップサブID = src.チップサブID;
+            this.音量 = src.音量;
+            this.左右位置 = src.左右位置;
+            this.BPM = src.BPM;
+            this.可視 = src.可視;
+        }
+
         // 概要:
         //     現在のインスタンスを同じ型の別のオブジェクトと比較して、並べ替え順序において、現在のインスタンスの位置が同じ型の別のオブジェクトの前、後ろ、または同じのいずれであるかを示す整数を返します。
         //
