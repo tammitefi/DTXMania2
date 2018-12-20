@@ -44,14 +44,15 @@ namespace DTXMania.曲
             using( var songdb = new SongDB() )
             {
                 var song = songdb.Songs.Where( ( r ) => ( r.Path == this.曲ファイルパス.変数なしパス ) ).SingleOrDefault();
-                if( null != song )
-                {
-                    this.タイトル = song.Title;
-                    this.サブタイトル = "";
-                    this.サブタイトル = song.Artist;
-                    this.曲ファイルハッシュ = song.HashId;
-                    this.難易度[ 3 ] = ("FREE", (float) song.Level);       // [3]:MASTER相当。set.def 内にある MusicNode でも同じ。
-                }
+
+                if( null == song )
+                    return;
+
+                this.タイトル = song.Title;
+                this.サブタイトル = "";
+                this.サブタイトル = song.Artist;
+                this.曲ファイルハッシュ = song.HashId;
+                this.難易度[ 3 ] = ("FREE", (float) song.Level);       // [3]:MASTER相当。set.def 内にある MusicNode でも同じ。
 
                 // サムネイル画像を決定する。
                 string サムネイル画像ファイルパス = null;

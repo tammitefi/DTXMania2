@@ -118,6 +118,11 @@ namespace FDK
                 }
             }
         }
+        public T Peek()
+        {
+            this.Peek( out T frame );
+            return frame;
+        }
         /// <summary>
         ///     <see cref="Add(T)"/> あるいは <see cref="Take"/> でブロックしているスレッドにキャンセルを通知してブロックを解除する。
         /// </summary>

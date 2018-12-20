@@ -8,7 +8,7 @@ using SharpDX.Direct2D1;
 
 namespace FDK
 {
-    public class Video : Activity
+    public class Video : IDisposable
     {
         public bool 加算合成 { get; set; } = false;
 
@@ -17,50 +17,28 @@ namespace FDK
 
         public Video( VariablePath ファイルパス )
         {
-            this._MFFileVideoSource = new MediaFoundationFileVideoSource( ファイルパス );
-            this._VideoSource = this._MFFileVideoSource;
+            this._VideoSource = new MediaFoundationFileVideoSource( ファイルパス );
+            this._ファイルから生成した = true;
         }
-
         public Video( IVideoSource videoSource )
         {
-            this._MFFileVideoSource = null;
             this._VideoSource = videoSource;
+            this._ファイルから生成した = false;
         }
 
-        protected override void On活性化()
-        {
-        }
-
-        protected override void On非活性化()
+        public void Dispose()
         {
             this.再生を終了する();
 
-            this._MFFileVideoSource?.Dispose();
-            this._MFFileVideoSource = null;
+            if( this._ファイルから生成した )
+                this._VideoSource?.Dispose();
+
+            this._VideoSource = null;
         }
 
         public void 再生を開始する( double 再生開始時刻sec = 0.0 )
         {
-            if( 0.0 < 再生開始時刻sec )
-            {
-                #region " 再生開始時刻までフレームをスキップする。"
-                //----------------
-                double 再生開始時刻ns = FDKUtilities.変換_sec単位から100ns単位へ( 再生開始時刻sec );
-
-                long 次のフレームの表示予定時刻100ns;
-
-                while( true )
-                {
-                    次のフレームの表示予定時刻100ns = this._VideoSource.Peek(); // なければ負数
-
-                    if( 0 > 次のフレームの表示予定時刻100ns || 再生開始時刻ns <= 次のフレームの表示予定時刻100ns )
-                        break;
-
-                    this._VideoSource.Read().Dispose(); // 破棄して次へ。
-                }
-                //----------------
-                #endregion
-            }
+            this._VideoSource.Start( 再生開始時刻sec );
 
             this._再生タイマ = new QPCTimer();
             this._再生タイマ.リセットする( QPCTimer.秒をカウントに変換して返す( 再生開始時刻sec ) );
@@ -70,8 +48,10 @@ namespace FDK
 
         public void 再生を終了する()
         {
-            this._最後のフレーム?.Dispose();
-            this._最後のフレーム = null;
+            this._VideoSource.Stop();
+
+            this._最後に描画したフレーム?.Dispose();
+            this._最後に描画したフレーム = null;
 
             this.再生中 = false;
         }
@@ -87,26 +67,25 @@ namespace FDK
 
             this.描画する( dc, 変換行列2D, 不透明度0to1 );
         }
-
         public void 描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
             if( null == this._VideoSource )
                 return;
 
-            long 次のフレームの表示予定時刻100ns = this._VideoSource.Peek(); // なければ負数
+            long 次のフレームの表示予定時刻100ns = this._VideoSource.Peek(); // 次のフレームがなければ負数
 
             if( 0 <= 次のフレームの表示予定時刻100ns )
             {
-                if( ( null != this._最後のフレーム ) && ( 次のフレームの表示予定時刻100ns < this._最後のフレーム.表示時刻100ns ) )
+                if( ( null != this._最後に描画したフレーム ) && ( 次のフレームの表示予定時刻100ns < this._最後に描画したフレーム.表示時刻100ns ) )
                 {
                     // (A) 次のフレームが前のフレームより過去 → ループしたので、タイマをリセットしてから描画する。
                     this._再生タイマ.リセットする( QPCTimer.秒をカウントに変換して返す( FDKUtilities.変換_100ns単位からsec単位へ( 次のフレームの表示予定時刻100ns ) ) );
-                    this._次のフレームを描画する( dc, 変換行列2D, 不透明度0to1 );
+                    this._次のフレームを読み込んで描画する( dc, 変換行列2D, 不透明度0to1 );
                 }
                 else if( 次のフレームの表示予定時刻100ns <= this._再生タイマ.現在のリアルタイムカウント100ns )
                 {
                     // (B) 次のフレームの表示時刻に達したので描画する。
-                    this._次のフレームを描画する( dc, 変換行列2D, 不透明度0to1 );
+                    this._次のフレームを読み込んで描画する( dc, 変換行列2D, 不透明度0to1 );
                 }
                 else
                 {
@@ -131,37 +110,46 @@ namespace FDK
 
             this.最後のフレームを再描画する( dc, 変換行列2D, 不透明度0to1 );
         }
-
         public void 最後のフレームを再描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
-            if( null != this._最後のフレーム )
-                this._指定されたフレームを描画する( dc, 変換行列2D, this._最後のフレーム, 不透明度0to1 );
+            if( null == this._最後に描画したフレーム )
+                return;
+
+            this._フレームを描画する( dc, 変換行列2D, 不透明度0to1, this._最後に描画したフレーム );
         }
 
 
         private IVideoSource _VideoSource = null;
 
-        private MediaFoundationFileVideoSource _MFFileVideoSource = null;
+        /// <summary>
+        ///     <see cref="_VideoSource"/> をファイルから生成した場合は true、
+        ///     参照を受け取った場合は false。
+        /// </summary>
+        private bool _ファイルから生成した = false;
 
-        private VideoFrame _最後のフレーム = null;
+        private VideoFrame _最後に描画したフレーム = null;
 
         private QPCTimer _再生タイマ = null;
 
 
-        private void _次のフレームを描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
+        private void _次のフレームを読み込んで描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
             if( null == this._VideoSource )
                 return;
 
-            var 次のフレーム = this._VideoSource.Read();   // ブロックされたくない場合は先に Peek しておくこと。
+            // デコードが間に合ってない場合にはブロックする。
+            // ブロックされたくない場合は、事前に Peek() でチェックしておくこと。
+            var 次のフレーム = this._VideoSource.Read();
 
-            this._最後のフレーム?.Dispose();
-            this._最後のフレーム = 次のフレーム;
+            // 描画。
+            this._フレームを描画する( dc, 変換行列2D, 不透明度0to1, 次のフレーム );
 
-            this._指定されたフレームを描画する( dc, 変換行列2D, 次のフレーム, 不透明度0to1 );
+            // 更新。
+            this._最後に描画したフレーム?.Dispose();
+            this._最後に描画したフレーム = 次のフレーム;
         }
 
-        private void _指定されたフレームを描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, VideoFrame 描画するフレーム, float 不透明度 )
+        private void _フレームを描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1, VideoFrame 描画するフレーム )
         {
             if( null == 描画するフレーム )
                 return;
@@ -169,7 +157,7 @@ namespace FDK
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
                 dc.Transform = ( 変換行列2D ) * dc.Transform;
                 dc.PrimitiveBlend = ( this.加算合成 ) ? PrimitiveBlend.Add : PrimitiveBlend.SourceOver;
-                dc.DrawBitmap( 描画するフレーム.Bitmap, 不透明度, InterpolationMode.NearestNeighbor );
+                dc.DrawBitmap( 描画するフレーム.Bitmap, 不透明度0to1, InterpolationMode.NearestNeighbor );
             } );
         }
     }

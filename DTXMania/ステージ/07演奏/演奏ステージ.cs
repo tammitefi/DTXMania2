@@ -114,7 +114,7 @@ namespace DTXMania.ステージ.演奏
                 //----------------
                 #endregion
 
-                this._動画?.非活性化する();
+                this._動画?.Dispose();
                 this._動画 = null;
 
                 this._BGM?.Dispose();

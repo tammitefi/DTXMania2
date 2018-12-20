@@ -111,7 +111,7 @@ namespace FDK
             if( null == this._BaseSampleSource )
                 return 0;
 
-            if( this._BaseSampleSource.Length == this._Position )   // 最後まで再生済み、または次のストリームデータが届いていない
+            if( this._BaseSampleSource.Length <= this._Position )   // 最後まで再生済み、または次のストリームデータが届いていない
             {
                 Array.Clear( buffer, offset, count );   // 全部ゼロで埋めて返す。
                 return count;

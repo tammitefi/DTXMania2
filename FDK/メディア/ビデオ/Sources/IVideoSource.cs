@@ -8,8 +8,15 @@ namespace FDK
 {
     public interface IVideoSource : IDisposable
     {
+        /// <summary>
+        ///     ビデオフレームのサイズ[width, height]。
+        /// </summary>
         Size2F フレームサイズ { get; }
 
+        /// <summary>
+        ///     指定した時刻からデコードを開始する。
+        /// </summary>
+        void Start( double 再生開始時刻sec );
 
         /// <summary>
         ///     次に読みだされるフレームがあれば、その表示予定時刻[100ns単位]を返す。
@@ -24,5 +31,10 @@ namespace FDK
         ///     取得したフレームは、使用が終わったら、呼び出し元で Dispose すること。
         /// </summary>
         VideoFrame Read();
+
+        /// <summary>
+        ///     デコードを終了する。
+        /// </summary>
+        void Stop();
     }
 }
