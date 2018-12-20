@@ -113,25 +113,17 @@ namespace SSTFormat.v3
         }
 
         /// <summary>
-        ///     浅いコピーを生成して返す。
+        ///     チップの深いコピーを生成して返す。
         /// </summary>
-        public チップ Clone()
+        public virtual object Clone()
         {
-            return (チップ) this.MemberwiseClone();
-        }
+            // 浅いコピー
+            var dst = this.MemberwiseClone();
 
-        /// <summary>
-        ///     深いコピーを生成して返す。
-        /// </summary>
-        object ICloneable.Clone()
-        {
-            var dst = this.Clone();
-
-            // 参照型フィールドのコピーが必要ならここに記述すること。
+            // 参照型フィールドのコピー：必要ならここに記述すること。
 
             return dst;
         }
-
 
         // 概要:
         //     現在のインスタンスを同じ型の別のオブジェクトと比較して、並べ替え順序において、現在のインスタンスの位置が同じ型の別のオブジェクトの前、後ろ、または同じのいずれであるかを示す整数を返します。

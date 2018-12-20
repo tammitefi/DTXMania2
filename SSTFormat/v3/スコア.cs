@@ -19,6 +19,10 @@ namespace SSTFormat.v3
 
         public const double 初期小節解像度 = 480.0;
 
+        public static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
+            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
+        };
+
 
         // ヘッダ
 
@@ -361,8 +365,5 @@ namespace SSTFormat.v3
         private string _PATH_WAV = "";
         private const double _BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );
         private const double _BPM初期値固定での1小節4拍の時間sec = 60.0 / ( スコア.初期BPM / 4.0 );
-        protected static readonly List<string> _背景動画のデフォルト拡張子リスト = new List<string>() {
-            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
-        };
     }
 }

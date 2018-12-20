@@ -89,7 +89,7 @@ namespace SSTFormat.v3
                     //----------------
                     score.背景動画ファイル名 =
                         ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
-                          where スコア._背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                          where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                           select file ).FirstOrDefault();
                     //----------------
                     #endregion
