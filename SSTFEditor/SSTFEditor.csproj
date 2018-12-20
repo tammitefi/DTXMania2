@@ -134,22 +134,22 @@
     <Compile Include="UndoRedo\セルBase.cs" />
     <Compile Include="UndoRedo\セルリスト.cs" />
     <Compile Include="UndoRedo\管理.cs" />
-    <Compile Include="モード\数値入力ダイアログ.cs">
+    <Compile Include="数値入力ダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="モード\数値入力ダイアログ.designer.cs">
+    <Compile Include="数値入力ダイアログ.designer.cs">
       <DependentUpon>数値入力ダイアログ.cs</DependentUpon>
     </Compile>
-    <Compile Include="モード\検索条件入力ダイアログ.cs">
+    <Compile Include="検索条件入力ダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="モード\検索条件入力ダイアログ.designer.cs">
+    <Compile Include="検索条件入力ダイアログ.designer.cs">
       <DependentUpon>検索条件入力ダイアログ.cs</DependentUpon>
     </Compile>
-    <Compile Include="モード\編集モード.cs" />
-    <Compile Include="モード\選択モード.cs" />
-    <Compile Include="譜面\C譜面.cs" />
-    <Compile Include="譜面\編集レーン種別.cs" />
+    <Compile Include="編集モード.cs" />
+    <Compile Include="選択モード.cs" />
+    <Compile Include="C譜面.cs" />
+    <Compile Include="編集レーン種別.cs" />
     <EmbeddedResource Include="Popupメッセージ.ja-JP.resx">
       <DependentUpon>Popupメッセージ.cs</DependentUpon>
     </EmbeddedResource>
@@ -180,16 +180,16 @@
     <EmbeddedResource Include="小節長倍率入力ダイアログ.resx">
       <DependentUpon>小節長倍率入力ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="モード\数値入力ダイアログ.ja-JP.resx">
+    <EmbeddedResource Include="数値入力ダイアログ.ja-JP.resx">
       <DependentUpon>数値入力ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="モード\数値入力ダイアログ.resx">
+    <EmbeddedResource Include="数値入力ダイアログ.resx">
       <DependentUpon>数値入力ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="モード\検索条件入力ダイアログ.ja-JP.resx">
+    <EmbeddedResource Include="検索条件入力ダイアログ.ja-JP.resx">
       <DependentUpon>検索条件入力ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="モード\検索条件入力ダイアログ.resx">
+    <EmbeddedResource Include="検索条件入力ダイアログ.resx">
       <DependentUpon>検索条件入力ダイアログ.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ja-JP.resx" />

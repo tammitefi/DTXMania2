@@ -4,9 +4,9 @@ using System.Text;
 
 namespace SSTFEditor.UndoRedo
 {
-	public delegate void DGRedoを実行する<T>( T 変更対象, T 変更前の値, T 変更後の値, object 任意1, object 任意2 );
+    public delegate void DGRedoを実行する<T>( T 変更対象, T 変更前の値, T 変更後の値, object 任意1, object 任意2 );
 
-	public delegate void DGUndoを実行する<T>( T 変更対象, T 変更前の値, T 変更後の値, object 任意1, object 任意2 );
+    public delegate void DGUndoを実行する<T>( T 変更対象, T 変更前の値, T 変更後の値, object 任意1, object 任意2 );
 
 
     class セル<T> : セルBase

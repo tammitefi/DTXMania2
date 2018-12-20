@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SSTFEditor.UndoRedo
 {
-    class 管理
+    class UndoRedo管理
     {
         public static bool UndoRedoした直後である { get; set; } = false;
 
@@ -15,7 +15,7 @@ namespace SSTFEditor.UndoRedo
         public int 現在の総ノード数 => this._ルート.現在の総セル数;
 
 
-        public 管理()
+        public UndoRedo管理()
         {
             this._現在のセル = this._ルート;
         }

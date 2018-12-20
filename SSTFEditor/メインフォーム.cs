@@ -82,7 +82,7 @@ namespace SSTFEditor
 
         public C譜面 譜面 { get; set; }
 
-        public UndoRedo.管理 UndoRedo管理 { get; set; }
+        public UndoRedo.UndoRedo管理 UndoRedo管理 { get; set; }
 
         public クリップボード クリップボード { get; set; }
 
@@ -1399,7 +1399,7 @@ namespace SSTFEditor
             this.譜面?.Dispose();
             this.譜面 = new C譜面( this );  // 譜面は、選択・編集モードよりも先に生成すること。
 
-            this.UndoRedo管理 = new UndoRedo.管理();
+            this.UndoRedo管理 = new UndoRedo.UndoRedo管理();
             this.選択モード = new 選択モード( this );
             this.編集モード = new 編集モード( this );
             this.クリップボード = new クリップボード( this );
@@ -1605,12 +1605,12 @@ namespace SSTFEditor
 
         private void _次のプロパティ変更がUndoRedoリストに載らないようにする()
         {
-            UndoRedo.管理.UndoRedoした直後である = true;
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = true;
         }
 
         private void _次のプロパティ変更がUndoRedoリストに載るようにする()
         {
-            UndoRedo.管理.UndoRedoした直後である = false;
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
         }
 
         private void _垂直スクロールバーと譜面の上下位置を調整する()
@@ -2597,7 +2597,7 @@ namespace SSTFEditor
         {
             #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
             //-----------------
-            if( false == UndoRedo.管理.UndoRedoした直後である )
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
             {
                 // 最新のセルの所有者が自分？
                 var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
@@ -2643,7 +2643,7 @@ namespace SSTFEditor
             #endregion
 
             this.textBox曲名_以前の値 = this.textBox曲名.Text;      // 以前の値 ← 現在の値
-            UndoRedo.管理.UndoRedoした直後である = false;
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
             this.未保存である = true;
 
             // スコアには随時保存する。
@@ -2660,7 +2660,7 @@ namespace SSTFEditor
         {
             #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
             //-----------------
-            if( false == UndoRedo.管理.UndoRedoした直後である )
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
             {
                 // 最新のセルの所有者が自分？
                 var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
@@ -2706,7 +2706,7 @@ namespace SSTFEditor
             #endregion
 
             this.textBox説明_以前の値 = this.textBox説明.Text;  // 以前の値 ← 現在の値
-            UndoRedo.管理.UndoRedoした直後である = false;
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
             this.未保存である = true;
 
             // スコアには随時保存する。
@@ -2723,7 +2723,7 @@ namespace SSTFEditor
         {
             #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加or修正する。"
             //-----------------
-            if( !UndoRedo.管理.UndoRedoした直後である )
+            if( !UndoRedo.UndoRedo管理.UndoRedoした直後である )
             {
                 // 最新のセルの所有者が自分？
 
@@ -2819,10 +2819,10 @@ namespace SSTFEditor
 
             this.textBoxメモ_以前の値 = this.textBoxメモ.Text;  // <以前の値> = <現在の値>
 
-            if( false == UndoRedo.管理.UndoRedoした直後である )
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
                 this.未保存である = true;
 
-            UndoRedo.管理.UndoRedoした直後である = false;
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
 
             #region " 小節番号に対応するメモを dicメモ に登録する。"
             //-----------------
@@ -2910,7 +2910,7 @@ namespace SSTFEditor
 
                 #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
                 //-----------------
-                if( false == UndoRedo.管理.UndoRedoした直後である )
+                if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
                 {
                     // 最新のセルの所有者が自分？
                     var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
@@ -2958,7 +2958,7 @@ namespace SSTFEditor
                 #endregion
 
                 this.textBoxLevel_以前の値 = this.textBoxLevel.Text;      // 以前の値 ← 現在の値
-                UndoRedo.管理.UndoRedoした直後である = false;
+                UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
                 this.未保存である = true;
 
                 // トラックバーに反映する。
