@@ -801,7 +801,12 @@
     <None Include="System\Images\数字フォント中グレー48x64.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\数字フォント中グレー48x64矩形リスト.json">
+    <None Include="System\Images\数字フォント中48x64矩形リスト.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\数字フォント中ホワイト48x64.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

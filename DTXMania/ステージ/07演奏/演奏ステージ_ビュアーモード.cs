@@ -61,8 +61,8 @@ namespace DTXMania.ステージ.演奏
                 this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
                 this.子を追加する( this._FPS = new FPS() );
                 this.子を追加する( this._数字フォント中グレー48x64 = new 画像フォント(
-                   @"$(System)images\数字フォント中グレー48x64.png",
-                   @"$(System)images\数字フォント中グレー48x64矩形リスト.json",
+                   @"$(System)images\数字フォント中ホワイト48x64.png",
+                   @"$(System)images\数字フォント中48x64矩形リスト.json",
                    文字幅補正dpx: -16f,
                    不透明度: 0.3f ) );
             }
@@ -797,7 +797,7 @@ namespace DTXMania.ステージ.演奏
                         dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._小節線色, strokeWidth: 3f );
 
                         // 小節番号
-                        float 右位置dpx = 441f + 780f - 64f;   // -64f は適当なマージン。
+                        float 右位置dpx = 441f + 780f - 24f;   // -24f は適当なマージン。
                         this._数字フォント中グレー48x64.描画する( dc, 右位置dpx, 上位置dpx - 84f, chip.小節番号.ToString(), 右揃え: true );	// -84f は適当なマージン。
                     }
 
