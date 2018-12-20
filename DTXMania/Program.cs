@@ -191,16 +191,17 @@ namespace DTXMania
             {
                 var WCFサービスホスト = (ServiceHost) null;
 
-                _WCFサービスホストを起動する( out WCFサービスホスト );
-
-                try
+                if( _WCFサービスホストを起動する( out WCFサービスホスト ) )    // 起動に成功した
                 {
-                    // アプリを実行する。
-                    Program.App.Run();
-                }
-                finally
-                {
-                    _WCFサービスホストを終了する( WCFサービスホスト );
+                    try
+                    {
+                        // アプリを実行する。
+                        Program.App.Run();
+                    }
+                    finally
+                    {
+                        _WCFサービスホストを終了する( WCFサービスホスト );
+                    }
                 }
             }
             Log.Header( "アプリケーションを終了しました。" );
@@ -215,19 +216,20 @@ namespace DTXMania
             {
                 var WCFサービスホスト = (ServiceHost) null;
 
-                _WCFサービスホストを起動する( out WCFサービスホスト );
-
-                try
+                if( _WCFサービスホストを起動する( out WCFサービスホスト ) )    // 起動に成功した
                 {
-                    // 自分へ処理委託。
-                    _起動済みのアプリケーションに処理を委託する( Program.App, options );
+                    try
+                    {
+                        // 自分へ処理委託。
+                        _起動済みのアプリケーションに処理を委託する( Program.App, options );
 
-                    // アプリを実行する。
-                    Program.App.Run();
-                }
-                finally
-                {
-                    _WCFサービスホストを終了する( WCFサービスホスト );
+                        // アプリを実行する。
+                        Program.App.Run();
+                    }
+                    finally
+                    {
+                        _WCFサービスホストを終了する( WCFサービスホスト );
+                    }
                 }
             }
             Log.Header( "アプリケーションを終了しました。" );
