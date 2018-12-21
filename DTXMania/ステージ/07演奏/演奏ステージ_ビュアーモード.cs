@@ -194,9 +194,16 @@ namespace DTXMania.ステージ.演奏
 
                     case "file":
                         {
-                            var path = new VariablePath( video_id );
+                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルパス ), video_id ) );
 
-                            this._動画 = new Video( path );
+                            try
+                            {
+                                this._動画 = new Video( path );
+                            }
+                            catch
+                            {
+                                this._動画 = null;    // 動画の生成に失敗したか、動画の含まれないファイルだった
+                            }
                             this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
                             this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
 
@@ -206,9 +213,16 @@ namespace DTXMania.ステージ.演奏
 
                     default:
                         {
-                            var path = new VariablePath( App.演奏スコア.背景動画ID );
+                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルパス ), App.演奏スコア.背景動画ID ) );
 
-                            this._動画 = new Video( path );
+                            try
+                            {
+                                this._動画 = new Video( path );
+                            }
+                            catch
+                            {
+                                this._動画 = null;    // 動画の生成に失敗したか、動画の含まれないファイルだった
+                            }
                             this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
                             this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
 
