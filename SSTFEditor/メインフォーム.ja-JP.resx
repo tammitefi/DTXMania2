@@ -551,7 +551,7 @@
   <data name="toolStripComboBox譜面拡大率.ToolTipText" xml:space="preserve">
     <value>譜面の縦方向の表示倍率を指定します。</value>
   </data>
-  <data name="toolStripComboBoxガイド間隔.Items10" xml:space="preserve">
+  <data name="toolStripComboBoxガイド間隔.Items11" xml:space="preserve">
     <value>フリー</value>
   </data>
   <data name="toolStripComboBoxガイド間隔.ToolTipText" xml:space="preserve">
