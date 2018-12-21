@@ -85,14 +85,17 @@ namespace SSTFormat.v3
                 {
                     // ファイル以外から情報を取得する。
 
-                    #region " 背景動画ファイル名を更新する。"
-                    //----------------
-                    score.背景動画ファイル名 =
-                        ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
-                          where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
-                          select file ).FirstOrDefault();
-                    //----------------
-                    #endregion
+                    if( string.IsNullOrEmpty( score.背景動画ID ) )
+                    {
+                        #region " 背景動画ファイルを検索する。"
+                        //----------------
+                        score.背景動画ID =
+                            ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
+                              where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                              select file ).FirstOrDefault();
+                        //----------------
+                        #endregion
+                    }
 
                     スコア._後処理を行う( score );
                 }
@@ -251,8 +254,7 @@ namespace SSTFormat.v3
                 score.アーティスト名 = "";               // v3で新規追加
                 score.説明文 = v2score.Header.説明文;
                 score.難易度 = 5.0;                      // v3で新規追加
-                score.背景動画ファイル名 = v2score.背景動画ファイル名;
-                score.背景動画ID = null;                 // v3で新規追加
+                score.背景動画ID = v2score.背景動画ファイル名;                 // v3で新規追加
                 score.プレビュー画像ファイル名 = null;        // v3で新規追加
                 score.サウンドデバイス遅延ms = v2score.Header.サウンドデバイス遅延ms;
                 //score.譜面ファイルパス = SSTFファイルパス;  --> 呼び出し元で設定すること。
@@ -555,13 +557,12 @@ namespace SSTFormat.v3
 
                     var videoId = items[ 1 ].Trim();
 
-                    {   // 書式確認
-                        items = videoId.Split( ':' );
-                        if( 2 != items.Length )
-                        {
-                            Trace.TraceError( $"Video の動画IDの書式が不正です。スキップします。[{現在の.行番号}行目]" );
-                            return false;
-                        }
+                    // 書式確認
+                    items = videoId.Split( ':' );
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"Video の動画IDの書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
                     }
 
                     現在の.スコア.背景動画ID = videoId;

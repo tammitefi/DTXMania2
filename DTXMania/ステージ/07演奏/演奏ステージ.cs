@@ -158,68 +158,82 @@ namespace DTXMania.ステージ.演奏
 
             if( App.演奏スコア.背景動画ID.Nullでも空でもない() )
             {
-                #region " (A) SSTF準拠のストリーミング動画 --> 今は凍結中 "
+                string protocol = null;
+                string video_id = null;
+
+                #region " プロトコルと動画IDを解析して取得する。"
                 //----------------
-                //var items = App.演奏スコア.背景動画ID.Split( ':' );
+                {
+                    int sep = App.演奏スコア.背景動画ID.IndexOf( ':' );
 
-                //if( 2 == items.Length && items[ 0 ].Nullでも空でもない() && items[ 1 ].Nullでも空でもない() )
-                //{
-                //    switch( items[ 0 ].ToLower() )
-                //    {
-                //        case "nicovideo":
-                //            {
-                //                var vpath = new VariablePath( @"$(AppData)nicovideo.json" );
-                //                try
-                //                {
-                //                    var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
-                //                    this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], items[ 1 ], App.サウンドデバイス );
-                //                    Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
-                //                }
-                //                catch( Exception )
-                //                {
-                //                    Log.ERROR( $"nicovideo.json の読み込みに失敗しました。[{vpath.変数付きパス}]" );
-                //                }
-                //            }
-                //            break;
+                    if( -1 == sep ) // プロトコル省略
+                    {
+                        protocol = "file";
+                        video_id = App.演奏スコア.背景動画ID;
+                    }
+                    else
+                    {
+                        protocol = App.演奏スコア.背景動画ID.Substring( 0, sep ).Trim().ToLower();
+                        video_id = App.演奏スコア.背景動画ID.Substring( sep + 1 ).Trim();
 
-                //        default:
-                //            Log.ERROR( $"対応していない動画プロトコルが指定されています。無視します。[{App.演奏スコア.背景動画ID}]" );
-                //            break;
-                //    }
-                //}
-                //else
-                //{
-                //    Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.背景動画ID}]" );
-                //}
+                        if( protocol.Nullまたは空である() || video_id.Nullまたは空である() )
+                            Log.ERROR( $"動画IDの指定に誤りがあります。無視します。[{App.演奏スコア.背景動画ID}]" );
+                    }
+                }
                 //----------------
                 #endregion
-            }
-            else if( App.演奏スコア.背景動画ファイル名.Nullでも空でもない() )
-            {
-                #region " (B) SST準拠の背景動画 "
-                //----------------
-                var path = new VariablePath( App.演奏スコア.背景動画ファイル名 );
 
-                this._動画 = new Video( path );
-                this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
-                this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+                switch( protocol )
+                {
+                    //case "nicovideo":
+                    //    {
+                    //        var vpath = new VariablePath( @"$(AppData)nicovideo.json" );
+                    //        try
+                    //        {
+                    //            var apiConfig = JObject.Parse( File.ReadAllText( vpath.変数なしパス ) );
+                    //            this._動画とBGM = new 動画とBGM( (string) apiConfig[ "user_id" ], (string) apiConfig[ "password" ], video_id, App.サウンドデバイス );
+                    //            Log.Info( $"背景動画とBGMを指定された動画IDから読み込みました。[{App.演奏スコア.背景動画ID}]" );
+                    //        }
+                    //        catch( Exception )
+                    //        {
+                    //            Log.ERROR( $"nicovideo.json の読み込みに失敗しました。[{vpath.変数付きパス}]" );
+                    //        }
+                    //    }
+                    //    break;
 
-                Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
-                //----------------
-                #endregion
+                    case "file":
+                        {
+                            var path = new VariablePath( video_id );
+
+                            this._動画 = new Video( path );
+                            this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
+                            this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+
+                            Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
+                        }
+                        break;
+
+                    default:
+                        {
+                            var path = new VariablePath( App.演奏スコア.背景動画ID );
+
+                            this._動画 = new Video( path );
+                            this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
+                            this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+
+                            Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
+                        }
+                        break;
+                }
             }
             else if( 0 < App.演奏スコア.AVIリスト.Count )
             {
-                #region " (C) DTX準拠の動画 "
-                //----------------
+                // DTX準拠の動画
+
                 // #AVIzz がいくつ宣言されてても、最初のAVIだけを対象とする。
                 var path = new VariablePath( Path.Combine( App.演奏スコア.PATH_WAV, App.演奏スコア.AVIリスト.ElementAt( 0 ).Value ) );
-
                 this._動画 = new Video( path );
-
                 Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
-                //----------------
-                #endregion
             }
             else
             {
@@ -244,7 +258,7 @@ namespace DTXMania.ステージ.演奏
 
         private void _演奏状態を終了する()
         {
-            this._動画.再生を終了する();
+            this._動画?.再生を終了する();
             //this._BGM.Stop();         --> BGM, WAV ともに、結果ステージから BGMを停止する() が呼び出されるまで鳴らし続ける。
             //App.WAV管理?.Dispose();	
             //App.WAV管理 = null;

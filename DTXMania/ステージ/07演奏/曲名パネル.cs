@@ -86,7 +86,8 @@ namespace DTXMania.ステージ.演奏
                 return;
 
             var サムネイル画像 = 選択曲.ノード画像 ?? Node.既定のノード画像;
-            Debug.Assert( null != サムネイル画像 );
+            if( null == サムネイル画像 )
+                return;
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 

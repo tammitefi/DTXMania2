@@ -1556,7 +1556,7 @@ namespace SSTFEditor
                 this._ConfigのRecentUsedFilesをファイルメニューへ追加する();
 
                 // 基本情報タブを設定する。
-                譜面.SSTFormatScore.背景動画ファイル名 =
+                譜面.SSTFormatScore.背景動画ID =
                     ( from file in Directory.GetFiles( Path.GetDirectoryName( this._作業フォルダパス ) )
                       where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                       select file ).FirstOrDefault();  // 複数あったら、最初に見つけたほうを採用。1つも見つからなければ null。
@@ -1574,7 +1574,7 @@ namespace SSTFEditor
                 this.textBox説明.Text = 譜面.SSTFormatScore.説明文;
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
-                this.textBox背景動画.Text = Path.GetFileName( 譜面.SSTFormatScore.背景動画ファイル名 );
+                this.textBox背景動画.Text = Path.GetFileName( 譜面.SSTFormatScore.背景動画ID );
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxメモ.Text = ( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 0 ) ) ? this.譜面.SSTFormatScore.AVIリスト[ 0 ] : "";

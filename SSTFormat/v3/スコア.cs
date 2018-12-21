@@ -13,7 +13,7 @@ namespace SSTFormat.v3
         /// <summary>
         ///     このソースが実装するSSTFバージョン。
         /// </summary>
-        public static readonly Version SSTFVERSION = new Version( 3, 3, 0, 0 );
+        public static readonly Version SSTFVERSION = new Version( 3, 4, 0, 0 );
 
         public const double 初期BPM = 120.0;
 
@@ -101,18 +101,14 @@ namespace SSTFormat.v3
         public double 難易度 { get; set; }
 
         /// <summary>
-        ///		スコアは、単一の動画または音楽ファイルを持つことができる。
-        ///		このファイルは、<see cref="チップ種別.BGM"/>の発声時に再生が開始される。
-        /// </summary>
-        public string 背景動画ファイル名 { get; set; }
-
-        /// <summary>
-        ///     動画のID。
-        ///     指定がある（非nullの）場合、<see cref="背景動画ファイル名"/>より優先される。
+        ///		スコアは、単一の動画または音楽を持つことができる。
+        ///		これは、<see cref="チップ種別.BGM"/>の発声時に再生が開始される。
         /// </summary>
         /// <remarks>
-        ///     書式: "プロトコル: 動画ID", 大文字小文字は区別されない。
-        ///     　例: ニコニコ動画の場合 …… "NicoVideo: sm12345678"
+        ///     「プロトコル: 動画ID」という書式で指定する。大文字小文字は区別されない。
+        ///     　例:"nicovideo: sm12345678" ... ニコ動
+        ///     　   "file: bgv.mp4" ... ローカルの mp4 ファイル
+        ///     　   "bgv.mp4" ... プロトコルを省略してもローカルファイルとなる
         /// </remarks>
         public string 背景動画ID { get; set; }
 
@@ -286,7 +282,6 @@ namespace SSTFormat.v3
             this.アーティスト名 = "";
             this.説明文 = "";
             this.難易度 = 5.0;
-            this.背景動画ファイル名 = null;
             this.背景動画ID = null;
             this.プレビュー画像ファイル名 = null;
             this.プレビュー音声ファイル名 = null;
