@@ -279,8 +279,14 @@ namespace SSTFormat.v3
 
             private static int _最大公約数を返す( int m, int n )
             {
-                if( ( 0 >= m ) || ( 0 >= n ) )
-                    throw new Exception( "引数に0以下の数は指定できません。" );
+                if( ( 0 > m ) || ( 0 > n ) )
+                    throw new Exception( "引数に負数は指定できません。" );
+
+                if( 0 == m )
+                    return n;
+
+                if( 0 == n )
+                    return m;
 
                 // ユーグリッドの互除法
                 int r;
