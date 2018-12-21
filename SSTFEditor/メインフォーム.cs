@@ -914,7 +914,7 @@ namespace SSTFEditor
             {
                 try
                 {
-                    Process.Start( this.Config.ViewerPath, "-s" );  // ビュアーオプション付き。
+                    Process.Start( this.Config.ViewerPath, "-s" ).WaitForInputIdle( 20 * 1000 );  // ビュアーオプション付き。
                 }
                 catch
                 {

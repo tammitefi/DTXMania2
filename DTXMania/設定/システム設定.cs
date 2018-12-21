@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -46,6 +47,12 @@ namespace DTXMania.設定
         /// </summary>
         [DataMember( Name = "WorkThreadSleep", Order = 10 )]
         public int 入力発声スレッドのスリープ量ms { get; set; }
+
+        [DataMember( Name = "WindowPositionOfViewerMode", Order = 10 )]
+        public Point ウィンドウ表示位置Viewerモード用 { get; set; }
+
+        [DataMember( Name = "ClientSizeOfViewerMode", Order = 10 )]
+        public Size ウィンドウサイズViewerモード用 { get; set; }
 
 
         public システム設定()
@@ -126,7 +133,8 @@ namespace DTXMania.設定
                 switch( Version )
                 {
                     case 0:
-                    //FDKUtilities.保存する( this, _ファイルパス, UseSimpleDictionaryFormat: false );
+                        //FDKUtilities.保存する( this, _ファイルパス, UseSimpleDictionaryFormat: false );
+                        //break;
                     case 1:
                         File.WriteAllText( _ファイルパス.変数なしパス, JsonConvert.SerializeObject( this, Formatting.Indented ) );
                         Log.Info( $"システム設定 を保存しました。[{_ファイルパス.変数付きパス}]" );
@@ -157,6 +165,8 @@ namespace DTXMania.設定
             this.曲検索フォルダ = new List<VariablePath>();
             this._曲検索フォルダProxy = new List<string>();
             this.入力発声スレッドのスリープ量ms = 2;
+            this.ウィンドウ表示位置Viewerモード用 = new Point( 100, 100 );
+            this.ウィンドウサイズViewerモード用 = new Size( 640, 360 );
         }
 
         /// <summary>
