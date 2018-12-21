@@ -80,7 +80,7 @@ namespace SSTFEditor
 
         public 編集モード 編集モード { get; set; }
 
-        public C譜面 譜面 { get; set; }
+        public 譜面 譜面 { get; set; }
 
         public UndoRedo.UndoRedo管理 UndoRedo管理 { get; set; }
 
@@ -140,7 +140,7 @@ namespace SSTFEditor
         public void 選択チップの有無に応じて編集用GUIのEnabledを設定する()
         {
             bool 譜面上に選択チップがある = this._選択チップが１個以上ある;
-            bool クリップボードに選択チップがある = ( null != this.クリップボード ) && ( 0 < this.クリップボード.セル数 );
+            bool クリップボードに選択チップがある = ( null != this.クリップボード ) && ( 0 < this.クリップボード.アイテム数 );
 
             // 編集メニューの Enabled 設定
             this.toolStripMenuItemコピー.Enabled = 譜面上に選択チップがある;
@@ -188,18 +188,10 @@ namespace SSTFEditor
         public void 譜面を縦スクロールする( int スクロール量grid )
         {
             int 現在の位置grid = this.vScrollBar譜面用垂直スクロールバー.Value;
-            int スクロール後の位置grid = this.vScrollBar譜面用垂直スクロールバー.Value + スクロール量grid;
             int 最小値grid = this.vScrollBar譜面用垂直スクロールバー.Minimum;
             int 最大値grid = ( this.vScrollBar譜面用垂直スクロールバー.Maximum + 1 ) - this.vScrollBar譜面用垂直スクロールバー.LargeChange;
-
-            if( スクロール後の位置grid < 最小値grid )
-            {
-                スクロール後の位置grid = 最小値grid;
-            }
-            else if( スクロール後の位置grid > 最大値grid )
-            {
-                スクロール後の位置grid = 最大値grid;
-            }
+            int スクロール後の位置grid = this.vScrollBar譜面用垂直スクロールバー.Value + スクロール量grid;
+            スクロール後の位置grid = Math.Max( 最小値grid, Math.Min( 最大値grid, スクロール後の位置grid ) );
 
             this.vScrollBar譜面用垂直スクロールバー.Value = スクロール後の位置grid;
         }
@@ -289,7 +281,6 @@ namespace SSTFEditor
 
         #region " フォルダ、ファイルパス "
         //----------------
-
         /// <summary>
         ///		SSTFEditor.exe と StrokeStyleT.exe が格納されているフォルダへのパス。
         /// </summary>
@@ -339,13 +330,13 @@ namespace SSTFEditor
         //----------------
         private void _アプリの起動処理を行う()
         {
-            //this.GRID_PER_PART = int.Parse( Properties.Resources.GRID_PER_PART );
-            //this._GRID_PER_PIXEL = int.Parse( Properties.Resources.GRID_PER_PIXEL );
-
             // 作業フォルダの初期値は、Windowsユーザのマイドキュメントフォルダ。
+
             this._作業フォルダパス = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
 
+
             // Config.xml を読み込む。
+
             this.Config = Config.読み込む( Path.Combine( this._ユーザフォルダパス, Properties.Resources.CONFIG_FILE_NAME ) );
             if( this.Config.ViewerPath.Nullまたは空である() )
             {
@@ -356,37 +347,44 @@ namespace SSTFEditor
                     this.Config.ViewerPath = "";    // ビュアーが存在してない。
             }
 
+            
             // デザイナでは追加できないイベントを手動で追加する。
+
             this.splitContainer分割パネルコンテナ.MouseWheel += new MouseEventHandler( splitContainer分割パネルコンテナ_MouseWheel );
 
+
             // 最近使ったファイル一覧を更新する。
+
             this._ConfigのRecentUsedFilesをファイルメニューへ追加する();
 
+
             // その他の初期化。
+
             this._新規作成する();
             this._ガイド間隔を変更する( 16 ); // 初期は 1/16 間隔。
             this._譜面拡大率を変更する( 1 );  // 初期は 標準。
 
+
             // 完了。
+
             this.初期化完了 = true;
 
+
             // コマンドライン引数に、存在するファイルの指定があれば開く。
+
             foreach( var arg in Environment.GetCommandLineArgs().Skip( 1 ) )    // 先頭は exe 名なのでスキップ。
             {
                 if( File.Exists( arg ) )
                 {
-                    if( Path.GetExtension( arg ).ToLower() == ".sstf" ||
-                        Path.GetExtension( arg ).ToLower() == ".dtx" )
-                    {
-                        this._指定されたファイルを開く( arg );
-                        break;
-                    }
+                    this._指定されたファイルを開く( arg );
+                    break;  // 最初の１つだけ。
                 }
             }
         }
         private void _アプリの終了処理を行う()
         {
-            // SSTファクトリを閉じる。
+            // WCFファクトリを閉じる。
+
             try
             {
                 this._WCFサービスチャンネル?.Close();
@@ -401,12 +399,19 @@ namespace SSTFEditor
                 // エラーは無視。
             }
 
+            
             // 一時ファイルが残っていれば、削除する。
+
             if( File.Exists( this._最後にプレイヤーに渡した一時ファイル名 ) )
                 File.Delete( this._最後にプレイヤーに渡した一時ファイル名 );
 
+            
             // Config.xml を保存する。
+
             this.Config.保存する( Path.Combine( this._ユーザフォルダパス, Properties.Resources.CONFIG_FILE_NAME ) );
+
+
+            // その他の終了処理。
 
             this.譜面?.Dispose();
             this.譜面 = null;
@@ -427,7 +432,7 @@ namespace SSTFEditor
             if( DialogResult.Cancel == this._未保存なら保存する() )
                 return; // 保存がキャンセルされた場合はここで中断。
 
-            #region " [ファイルを開く] ダイアログでファイルを選択する。"
+            #region " ファイルを開くダイアログでファイルを選択する。"
             //-----------------
             var dialog = new OpenFileDialog() {
                 Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,
@@ -627,45 +632,51 @@ namespace SSTFEditor
             {
                 this.UndoRedo管理.トランザクション記録を開始する();
 
-                // 譜面が持つすべてのチップについて、選択されているチップがあれば削除する。
+                #region " 譜面が持つすべてのチップについて、選択されているチップがあれば削除する。"
+                //----------------
                 for( int i = this.譜面.SSTFormatScore.チップリスト.Count - 1; 0 <= i; i-- )
                 {
                     var chip = (描画用チップ) this.譜面.SSTFormatScore.チップリスト[ i ];
 
-                    if( chip.選択が確定している )
-                    {
-                        var chip変更前 = new 描画用チップ( chip );
+                    if( chip.選択が確定していない )
+                        continue;
 
-                        var cell = new UndoRedo.セル<描画用チップ>(
-                            所有者ID: null,
-                            Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
-                                変更対象.CopyFrom( 変更前 );
-                                this.譜面.SSTFormatScore.チップリスト.Add( 変更対象 );
-                                this.譜面.SSTFormatScore.チップリスト.Sort();
-                            },
-                            Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
-                                this.譜面.SSTFormatScore.チップリスト.Remove( 変更対象 );
-                                this.未保存である = true;
-                            },
-                            変更対象: chip,
-                            変更前の値: chip変更前,
-                            変更後の値: null,
-                            任意1: null,
-                            任意2: null );
+                    var chip変更前 = new 描画用チップ( chip );
 
-                        this.UndoRedo管理.セルを追加する( cell );
-                        cell.Redoを実行する();
-                    }
+                    var cell = new UndoRedo.セル<描画用チップ>(
+                        所有者ID: null,
+                        Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            変更対象.CopyFrom( 変更前 );
+                            this.譜面.SSTFormatScore.チップリスト.Add( 変更対象 );
+                            this.譜面.SSTFormatScore.チップリスト.Sort();
+                        },
+                        Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this.譜面.SSTFormatScore.チップリスト.Remove( 変更対象 );
+                            this.未保存である = true;
+                        },
+                        変更対象: chip,
+                        変更前の値: chip変更前,
+                        変更後の値: null,
+                        任意1: null,
+                        任意2: null );
+
+                    this.UndoRedo管理.セルを追加する( cell );
+                    cell.Redoを実行する();
                 }
+                //----------------
+                #endregion
             }
             finally
             {
                 this.UndoRedo管理.トランザクション記録を終了する();
 
-                // GUI を再描画する。
+                #region " GUI を再描画する。"
+                //----------------
                 this.UndoRedo用GUIのEnabledを設定する();
                 this.選択チップの有無に応じて編集用GUIのEnabledを設定する();
                 this.譜面をリフレッシュする();
+                //----------------
+                #endregion
             }
         }
 
@@ -1397,7 +1408,7 @@ namespace SSTFEditor
             #region " 各種オブジェクトを生成する。"
             //-----------------
             this.譜面?.Dispose();
-            this.譜面 = new C譜面( this );  // 譜面は、選択・編集モードよりも先に生成すること。
+            this.譜面 = new 譜面( this );  // 譜面は、選択・編集モードよりも先に生成すること。
 
             this.UndoRedo管理 = new UndoRedo.UndoRedo管理();
             this.選択モード = new 選択モード( this );

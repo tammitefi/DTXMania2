@@ -148,7 +148,7 @@
     </Compile>
     <Compile Include="編集モード.cs" />
     <Compile Include="選択モード.cs" />
-    <Compile Include="C譜面.cs" />
+    <Compile Include="譜面.cs" />
     <Compile Include="編集レーン種別.cs" />
     <EmbeddedResource Include="Popupメッセージ.ja-JP.resx">
       <DependentUpon>Popupメッセージ.cs</DependentUpon>

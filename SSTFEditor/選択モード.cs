@@ -396,12 +396,12 @@ namespace SSTFEditor
 
         protected Dictionary<描画用チップ, 描画用チップ> 移動開始時のチップ状態 = new Dictionary<描画用チップ, 描画用チップ>();
 
-        protected struct STレーングリッド座標
+        protected struct レーングリッド座標
         {
             public int 編集レーン番号;         // X座標に相当。
             public int 譜面内絶対位置grid;     // Y座標に相当。
         };
-        protected STレーングリッド座標 前回のマウス位置LaneGrid = new STレーングリッド座標();
+        protected レーングリッド座標 前回のマウス位置LaneGrid = new レーングリッド座標();
 
         protected void 移動の開始処理( MouseEventArgs e )
         {
@@ -412,7 +412,7 @@ namespace SSTFEditor
             this.現在の移動用ドラッグ開始位置px.Y = this.現在の移動用ドラッグ終了位置px.Y = e.Y;
 
             // マウス位置（lane×grid）の初期化。
-            this.前回のマウス位置LaneGrid = new STレーングリッド座標() {
+            this.前回のマウス位置LaneGrid = new レーングリッド座標() {
                 編集レーン番号 = this.Form.譜面.dicレーン番号[ this.Form.譜面.譜面パネル内X座標pxにある編集レーンを返す( e.X ) ],
                 譜面内絶対位置grid = this.Form.譜面.譜面パネル内Y座標pxにおける譜面内絶対位置gridをガイド幅単位で返す( e.Y ),
             };
@@ -441,13 +441,13 @@ namespace SSTFEditor
             //-----------------
 
             // 現在の位置を算出。
-            var 現在のドラッグ終了位置LaneGrid = new STレーングリッド座標() {
+            var 現在のドラッグ終了位置LaneGrid = new レーングリッド座標() {
                 編集レーン番号 = this.Form.譜面.dicレーン番号[ this.Form.譜面.譜面パネル内X座標pxにある編集レーンを返す( this.現在の移動用ドラッグ終了位置px.X ) ],
                 譜面内絶対位置grid = this.Form.譜面.譜面パネル内Y座標pxにおける譜面内絶対位置gridをガイド幅単位で返す( this.現在の移動用ドラッグ終了位置px.Y ),
             };
 
             // 前回位置からの移動量を算出。
-            var 移動量LaneGrid = new STレーングリッド座標() {
+            var 移動量LaneGrid = new レーングリッド座標() {
                 編集レーン番号 = 現在のドラッグ終了位置LaneGrid.編集レーン番号 - this.前回のマウス位置LaneGrid.編集レーン番号,
                 譜面内絶対位置grid = 現在のドラッグ終了位置LaneGrid.譜面内絶対位置grid - this.前回のマウス位置LaneGrid.譜面内絶対位置grid,
             };
@@ -551,7 +551,7 @@ namespace SSTFEditor
                 }
 
                 // 前回位置を現在の位置に更新。
-                this.前回のマウス位置LaneGrid = new STレーングリッド座標() {
+                this.前回のマウス位置LaneGrid = new レーングリッド座標() {
                     編集レーン番号 = 現在のドラッグ終了位置LaneGrid.編集レーン番号,
                     譜面内絶対位置grid = 現在のドラッグ終了位置LaneGrid.譜面内絶対位置grid,
                 };

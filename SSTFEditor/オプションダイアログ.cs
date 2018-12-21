@@ -17,7 +17,7 @@ namespace SSTFEditor
 
         private void buttonViewerPath参照_Click( object sender, EventArgs e )
         {
-            #region " [ファイルを開く] ダイアログでファイルを選択する。"
+            #region " ファイルを開くダイアログでファイルを選択する。"
             //-----------------
             var dialog = new OpenFileDialog() {
                 Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,

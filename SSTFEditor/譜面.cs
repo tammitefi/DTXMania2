@@ -11,7 +11,7 @@ using SSTFormat.v3;
 
 namespace SSTFEditor
 {
-    class C譜面 : IDisposable
+    class 譜面 : IDisposable
     {
         public readonly Size チップサイズpx = new Size( 30, 8 );
 
@@ -116,7 +116,7 @@ namespace SSTFEditor
             => this.譜面内絶対位置gridに位置する小節の情報を返す( this.カレントラインの譜面内絶対位置grid ).小節番号;
 
 
-        public C譜面( メインフォーム form )
+        public 譜面( メインフォーム form )
         {
             this.Form = form;
 
@@ -473,7 +473,7 @@ namespace SSTFEditor
             #endregion
             #region " レーン名を描画。"
             //-----------------
-            var レーン名描画領域下側 = new Rectangle( 0, 10, panel.Width, C譜面.レーン番号表示高さpx );
+            var レーン名描画領域下側 = new Rectangle( 0, 10, panel.Width, 譜面.レーン番号表示高さpx );
             var レーン名描画領域上側 = new Rectangle( 0, 0, panel.Width, 10 );
 
             // グラデーション描画。

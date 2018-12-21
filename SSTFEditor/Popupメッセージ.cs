@@ -26,7 +26,8 @@ namespace SSTFEditor
 
         protected void Popupメッセージ_FormClosing( object sender, FormClosingEventArgs e )
         {
-            FDK.FDKUtilities.解放する( ref this.フォント );
+            this.フォント?.Dispose();
+            this.フォント = null;
         }
 
         protected void Popupメッセージ_Load( object sender, EventArgs e )

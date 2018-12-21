@@ -6,7 +6,7 @@ namespace SSTFEditor
 {
     class クリップボード
     {
-        public int セル数 => this.セルリスト.Count;
+        public int アイテム数 => this.アイテムリスト.Count;
 
 
         public クリップボード( メインフォーム form )
@@ -16,7 +16,8 @@ namespace SSTFEditor
 
         public void クリアする()
         {
-            this.セルリスト.Clear();
+            this.アイテムリスト.Clear();
+            this.Form = null;
         }
 
         public void 現在選択されているチップをボードにコピーする()
@@ -27,15 +28,15 @@ namespace SSTFEditor
             {
                 if( chip.選択が確定している )
                 {
-                    this.セルリスト.Add(
-                        new Cセル() { チップ = new 描画用チップ( chip ) } );
+                    this.アイテムリスト.Add(
+                        new アイテム() { チップ = new 描画用チップ( chip ) } );
                 }
             }
         }
 
         public void チップを指定位置から貼り付ける( int 貼り付け先頭の譜面内絶対位置grid )
         {
-            if( 0 == this.セル数 )
+            if( 0 == this.アイテム数 )
                 return;
 
             try
@@ -43,21 +44,21 @@ namespace SSTFEditor
                 this.Form.UndoRedo管理.トランザクション記録を開始する();
 
                 // すべてのセルについて、チップ位置を、ボード内でもっとも位置が前にあるセルを 0grid とした相対値に変換する。
-                int 最小値grid = this.セルリスト[ 0 ].チップ.譜面内絶対位置grid;
-                foreach( var cell in this.セルリスト )
+                int 最小値grid = this.アイテムリスト[ 0 ].チップ.譜面内絶対位置grid;
+                foreach( var cell in this.アイテムリスト )
                 {
                     if( cell.チップ.譜面内絶対位置grid < 最小値grid )
                         最小値grid = cell.チップ.譜面内絶対位置grid;
                 }
-                foreach( var cell in this.セルリスト )
+                foreach( var cell in this.アイテムリスト )
                     cell.チップ.譜面内絶対位置grid -= 最小値grid;
 
                 // すべてのセルについて、チップ位置を、実際に貼り付ける位置に変換する。
-                foreach( var cell in this.セルリスト )
+                foreach( var cell in this.アイテムリスト )
                     cell.チップ.譜面内絶対位置grid += 貼り付け先頭の譜面内絶対位置grid;
 
                 // チップを譜面に貼り付ける。
-                foreach( var cell in this.セルリスト )
+                foreach( var cell in this.アイテムリスト )
                 {
                     this.Form.譜面.チップを配置または置換する(
                         this.Form.譜面.dicチップ編集レーン対応表[ cell.チップ.チップ種別 ],
@@ -81,7 +82,7 @@ namespace SSTFEditor
         }
 
 
-        protected class Cセル
+        protected class アイテム
         {
             public bool 貼り付け済み = false;
             public int グループID = 0;
@@ -90,6 +91,6 @@ namespace SSTFEditor
 
         protected メインフォーム Form;
 
-        protected readonly List<Cセル> セルリスト = new List<Cセル>();
+        protected readonly List<アイテム> アイテムリスト = new List<アイテム>();
     }
 }
