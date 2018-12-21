@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Drawing;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 
@@ -21,6 +22,10 @@ namespace SSTFEditor
         public List<string> RecentUsedFiles = new List<string>();
 
         public string ViewerPath = "";
+
+        public Point WindowLocation = new Point( 100, 100 );
+
+        public Size ClientSize = new Size( 710, 512 );
 
 
         // メソッド（保存されない）

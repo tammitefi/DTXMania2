@@ -1068,6 +1068,7 @@
             this.Name = "メインフォーム";
             this.toolTipメインフォーム.SetToolTip(this, resources.GetString("$this.ToolTip"));
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.メインフォーム_FormClosing);
+            this.ResizeEnd += new System.EventHandler(this.メインフォーム_ResizeEnd);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.メインフォーム_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.メインフォーム_DragEnter);
             this.splitContainer分割パネルコンテナ.Panel1.ResumeLayout(false);

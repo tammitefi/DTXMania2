@@ -94,7 +94,7 @@ namespace SSTFormat.v3
                             path += @"\";
 
                         score.背景動画ID =
-                            ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
+                            ( from file in Directory.GetFiles( Path.GetDirectoryName( path ) )
                               where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                               select file ).FirstOrDefault();
                         //----------------

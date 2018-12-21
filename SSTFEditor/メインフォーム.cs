@@ -347,7 +347,14 @@ namespace SSTFEditor
                     this.Config.ViewerPath = "";    // ビュアーが存在してない。
             }
 
-            
+
+            // ウィンドウの位置とサイズ。
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = this.Config.WindowLocation;
+            this.ClientSize = this.Config.ClientSize;
+           
+
             // デザイナでは追加できないイベントを手動で追加する。
 
             this.splitContainer分割パネルコンテナ.MouseWheel += new MouseEventHandler( splitContainer分割パネルコンテナ_MouseWheel );
@@ -504,7 +511,7 @@ namespace SSTFEditor
                 // 背景動画が未定だったら、出力するパス内の背景動画を検索し、背景動画テキストボックスに設定する。
                 if( string.IsNullOrEmpty( this.textBox背景動画.Text ) )
                 {
-                    if( ファイルの絶対パス.EndsWith( @"\" ) )
+                    if( !ファイルの絶対パス.EndsWith( @"\" ) )
                         ファイルの絶対パス += @"\";
 
                     this.textBox背景動画.Text =
@@ -1836,6 +1843,12 @@ namespace SSTFEditor
             {
                 this._アプリの終了処理を行う();
             }
+        }
+
+        protected void メインフォーム_ResizeEnd( object sender, EventArgs e )
+        {
+            this.Config.WindowLocation = this.Location;
+            this.Config.ClientSize = this.ClientSize;
         }
         //-----------------
         #endregion

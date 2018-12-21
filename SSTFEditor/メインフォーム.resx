@@ -152,9 +152,6 @@
   <data name="&gt;&gt;toolStripMenuItem現在位置からBGMのみ再生.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItem現在位置からBGMのみ再生.Name" xml:space="preserve">
-    <value>toolStripMenuItem現在位置からBGMのみ再生</value>
-  </data>
   <data name="&gt;&gt;labelサウンド遅延ms.Name" xml:space="preserve">
     <value>labelサウンド遅延ms</value>
   </data>
@@ -163,6 +160,9 @@
   </data>
   <data name="&gt;&gt;toolStripButton元に戻す.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemガイド間隔48分.Name" xml:space="preserve">
+    <value>toolStripMenuItemガイド間隔48分</value>
   </data>
   <data name="toolStripMenuItemガイド間隔フリー.Text" xml:space="preserve">
     <value>Free</value>
@@ -204,8 +204,8 @@
   <data name="&gt;&gt;splitContainer分割パネルコンテナ.Panel1.Type" xml:space="preserve">
     <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripButton選択モード.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;labelLevel.Parent" xml:space="preserve">
+    <value>tabPage基本情報</value>
   </data>
   <data name="&gt;&gt;pictureBox譜面パネル.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -273,8 +273,8 @@
   <data name="label曲名.Text" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="toolStripMenuItemコピー.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="&gt;&gt;toolStripMenuItem小節の削除.Name" xml:space="preserve">
+    <value>toolStripMenuItem小節の削除</value>
   </data>
   <data name="textBox背景動画.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 229</value>
@@ -477,8 +477,8 @@
   <data name="&gt;&gt;toolStripMenuItemガイド間隔128分.Name" xml:space="preserve">
     <value>toolStripMenuItemガイド間隔128分</value>
   </data>
-  <data name="&gt;&gt;toolStripButton削除.Name" xml:space="preserve">
-    <value>toolStripButton削除</value>
+  <data name="textBox背景動画.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="toolStripButton現在位置から再生.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -503,9 +503,6 @@
   </data>
   <data name="&gt;&gt;splitContainer分割パネルコンテナ.Type" xml:space="preserve">
     <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelサウンド遅延ms.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="toolStripComboBox譜面拡大率.Items3" xml:space="preserve">
     <value>x4</value>
@@ -567,9 +564,6 @@
   <data name="toolStripMenuItem先頭から再生.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>F5</value>
   </data>
-  <data name="toolStripMenuItem選択チップの貼り付け.Text" xml:space="preserve">
-    <value>&amp;Paste chip(s)</value>
-  </data>
   <data name="&gt;&gt;tabControl情報タブコンテナ.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
@@ -625,8 +619,8 @@
   <data name="toolStripButton貼り付け.ToolTipText" xml:space="preserve">
     <value>Paste chip(s)</value>
   </data>
-  <data name="&gt;&gt;numericUpDownメモ用小節番号.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="toolStripMenuItemコピー.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;textBox背景動画.Parent" xml:space="preserve">
     <value>tabPage基本情報</value>
@@ -636,9 +630,6 @@
   </data>
   <data name="labelサウンド遅延ms.Size" type="System.Drawing.Size, System.Drawing">
     <value>153, 12</value>
-  </data>
-  <data name="contextMenuStrip譜面右メニュー.Size" type="System.Drawing.Size, System.Drawing">
-    <value>193, 198</value>
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>
@@ -651,9 +642,6 @@
   </data>
   <data name="&gt;&gt;labelメモ小節単位.ZOrder" xml:space="preserve">
     <value>8</value>
-  </data>
-  <data name="&gt;&gt;toolStripMenuItem選択チップの削除.Name" xml:space="preserve">
-    <value>toolStripMenuItem選択チップの削除</value>
   </data>
   <data name="&gt;&gt;textBoxLevel.Parent" xml:space="preserve">
     <value>tabPage基本情報</value>
@@ -760,8 +748,8 @@
   <data name="label曲名.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="label曲名.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 9</value>
+  <data name="toolStripMenuItem選択チップの貼り付け.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem切り取り.Name" xml:space="preserve">
     <value>toolStripMenuItem切り取り</value>
@@ -772,8 +760,11 @@
   <data name="&gt;&gt;toolStripMenuItemすべて選択.Name" xml:space="preserve">
     <value>toolStripMenuItemすべて選択</value>
   </data>
-  <data name="toolStripButton元に戻す.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 23</value>
+  <data name="&gt;&gt;toolStripButton選択モード.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>SSTFEditor</value>
   </data>
   <data name="&gt;&gt;toolStripButton音量UP.Name" xml:space="preserve">
     <value>toolStripButton音量UP</value>
@@ -783,6 +774,9 @@
   </data>
   <data name="toolStripMenuItem現在位置から再生.Text" xml:space="preserve">
     <value>&amp;Play from current part</value>
+  </data>
+  <data name="&gt;&gt;numericUpDownメモ用小節番号.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="textBox説明.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -796,8 +790,8 @@
   <data name="toolStripMenuItemガイド間隔.Size" type="System.Drawing.Size, System.Drawing">
     <value>145, 22</value>
   </data>
-  <data name="statusStripステータスバー.Size" type="System.Drawing.Size, System.Drawing">
-    <value>752, 22</value>
+  <data name="&gt;&gt;toolStripComboBox譜面拡大率.Name" xml:space="preserve">
+    <value>toolStripComboBox譜面拡大率</value>
   </data>
   <data name="toolStripMenuItem切り取り.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+X</value>
@@ -826,14 +820,14 @@
   <data name="toolStripMenuItemコピー.Text" xml:space="preserve">
     <value>&amp;Copy</value>
   </data>
-  <data name="labelメモ用小節番号.ToolTip" xml:space="preserve">
-    <value />
+  <data name="toolStripMenuItem開く.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 22</value>
   </data>
   <data name="label現在のチップ種別.Size" type="System.Drawing.Size, System.Drawing">
     <value>0, 16</value>
   </data>
-  <data name="toolStripツールバー.Size" type="System.Drawing.Size, System.Drawing">
-    <value>752, 26</value>
+  <data name="&gt;&gt;toolStripButton削除.Name" xml:space="preserve">
+    <value>toolStripButton削除</value>
   </data>
   <data name="toolStripLabel音量.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -874,8 +868,8 @@
   <data name="&gt;&gt;labelメモ用小節番号.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="toolStripButton再生停止.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 23</value>
+  <data name="contextMenuStrip譜面右メニュー.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="&gt;&gt;toolStripMenuItem選択チップのコピー.Name" xml:space="preserve">
     <value>toolStripMenuItem選択チップのコピー</value>
@@ -997,6 +991,9 @@
   <data name="toolStripMenuItemモード切替え.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>F8</value>
   </data>
+  <data name="labelメモ小節単位.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="&gt;&gt;toolStripMenuItemファイル.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -1042,6 +1039,9 @@
   <data name="&gt;&gt;toolStripMenuItemバージョン.Name" xml:space="preserve">
     <value>toolStripMenuItemバージョン</value>
   </data>
+  <data name="pictureBox譜面パネル.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="&gt;&gt;toolStripSeparator5.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -1057,11 +1057,14 @@
   <data name="toolStripButton切り取り.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="toolStripMenuItemファイル.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 20</value>
+  </data>
   <data name="&gt;&gt;toolStripMenuItem編集.Name" xml:space="preserve">
     <value>toolStripMenuItem編集</value>
   </data>
-  <data name="textBoxLevel.Text" xml:space="preserve">
-    <value>5.00</value>
+  <data name="toolStripMenuItem選択チップの貼り付け.Text" xml:space="preserve">
+    <value>&amp;Paste chip(s)</value>
   </data>
   <data name="toolStripMenuItemガイド間隔24分.Size" type="System.Drawing.Size, System.Drawing">
     <value>132, 22</value>
@@ -1081,8 +1084,8 @@
   <data name="toolStripLabel音量.Text" xml:space="preserve">
     <value> 0 *******-</value>
   </data>
-  <data name="toolStripLabel音量.ToolTipText" xml:space="preserve">
-    <value>Current volue of chip (smallest:1 - 4:largest)</value>
+  <data name="toolStripMenuItem再生.Text" xml:space="preserve">
+    <value>&amp;Play</value>
   </data>
   <data name="&gt;&gt;labelCurrentChipType.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1111,14 +1114,8 @@
   <data name="&gt;&gt;toolStripMenuItem開く.Name" xml:space="preserve">
     <value>toolStripMenuItem開く</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItem小節の削除.Name" xml:space="preserve">
-    <value>toolStripMenuItem小節の削除</value>
-  </data>
   <data name="&gt;&gt;toolStripMenuItem先頭から再生.Name" xml:space="preserve">
     <value>toolStripMenuItem先頭から再生</value>
-  </data>
-  <data name="textBox背景動画.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="toolStripButton元に戻す.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -1144,11 +1141,8 @@
   <data name="&gt;&gt;textBox説明.Name" xml:space="preserve">
     <value>textBox説明</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="toolStripMenuItem再生.Text" xml:space="preserve">
-    <value>&amp;Play</value>
+  <data name="toolStripButton元に戻す.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
   </data>
   <data name="label現在のチップ種別.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 12pt</value>
@@ -1171,8 +1165,8 @@
   <data name="&gt;&gt;toolStripButton音量UP.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="toolStripMenuItemファイル.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
+  <data name="toolStripButton再生停止.ToolTipText" xml:space="preserve">
+    <value>Stop viewer playing</value>
   </data>
   <data name="labelメモ小節単位.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -1225,11 +1219,8 @@
   <data name="labelメモ用小節番号.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;labelLevel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="labelメモ小節単位.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="contextMenuStrip譜面右メニュー.Size" type="System.Drawing.Size, System.Drawing">
+    <value>193, 198</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem再生.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1321,8 +1312,8 @@
   <data name="toolStripButton上書き保存.ToolTipText" xml:space="preserve">
     <value>Save to file</value>
   </data>
-  <data name="textBox曲名.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 24</value>
+  <data name="toolStripツールバー.Size" type="System.Drawing.Size, System.Drawing">
+    <value>752, 26</value>
   </data>
   <data name="toolStripMenuItemやり直す.Text" xml:space="preserve">
     <value>&amp;Redo</value>
@@ -1335,9 +1326,6 @@
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
     <value>163, 6</value>
-  </data>
-  <data name="&gt;&gt;toolStripComboBox譜面拡大率.Name" xml:space="preserve">
-    <value>toolStripComboBox譜面拡大率</value>
   </data>
   <data name="toolStripMenuItem元に戻す.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+Z</value>
@@ -1362,9 +1350,6 @@
   </data>
   <data name="toolStripMenuItem終了.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 22</value>
-  </data>
-  <data name="contextMenuStrip譜面右メニュー.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="&gt;&gt;textBoxサウンド遅延ms.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1405,8 +1390,11 @@
   <data name="pictureBox譜面パネル.Size" type="System.Drawing.Size, System.Drawing">
     <value>245, 801</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItemやり直す.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="toolStripLabel音量.ToolTipText" xml:space="preserve">
+    <value>Current volue of chip (smallest:1 - 4:largest)</value>
+  </data>
+  <data name="numericUpDownメモ用小節番号.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 19</value>
   </data>
   <data name="&gt;&gt;label曲名.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1416,6 +1404,9 @@
   </data>
   <data name="&gt;&gt;toolStripMenuItem編集.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer分割パネルコンテナ.Panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="labelメモ小節単位.ToolTip" xml:space="preserve">
     <value />
@@ -1440,9 +1431,6 @@
   </data>
   <data name="&gt;&gt;textBox背景動画.Name" xml:space="preserve">
     <value>textBox背景動画</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>SSTFEditor</value>
   </data>
   <data name="toolStripMenuItem編集.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 20</value>
@@ -1597,6 +1585,9 @@
   <data name="&gt;&gt;toolStripButton貼り付け.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="toolStripButton再生停止.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
   <data name="toolStripMenuItem再生停止.Text" xml:space="preserve">
     <value>&amp;Stop</value>
   </data>
@@ -1672,8 +1663,8 @@
   <data name="toolStripMenuItemすべて選択.Text" xml:space="preserve">
     <value>Select &amp;All</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItemガイド間隔48分.Name" xml:space="preserve">
-    <value>toolStripMenuItemガイド間隔48分</value>
+  <data name="&gt;&gt;toolStripMenuItemやり直す.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemガイド間隔12分.Name" xml:space="preserve">
     <value>toolStripMenuItemガイド間隔12分</value>
@@ -1711,11 +1702,14 @@
   <data name="&gt;&gt;toolStripSeparator15.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;toolStripMenuItem選択チップの削除.Name" xml:space="preserve">
+    <value>toolStripMenuItem選択チップの削除</value>
+  </data>
   <data name="&gt;&gt;toolStripButton現在位置からBGMのみ再生.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="toolStripMenuItem開く.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 22</value>
+  <data name="&gt;&gt;toolStripMenuItem現在位置からBGMのみ再生.Name" xml:space="preserve">
+    <value>toolStripMenuItem現在位置からBGMのみ再生</value>
   </data>
   <data name="toolStripツールバー.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1737,9 +1731,6 @@
   </data>
   <data name="toolStripButtonコピー.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
-  </data>
-  <data name="numericUpDownメモ用小節番号.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 19</value>
   </data>
   <data name="toolStripMenuItemヘルプ.Text" xml:space="preserve">
     <value>&amp;Help</value>
@@ -1768,8 +1759,14 @@
   <data name="toolStripMenuItem削除.Text" xml:space="preserve">
     <value>&amp;Delete</value>
   </data>
+  <data name="&gt;&gt;textBoxサウンド遅延ms.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
     <value>toolStripSeparator2</value>
+  </data>
+  <data name="textBoxLevel.Text" xml:space="preserve">
+    <value>5.00</value>
   </data>
   <data name="textBox説明.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1837,6 +1834,9 @@
   <data name="&gt;&gt;textBox説明.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;toolStripSeparator8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;toolStripMenuItemガイド間隔64分.Name" xml:space="preserve">
     <value>toolStripMenuItemガイド間隔64分</value>
   </data>
@@ -1854,6 +1854,9 @@
   </data>
   <data name="&gt;&gt;toolStripMenuItemツール.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textBox曲名.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 24</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1942,7 +1945,7 @@
   <data name="&gt;&gt;textBoxメモ.Name" xml:space="preserve">
     <value>textBoxメモ</value>
   </data>
-  <data name="pictureBox譜面パネル.ToolTip" xml:space="preserve">
+  <data name="labelメモ用小節番号.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="toolStripButton現在位置からBGMのみ再生.Size" type="System.Drawing.Size, System.Drawing">
@@ -2032,14 +2035,14 @@
   <data name="&gt;&gt;toolStripButton音量Down.Name" xml:space="preserve">
     <value>toolStripButton音量Down</value>
   </data>
+  <data name="statusStripステータスバー.Size" type="System.Drawing.Size, System.Drawing">
+    <value>752, 22</value>
+  </data>
   <data name="toolStripButton切り取り.ToolTipText" xml:space="preserve">
     <value>Cut selected chip(s)</value>
   </data>
   <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 6</value>
-  </data>
-  <data name="toolStripButton再生停止.ToolTipText" xml:space="preserve">
-    <value>Stop viewer playing</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem先頭から再生.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -2050,8 +2053,8 @@
   <data name="&gt;&gt;labelCurrentChipType.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;splitContainer分割パネルコンテナ.Panel2.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;labelLevel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator4.Name" xml:space="preserve">
     <value>toolStripSeparator4</value>
@@ -2064,9 +2067,6 @@
   </data>
   <data name="toolStripMenuItem選択モード.Size" type="System.Drawing.Size, System.Drawing">
     <value>166, 22</value>
-  </data>
-  <data name="&gt;&gt;labelLevel.Parent" xml:space="preserve">
-    <value>tabPage基本情報</value>
   </data>
   <data name="toolStripMenuItem名前を付けて保存.Text" xml:space="preserve">
     <value>S&amp;ave as ...</value>
@@ -2092,20 +2092,20 @@
   <data name="toolStripMenuItemすべてのチップの選択.Text" xml:space="preserve">
     <value>Select &amp;all chips</value>
   </data>
-  <data name="toolStripMenuItem選択チップの貼り付け.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
   <data name="&gt;&gt;toolStripMenuItemガイド間隔128分.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButton新規作成.Name" xml:space="preserve">
     <value>toolStripButton新規作成</value>
   </data>
+  <data name="label曲名.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 9</value>
+  </data>
   <data name="toolStripButton現在位置から再生.Size" type="System.Drawing.Size, System.Drawing">
     <value>23, 23</value>
   </data>
-  <data name="&gt;&gt;textBoxサウンド遅延ms.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="&gt;&gt;labelサウンド遅延ms.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxメモ.Parent" xml:space="preserve">
     <value>tabPage基本情報</value>
@@ -2131,6 +2131,9 @@
   <metadata name="toolTipメインフォーム.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>369, 17</value>
   </metadata>
+  <metadata name="statusStripステータスバー.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 653</value>
+  </metadata>
   <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>ja-JP</value>
   </metadata>
@@ -2140,13 +2143,10 @@
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="menuStripメニューバー.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>0, 0</value>
-  </metadata>
   <metadata name="contextMenuStrip譜面右メニュー.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>548, 17</value>
   </metadata>
-  <metadata name="statusStripステータスバー.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>0, 653</value>
+  <metadata name="menuStripメニューバー.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
   </metadata>
 </root>
