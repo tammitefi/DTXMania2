@@ -510,11 +510,8 @@ namespace SSTFEditor
                 // 背景動画が未定だったら、出力するパス内の背景動画を検索し、背景動画テキストボックスに設定する。
                 if( string.IsNullOrEmpty( this.textBox背景動画.Text ) )
                 {
-                    if( !ファイルの絶対パス.EndsWith( @"\" ) )
-                        ファイルの絶対パス += @"\";
-
                     this.textBox背景動画.Text =
-                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )      // パスは末尾が '\' でなければディレクトリとして認識されないので注意！
+                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )
                           where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
                           select ファイル名 ).FirstOrDefault();
                 }

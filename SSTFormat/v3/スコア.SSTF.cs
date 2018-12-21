@@ -89,12 +89,8 @@ namespace SSTFormat.v3
                     {
                         #region " 背景動画ファイルを検索する。"
                         //----------------
-                        var path = score.譜面ファイルパス;
-                        if( !path.EndsWith( @"\" ) )
-                            path += @"\";
-
                         score.背景動画ID =
-                            ( from file in Directory.GetFiles( Path.GetDirectoryName( path ) )
+                            ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
                               where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                               select file ).FirstOrDefault();
                         //----------------
