@@ -128,7 +128,7 @@
     <value>Select Song file</value>
   </data>
   <data name="MSG_曲ファイル選択ダイアログのフィルタ" xml:space="preserve">
-    <value>Song files (*.sstf;*.dtx)|*.sstf;*.dtx</value>
+    <value>Song files (*.sstf;*.dtx;*.gda;*.g2d;*.bms;*.bme)|*.sstf;*.dtx;*.gda;*.g2d;*.bms;*.bme</value>
   </data>
   <data name="MSG_保存中です" xml:space="preserve">
     <value>Saving now...</value>

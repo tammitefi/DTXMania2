@@ -268,7 +268,7 @@ namespace SSTFEditor.Properties {
         }
         
         /// <summary>
-        ///   Song files (*.sstf;*.dtx)|*.sstf;*.dtx に類似しているローカライズされた文字列を検索します。
+        ///   Song files (*.sstf;*.dtx;*.gda;*.g2d;*.bms;*.bme)|*.sstf;*.dtx;*.gda;*.g2d;*.bms;*.bme に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MSG_曲ファイル選択ダイアログのフィルタ {
             get {

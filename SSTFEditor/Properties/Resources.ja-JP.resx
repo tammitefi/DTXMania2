@@ -148,7 +148,7 @@
     <value>小節番号に誤りがあります。</value>
   </data>
   <data name="MSG_曲ファイル選択ダイアログのフィルタ" xml:space="preserve">
-    <value>曲ファイル (*.sstf;*.dtx)|*.sstf;*.dtx</value>
+    <value>曲ファイル (*.sstf;*.dtx;*.gda;*.g2d;*.bms;*.bme)|*.sstf;*.dtx;*.gda;*.g2d;*.bms;*.bme</value>
   </data>
   <data name="MSG_検索結果ダイアログのタイトル" xml:space="preserve">
     <value>検索結果</value>
