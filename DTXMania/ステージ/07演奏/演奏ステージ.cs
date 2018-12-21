@@ -213,8 +213,16 @@ namespace DTXMania.ステージ.演奏
                             {
                                 this._動画 = null;    // 動画の生成に失敗したか、動画の含まれないファイルだった
                             }
-                            this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
-                            this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+                            try
+                            {
+                                this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
+                                this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+                            }
+                            catch
+                            {
+                                this._BGMsource = null; // 音声の生成に失敗したか、音声の含まれないファイルだった
+                                this._BGM = null;
+                            }
 
                             Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
                         }
@@ -232,8 +240,16 @@ namespace DTXMania.ステージ.演奏
                             {
                                 this._動画 = null;    // 動画の生成に失敗したか、動画の含まれないファイルだった
                             }
-                            this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
-                            this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+                            try
+                            {
+                                this._BGMsource = SampleSourceFactory.Create( App.サウンドデバイス, path );
+                                this._BGM = new Sound( App.サウンドデバイス, this._BGMsource );
+                            }
+                            catch
+                            {
+                                this._BGMsource = null; // 音声の生成に失敗したか、音声の含まれないファイルだった
+                                this._BGM = null;
+                            }
 
                             Log.Info( $"背景動画とBGMを読み込みました。[{path.変数付きパス}]" );
                         }
