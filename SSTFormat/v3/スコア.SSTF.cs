@@ -1477,6 +1477,7 @@ namespace SSTFormat.v3
                 { "china",      ( チップ種別.China,       true  ) },
                 { "splash",     ( チップ種別.Splash,      true  ) },
                 { "hihat",      ( チップ種別.HiHat_Close, true  ) },
+                { "foot",       ( チップ種別.HiHat_Foot,  true  ) },
                 { "snare",      ( チップ種別.Snare,       true  ) },
                 { "bass",       ( チップ種別.Bass,        true  ) },
                 { "tom1",       ( チップ種別.Tom1,        true  ) },
