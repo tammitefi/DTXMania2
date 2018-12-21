@@ -369,7 +369,6 @@ namespace SSTFEditor
 
             this._新規作成する();
             this._ガイド間隔を変更する( 16 ); // 初期は 1/16 間隔。
-            this._譜面拡大率を変更する( 1 );  // 初期は 標準。
 
 
             // 完了。
@@ -870,6 +869,8 @@ namespace SSTFEditor
             this.toolStripComboBox譜面拡大率.SelectedIndex = ( n倍 - 1 );
 
             this.譜面をリフレッシュする();
+
+            this.Config.ViewScale = n倍;
         }
 
         private void _最初から再生する()
@@ -1455,8 +1456,8 @@ namespace SSTFEditor
             #endregion
             #region " 譜面拡大率 "
             //-----------------
-            this._譜面拡大率を変更する( 1 );      // 初期値は x1.0。
-                                        //-----------------
+            this._譜面拡大率を変更する( this.Config.ViewScale );
+            //-----------------
             #endregion
             #region " Undo/Redo "
             //-----------------

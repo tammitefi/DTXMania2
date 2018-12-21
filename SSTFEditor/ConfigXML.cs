@@ -27,6 +27,8 @@ namespace SSTFEditor
 
         public Size ClientSize = new Size( 710, 512 );
 
+        public int ViewScale = 1;
+
 
         // メソッド（保存されない）
 
