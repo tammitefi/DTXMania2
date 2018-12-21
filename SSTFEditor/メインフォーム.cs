@@ -501,11 +501,14 @@ namespace SSTFEditor
                 if( this.選択モードである )
                     this.選択モード.全チップの選択を解除する();
 
-                // 出力するパス内の背景動画を検索し、背景動画テキストボックスに設定する。
-                this.textBox背景動画.Text =
-                    ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )
-                      where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
-                      select ファイル名 ).FirstOrDefault();
+                // 背景動画が未定だったら、出力するパス内の背景動画を検索し、背景動画テキストボックスに設定する。
+                if( string.IsNullOrEmpty( this.textBox背景動画.Text ) )
+                {
+                    this.textBox背景動画.Text =
+                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )
+                          where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
+                          select ファイル名 ).FirstOrDefault();
+                }
 
                 // SSTFファイルを出力する。
                 this.譜面.SSTFファイルを書き出す(
@@ -1556,10 +1559,14 @@ namespace SSTFEditor
                 this._ConfigのRecentUsedFilesをファイルメニューへ追加する();
 
                 // 基本情報タブを設定する。
-                譜面.SSTFormatScore.背景動画ID =
-                    ( from file in Directory.GetFiles( Path.GetDirectoryName( this._作業フォルダパス ) )
-                      where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
-                      select file ).FirstOrDefault();  // 複数あったら、最初に見つけたほうを採用。1つも見つからなければ null。
+
+                if( string.IsNullOrEmpty( 譜面.SSTFormatScore.背景動画ID ) )
+                {
+                    譜面.SSTFormatScore.背景動画ID =
+                        ( from file in Directory.GetFiles( Path.GetDirectoryName( this._作業フォルダパス ) )
+                          where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                          select file ).FirstOrDefault();  // 複数あったら、最初に見つけたほうを採用。1つも見つからなければ null。
+                }
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBox曲名.Text = 譜面.SSTFormatScore.曲名;
@@ -2991,8 +2998,13 @@ namespace SSTFEditor
             this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxLevel );
         }
         private string textBoxLevel_以前の値 = "5.00";
+
+        protected void textBox背景動画_TextChanged( object sender, EventArgs e )
+        {
+            譜面.SSTFormatScore.背景動画ID = this.textBox背景動画.Text;
+            this.未保存である = true;
+        }
         //-----------------
         #endregion
-
     }
 }

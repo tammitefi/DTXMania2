@@ -302,6 +302,7 @@ namespace SSTFormat.v3
         }
 
 
+
         // private
 
         internal static void _後処理を行う( スコア score )

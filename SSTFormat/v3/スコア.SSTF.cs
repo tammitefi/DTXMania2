@@ -555,17 +555,7 @@ namespace SSTFormat.v3
                         return false;
                     }
 
-                    var videoId = items[ 1 ].Trim();
-
-                    // 書式確認
-                    items = videoId.Split( ':' );
-                    if( 2 != items.Length )
-                    {
-                        Trace.TraceError( $"Video の動画IDの書式が不正です。スキップします。[{現在の.行番号}行目]" );
-                        return false;
-                    }
-
-                    現在の.スコア.背景動画ID = videoId;
+                    現在の.スコア.背景動画ID = items[ 1 ].Trim();
 
                     return true;
                 }
@@ -1265,6 +1255,9 @@ namespace SSTFormat.v3
                 sw.WriteLine( $"SoundDevice.Delay={score.サウンドデバイス遅延ms}" );
 
                 sw.WriteLine( $"Level={score.難易度.ToString( "0.00" )}" );
+
+                if( !string.IsNullOrEmpty( score.背景動画ID ) )
+                    sw.WriteLine( $"Video={score.背景動画ID}" );
 
                 sw.WriteLine( "" );
             }
