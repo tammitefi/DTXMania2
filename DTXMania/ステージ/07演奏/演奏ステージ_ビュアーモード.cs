@@ -261,6 +261,8 @@ namespace DTXMania.ステージ.演奏
 
         private void _演奏状態を終了する()
         {
+            this._描画開始チップ番号 = -1;
+
             this._動画?.再生を終了する();
             this._動画?.Dispose();
             this._動画 = null;
@@ -1282,7 +1284,7 @@ namespace DTXMania.ステージ.演奏
                         //App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
                         this._動画?.再生を開始する( 演奏開始時刻sec - 動画チップ.発声時刻sec );
-                        this._BGM?.Play( 演奏開始時刻sec - 動画チップ.発声時刻sec );
+                        this._BGM?.Play( Math.Max( 0.0, 演奏開始時刻sec - 動画チップ.発声時刻sec ) );
 
                         //App.サウンドタイマ.再開する();
                     }
