@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="button背景動画参照.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBoxLevel.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="trackBarLevel.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelLevel.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 12</value>
@@ -124,8 +133,20 @@
   <data name="labelLevel.Text" xml:space="preserve">
     <value>レベル</value>
   </data>
+  <data name="labelLevel.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBoxサウンド遅延ms.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="labelサウンド遅延ms.Text" xml:space="preserve">
     <value>サウンド遅延 [ms] (自動検出)</value>
+  </data>
+  <data name="labelサウンド遅延ms.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBoxメモ.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="labelメモ用小節番号.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 214</value>
@@ -136,11 +157,20 @@
   <data name="labelメモ用小節番号.Text" xml:space="preserve">
     <value>小節番号：</value>
   </data>
+  <data name="labelメモ用小節番号.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="numericUpDownメモ用小節番号.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="labelメモ小節単位.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 12</value>
   </data>
   <data name="labelメモ小節単位.Text" xml:space="preserve">
     <value>メモ（小節単位）</value>
+  </data>
+  <data name="labelメモ小節単位.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="label背景動画.Size" type="System.Drawing.Size, System.Drawing">
     <value>17, 12</value>
@@ -148,11 +178,23 @@
   <data name="label背景動画.Text" xml:space="preserve">
     <value>曲</value>
   </data>
+  <data name="label背景動画.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBox背景動画.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="label説明.Size" type="System.Drawing.Size, System.Drawing">
     <value>29, 12</value>
   </data>
   <data name="label説明.Text" xml:space="preserve">
     <value>説明</value>
+  </data>
+  <data name="label説明.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBox説明.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="label曲名.Size" type="System.Drawing.Size, System.Drawing">
     <value>29, 12</value>
@@ -160,8 +202,26 @@
   <data name="label曲名.Text" xml:space="preserve">
     <value>曲名</value>
   </data>
+  <data name="label曲名.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBox曲名.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="tabPage基本情報.Text" xml:space="preserve">
     <value>基本情報</value>
+  </data>
+  <data name="tabPage基本情報.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tabControl情報タブコンテナ.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="splitContainer分割パネルコンテナ.Panel1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="label現在のチップ種別.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="labelCurrentChipType.Size" type="System.Drawing.Size, System.Drawing">
     <value>132, 24</value>
@@ -169,6 +229,21 @@
   <data name="labelCurrentChipType.Text" xml:space="preserve">
     <value>現在のレーンのチップ種別：
 (SPACEキーで変更)</value>
+  </data>
+  <data name="labelCurrentChipType.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pictureBox譜面パネル.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="splitContainer分割パネルコンテナ.Panel2.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="splitContainer分割パネルコンテナ.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="statusStripステータスバー.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="toolStripMenuItem新規作成.Size" type="System.Drawing.Size, System.Drawing">
     <value>184, 22</value>
@@ -413,6 +488,9 @@
   <data name="toolStripMenuItemヘルプ.Text" xml:space="preserve">
     <value>ヘルプ(&amp;H)</value>
   </data>
+  <data name="menuStripメニューバー.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="toolStripButton新規作成.ToolTipText" xml:space="preserve">
     <value>新しい譜面を作成します。</value>
   </data>
@@ -506,6 +584,12 @@
   <data name="toolStripButton音量UP.ToolTipText" xml:space="preserve">
     <value>チップ音量を上げる</value>
   </data>
+  <data name="toolStripツールバー.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vScrollBar譜面用垂直スクロールバー.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="toolStripMenuItem選択チップの切り取り.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 22</value>
   </data>
@@ -565,5 +649,11 @@
   </data>
   <data name="contextMenuStrip譜面右メニュー.Size" type="System.Drawing.Size, System.Drawing">
     <value>191, 198</value>
+  </data>
+  <data name="contextMenuStrip譜面右メニュー.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="$this.ToolTip" xml:space="preserve">
+    <value />
   </data>
 </root>

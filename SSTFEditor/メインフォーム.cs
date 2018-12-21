@@ -3020,6 +3020,30 @@ namespace SSTFEditor
             譜面.SSTFormatScore.背景動画ID = this.textBox背景動画.Text;
             this.未保存である = true;
         }
+
+        protected void button背景動画参照_Click( object sender, EventArgs e )
+        {
+            #region " ファイルを開くダイアログでファイルを選択する。"
+            //-----------------
+            var dialog = new OpenFileDialog() {
+                Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,
+                Filter = Properties.Resources.MSG_背景動画ファイル選択ダイアログのフィルタ,
+                FilterIndex = 1,
+                InitialDirectory = this._作業フォルダパス,
+            };
+            var result = dialog.ShowDialog( this );
+
+            // メインフォームを再描画してダイアログを完全に消す。
+            this.Refresh();
+
+            // OKじゃないならここで中断。
+            if( DialogResult.OK != result )
+                return;
+            //-----------------
+            #endregion
+
+            this.textBox背景動画.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
+        }
         //-----------------
         #endregion
     }

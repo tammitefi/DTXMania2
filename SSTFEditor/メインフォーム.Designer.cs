@@ -33,6 +33,7 @@
             this.splitContainer分割パネルコンテナ = new System.Windows.Forms.SplitContainer();
             this.tabControl情報タブコンテナ = new System.Windows.Forms.TabControl();
             this.tabPage基本情報 = new System.Windows.Forms.TabPage();
+            this.button背景動画参照 = new System.Windows.Forms.Button();
             this.textBoxLevel = new System.Windows.Forms.TextBox();
             this.trackBarLevel = new System.Windows.Forms.TrackBar();
             this.labelLevel = new System.Windows.Forms.Label();
@@ -193,6 +194,7 @@
             // 
             resources.ApplyResources(this.tabPage基本情報, "tabPage基本情報");
             this.tabPage基本情報.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPage基本情報.Controls.Add(this.button背景動画参照);
             this.tabPage基本情報.Controls.Add(this.textBoxLevel);
             this.tabPage基本情報.Controls.Add(this.trackBarLevel);
             this.tabPage基本情報.Controls.Add(this.labelLevel);
@@ -210,6 +212,14 @@
             this.tabPage基本情報.Controls.Add(this.textBox曲名);
             this.tabPage基本情報.Name = "tabPage基本情報";
             this.toolTipメインフォーム.SetToolTip(this.tabPage基本情報, resources.GetString("tabPage基本情報.ToolTip"));
+            // 
+            // button背景動画参照
+            // 
+            resources.ApplyResources(this.button背景動画参照, "button背景動画参照");
+            this.button背景動画参照.Name = "button背景動画参照";
+            this.toolTipメインフォーム.SetToolTip(this.button背景動画参照, resources.GetString("button背景動画参照.ToolTip"));
+            this.button背景動画参照.UseVisualStyleBackColor = true;
+            this.button背景動画参照.Click += new System.EventHandler(this.button背景動画参照_Click);
             // 
             // textBoxLevel
             // 
@@ -1207,6 +1217,7 @@
 		private System.Windows.Forms.TextBox textBoxLevel;
 		private System.Windows.Forms.TrackBar trackBarLevel;
 		private System.Windows.Forms.Label labelLevel;
-	}
+        private System.Windows.Forms.Button button背景動画参照;
+    }
 }
 
