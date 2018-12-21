@@ -504,8 +504,11 @@ namespace SSTFEditor
                 // 背景動画が未定だったら、出力するパス内の背景動画を検索し、背景動画テキストボックスに設定する。
                 if( string.IsNullOrEmpty( this.textBox背景動画.Text ) )
                 {
+                    if( ファイルの絶対パス.EndsWith( @"\" ) )
+                        ファイルの絶対パス += @"\";
+
                     this.textBox背景動画.Text =
-                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )
+                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )      // パスは末尾が '\' でなければディレクトリとして認識されないので注意！
                           where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
                           select ファイル名 ).FirstOrDefault();
                 }
@@ -1552,7 +1555,7 @@ namespace SSTFEditor
 
                 string 読み込み時の拡張子 = Path.GetExtension( ファイル名 ).ToLower();
                 this._編集中のファイル名 = Path.ChangeExtension( Path.GetFileName( ファイル名 ), ".sstf" );       // 読み込んだファイルの拡張子を .sstf に変換。（ファイルはすでに読み込み済み）
-                this._作業フォルダパス = Path.GetDirectoryName( ファイル名 );
+                this._作業フォルダパス = Path.GetDirectoryName( ファイル名 ) + @"\";
 
                 // 読み込んだファイルを [ファイル]メニューの最近使ったファイル一覧に追加する。
                 this.Config.ファイルを最近使ったファイルの一覧に追加する( Path.Combine( this._作業フォルダパス, this._編集中のファイル名 ) );
@@ -1563,7 +1566,7 @@ namespace SSTFEditor
                 if( string.IsNullOrEmpty( 譜面.SSTFormatScore.背景動画ID ) )
                 {
                     譜面.SSTFormatScore.背景動画ID =
-                        ( from file in Directory.GetFiles( Path.GetDirectoryName( this._作業フォルダパス ) )
+                        ( from file in Directory.GetFiles( Path.GetDirectoryName( this._作業フォルダパス ) )    // パスは末尾が '\' でなければディレクトリとして認識されないので注意！
                           where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                           select file ).FirstOrDefault();  // 複数あったら、最初に見つけたほうを採用。1つも見つからなければ null。
                 }
