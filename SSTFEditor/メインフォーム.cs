@@ -875,7 +875,7 @@ namespace SSTFEditor
             // 新しい一時ファイルの名前をランダムに決める。
             do
             {
-                this._最後にプレイヤーに渡した一時ファイル名 = Path.Combine( this._作業フォルダパス, Path.GetRandomFileName() );
+                this._最後にプレイヤーに渡した一時ファイル名 = Path.Combine( this._作業フォルダパス, Path.GetRandomFileName() + @".sstf" );
             }
             while( File.Exists( this._最後にプレイヤーに渡した一時ファイル名 ) );    // 同一名のファイルが存在してたらもう一度。（まずないだろうが）
 
@@ -884,9 +884,9 @@ namespace SSTFEditor
                 this._最後にプレイヤーに渡した一時ファイル名,
                 一時ファイルである: true );    // 一時ファイルである場合、「最近使ったファイル一覧」には残されない。
 
-            #region " SSTサービスを取得する。（必要あれば、SSTビュアープロセスを起動する。）"
+            #region " WCFサービスを取得する。（必要あれば、Tビュアープロセスを起動する。）"
             //----------------
-            this._SSTサービスが起動していれば取得する();
+            this._WCFサービスが起動していれば取得する();
 
             // プロセスの起動が必要か？
 
@@ -914,7 +914,7 @@ namespace SSTFEditor
             {
                 try
                 {
-                    Process.Start( this.Config.ViewerPath, "-v" );  // ビュアーオプション付き。
+                    Process.Start( this.Config.ViewerPath, "-s" );  // ビュアーオプション付き。
                 }
                 catch
                 {
@@ -926,7 +926,7 @@ namespace SSTFEditor
                 this._WCFファクトリ = null;
                 for( int retry = 0; retry < 10; retry++ )   // 最大10回リトライ。
                 {
-                    this._SSTサービスが起動していれば取得する();
+                    this._WCFサービスが起動していれば取得する();
 
                     if( null != this._WCFサービス )
                         break;  // サービスに接続できた。
@@ -976,7 +976,7 @@ namespace SSTFEditor
 
             // SSTサービスを通じて、演奏を停止する。
 
-            this._SSTサービスが起動していれば取得する();
+            this._WCFサービスが起動していれば取得する();
 
             if( null == this._WCFサービス )
                 return; // SSTサービスが起動していないなら何もしない。
@@ -1746,7 +1746,7 @@ namespace SSTFEditor
             this.toolStripLabel音量.Text = ( this._音量toラベル.ContainsKey( this.現在のチップ音量 ) ) ? this._音量toラベル[ this.現在のチップ音量 ] : @"???";
         }
 
-        private void _SSTサービスが起動していれば取得する()
+        private void _WCFサービスが起動していれば取得する()
         {
             // ファクトリが未生成なら生成する。
             if( null == this._WCFファクトリ )

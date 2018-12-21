@@ -209,36 +209,52 @@ namespace SSTFEditor
 
             // 後処理
 
-            #region " チップリストのすべてのチップを、描画用チップに変換する。"
-            //----------------
-            var src = this.SSTFormatScore.チップリスト;
-            this.SSTFormatScore.チップリスト = new List<チップ>();   // Clear() は src まで消えてしまうのでNG。
-            for( int i = 0; i < src.Count; i++ )
-                this.SSTFormatScore.チップリスト.Add( new 描画用チップ( src[ i ] ) );
-            src = null;
-            //----------------
-            #endregion
             #region " 小節線・拍線チップをすべて削除する。"
             //-----------------
-            this.SSTFormatScore.チップリスト.RemoveAll( ( chip ) => { return chip.チップ種別 == チップ種別.小節線 || chip.チップ種別 == チップ種別.拍線 || chip.チップ種別 == チップ種別.Unknown; } );
+            this.SSTFormatScore.チップリスト.RemoveAll( ( chip ) => (
+                chip.チップ種別 == チップ種別.小節線 || 
+                chip.チップ種別 == チップ種別.拍線 || 
+                chip.チップ種別 == チップ種別.Unknown ) );
             //-----------------
+            #endregion
+            #region " チップリストのすべてのチップを、描画用チップに変換する。"
+            //----------------
+            {
+                // バックアップを取って、
+                var 元のチップリスト = new チップ[ this.SSTFormatScore.チップリスト.Count ];
+                for( int i = 0; i < this.SSTFormatScore.チップリスト.Count; i++ )
+                    元のチップリスト[ i ] = this.SSTFormatScore.チップリスト[ i ];
+
+                // クリアして、
+                this.SSTFormatScore.チップリスト.Clear();
+
+                // 再構築。
+                for( int i = 0; i < 元のチップリスト.Length; i++ )
+                    this.SSTFormatScore.チップリスト.Add( new 描画用チップ( 元のチップリスト[ i ] ) );
+            }
+            //----------------
             #endregion
             #region " 全チップに対して「譜面内絶対位置grid」を設定する。"
             //-----------------
-            int チップが存在する小節の先頭grid = 0;
-            int 現在の小節番号 = 0;
-            foreach( 描画用チップ chip in this.SSTFormatScore.チップリスト )
             {
-                // チップの小節番号が現在の小節番号よりも大きい場合、チップが存在する小節に至るまで、「nチップが存在する小節の先頭grid」を更新する。
-                while( 現在の小節番号 < chip.小節番号 )
+                int チップが存在する小節の先頭grid = 0;
+                int 現在の小節番号 = 0;
+
+                foreach( 描画用チップ chip in this.SSTFormatScore.チップリスト )
                 {
-                    double 現在の小節の小節長倍率 = this.SSTFormatScore.小節長倍率を取得する( 現在の小節番号 );
-                    チップが存在する小節の先頭grid += (int) ( this.Form.GRID_PER_PART * 現在の小節の小節長倍率 );
+                    // チップの小節番号が現在の小節番号よりも大きい場合、チップが存在する小節に至るまで、「nチップが存在する小節の先頭grid」を更新する。
+                    while( 現在の小節番号 < chip.小節番号 )
+                    {
+                        double 現在の小節の小節長倍率 = this.SSTFormatScore.小節長倍率を取得する( 現在の小節番号 );
+                        チップが存在する小節の先頭grid += (int) ( this.Form.GRID_PER_PART * 現在の小節の小節長倍率 );
 
-                    現在の小節番号++;      // 現在の小節番号 が chip.小節番号 に追いつくまでループする。
+                        現在の小節番号++;      // 現在の小節番号 が chip.小節番号 に追いつくまでループする。
+                    }
+
+                    chip.譜面内絶対位置grid =
+                        チップが存在する小節の先頭grid + 
+                        ( chip.小節内位置 * this.小節長をグリッドで返す( chip.小節番号 ) ) / chip.小節解像度;
                 }
-
-                chip.譜面内絶対位置grid = チップが存在する小節の先頭grid + ( ( chip.小節内位置 * this.小節長をグリッドで返す( chip.小節番号 ) ) / chip.小節解像度 );
             }
             //-----------------
             #endregion
@@ -246,7 +262,7 @@ namespace SSTFEditor
 
         public void SSTFファイルを書き出す( string ファイル名, string ヘッダ行 )
         {
-            using( var fs = new FileStream( ファイル名, FileMode.CreateNew, FileAccess.Write ) )
+            using( var fs = new FileStream( ファイル名, FileMode.Create, FileAccess.Write ) )
             {
                 スコア.SSTF.出力する( this.SSTFormatScore, fs, $"{ヘッダ行}{Environment.NewLine}" );
             }

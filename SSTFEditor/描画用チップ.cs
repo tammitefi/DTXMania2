@@ -34,6 +34,37 @@ namespace SSTFEditor
         public int 枠外レーン数 { get; set; } = 0;
 
 
+        public 描画用チップ( チップ sstfChip = null )
+        {
+            if( null != sstfChip )
+                this.CopyFrom( sstfChip );
+
+            this._特別なチップ内文字列を設定する();
+        }
+        public 描画用チップ( 描画用チップ sstfChip )
+        {
+            描画用チップ.Copy( sstfChip, this );
+
+            this._特別なチップ内文字列を設定する();
+        }
+
+        public static void Copy( 描画用チップ src, 描画用チップ dst )
+        {
+            ( (チップ) dst ).CopyFrom( src );
+
+            dst.譜面内絶対位置grid = src.譜面内絶対位置grid;
+            dst.ドラッグ操作により選択中である = src.ドラッグ操作により選択中である;
+            dst.選択が確定している = src.選択が確定している;
+            dst.移動済みである = src.移動済みである;
+            dst.チップ内文字列 = src.チップ内文字列;
+            dst.枠外レーン数 = src.枠外レーン数;
+        }
+        public void CopyFrom( 描画用チップ コピー元チップ )
+        {
+            描画用チップ.Copy( コピー元チップ, this );
+        }
+
+
         private void _特別なチップ内文字列を設定する()
         {
             if( this.チップ種別 == チップ種別.China ) this.チップ内文字列 = "C N";

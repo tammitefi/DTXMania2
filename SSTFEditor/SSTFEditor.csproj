@@ -97,6 +97,7 @@
     <Compile Include="Popupメッセージ.designer.cs">
       <DependentUpon>Popupメッセージ.cs</DependentUpon>
     </Compile>
+    <Compile Include="UndoRedo\UndoRedo管理.cs" />
     <Compile Include="オプションダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,7 +134,6 @@
     <Compile Include="UndoRedo\セル.cs" />
     <Compile Include="UndoRedo\セルBase.cs" />
     <Compile Include="UndoRedo\セルリスト.cs" />
-    <Compile Include="UndoRedo\管理.cs" />
     <Compile Include="数値入力ダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>

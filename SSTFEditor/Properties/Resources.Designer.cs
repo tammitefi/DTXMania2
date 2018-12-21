@@ -361,7 +361,7 @@ namespace SSTFEditor.Properties {
         }
         
         /// <summary>
-        ///   StrokeStyleT.exe に類似しているローカライズされた文字列を検索します。
+        ///   DTXMania.exe に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PLAYER_NAME {
             get {

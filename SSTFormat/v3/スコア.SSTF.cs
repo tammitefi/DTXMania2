@@ -1296,40 +1296,29 @@ namespace SSTFormat.v3
                 // すべての小節番号について……
                 for( int 小節番号 = 0; 小節番号 <= 最終小節番号; 小節番号++ )
                 {
-                    var レーン別チップリスト = new Dictionary<レーン種別, チップ[]>();    // 現在の小節に存在するチップをレーンごとにまとめたリスト
+                    var 現在の小節に存在するチップのレーン別リスト = new Dictionary<レーン種別, チップ[]>();
 
-                    #region "  レーン別チップリスト を作成する。"
-                    //-----------------
+                    #region " 現在の小節に存在するチップのレーン別リストを作成する。"
+                    //----------------
                     foreach( レーン種別 laneType in Enum.GetValues( typeof( レーン種別 ) ) )
                     {
-                        var chips =
-                            from chip in score.チップリスト
-                            where (
-                                chip.小節番号 == 小節番号 &&
-                                chip.チップ種別 != チップ種別.小節線 &&      // 以下は出力対象外のチップ種別。
-                                chip.チップ種別 != チップ種別.拍線 &&
-                                chip.チップ種別 != チップ種別.小節メモ &&
-                                chip.チップ種別 != チップ種別.小節の先頭 &&
-                                chip.チップ種別 != チップ種別.BGM &&
-                                chip.チップ種別 != チップ種別.SE1 &&
-                                chip.チップ種別 != チップ種別.SE2 &&
-                                chip.チップ種別 != チップ種別.SE3 &&
-                                chip.チップ種別 != チップ種別.SE4 &&
-                                chip.チップ種別 != チップ種別.SE5 &&
-                                chip.チップ種別 != チップ種別.GuitarAuto &&
-                                chip.チップ種別 != チップ種別.BassAuto &&
-                                chip.チップ種別 != チップ種別.Unknown )
-                            select chip;
+                        if( laneType == レーン種別.Unknown ) // チップ記述対象外レーン
+                            continue;
 
-                        レーン別チップリスト[ laneType ] = chips.ToArray();
+                        var chips = score.チップリスト.Where( ( chip ) => ( 
+                            chip.小節番号 == 小節番号 &&
+                            スコア.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
+
+                        現在の小節に存在するチップのレーン別リスト[ laneType ] = chips.ToArray();
                     }
-                    //-----------------
+                    //----------------
                     #endregion
 
                     #region " Part を出力する。"
                     //-----------------
                     {
                         var options = ( score.小節長倍率リスト[ 小節番号 ] == 1.0 ) ? "" : $"s{score.小節長倍率リスト[ 小節番号 ].ToString()}";     // 小節長倍率指定
+
                         sw.WriteLine( $"Part = {小節番号.ToString()}{options};" );
                     }
                     //-----------------
@@ -1337,7 +1326,8 @@ namespace SSTFormat.v3
 
                     foreach( レーン種別 laneType in Enum.GetValues( typeof( レーン種別 ) ) )
                     {
-                        if( 0 == レーン別チップリスト[ laneType ].Length )
+                        if( !( 現在の小節に存在するチップのレーン別リスト.ContainsKey( laneType ) ) ||
+                            0 == 現在の小節に存在するチップのレーン別リスト[ laneType ].Length )
                             continue;
 
                         #region " Lane を出力する。"
@@ -1351,7 +1341,7 @@ namespace SSTFormat.v3
                         {
                             // チップの 位置 と 解像度 を約分する。
 
-                            foreach( var chip in レーン別チップリスト[ laneType ] )
+                            foreach( var chip in 現在の小節に存在するチップのレーン別リスト[ laneType ] )
                             {
                                 var 最大公約数 = _最大公約数を返す( chip.小節内位置, chip.小節解像度 );
 
@@ -1363,19 +1353,18 @@ namespace SSTFormat.v3
                             // この小節の解像度を、チップの解像度の最小公倍数から算出する。
 
                             int この小節の解像度 = 1;
-
-                            foreach( var chip in レーン別チップリスト[ laneType ] )
+                            foreach( var chip in 現在の小節に存在するチップのレーン別リスト[ laneType ] )
                                 この小節の解像度 = _最小公倍数を返す( この小節の解像度, chip.小節解像度 );
 
 
                             // 算出した解像度を、Resolution として出力する。
 
-                            sw.Write( $"Resolution = {この小節の解像度}; " );
+                            sw.Write( $"Resolution={この小節の解像度}; " );
 
                            
                             // Resolution にあわせて、チップの位置と解像度を修正する。
 
-                            foreach( var chip in レーン別チップリスト[ laneType ] )
+                            foreach( var chip in 現在の小節に存在するチップのレーン別リスト[ laneType ] )
                             {
                                 int 倍率 = この小節の解像度 / chip.小節解像度;      // 必ず割り切れる。（この小節の解像度はチップの小節解像度の最小公倍数なので）
 
@@ -1388,11 +1377,11 @@ namespace SSTFormat.v3
 
                         #region " Chips を出力する。"
                         //----------------
-                        sw.Write( "Chips = " );
+                        sw.Write( "Chips=" );
 
-                        for( int i = 0; i < レーン別チップリスト[ laneType ].Length; i++ )
+                        for( int i = 0; i < 現在の小節に存在するチップのレーン別リスト[ laneType ].Length; i++ )
                         {
-                            var chip = レーン別チップリスト[ laneType ][ i ];
+                            var chip = 現在の小節に存在するチップのレーン別リスト[ laneType ][ i ];
 
 
                             // 位置を出力。
@@ -1471,7 +1460,7 @@ namespace SSTFormat.v3
 
                             // 区切り文字(,) または 終端文字(;) を出力。
 
-                            bool 最後のチップである = ( i == レーン別チップリスト[ laneType ].Length - 1 );
+                            bool 最後のチップである = ( i == 現在の小節に存在するチップのレーン別リスト[ laneType ].Length - 1 );
                             sw.Write( 最後のチップである ? ";" : "," );
                         }
                         //----------------
