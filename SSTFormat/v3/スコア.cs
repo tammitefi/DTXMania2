@@ -273,8 +273,8 @@ namespace SSTFormat.v3
                     break;
             }
 
-            if( !( ヘッダだけ ) )
-                _後処理を行う( score );
+            //if( !( ヘッダだけ ) )
+            //    _後処理を行う( score ); --> 生成メソッドの中で行っておくこと。
 
             return score;
         }
