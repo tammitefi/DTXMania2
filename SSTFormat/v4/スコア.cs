@@ -57,17 +57,20 @@ namespace SSTFormat.v4
         // ヘッダ：プレビュー
 
         /// <summary>
-        ///		プレビュー画像のファイル名。
+        ///		プレビュー画像ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
         public string プレビュー画像ファイル名 { get; set; }
 
         /// <summary>
-        ///		プレビュー音のファイル名。
+        ///		プレビュー音声ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
         public string プレビュー音声ファイル名 { get; set; }
 
         /// <summary>
-        ///		プレビュー動画のファイル名。
+        ///		プレビュー動画ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
         public string プレビュー動画ファイル名 { get; set; }
 
@@ -75,29 +78,68 @@ namespace SSTFormat.v4
         // ヘッダ：ファイル・フォルダ情報
 
         /// <summary>
-        ///		譜面ファイルの絶対パス。
+        ///    この曲の BGV として再生する動画ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
-        public string 譜面ファイルパス { get; set; } = null;
+        /// <remarks>
+        ///     <see cref="チップ種別.BGV"/> のチップで再生される。
+        ///     ファイルに音声が含まれている場合、音声は無視される。
+        /// </remarks>
+        public string BGVファイル名 { get; set; }
 
         /// <summary>
-        ///		WAV, AVI, その他ファイルの基点となるフォルダの絶対パス。
-        ///		末尾は '\' 。（例: "D:\DTXData\DemoSong\Sounds\"）
+        ///    この曲の BGM として発声する音声ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
+        /// <remarks>
+        ///     <see cref="チップ種別.BGM"/> のチップで再生される。
+        ///    ファイルに動画が含まれている場合、動画は無視される。
+        /// </remarks>
+        public string BGMファイル名 { get; set; }
+
+        /// <summary>
+        ///		譜面ファイルの絶対パス。
+        /// </summary>
+        public string 譜面ファイルの絶対パス { get; set; } = null;
+
+        /// <summary>
+        ///     譜面ファイルのあるフォルダの絶対パス。
+        /// </summary>
+        /// <remarks>
+        ///     WAV, AVI ファイルへのパスには、このフィールドではなく <see cref="PATH_WAV"/> を使うこと。
+        /// </remarks>
+        public string 譜面ファイルのあるフォルダ
+            => ( string.IsNullOrEmpty( this.譜面ファイルの絶対パス ) ) ? "" : Path.GetDirectoryName( this.譜面ファイルの絶対パス );
+
+        /// <summary>
+        ///		WAV と AVI ファイルの基点となるフォルダの絶対パス。
+        /// </summary>
+        /// <remarks>
+        ///     譜面で指定された PATH_WAV が空文字列または相対パスの場合、譜面のあるフォルダからの相対パスとしてPATH_WAVを適用した絶対パスを返す。
+        ///     　例：譜面ファイルが "D:\DTXData\DemoSong\score.sstf" であり、譜面内で PATH_WAV が未定義の場合、このプロパティは"D:\DTXData\DemoSong" を返す。
+        ///     　例：譜面ファイルが "D:\DTXData\DemoSong\score.sstf" であり、譜面内で PATH_WAV=Sounds と指定されている場合、このプロパティは"D:\DTXData\DemoSong\Sounds" を返す。
+        ///     譜面で指定された PATH_WAV が絶対パスの場合、その PATH_WAV をそのまま返す。
+        ///     　例：譜面ファイルが "D:\DTXData\DemoSong\score.sstf" であり、譜面内で PATH_WAV=E:\Sounds と指定されている場合、このプロパティは"E:\Sounds" を返す。
+        /// </remarks>
         public string PATH_WAV
         {
             get
             {
-                if( null != this.譜面ファイルパス )
-                    return Path.Combine( Path.GetDirectoryName( this.譜面ファイルパス ), this._PATH_WAV );
+                if( string.IsNullOrEmpty( this._PATH_WAV ) )
+                {
+                    // (A) PATH_WAV が未指定の場合、譜面のあるフォルダの絶対パスを返す。
+                    return this.譜面ファイルのあるフォルダ;
+                }
+                else if( !Path.IsPathRooted( this._PATH_WAV ) )
+                {
+                    // (B) 譜面で指定された PATH_WAV が空文字列または相対パスの場合、譜面のあるフォルダからの相対パスとしてPATH_WAVを適用した絶対パスを返す。
+                    return Path.Combine( this.譜面ファイルのあるフォルダ, this._PATH_WAV );
+                }
                 else
+                {
+                    // (C) 譜面で指定された PATH_WAV が絶対パスの場合、その PATH_WAV をそのまま返す。
                     return this._PATH_WAV;
-            }
-            set
-            {
-                this._PATH_WAV = value;
-
-                if( 0 < this._PATH_WAV.Length && this._PATH_WAV.Last() != '\\' )
-                    this._PATH_WAV += '\\';
+                }
             }
         }
 
@@ -192,20 +234,20 @@ namespace SSTFormat.v4
             this.リセットする();
         }
 
-        public static スコア ファイルから生成する( string スコアファイルパス, bool ヘッダだけ = false )
+        public static スコア ファイルから生成する( string スコアファイルの絶対パス, bool ヘッダだけ = false )
         {
             スコア score = null;
 
-            var 拡張子 = Path.GetExtension( スコアファイルパス ).ToLower();
+            var 拡張子 = Path.GetExtension( スコアファイルの絶対パス ).ToLower();
 
             switch( 拡張子 )
             {
                 case ".sstf":
-                    score = SSTF.ファイルから生成する( スコアファイルパス, ヘッダだけ );
+                    score = SSTF.ファイルから生成する( スコアファイルの絶対パス, ヘッダだけ );
                     break;
 
                 default:    // dtx, gda, 他
-                    score = DTX.ファイルから生成する( スコアファイルパス, DTX.データ種別.拡張子から判定, ヘッダだけ );
+                    score = DTX.ファイルから生成する( スコアファイルの絶対パス, DTX.データ種別.拡張子から判定, ヘッダだけ );
                     break;
             }
 
@@ -226,8 +268,8 @@ namespace SSTFormat.v4
             this.プレビュー画像ファイル名 = null;
             this.プレビュー音声ファイル名 = null;
             this.プレビュー動画ファイル名 = null;
-            this.譜面ファイルパス = null;
-            this.PATH_WAV = "";
+            this.譜面ファイルの絶対パス = null;
+            this._PATH_WAV = "";
 
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
@@ -350,9 +392,12 @@ namespace SSTFormat.v4
 
 
         /// <summary>
-        ///		空文字、または絶対パス。
-        ///		null は不可。
+        ///		WAV と AVI ファイルの基点となるフォルダの相対または絶対パス。
+        ///		譜面の PATH_WAV= の内容がそのまま入る。
         /// </summary>
+        /// <remarks>
+        ///     例: "Sounds"
+        /// </remarks>
         private string _PATH_WAV = "";
 
         private const double _BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );

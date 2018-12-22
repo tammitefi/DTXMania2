@@ -112,7 +112,7 @@ namespace SSTFormat.v3
                 // データのバージョンを確認。
 
                 string 先頭行;
-                using( var sr = new StreamReader( 全入力文字列 ) )
+                using( var sr = new StringReader( 全入力文字列 ) )
                     先頭行 = sr.ReadLine();
 
                 var SSTFバージョン = _行にSSTFVersionがあるなら解析して返す( 先頭行 ) ?? new Version( 1, 0, 0, 0 );  // 既定値

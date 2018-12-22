@@ -194,7 +194,7 @@ namespace DTXMania.ステージ.演奏
 
                     case "file":
                         {
-                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルパス ), video_id ) );
+                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルの絶対パス ), video_id ) );
 
                             try
                             {
@@ -221,7 +221,7 @@ namespace DTXMania.ステージ.演奏
 
                     default:
                         {
-                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルパス ), App.演奏スコア.背景動画ID ) );
+                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルの絶対パス ), App.演奏スコア.背景動画ID ) );
 
                             try
                             {
@@ -1245,7 +1245,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var 選択曲ファイルパス = App.演奏曲ノード.曲ファイルパス;
+                var 選択曲ファイルパス = App.演奏曲ノード.曲ファイルの絶対パス;
 
                 // SSTFファイルのみ対応。
                 var 拡張子 = Path.GetExtension( 選択曲ファイルパス.ToString() ).ToLower();

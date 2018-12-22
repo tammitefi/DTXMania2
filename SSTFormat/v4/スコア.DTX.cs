@@ -26,7 +26,7 @@ namespace SSTFormat.v4
             ///		ファイルから指定された種別のデータを読み込み、スコアを生成して返す。
             ///		読み込みに失敗した場合は、何らかの例外を発出する。
             /// </summary>
-            public static スコア ファイルから生成する( string ファイルパス, データ種別 データ種別 = データ種別.拡張子から判定, bool ヘッダだけ = false )
+            public static スコア ファイルから生成する( string ファイルの絶対パス, データ種別 データ種別 = データ種別.拡張子から判定, bool ヘッダだけ = false )
             {
                 if( データ種別 == データ種別.拡張子から判定 )
                 {
@@ -40,7 +40,7 @@ namespace SSTFormat.v4
                         { ".bme", データ種別.BME },
                     };
 
-                    string ファイルの拡張子 = Path.GetExtension( ファイルパス ).ToLower();
+                    string ファイルの拡張子 = Path.GetExtension( ファイルの絶対パス ).ToLower();
 
                     // マップから、拡張子に対応するデータ種別を取得する。
                     if( !( 拡張子toデータ種別マップ.TryGetValue( ファイルの拡張子, out データ種別 確定したデータ種別 ) ) )
@@ -57,14 +57,14 @@ namespace SSTFormat.v4
                 string 全入力文字列 = null;
 
                 // ファイルの内容を一気読み。
-                using( var sr = new StreamReader( ファイルパス, Encoding.GetEncoding( 932/*Shift-JIS*/ ) ) )
+                using( var sr = new StreamReader( ファイルの絶対パス, Encoding.GetEncoding( 932/*Shift-JIS*/ ) ) )
                     全入力文字列 = sr.ReadToEnd();
 
                 // 読み込んだ内容でスコアを生成する。
                 var score = 文字列から生成する( 全入力文字列, データ種別, ヘッダだけ );
 
                 // ファイルから読み込んだ場合のみ、このメンバが有効。
-                score.譜面ファイルパス = ファイルパス;
+                score.譜面ファイルの絶対パス = ファイルの絶対パス;
 
                 return score;
             }
@@ -80,7 +80,7 @@ namespace SSTFormat.v4
 
                 現在の.状態をリセットする();
                 現在の.スコア = new スコア();
-                現在の.スコア.譜面ファイルパス = null;    // ファイルから読み込んだ場合のみ、このメンバが有効。
+                現在の.スコア.譜面ファイルの絶対パス = null;    // ファイルから読み込んだ場合のみ、このメンバが有効。
                 現在の.データ種別 = データ種別;
 
                 全入力文字列 = 全入力文字列.Replace( '\t', ' ' );   // TAB は空白に置換しておく。
@@ -468,7 +468,7 @@ namespace SSTFormat.v4
             }
             internal static void _コマンド_PATH_WAV()
             {
-                現在の.スコア.PATH_WAV = 現在の.パラメータ;
+                現在の.スコア._PATH_WAV = 現在の.パラメータ;
             }
             internal static void _コマンド_WAVzz()
             {

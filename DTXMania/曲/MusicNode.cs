@@ -19,7 +19,7 @@ namespace DTXMania.曲
         /// <summary>
         ///		この曲ノードに対応する曲ファイル。
         /// </summary>
-        public VariablePath 曲ファイルパス { get; protected set; } = null;
+        public VariablePath 曲ファイルの絶対パス { get; protected set; } = null;
 
         /// <summary>
         ///		この曲ノードに対応する曲ファイルのハッシュ値。
@@ -32,18 +32,18 @@ namespace DTXMania.曲
         public VariablePath 動画ファイルパス { get; protected set; } = null;
 
 
-        public MusicNode( VariablePath 曲ファイルパス, Node 親ノード )
+        public MusicNode( VariablePath 曲ファイルの絶対パス, Node 親ノード )
         {
             this.親ノード = 親ノード;
-            this.曲ファイルパス = 曲ファイルパス;
+            this.曲ファイルの絶対パス = 曲ファイルの絶対パス;
 
             // （まだ存在してなければ）曲DBに追加する。
-            曲DB.曲を追加または更新する( this.曲ファイルパス, App.ユーザ管理.ログオン中のユーザ );
+            曲DB.曲を追加または更新する( this.曲ファイルの絶対パス, App.ユーザ管理.ログオン中のユーザ );
 
             // 追加後、改めて曲DBから情報を取得する。
             using( var songdb = new SongDB() )
             {
-                var song = songdb.Songs.Where( ( r ) => ( r.Path == this.曲ファイルパス.変数なしパス ) ).SingleOrDefault();
+                var song = songdb.Songs.Where( ( r ) => ( r.Path == this.曲ファイルの絶対パス.変数なしパス ) ).SingleOrDefault();
 
                 if( null == song )
                     return;
@@ -65,7 +65,7 @@ namespace DTXMania.曲
                 {
                     // (B) DB に保存されてない場合、曲ファイルと同じ場所に画像ファイルがあるなら、それをノード画像として採用する。
                     サムネイル画像ファイルパス =
-                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルパス.変数なしパス ) )
+                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルの絶対パス.変数なしパス ) )
                           where _対応するサムネイル画像名.Any( thumbファイル名 => ( Path.GetFileName( ファイル名 ).ToLower() == thumbファイル名 ) )
                           select ファイル名 ).FirstOrDefault();
                 }
@@ -77,7 +77,7 @@ namespace DTXMania.曲
 
             // 曲ファイルと同じ場所に（対応する拡張子を持った）動画ファイルがあるなら、それを背景動画として採用する。
             this.動画ファイルパス = new VariablePath(
-                ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルパス.変数なしパス ) )
+                ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルの絶対パス.変数なしパス ) )
                   where _対応する動画の拡張子.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
                   select ファイル名 ).FirstOrDefault() );
         }

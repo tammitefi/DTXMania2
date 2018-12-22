@@ -1,13 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SSTFormat.v4;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SSTFormat.v3.Tests
+namespace SSTFormat.v4.Tests
 {
     [TestClass()]
-    public class スコアDTXTests
+    public class DTXTests
     {
         // 例外検証用メソッド
         private void 例外が出れば成功( Action action )
@@ -220,7 +221,6 @@ namespace SSTFormat.v3.Tests
             //Assert.IsFalse( スコア.DTX._行をコマンドとパラメータとコメントに分解する( @"", out コマンド, out パラメータ, out コメント ) );
         }
 
-
         [TestMethod()]
         public void コマンド_TITLE()
         {
@@ -381,12 +381,11 @@ namespace SSTFormat.v3.Tests
 " );
             Assert.AreEqual( @"waves\", score.PATH_WAV );
 
-
-            // 末尾に '\' がない場合 → 自動付与される。
+            // 末尾の '\' の有無に関係なく、そのまま格納される。
             score = スコア.DTX.文字列から生成する( @"
 #PATH_WAV: waves
 " );
-            Assert.AreEqual( @"waves\", score.PATH_WAV );
+            Assert.AreEqual( @"waves", score.PATH_WAV );
 
 
             // 複数存在する場合 → 最後のものが有効になる。
@@ -395,7 +394,36 @@ namespace SSTFormat.v3.Tests
 #PATH_WAV: waves2
 #PATH_WAV: waves3
 " );
-            Assert.AreEqual( @"waves3\", score.PATH_WAV );
+            Assert.AreEqual( @"waves3", score.PATH_WAV );
+
+            // 未定義の場合 → 空文字列。
+            score = スコア.DTX.文字列から生成する( @"
+#WAV01: sound1.wav
+" );
+            Assert.AreEqual( @"", score.PATH_WAV );
+
+            // 未定義かつ譜面ファイルパスの指定がある場合 → 譜面ファイルがあるフォルダの絶対パス。
+            score = スコア.DTX.文字列から生成する( @"
+#WAV01: sound1.wav
+" );
+            score.譜面ファイルの絶対パス = @"D:\DTXFiles\Demo\score.dtx";
+            Assert.AreEqual( @"D:\DTXFiles\Demo", score.PATH_WAV );
+
+            // 相対パスでの定義ありかつ譜面ファイルパスの指定がある場合 → 譜面ファイルがあるフォルダからの相対 PATH_WAV パス。
+            score = スコア.DTX.文字列から生成する( @"
+#PATH_WAV: waves
+#WAV01: sound1.wav
+" );
+            score.譜面ファイルの絶対パス = @"D:\DTXFiles\Demo\score.dtx";
+            Assert.AreEqual( @"D:\DTXFiles\Demo\waves", score.PATH_WAV );
+
+            // 絶対パスでの定義がある場合 → PATH_WAV パス。
+            score = スコア.DTX.文字列から生成する( @"
+#PATH_WAV: D:\waves
+#WAV01: sound1.wav
+" );
+            score.譜面ファイルの絶対パス = @"D:\DTXFiles\Demo\score.dtx";
+            Assert.AreEqual( @"D:\waves", score.PATH_WAV );
         }
 
         [TestMethod()]
@@ -505,7 +533,7 @@ namespace SSTFormat.v3.Tests
 #pan05: 101
 #00111: 010203040506    ; HiHat Close
 " );
-            var HHchips = 
+            var HHchips =
                 from chip in score.チップリスト
                 where ( chip.チップ種別 == チップ種別.HiHat_Close )
                 orderby chip.小節内位置
@@ -688,7 +716,7 @@ namespace SSTFormat.v3.Tests
 
                 // 音量が 最大 であること。
                 // DTXで音量の指定がない場合の規定値は100。
-                Assert.AreEqual( チップ.最大音量, chip.音量 );      
+                Assert.AreEqual( チップ.最大音量, chip.音量 );
             }
             //----------------
             #endregion
@@ -877,7 +905,7 @@ namespace SSTFormat.v3.Tests
             Assert.AreEqual( @"sounds\Drums\cyc8sa.ogg", score.WAVリスト[ 36 + 6 ].ファイルパス );   // WAV16
 
             // チップリストチェック
-            var chips = score.チップリスト.Where( ( c ) => ( c.チップ種別 == チップ種別.背景動画 ) );
+            var chips = score.チップリスト.Where( ( c ) => ( c.チップ種別 == チップ種別.BGV ) );
             Assert.AreEqual( 1, chips.Count() );
             Assert.AreEqual( _zz36進数( "01" ), chips.ElementAt( 0 ).チップサブID );
 

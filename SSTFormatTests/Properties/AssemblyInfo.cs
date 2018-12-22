@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "SSTFormatTests" )]
-[assembly: AssemblyCopyright( "Copyright ©  2016" )]
+[assembly: AssemblyCopyright( "Copyright ©  2018" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
-[assembly: Guid( "6b948694-7a83-4449-8a70-03f8b9f6b07b" )]
+[assembly: Guid( "17ad5463-e418-4f95-8371-b7918d8b7853" )]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //

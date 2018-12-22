@@ -203,7 +203,7 @@ namespace DTXMania.ステージ.演奏
 
                     case "file":
                         {
-                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルパス ), video_id ) );
+                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルの絶対パス ), video_id ) );
 
                             try
                             {
@@ -230,7 +230,7 @@ namespace DTXMania.ステージ.演奏
 
                     default:
                         {
-                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルパス ), App.演奏スコア.背景動画ID ) );
+                            var path = new VariablePath( Path.Combine( Path.GetDirectoryName( App.演奏スコア.譜面ファイルの絶対パス ), App.演奏スコア.背景動画ID ) );
 
                             try
                             {

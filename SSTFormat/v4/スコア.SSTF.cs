@@ -22,12 +22,12 @@ namespace SSTFormat.v4
             ///		ファイルからSSTFデータを読み込み、スコアを生成して返す。
             ///		読み込みに失敗した場合は、何らかの例外を発出する。
             /// </summary>
-            public static スコア ファイルから生成する( string SSTFファイルパス, bool ヘッダだけ = false )
+            public static スコア ファイルから生成する( string SSTFファイルの絶対パス, bool ヘッダだけ = false )
             {
                 // ファイルのSSTFバージョンを確認。
 
                 string 先頭行;
-                using( var sr = new StreamReader( SSTFファイルパス, Encoding.UTF8 ) )
+                using( var sr = new StreamReader( SSTFファイルの絶対パス, Encoding.UTF8 ) )
                     先頭行 = sr.ReadLine();
 
                 var SSTFバージョン = _行にSSTFVersionがあるなら解析して返す( 先頭行 ) ?? new Version( 1, 0, 0, 0 );  // 既定値
@@ -44,14 +44,14 @@ namespace SSTFormat.v4
                     string 全入力文字列 = null;
 
                     // ファイルの内容を一気読み。
-                    using( var sr = new StreamReader( SSTFファイルパス ) )
+                    using( var sr = new StreamReader( SSTFファイルの絶対パス ) )
                         全入力文字列 = sr.ReadToEnd();
 
                     // 読み込んだ内容でスコアを生成する。
                     score = _全行解析する( ref 全入力文字列, ヘッダだけ );
 
                     // ファイルから読み込んだ場合のみ、このメンバが有効。
-                    score.譜面ファイルパス = SSTFファイルパス;
+                    score.譜面ファイルの絶対パス = SSTFファイルの絶対パス;
                     //----------------
                     #endregion
                 }
@@ -60,12 +60,12 @@ namespace SSTFormat.v4
                     #region " (B) 前方互換 "
                     //----------------
                     {
-                        var v3score = v3.スコア.ファイルから生成する( SSTFファイルパス );
+                        var v3score = v3.スコア.ファイルから生成する( SSTFファイルの絶対パス );
 
                         score = _v3から移行する( v3score );
 
                         // ファイルから読み込んだ場合のみ、このメンバが有効。
-                        score.譜面ファイルパス = SSTFファイルパス;
+                        score.譜面ファイルの絶対パス = SSTFファイルの絶対パス;
                     }
                     //----------------
                     #endregion
@@ -99,10 +99,10 @@ namespace SSTFormat.v4
             /// </summary>
             public static スコア 文字列から生成する( string 全入力文字列, bool ヘッダだけ = false )
             {
-                // データのバージョンを確認。
+                // データのSSTFバージョンを確認。
 
                 string 先頭行;
-                using( var sr = new StreamReader( 全入力文字列 ) )
+                using( var sr = new StringReader( 全入力文字列 ) )
                     先頭行 = sr.ReadLine();
 
                 var SSTFバージョン = _行にSSTFVersionがあるなら解析して返す( 先頭行 ) ?? new Version( 1, 0, 0, 0 );  // 既定値
@@ -119,7 +119,7 @@ namespace SSTFormat.v4
                     score = _全行解析する( ref 全入力文字列, ヘッダだけ );
 
                     // ファイルから読み込んだ場合のみ、このメンバが有効。
-                    score.譜面ファイルパス = null;
+                    score.譜面ファイルの絶対パス = null;
                     //----------------
                     #endregion
                 }
@@ -134,7 +134,7 @@ namespace SSTFormat.v4
 
                         // ファイルから読み込んだ場合のみ、このメンバが有効。
                         // ここでは便宜上ファイルを介しただけなので、このメンバは無効とする。
-                        score.譜面ファイルパス = null;
+                        score.譜面ファイルの絶対パス = null;
                     }
                     //----------------
                     #endregion
@@ -153,9 +153,6 @@ namespace SSTFormat.v4
 
                 if( !( ヘッダだけ ) )
                 {
-                    // ファイル以外から情報を取得する。
-                    //score.背景動画ファイル名 = ...     --> 文字列から生成した場合は設定しない。
-
                     スコア._スコア読み込み時の後処理を行う( score );
                 }
 
@@ -238,7 +235,7 @@ namespace SSTFormat.v4
                 score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
                 score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
                 //score.譜面ファイルパス = ...;  --> 呼び出し元で設定すること。
-                score.PATH_WAV = v3score.PATH_WAV;
+                score._PATH_WAV = v3score.PATH_WAV;
 
                 score.チップリスト = new List<チップ>();
                 foreach( var v3chip in v3score.チップリスト )
@@ -299,7 +296,7 @@ namespace SSTFormat.v4
 
             // 行解析
 
-            private static class 現在の
+            private static class 現在の    // 解析時の状態変数。
             {
                 public static スコア スコア;
                 public static int 行番号;
@@ -526,6 +523,44 @@ namespace SSTFormat.v4
                         Trace.TraceError( $"Level の右辺が不正です。スキップします。[{現在の.行番号}行目]" );
                         return false;
                     }
+
+                    return true;
+                }
+                //----------------
+                #endregion
+                #region " BGV "
+                //----------------
+                if( 行.StartsWith( "bgv", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string[] items = 行.Split( '=' );
+
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"BGV の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
+                    }
+
+                    現在の.スコア.BGVファイル名 = items[ 1 ].Trim();
+                    現在の.スコア.AVIリスト[ 1 ] = 現在の.スコア.BGVファイル名;   // #AVI01 固定。あれば上書き、なければ追加
+
+                    return true;
+                }
+                //----------------
+                #endregion
+                #region " BGM "
+                //----------------
+                if( 行.StartsWith( "bgm", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string[] items = 行.Split( '=' );
+
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"BGM の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
+                    }
+
+                    現在の.スコア.BGMファイル名 = items[ 1 ].Trim();
+                    現在の.スコア.WAVリスト[ 1 ] = (現在の.スコア.BGMファイル名, false);   // #WAV01 固定。あれば上書き、なければ追加
 
                     return true;
                 }
@@ -1191,10 +1226,10 @@ namespace SSTFormat.v4
                 return true;
             }
 
-            /// <summary>
+            /// <remarks>
             ///		取出文字列の先頭にある数字（小数点も有効）の連続した部分を取り出して、戻り値として返す。
             ///		また、取出文字列から取り出した数字文字列部分を除去した文字列を再度格納する。
-            /// </summary>
+            /// </remarks>
             private static string _指定された文字列の先頭から数字文字列を取り出す( ref string 取出文字列 )
             {
                 // 数字が何桁続くか数える。
@@ -1242,6 +1277,18 @@ namespace SSTFormat.v4
                 #region " Level "
                 //----------------
                 sw.WriteLine( $"Level={score.難易度.ToString( "0.00" )}" );
+                //----------------
+                #endregion
+                #region " BGV "
+                //----------------
+                if( !string.IsNullOrEmpty( score.BGVファイル名 ) )    // BGV は任意
+                    sw.WriteLine( $"BGV=" + score.BGVファイル名 );
+                //----------------
+                #endregion
+                #region " BGM "
+                //----------------
+                if( !string.IsNullOrEmpty( score.BGMファイル名 ) )    // BGM は任意
+                    sw.WriteLine( $"BGM=" + score.BGMファイル名 );
                 //----------------
                 #endregion
 
@@ -1474,10 +1521,6 @@ namespace SSTFormat.v4
                 { "song",       ( チップ種別.BGV,        false ) },
                 //----------------
                 #endregion
-            };
-
-            private static readonly List<string> _動画の拡張子リスト = new List<string>() {
-                ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
             };
         }
     }
