@@ -106,10 +106,16 @@
     <Compile Include="v2\チップ.cs" />
     <Compile Include="v2\チップ種別.cs" />
     <Compile Include="v2\レーン種別.cs" />
+    <Compile Include="v4\スコア.cs" />
+    <Compile Include="v4\スコア.DTX.cs" />
+    <Compile Include="v4\スコア.SSTF.cs" />
+    <Compile Include="v4\チップ.cs" />
+    <Compile Include="v4\チップ種別.cs" />
+    <Compile Include="v4\レーン種別.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="仕様履歴.txt" />
+    <None Include="変更履歴.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

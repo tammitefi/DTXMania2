@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public partial class スコア
     {
@@ -48,7 +48,7 @@ namespace SSTFormat.v3
             { チップ種別.BPM,                レーン種別.BPM },
             { チップ種別.小節線,             レーン種別.Unknown },
             { チップ種別.拍線,               レーン種別.Unknown },
-            { チップ種別.背景動画,           レーン種別.Song },
+            { チップ種別.動画,               レーン種別.Song },
             { チップ種別.小節メモ,           レーン種別.Unknown },
             { チップ種別.LeftCymbal_Mute,    レーン種別.LeftCrash },
             { チップ種別.RightCymbal_Mute,   レーン種別.RightCrash },

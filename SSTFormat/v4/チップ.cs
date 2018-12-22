@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public class チップ : IComparable, ICloneable
     {
@@ -248,7 +248,7 @@ namespace SSTFormat.v3
             { チップ種別.RightCymbal_Mute, 76 },
             { チップ種別.小節線, 80 },
             { チップ種別.拍線, 85 },
-            { チップ種別.背景動画, 90 },
+            { チップ種別.動画, 90 },
             { チップ種別.小節メモ, 99 },
             { チップ種別.小節の先頭, 99 },
             { チップ種別.BGM, 99 },

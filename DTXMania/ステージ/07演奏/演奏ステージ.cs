@@ -584,7 +584,7 @@ namespace DTXMania.ステージ.演奏
                                 {
                                     var prop = プロパティs.ElementAt( i ).Value;
 
-                                    int zz = App.演奏スコア.空打ちチップ[ prop.レーン種別 ];
+                                    int zz = App.演奏スコア.空打ちチップマップ[ prop.レーン種別 ];
 
                                     // (A) 空打ちチップの指定があるなら、それを発声する。
                                     if( 0 != zz )

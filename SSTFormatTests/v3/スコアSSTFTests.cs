@@ -126,10 +126,10 @@ Lane=Song; Resolution = 128; Chips = 77;    # 位置 77/128 に Song チップ�
                 Assert.AreEqual( 12, score.サウンドデバイス遅延ms );
                 Assert.AreEqual( 1.23, score.難易度 );
                 Assert.AreEqual( "nicovideo:sm33543356", score.背景動画ID );
-                Assert.AreEqual( 2, score.メモリスト.Count );
-                Assert.AreEqual( "始まるよー", score.メモリスト[ 1 ] );
-                例外が出れば成功( () => { var m = score.メモリスト[ 2 ]; } );
-                Assert.AreEqual( "終わるよー", score.メモリスト[ 99 ] );
+                Assert.AreEqual( 2, score.小節メモリスト.Count );
+                Assert.AreEqual( "始まるよー", score.小節メモリスト[ 1 ] );
+                例外が出れば成功( () => { var m = score.小節メモリスト[ 2 ]; } );
+                Assert.AreEqual( "終わるよー", score.小節メモリスト[ 99 ] );
             }
             //----------------
             #endregion

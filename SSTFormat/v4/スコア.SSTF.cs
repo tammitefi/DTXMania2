@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public partial class スコア
     {
@@ -1188,7 +1188,7 @@ namespace SSTFormat.v3
                                             }
                                             continue;
 
-                                        case チップ種別.背景動画:
+                                        case チップ種別.動画:
                                             {
                                                 #region " 未知の属性 "
                                                 //-----------------
@@ -1485,7 +1485,7 @@ namespace SSTFormat.v3
                 { "tom3",       ( チップ種別.Tom3,        true  ) },
                 { "rightcrash", ( チップ種別.RightCrash,  true  ) },
                 { "bpm",        ( チップ種別.BPM,         false ) },
-                { "song",       ( チップ種別.背景動画,    false ) },
+                { "song",       ( チップ種別.動画,        false ) },
                 //----------------
                 #endregion
             };

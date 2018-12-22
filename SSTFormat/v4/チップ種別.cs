@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     /// <summary>
     ///		チップの種別を表す整数値。
@@ -163,7 +163,7 @@ namespace SSTFormat.v3
         ///     再生する動画の識別子は <see cref="スコア.背景動画ID"/> に格納される。
         ///     背景動画が音声も持つ場合には、音声の再生も開始される。
         /// </remarks>
-        背景動画 = 25,
+        動画 = 25,
 
         /// <summary>
         ///     BGMの再生を開始する。v3.0以降。
@@ -298,6 +298,17 @@ namespace SSTFormat.v3
         public static チップ種別 FromV2( this チップ種別 v3type, SSTFormat.v2.チップ種別 v2type )
         {
             return (チップ種別) ( (int) v2type );    // 仕様に変更なし。
+        }
+
+        /// <summary>
+        ///		SSTFormat.v3.チップ種別 を、SSTFormat.v4.チップ種別 に変換して返す。
+        /// </summary>
+        public static チップ種別 FromV3( this チップ種別 v4type, SSTFormat.v3.チップ種別 v3type )
+        {
+            if( v3type == v3.チップ種別.背景動画 )
+                return チップ種別.動画;                // 改名。
+            else
+                return (チップ種別) ( (int) v3type );
         }
     }
 }
