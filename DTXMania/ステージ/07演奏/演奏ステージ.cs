@@ -9,7 +9,7 @@ using SharpDX.DirectInput;
 using CSCore;
 using Newtonsoft.Json.Linq;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.設定;
 using DTXMania.データベース.ユーザ;
 using DTXMania.入力;
@@ -1203,7 +1203,7 @@ namespace DTXMania.ステージ.演奏
             {
                 #region " (A) SSTF 準拠のチップの発声 "
                 //----------------
-                if( chip.チップ種別 == チップ種別.背景動画 )
+                if( chip.チップ種別 == チップ種別.動画 )
                 {
                     // (A-a) 背景動画チップの場合 → 動画とBGMの再生を開始する。
 
@@ -1226,7 +1226,7 @@ namespace DTXMania.ステージ.演奏
             {
                 #region " (B) DTX 準拠のチップの発声 "
                 //----------------
-                if( chip.チップ種別 == チップ種別.背景動画 )
+                if( chip.チップ種別 == チップ種別.動画 )
                 {
                     // (B-a) 背景動画チップの場合 → 動画の再生を開始する（BGMはない）。
 

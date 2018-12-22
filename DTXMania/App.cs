@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Windows;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.ステージ;
 using DTXMania.曲;
 using DTXMania.設定;

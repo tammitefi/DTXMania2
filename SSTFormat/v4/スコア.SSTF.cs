@@ -265,7 +265,9 @@ namespace SSTFormat.v4
                 foreach( var kvp in v3score.小節メモリスト )
                     score.小節メモリスト.Add( kvp.Key, kvp.Value );
 
-                //score.空打ちチップマップ = ...;  --> v4 で廃止。
+                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
+                foreach( var v3kara in v3score.空打ちチップマップ )
+                    score.空打ちチップマップ.Add( (レーン種別) ( (int) v3kara.Key ), v3kara.Value );
 
                 score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
                 foreach( var v3wav in v3score.WAVリスト )

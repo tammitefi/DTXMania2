@@ -212,6 +212,16 @@ namespace SSTFormat.v4
         public Dictionary<int, string> 小節メモリスト { get; protected set; }
 
 
+        // 空うちチップマップ
+
+        /// <summary>
+        ///     レーンごとの空うちチップ番号。
+        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
+        ///		[value: zz番号]
+        /// </summary>
+        public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
+
+
         // WAVリスト
 
         /// <summary>
@@ -279,6 +289,10 @@ namespace SSTFormat.v4
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
             this.小節メモリスト = new Dictionary<int, string>();
+
+            this.空打ちチップマップ = new Dictionary<レーン種別, int>();
+            foreach( レーン種別 lane in Enum.GetValues( typeof( レーン種別 ) ) )
+                this.空打ちチップマップ.Add( lane, 0 );
 
             this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
             this.AVIリスト = new Dictionary<int, string>();

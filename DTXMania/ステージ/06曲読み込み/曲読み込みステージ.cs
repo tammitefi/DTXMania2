@@ -7,7 +7,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace DTXMania.ステージ.曲読み込み
 {

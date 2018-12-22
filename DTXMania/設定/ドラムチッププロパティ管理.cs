@@ -6,9 +6,7 @@ using FDK;
 using DTXMania.入力;
 using DTXMania.ステージ.演奏;
 using DTXMania.設定;
-
-using チップ種別 = SSTFormat.v3.チップ種別;
-using レーン種別 = SSTFormat.v3.レーン種別;
+using SSTFormat.v4;
 
 namespace DTXMania.設定
 {
@@ -718,8 +716,8 @@ namespace DTXMania.設定
                     #endregion
                     #region " チップ種別.背景動画 "
                     //----------------
-                    [ チップ種別.背景動画 ] = new ドラムチッププロパティ() {
-                        チップ種別 = チップ種別.背景動画,
+                    [ チップ種別.動画 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.動画,
                         レーン種別 = レーン種別.Song,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,

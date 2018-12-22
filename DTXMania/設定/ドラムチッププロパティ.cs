@@ -4,14 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using DTXMania.入力;
 using DTXMania.ステージ.演奏;
-
-using チップ種別 = SSTFormat.v3.チップ種別;
-using レーン種別 = SSTFormat.v3.レーン種別;
+using SSTFormat.v4;
 
 namespace DTXMania.設定
 {
     /// <summary>
-    ///     譜面のチップ（<see cref="SSTFormat.v3.チップ種別"/>）をキーとして、様々なコンフィグプロパティを定義する。
+    ///     譜面のチップ（<see cref="チップ種別"/>）をキーとして、様々なコンフィグプロパティを定義する。
     /// </summary>
     class ドラムチッププロパティ
     {
