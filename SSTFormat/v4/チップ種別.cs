@@ -15,7 +15,7 @@ namespace SSTFormat.v4
         /// </summary>
         Unknown = 0,
 
-        #region " シンバル類 "
+        #region " シンバル "
         //----------------
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace SSTFormat.v4
         //----------------
         #endregion
 
-        #region " ハイハット類 "
+        #region " ハイハット "
         //----------------
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SSTFormat.v4
         //----------------
         #endregion
 
-        #region " パッド類 "
+        #region " スネア "
         //----------------
 
         /// <summary>
@@ -110,6 +110,12 @@ namespace SSTFormat.v4
         /// </summary>
         Snare_Ghost = 13,
 
+        //----------------
+        #endregion
+
+        #region " バス "
+        //----------------
+
         /// <summary>
         ///     バスドラム（右）。
         /// </summary>
@@ -119,6 +125,12 @@ namespace SSTFormat.v4
         ///     バスドラム（左）。v3.1 以降。
         /// </summary>
         LeftBass = 38,
+
+        //----------------
+        #endregion
+
+        #region " タム "
+        //----------------
 
         /// <summary>
         ///     ハイタム。
@@ -153,7 +165,7 @@ namespace SSTFormat.v4
         //----------------
         #endregion
 
-        #region " オートサウンド類 "
+        #region " 自動再生 "
         //----------------
 
         /// <summary>
@@ -203,7 +215,6 @@ namespace SSTFormat.v4
 
         /// <summary>
         ///     効果音４の再生を開始する。v3.0以降。
-
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
@@ -241,7 +252,7 @@ namespace SSTFormat.v4
         //----------------
         #endregion
 
-        #region " 制御類 "
+        #region " 制御 "
         //----------------
 
         /// <summary>
@@ -260,7 +271,7 @@ namespace SSTFormat.v4
         //----------------
         #endregion
 
-        #region " アクセサリ類 "
+        #region " アクセサリ "
         //----------------
 
         /// <summary>
@@ -272,15 +283,6 @@ namespace SSTFormat.v4
         ///     拍線を配置する。
         /// </summary>
         拍線 = 24,
-
-        /// <summary>
-        ///     小節に対するメモ（文字列）を保持する。
-        /// </summary>
-        /// <remarks>
-        ///     メモは、チップとは関係なく、<see cref="スコア.小節メモリスト"/> に格納される。
-        ///     そのため、この種別は非推奨。
-        /// </remarks>
-        小節メモ = 26,
 
         //----------------
         #endregion
