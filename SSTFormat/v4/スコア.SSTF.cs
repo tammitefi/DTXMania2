@@ -82,23 +82,12 @@ namespace SSTFormat.v4
                 if( null == score )
                     new Exception( "スコアが生成されませんでした。" );
 
+
+                // 後処理。
+
                 if( !( ヘッダだけ ) )
                 {
-                    // ファイル以外から情報を取得する。
-
-                    if( string.IsNullOrEmpty( score.背景動画ID ) )
-                    {
-                        #region " 背景動画ファイルを検索する。"
-                        //----------------
-                        score.背景動画ID =
-                            ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
-                              where _動画の拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
-                              select file ).FirstOrDefault();
-                        //----------------
-                        #endregion
-                    }
-
-                    スコア._後処理を行う( score );
+                    スコア._スコア読み込み時の後処理を行う( score );
                 }
 
                 return score;
@@ -167,7 +156,7 @@ namespace SSTFormat.v4
                     // ファイル以外から情報を取得する。
                     //score.背景動画ファイル名 = ...     --> 文字列から生成した場合は設定しない。
 
-                    スコア._後処理を行う( score );
+                    スコア._スコア読み込み時の後処理を行う( score );
                 }
 
                 return score;
@@ -254,8 +243,6 @@ namespace SSTFormat.v4
                 score.チップリスト = new List<チップ>();
                 foreach( var v3chip in v3score.チップリスト )
                     score.チップリスト.Add( new チップ( v3chip ) );
-
-                score.背景動画ID = v3score.背景動画ID;
 
                 score.小節長倍率リスト = new List<double>();
                 foreach( var v3scale in v3score.小節長倍率リスト )
@@ -539,24 +526,6 @@ namespace SSTFormat.v4
                         Trace.TraceError( $"Level の右辺が不正です。スキップします。[{現在の.行番号}行目]" );
                         return false;
                     }
-
-                    return true;
-                }
-                //----------------
-                #endregion
-                #region " Video "
-                //----------------
-                if( 行.StartsWith( "video", StringComparison.OrdinalIgnoreCase ) )
-                {
-                    string[] items = 行.Split( '=' );
-
-                    if( 2 != items.Length )
-                    {
-                        Trace.TraceError( $"Video の書式が不正です。スキップします。[{現在の.行番号}行目]" );
-                        return false;
-                    }
-
-                    現在の.スコア.背景動画ID = items[ 1 ].Trim();
 
                     return true;
                 }
@@ -1248,17 +1217,33 @@ namespace SSTFormat.v4
 
             private static void _ヘッダ行を出力する( スコア score, StreamWriter sw )
             {
-                sw.WriteLine( "Title=" + ( ( string.IsNullOrEmpty( score.曲名 ) ) ? "(no title)" : score.曲名 ) );
-
-                if( !string.IsNullOrEmpty( score.説明文 ) )
+                #region " Title "
+                //----------------
+                sw.WriteLine( "Title=" + ( ( string.IsNullOrEmpty( score.曲名 ) ) ? "(no title)" : score.曲名 ) );  // Title は必須
+                //----------------
+                #endregion
+                #region " Artist "
+                //----------------
+                if( !string.IsNullOrEmpty( score.アーティスト名 ) )    // Artist は任意
+                    sw.WriteLine( $"Artist=" + score.アーティスト名 );
+                //----------------
+                #endregion
+                #region " Description "
+                //----------------
+                if( !string.IsNullOrEmpty( score.説明文 ) )    // Description は任意
                     sw.WriteLine( $"Description=" + score.説明文.Replace( Environment.NewLine, @"\n" ) );   // 改行コードは、２文字のリテラル "\n" に置換。
-
+                                                                                                         //----------------
+                #endregion
+                #region " SoundDevice.Delay "
+                //----------------
                 sw.WriteLine( $"SoundDevice.Delay={score.サウンドデバイス遅延ms}" );
-
+                //----------------
+                #endregion
+                #region " Level "
+                //----------------
                 sw.WriteLine( $"Level={score.難易度.ToString( "0.00" )}" );
-
-                if( !string.IsNullOrEmpty( score.背景動画ID ) )
-                    sw.WriteLine( $"Video={score.背景動画ID}" );
+                //----------------
+                #endregion
 
                 sw.WriteLine( "" );
             }

@@ -13,7 +13,7 @@ namespace SSTFormat.v4
         /// <summary>
         ///     このソースが実装するSSTFバージョン。
         /// </summary>
-        public static readonly Version SSTFVERSION = new Version( 3, 4, 0, 0 );
+        public static readonly Version SSTFVERSION = new Version( 4, 0, 0, 0 );
         public const double 初期BPM = 120.0;
         public const double 初期小節解像度 = 480.0;
 
@@ -49,6 +49,14 @@ namespace SSTFormat.v4
         public double 難易度 { get; set; }
 
         /// <summary>
+        ///     このスコアが作成されたときのサウンドデバイスの遅延量[ミリ秒]。
+        /// </summary>
+        public float サウンドデバイス遅延ms { get; set; } = 0f;
+
+
+        // ヘッダ：プレビュー
+
+        /// <summary>
         ///		プレビュー画像のファイル名。
         /// </summary>
         public string プレビュー画像ファイル名 { get; set; }
@@ -63,10 +71,8 @@ namespace SSTFormat.v4
         /// </summary>
         public string プレビュー動画ファイル名 { get; set; }
 
-        /// <summary>
-        ///     このスコアが作成されたときのサウンドデバイスの遅延量[ミリ秒]。
-        /// </summary>
-        public float サウンドデバイス遅延ms { get; set; } = 0f;
+
+        // ヘッダ：ファイル・フォルダ情報
 
         /// <summary>
         ///		譜面ファイルの絶対パス。
@@ -90,7 +96,7 @@ namespace SSTFormat.v4
             {
                 this._PATH_WAV = value;
 
-                if( this._PATH_WAV.Last() != '\\' )
+                if( 0 < this._PATH_WAV.Length && this._PATH_WAV.Last() != '\\' )
                     this._PATH_WAV += '\\';
             }
         }
@@ -102,21 +108,6 @@ namespace SSTFormat.v4
         ///     このスコアに存在するすべてのチップのリスト。
         /// </summary>
         public List<チップ> チップリスト { get; protected set; }
-
-
-        // 背景動画
-
-        /// <summary>
-        ///		スコアは、単一の動画または音楽（あるいはその両方）を持つことができる。
-        ///		これは、<see cref="チップ種別.背景動画"/>の発声時に再生が開始される。
-        /// </summary>
-        /// <remarks>
-        ///     「プロトコル: 動画ID」という書式で指定する。大文字小文字は区別されない。
-        ///     　例:"nicovideo: sm12345678" ... ニコ動
-        ///     　   "file: bgv.mp4" ... ローカルの mp4 ファイル
-        ///     　   "bgv.mp4" ... プロトコルを省略してもローカルファイルとなる
-        /// </remarks>
-        public string 背景動画ID { get; set; }
 
 
         // 小節長倍率リスト
@@ -231,24 +222,21 @@ namespace SSTFormat.v4
             this.アーティスト名 = "";
             this.説明文 = "";
             this.難易度 = 5.0;
-            this.背景動画ID = null;
+            this.サウンドデバイス遅延ms = 0f;
             this.プレビュー画像ファイル名 = null;
             this.プレビュー音声ファイル名 = null;
             this.プレビュー動画ファイル名 = null;
-            this.サウンドデバイス遅延ms = 0f;
             this.譜面ファイルパス = null;
+            this.PATH_WAV = "";
 
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
             this.小節メモリスト = new Dictionary<int, string>();
-
             this.空打ちチップマップ = new Dictionary<レーン種別, int>();
             foreach( レーン種別 lane in Enum.GetValues( typeof( レーン種別 ) ) )
                 this.空打ちチップマップ.Add( lane, 0 );
-
             this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
             this.AVIリスト = new Dictionary<int, string>();
-            this._PATH_WAV = "";
         }
 
         /// <summary>
@@ -265,7 +253,7 @@ namespace SSTFormat.v4
 
         // private
 
-        internal static void _後処理を行う( スコア score )
+        internal static void _スコア読み込み時の後処理を行う( スコア score )
         {
             #region " 小節の先頭チップを追加する。"
             //----------------
