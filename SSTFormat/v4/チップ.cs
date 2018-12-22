@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SSTFormat.v3;
 
 namespace SSTFormat.v4
 {
@@ -199,20 +200,21 @@ namespace SSTFormat.v4
         // 前方互換
 
         /// <summary>
-        ///		v2 からのバージョンアップ。
+        ///		v3 からのバージョンアップ。
         /// </summary>
-        public チップ( SSTFormat.v2.チップ v2chip )
+        public チップ( v3.チップ v3chip )
         {
-            this.チップ種別 = this.チップ種別.FromV2( v2chip.チップ種別 );
-            this.チップサブID = 0;   // [仕様追加] v2: なし → v3: 新設
-            this.小節番号 = v2chip.小節番号;
-            this.小節内位置 = v2chip.小節内位置;
-            this.小節解像度 = v2chip.小節解像度;
-            this.描画時刻sec = v2chip.描画時刻ms / 1000.0;
-            this.発声時刻sec = v2chip.発声時刻ms / 1000.0;
-            this.音量 = v2chip.音量;
-            this.BPM = v2chip.BPM;
-            this.可視 = true; // v3で新規追加
+            this.チップ種別 = v3chip.チップ種別.ToV4();
+            this.小節番号 = v3chip.小節番号;
+            this.小節内位置 = v3chip.小節内位置;
+            this.小節解像度 = v3chip.小節解像度;
+            this.描画時刻sec = v3chip.描画時刻sec;
+            this.発声時刻sec = v3chip.発声時刻sec;
+            this.チップサブID = 0;
+            this.音量 = v3chip.音量;
+            this.左右位置 = v3chip.左右位置;
+            this.BPM = v3chip.BPM;
+            this.可視 = true;
         }
 
 

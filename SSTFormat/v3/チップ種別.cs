@@ -285,19 +285,14 @@ namespace SSTFormat.v3
     public static class チップ種別Extensions
     {
         /// <summary>
-        ///		SSTFormat.v1.チップ種別 を、SSTFormat.v2.チップ種別 に変換して返す。
+        ///		SSTFormat.v3.チップ種別 を、SSTFormat.v4.チップ種別 に変換して返す。
         /// </summary>
-        public static チップ種別 FromV1( this チップ種別 v2type, SSTFormat.v1.チップ種別 v1type )
+        public static v4.チップ種別 ToV4( this チップ種別 v3type )
         {
-            return (チップ種別) ( (int) v1type );    // 仕様に変更なし。
-        }
-
-        /// <summary>
-        ///		SSTFormat.v2.チップ種別 を、SSTFormat.v3.チップ種別 に変換して返す。
-        /// </summary>
-        public static チップ種別 FromV2( this チップ種別 v3type, SSTFormat.v2.チップ種別 v2type )
-        {
-            return (チップ種別) ( (int) v2type );    // 仕様に変更なし。
+            if( v3type == v3.チップ種別.背景動画 )
+                return v4.チップ種別.動画;                // 改名。
+            else
+                return (v4.チップ種別) ( (int) v3type );
         }
     }
 }

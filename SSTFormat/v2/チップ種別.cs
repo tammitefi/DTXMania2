@@ -51,14 +51,11 @@ namespace SSTFormat.v2
     public static class チップ種別Extensions
     {
         /// <summary>
-        ///		SSTFormat.v1.チップ種別 を、SSTFormat.v2.チップ種別 に変換して返す。
+        ///		SSTFormat.v2.チップ種別 を、SSTFormat.v3.チップ種別 に変換して返す。
         /// </summary>
-        /// <param name="v2type"></param>
-        /// <param name="v1type"></param>
-        /// <returns></returns>
-        public static チップ種別 FromV1( this チップ種別 v2type, SSTFormat.v1.チップ種別 v1type )
+        public static v3.チップ種別 ToV3( this チップ種別 v2type )
         {
-            return (チップ種別) ( (int) v1type );    // 仕様に変更なし。
+            return (v3.チップ種別) ( (int) v2type );    // 仕様に変更なし。
         }
     }
 }

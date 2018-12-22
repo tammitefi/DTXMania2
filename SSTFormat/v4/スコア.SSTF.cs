@@ -37,7 +37,7 @@ namespace SSTFormat.v4
 
                 スコア score = null;
 
-                if( 3 == SSTFバージョン.Major )
+                if( 4 == SSTFバージョン.Major )
                 {
                     #region " (A) 現行版 "
                     //----------------
@@ -55,13 +55,14 @@ namespace SSTFormat.v4
                     //----------------
                     #endregion
                 }
-                else if( 3 > SSTFバージョン.Major )
+                else if( 4 > SSTFバージョン.Major )
                 {
                     #region " (B) 前方互換 "
                     //----------------
-                    using( var v2score = new SSTFormat.v2.スコア( SSTFファイルパス ) )
                     {
-                        score = _v2から移行する( v2score );
+                        var v3score = v3.スコア.ファイルから生成する( SSTFファイルパス );
+
+                        score = _v3から移行する( v3score );
 
                         // ファイルから読み込んだ場合のみ、このメンバが有効。
                         score.譜面ファイルパス = SSTFファイルパス;
@@ -122,7 +123,7 @@ namespace SSTFormat.v4
 
                 スコア score = null;
 
-                if( 3 == SSTFバージョン.Major )
+                if( 4 == SSTFバージョン.Major )
                 {
                     #region " (A) 現行版 "
                     //----------------
@@ -133,29 +134,18 @@ namespace SSTFormat.v4
                     //----------------
                     #endregion
                 }
-                else if( 3 > SSTFバージョン.Major )
+                else if( 4 > SSTFバージョン.Major )
                 {
                     #region " (B) 前方互換 "
                     //----------------
-                    var 一時ファイルパス = Path.GetTempFileName();
-
-                    try
                     {
-                        // v2 にはファイルからの生成メソッドしかないので、全入力文字列を一時ファイルに出力し、
-                        using( var sw = new StreamWriter( 一時ファイルパス ) )
-                            sw.Write( 全入力文字列 );
+                        var v3score = v3.スコア.SSTF.文字列から生成する( 全入力文字列, ヘッダだけ );
 
-                        // それを再び読み込んで生成する。
-                        using( var v2score = new SSTFormat.v2.スコア( 一時ファイルパス ) )
-                            score = _v2から移行する( v2score );
+                        score = _v3から移行する( v3score );
 
                         // ファイルから読み込んだ場合のみ、このメンバが有効。
                         // ここでは便宜上ファイルを介しただけなので、このメンバは無効とする。
                         score.譜面ファイルパス = null;
-                    }
-                    finally
-                    {
-                        File.Delete( 一時ファイルパス );
                     }
                     //----------------
                     #endregion
@@ -244,37 +234,46 @@ namespace SSTFormat.v4
             }
 
             /// <summary>
-            ///     v2のスコアをもとに、現行版のスコアを新規生成して返す。
+            ///     v3 のスコアをもとに、現行版のスコアを新規生成して返す。
             /// </summary>
-            private static スコア _v2から移行する( SSTFormat.v2.スコア v2score )
+            private static スコア _v3から移行する( v3.スコア v3score )
             {
                 var score = new スコア();
 
-                score.曲名 = v2score.Header.曲名;
-                score.アーティスト名 = "";               // v3で新規追加
-                score.説明文 = v2score.Header.説明文;
-                score.難易度 = 5.0;                      // v3で新規追加
-                score.背景動画ID = v2score.背景動画ファイル名;                 // v3で新規追加
-                score.プレビュー画像ファイル名 = null;        // v3で新規追加
-                score.サウンドデバイス遅延ms = v2score.Header.サウンドデバイス遅延ms;
-                //score.譜面ファイルパス = SSTFファイルパス;  --> 呼び出し元で設定すること。
+                score.曲名 = v3score.曲名;
+                score.アーティスト名 = v3score.アーティスト名;
+                score.説明文 = v3score.説明文;
+                score.難易度 = v3score.難易度;
+                score.プレビュー画像ファイル名 = v3score.プレビュー画像ファイル名;
+                score.プレビュー音声ファイル名 = v3score.プレビュー音声ファイル名;
+                score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
+                score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
+                //score.譜面ファイルパス = ...;  --> 呼び出し元で設定すること。
+                score.PATH_WAV = v3score.PATH_WAV;
 
                 score.チップリスト = new List<チップ>();
-                foreach( var v2chip in v2score.チップリスト )
-                    score.チップリスト.Add( new チップ( v2chip ) );
+                foreach( var v3chip in v3score.チップリスト )
+                    score.チップリスト.Add( new チップ( v3chip ) );
+
+                score.背景動画ID = v3score.背景動画ID;
 
                 score.小節長倍率リスト = new List<double>();
-                foreach( var v2scale in v2score.小節長倍率リスト )
-                    score.小節長倍率リスト.Add( v2scale );
+                foreach( var v3scale in v3score.小節長倍率リスト )
+                    score.小節長倍率リスト.Add( v3scale );
 
                 score.小節メモリスト = new Dictionary<int, string>();
-                foreach( var kvp in v2score.dicメモ )
+                foreach( var kvp in v3score.小節メモリスト )
                     score.小節メモリスト.Add( kvp.Key, kvp.Value );
 
-                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
-                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>(); // v3で新規追加
-                score.AVIリスト = new Dictionary<int, string>();   // v3で新規追加
-                score.PATH_WAV = @"\";  // v3で新規追加
+                //score.空打ちチップマップ = ...;  --> v4 で廃止。
+
+                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+                foreach( var v3wav in v3score.WAVリスト )
+                    score.WAVリスト.Add( v3wav.Key, v3wav.Value );
+
+                score.AVIリスト = new Dictionary<int, string>();
+                foreach( var v3avi in v3score.AVIリスト )
+                    score.AVIリスト.Add( v3avi.Key, v3avi.Value );
 
                 return score;
             }

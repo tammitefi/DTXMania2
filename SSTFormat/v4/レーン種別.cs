@@ -2,6 +2,9 @@
 
 namespace SSTFormat.v4
 {
+    /// <summary>
+    ///     チップが
+    /// </summary>
     public enum レーン種別
     {
         Unknown,

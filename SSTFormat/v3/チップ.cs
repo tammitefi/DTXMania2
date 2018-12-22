@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SSTFormat.v2;
 
 namespace SSTFormat.v3
 {
@@ -203,7 +204,7 @@ namespace SSTFormat.v3
         /// </summary>
         public チップ( SSTFormat.v2.チップ v2chip )
         {
-            this.チップ種別 = this.チップ種別.FromV2( v2chip.チップ種別 );
+            this.チップ種別 = v2chip.チップ種別.ToV3();
             this.チップサブID = 0;   // [仕様追加] v2: なし → v3: 新設
             this.小節番号 = v2chip.小節番号;
             this.小節内位置 = v2chip.小節内位置;
