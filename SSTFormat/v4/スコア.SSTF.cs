@@ -1189,7 +1189,7 @@ namespace SSTFormat.v4
                                             }
                                             continue;
 
-                                        case チップ種別.動画:
+                                        case チップ種別.BGV:
                                             {
                                                 #region " 未知の属性 "
                                                 //-----------------
@@ -1486,7 +1486,7 @@ namespace SSTFormat.v4
                 { "tom3",       ( チップ種別.Tom3,        true  ) },
                 { "rightcrash", ( チップ種別.RightCrash,  true  ) },
                 { "bpm",        ( チップ種別.BPM,         false ) },
-                { "song",       ( チップ種別.動画,        false ) },
+                { "song",       ( チップ種別.BGV,        false ) },
                 //----------------
                 #endregion
             };

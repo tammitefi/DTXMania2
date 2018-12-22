@@ -160,16 +160,17 @@ namespace SSTFormat.v4
         ///     動画の再生を開始する。
         /// </summary>
         /// <remarks>
-        ///     再生する動画の識別子は <see cref="スコア.背景動画ID"/> に格納される。
-        ///     背景動画が音声も持つ場合には、音声の再生も開始される。
+        ///     再生する動画のファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.AVIリスト"/> に格納される。
+        ///     ファイルが音声も持つ場合でも、音声は再生されない。
         /// </remarks>
-        動画 = 25,
+        BGV = 25,
 
         /// <summary>
         ///     BGMの再生を開始する。v3.0以降。
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         BGM = 30,
 
@@ -178,6 +179,7 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         SE1 = 31,
 
@@ -186,6 +188,7 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         SE2 = 32,
 
@@ -194,14 +197,17 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         SE3 = 33,
 
         /// <summary>
         ///     効果音４の再生を開始する。v3.0以降。
+
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         SE4 = 34,
 
@@ -210,6 +216,7 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         SE5 = 35,
 
@@ -218,6 +225,7 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         GuitarAuto = 36,
 
@@ -226,6 +234,7 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
+        ///     ファイルが動画も持つ場合でも、動画は再生されない。
         /// </remarks>
         BassAuto = 37,
 
@@ -284,6 +293,8 @@ namespace SSTFormat.v4
     /// </summary>
     public static class チップ種別Extensions
     {
+        #region " v5 が実装されたときに実装する。"
+        //----------------
         /// <summary>
         ///		SSTFormat.v4.チップ種別 を、SSTFormat.v5.チップ種別 に変換して返す。
         /// </summary>
@@ -291,5 +302,7 @@ namespace SSTFormat.v4
         //{
         //    return (v5.チップ種別) ( (int) v4type );
         //}
+        //----------------
+        #endregion
     }
 }

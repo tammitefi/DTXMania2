@@ -290,7 +290,7 @@ namespace SSTFormat.v3
         public static v4.チップ種別 ToV4( this チップ種別 v3type )
         {
             if( v3type == v3.チップ種別.背景動画 )
-                return v4.チップ種別.動画;                // 改名。
+                return v4.チップ種別.BGV;                // 改名。
             else
                 return (v4.チップ種別) ( (int) v3type );
         }
