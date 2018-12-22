@@ -16,53 +16,6 @@ namespace SSTFormat.v4
         public static readonly Version SSTFVERSION = new Version( 3, 4, 0, 0 );
         public const double 初期BPM = 120.0;
         public const double 初期小節解像度 = 480.0;
-        public static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
-            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
-        };
-        public static readonly Dictionary<チップ種別, レーン種別> チップtoレーンマップ = new Dictionary<チップ種別, レーン種別>() {
-            #region " *** "
-            //----------------
-            { チップ種別.Unknown,            レーン種別.Unknown },
-            { チップ種別.LeftCrash,          レーン種別.LeftCrash },
-            { チップ種別.Ride,               レーン種別.Ride },
-            { チップ種別.Ride_Cup,           レーン種別.Ride },
-            { チップ種別.China,              レーン種別.China },
-            { チップ種別.Splash,             レーン種別.Splash },
-            { チップ種別.HiHat_Open,         レーン種別.HiHat },
-            { チップ種別.HiHat_HalfOpen,     レーン種別.HiHat },
-            { チップ種別.HiHat_Close,        レーン種別.HiHat },
-            { チップ種別.HiHat_Foot,         レーン種別.Foot },
-            { チップ種別.Snare,              レーン種別.Snare },
-            { チップ種別.Snare_OpenRim,      レーン種別.Snare },
-            { チップ種別.Snare_ClosedRim,    レーン種別.Snare },
-            { チップ種別.Snare_Ghost,        レーン種別.Snare },
-            { チップ種別.Bass,               レーン種別.Bass },
-            { チップ種別.LeftBass,           レーン種別.Bass },
-            { チップ種別.Tom1,               レーン種別.Tom1 },
-            { チップ種別.Tom1_Rim,           レーン種別.Tom1 },
-            { チップ種別.Tom2,               レーン種別.Tom2 },
-            { チップ種別.Tom2_Rim,           レーン種別.Tom2 },
-            { チップ種別.Tom3,               レーン種別.Tom3 },
-            { チップ種別.Tom3_Rim,           レーン種別.Tom3 },
-            { チップ種別.RightCrash,         レーン種別.RightCrash },
-            { チップ種別.BPM,                レーン種別.BPM },
-            { チップ種別.小節線,             レーン種別.Unknown },
-            { チップ種別.拍線,               レーン種別.Unknown },
-            { チップ種別.BGV,               レーン種別.Song },
-            { チップ種別.LeftCymbal_Mute,    レーン種別.LeftCrash },
-            { チップ種別.RightCymbal_Mute,   レーン種別.RightCrash },
-            { チップ種別.小節の先頭,         レーン種別.Unknown },
-            { チップ種別.BGM,                レーン種別.Song },
-            { チップ種別.SE1,                レーン種別.Song },
-            { チップ種別.SE2,                レーン種別.Song },
-            { チップ種別.SE3,                レーン種別.Song },
-            { チップ種別.SE4,                レーン種別.Song },
-            { チップ種別.SE5,                レーン種別.Song },
-            { チップ種別.GuitarAuto,         レーン種別.Song },
-            { チップ種別.BassAuto,           レーン種別.Song },
-            //----------------
-            #endregion
-        };
 
 
         // ヘッダ

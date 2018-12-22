@@ -92,7 +92,7 @@ namespace SSTFormat.v4
                         //----------------
                         score.背景動画ID =
                             ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
-                              where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                              where _動画の拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
                               select file ).FirstOrDefault();
                         //----------------
                         #endregion
@@ -1302,7 +1302,7 @@ namespace SSTFormat.v4
 
                         var chips = score.チップリスト.Where( ( chip ) => ( 
                             chip.小節番号 == 小節番号 &&
-                            スコア.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
+                            SSTFプロパティ.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
 
                         現在の小節に存在するチップのレーン別リスト[ laneType ] = chips.ToArray();
                     }
@@ -1489,6 +1489,10 @@ namespace SSTFormat.v4
                 { "song",       ( チップ種別.BGV,        false ) },
                 //----------------
                 #endregion
+            };
+
+            private static readonly List<string> _動画の拡張子リスト = new List<string>() {
+                ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
             };
         }
     }

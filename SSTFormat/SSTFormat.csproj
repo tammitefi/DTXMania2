@@ -111,6 +111,7 @@
     <Compile Include="v4\スコア.SSTF.cs" />
     <Compile Include="v4\チップ.cs" />
     <Compile Include="v4\チップ種別.cs" />
+    <Compile Include="v4\SSTFプロパティ.cs" />
     <Compile Include="v4\レーン種別.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>
