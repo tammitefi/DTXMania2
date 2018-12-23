@@ -20,14 +20,14 @@ namespace SSTFEditor
 #if !DEBUG
             catch( Exception e )
             {
-                using( var dlg = new 未処理例外検出ダイアログ() )
+                //using( var dlg = new 未処理例外検出ダイアログ() )
                 {
                     Trace.WriteLine( "" );
                     Trace.WriteLine( "====> 未処理の例外が検出されました。" );
                     Trace.WriteLine( "" );
                     Trace.WriteLine( e.ToString() );
 
-                    dlg.ShowDialog();
+                    //dlg.ShowDialog();
                 }
             }
 #else
