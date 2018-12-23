@@ -1425,6 +1425,7 @@ namespace SSTFEditor
             //-----------------
             this._次のプロパティ変更がUndoRedoリストに載らないようにする();
             this.textBox曲名.Clear();
+            this.textBoxアーティスト名.Clear();
             this.textBoxLevel.Text = "5.00";
             this.trackBarLevel.Value = 500;
             this.textBox説明.Clear();
@@ -1586,6 +1587,9 @@ namespace SSTFEditor
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBox曲名.Text = 譜面.SSTFormatScore.曲名;
+
+                this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                this.textBoxアーティスト名.Text = 譜面.SSTFormatScore.アーティスト名;
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxLevel.Text = 譜面.SSTFormatScore.難易度.ToString( "0.00" );
@@ -2699,6 +2703,69 @@ namespace SSTFEditor
         }
         private string textBox曲名_以前の値 = "";
 
+        protected void textBoxアーティスト名_TextChanged( object sender, EventArgs e )
+        {
+            #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
+            //-----------------
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
+            {
+                // 最新のセルの所有者が自分？
+                var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
+
+                if( ( null != cell ) && cell.所有権がある( this.textBoxアーティスト名 ) )
+                {
+                    // (A) 所有者である → 最新のセルの "変更後の値" を現在のコントロールの値に更新する。
+                    ( (UndoRedo.セル<string>) cell ).変更後の値 = this.textBoxアーティスト名.Text;
+                }
+                else
+                {
+                    // (B) 所有者ではない → 以下のようにセルを新規追加する。
+                    //    "変更前の値" ← 以前の値
+                    //    "変更後の値" ← 現在の値
+                    //    "所有者ID" ← 対象となるコンポーネントオブジェクト
+                    var cc = new UndoRedo.セル<string>(
+                        所有者ID: this.textBoxアーティスト名,
+                        Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxアーティスト名.Text = 変更前;
+                            this.textBoxアーティスト名.Focus();
+                        },
+                        Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxアーティスト名.Text = 変更後;
+                            this.textBoxアーティスト名.Focus();
+                        },
+                        変更対象: null,
+                        変更前の値: this.textBoxアーティスト名_以前の値,
+                        変更後の値: this.textBoxアーティスト名.Text,
+                        任意1: null,
+                        任意2: null );
+
+                    this.UndoRedo管理.セルを追加する( cc );
+
+                    // Undo ボタンを有効にする。
+                    this.UndoRedo用GUIのEnabledを設定する();
+                }
+            }
+            //-----------------
+            #endregion
+
+            this.textBoxアーティスト名_以前の値 = this.textBoxアーティスト名.Text;      // 以前の値 ← 現在の値
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
+            this.未保存である = true;
+
+            // スコアには随時保存する。
+            譜面.SSTFormatScore.アーティスト名 = this.textBoxアーティスト名.Text;
+        }
+        protected void textBoxアーティスト名_Validated( object sender, EventArgs e )
+        {
+            // 最新の UndoRedoセル の所有権を放棄する。
+            this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxアーティスト名 );
+        }
+        private string textBoxアーティスト名_以前の値 = "";
+
         protected void textBox説明_TextChanged( object sender, EventArgs e )
         {
             #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
@@ -3174,7 +3241,7 @@ namespace SSTFEditor
         }
         private string textBoxBGM_以前の値 = "";
 
-        private void buttonBGM参照_Click( object sender, EventArgs e )
+        protected void buttonBGM参照_Click( object sender, EventArgs e )
         {
             #region " ファイルを開くダイアログでファイルを選択する。"
             //-----------------
