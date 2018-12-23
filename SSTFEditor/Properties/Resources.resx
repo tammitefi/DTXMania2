@@ -170,9 +170,6 @@
   <data name="MSG_該当するチップはありませんでした" xml:space="preserve">
     <value>Chips not found.</value>
   </data>
-  <data name="PLAYER_NAME" xml:space="preserve">
-    <value>DTXMania.exe</value>
-  </data>
   <data name="MSG_小節メモ" xml:space="preserve">
     <value>Part memo</value>
   </data>
@@ -242,5 +239,11 @@
   </data>
   <data name="MSG_SSTF形式に変換します" xml:space="preserve">
     <value>Are you sure you want to load it and convert to SSTFormat?</value>
+  </data>
+  <data name="MSG_画像ファイル選択ダイアログのフィルタ" xml:space="preserve">
+    <value>Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp</value>
+  </data>
+  <data name="PLAYER_NAME" xml:space="preserve">
+    <value>DTXMania.exe</value>
   </data>
 </root>

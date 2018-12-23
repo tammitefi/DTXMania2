@@ -156,6 +156,9 @@
   <data name="MSG_検索結果ダイアログのタイトル" xml:space="preserve">
     <value>検索結果</value>
   </data>
+  <data name="MSG_画像ファイル選択ダイアログのフィルタ" xml:space="preserve">
+    <value>画像ファイル (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp</value>
+  </data>
   <data name="MSG_確認ダイアログのタイトル" xml:space="preserve">
     <value>確認</value>
   </data>

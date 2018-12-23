@@ -33,6 +33,9 @@
             this.splitContainer分割パネルコンテナ = new System.Windows.Forms.SplitContainer();
             this.tabControl情報タブコンテナ = new System.Windows.Forms.TabControl();
             this.tabPage基本情報 = new System.Windows.Forms.TabPage();
+            this.buttonプレビュー音声 = new System.Windows.Forms.Button();
+            this.textBoxプレビュー音声 = new System.Windows.Forms.TextBox();
+            this.labelプレビュー音声 = new System.Windows.Forms.Label();
             this.labelメモ用小節番号 = new System.Windows.Forms.Label();
             this.labelアーティスト名 = new System.Windows.Forms.Label();
             this.textBoxアーティスト名 = new System.Windows.Forms.TextBox();
@@ -199,6 +202,9 @@
             // 
             resources.ApplyResources(this.tabPage基本情報, "tabPage基本情報");
             this.tabPage基本情報.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPage基本情報.Controls.Add(this.buttonプレビュー音声);
+            this.tabPage基本情報.Controls.Add(this.textBoxプレビュー音声);
+            this.tabPage基本情報.Controls.Add(this.labelプレビュー音声);
             this.tabPage基本情報.Controls.Add(this.labelメモ用小節番号);
             this.tabPage基本情報.Controls.Add(this.labelアーティスト名);
             this.tabPage基本情報.Controls.Add(this.textBoxアーティスト名);
@@ -222,6 +228,28 @@
             this.tabPage基本情報.Controls.Add(this.textBox曲名);
             this.tabPage基本情報.Name = "tabPage基本情報";
             this.toolTipメインフォーム.SetToolTip(this.tabPage基本情報, resources.GetString("tabPage基本情報.ToolTip"));
+            // 
+            // buttonプレビュー音声
+            // 
+            resources.ApplyResources(this.buttonプレビュー音声, "buttonプレビュー音声");
+            this.buttonプレビュー音声.Name = "buttonプレビュー音声";
+            this.toolTipメインフォーム.SetToolTip(this.buttonプレビュー音声, resources.GetString("buttonプレビュー音声.ToolTip"));
+            this.buttonプレビュー音声.UseVisualStyleBackColor = true;
+            this.buttonプレビュー音声.Click += new System.EventHandler(this.buttonプレビュー音声_Click);
+            // 
+            // textBoxプレビュー音声
+            // 
+            resources.ApplyResources(this.textBoxプレビュー音声, "textBoxプレビュー音声");
+            this.textBoxプレビュー音声.Name = "textBoxプレビュー音声";
+            this.toolTipメインフォーム.SetToolTip(this.textBoxプレビュー音声, resources.GetString("textBoxプレビュー音声.ToolTip"));
+            this.textBoxプレビュー音声.TextChanged += new System.EventHandler(this.textBoxプレビュー音声_TextChanged);
+            this.textBoxプレビュー音声.Validated += new System.EventHandler(this.textBoxプレビュー音声_Validated);
+            // 
+            // labelプレビュー音声
+            // 
+            resources.ApplyResources(this.labelプレビュー音声, "labelプレビュー音声");
+            this.labelプレビュー音声.Name = "labelプレビュー音声";
+            this.toolTipメインフォーム.SetToolTip(this.labelプレビュー音声, resources.GetString("labelプレビュー音声.ToolTip"));
             // 
             // labelメモ用小節番号
             // 
@@ -1270,6 +1298,9 @@
         private System.Windows.Forms.Label labelアーティスト名;
         private System.Windows.Forms.TextBox textBoxアーティスト名;
         private System.Windows.Forms.Label labelメモ用小節番号;
+        private System.Windows.Forms.TextBox textBoxプレビュー音声;
+        private System.Windows.Forms.Label labelプレビュー音声;
+        private System.Windows.Forms.Button buttonプレビュー音声;
     }
 }
 

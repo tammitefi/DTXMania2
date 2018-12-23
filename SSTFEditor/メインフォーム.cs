@@ -1433,6 +1433,7 @@ namespace SSTFEditor
             this.textBoxBGM.Clear();
             this.numericUpDownメモ用小節番号.Value = 0;
             this.textBoxメモ.Clear();
+            this.textBoxプレビュー音声.Clear();
             //-----------------
             #endregion
             #region " Viewer 再生 "
@@ -3264,6 +3265,94 @@ namespace SSTFEditor
 
             this.textBoxBGM.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
         }
+
+        protected void textBoxプレビュー音声_TextChanged( object sender, EventArgs e )
+        {
+            #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
+            //-----------------
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
+            {
+                // 最新のセルの所有者が自分？
+                var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
+
+                if( ( null != cell ) && cell.所有権がある( this.textBoxプレビュー音声 ) )
+                {
+                    // (A) 所有者である → 最新のセルの "変更後の値" を現在のコントロールの値に更新する。
+                    ( (UndoRedo.セル<string>) cell ).変更後の値 = this.textBoxプレビュー音声.Text;
+                }
+                else
+                {
+                    // (B) 所有者ではない → 以下のようにセルを新規追加する。
+                    //    "変更前の値" ← 以前の値
+                    //    "変更後の値" ← 現在の値
+                    //    "所有者ID" ← 対象となるコンポーネントオブジェクト
+                    var cc = new UndoRedo.セル<string>(
+                        所有者ID: this.textBoxプレビュー音声,
+                        Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxプレビュー音声.Text = 変更前;
+                            this.textBoxプレビュー音声.Focus();
+                        },
+                        Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxプレビュー音声.Text = 変更後;
+                            this.textBoxプレビュー音声.Focus();
+                        },
+                        変更対象: null,
+                        変更前の値: this.textBoxプレビュー音声_以前の値,
+                        変更後の値: this.textBoxプレビュー音声.Text,
+                        任意1: null,
+                        任意2: null );
+
+                    this.UndoRedo管理.セルを追加する( cc );
+
+                    // Undo ボタンを有効にする。
+                    this.UndoRedo用GUIのEnabledを設定する();
+                }
+            }
+            //-----------------
+            #endregion
+
+            this.textBoxプレビュー音声_以前の値 = this.textBoxプレビュー音声.Text;      // 以前の値 ← 現在の値
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
+            this.未保存である = true;
+
+            // スコアには随時保存する。
+            譜面.SSTFormatScore.プレビュー音声ファイル名 = this.textBoxプレビュー音声.Text;
+        }
+        protected void textBoxプレビュー音声_Validated( object sender, EventArgs e )
+        {
+            // 最新の UndoRedoセル の所有権を放棄する。
+            this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxプレビュー音声 );
+        }
+        private string textBoxプレビュー音声_以前の値 = "";
+
+        private void buttonプレビュー音声_Click( object sender, EventArgs e )
+        {
+            #region " ファイルを開くダイアログでファイルを選択する。"
+            //-----------------
+            var dialog = new OpenFileDialog() {
+                Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,
+                Filter = Properties.Resources.MSG_画像ファイル選択ダイアログのフィルタ,
+                FilterIndex = 1,
+                InitialDirectory = this._作業フォルダパス,
+            };
+            var result = dialog.ShowDialog( this );
+
+            // メインフォームを再描画してダイアログを完全に消す。
+            this.Refresh();
+
+            // OKじゃないならここで中断。
+            if( DialogResult.OK != result )
+                return;
+            //-----------------
+            #endregion
+
+            this.textBoxプレビュー音声.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
+        }
+
         //-----------------
         #endregion
     }

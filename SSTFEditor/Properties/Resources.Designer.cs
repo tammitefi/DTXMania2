@@ -295,6 +295,15 @@ namespace SSTFEditor.Properties {
         }
         
         /// <summary>
+        ///   Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MSG_画像ファイル選択ダイアログのフィルタ {
+            get {
+                return ResourceManager.GetString("MSG_画像ファイル選択ダイアログのフィルタ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Confirm に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MSG_確認ダイアログのタイトル {
