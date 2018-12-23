@@ -48,11 +48,12 @@ namespace FDK.Tests
             Assert.AreEqual( actual: FDK.FDKUtilities.最大公約数を返す( 1, 2 ), expected: 1 );
             Assert.AreEqual( actual: FDK.FDKUtilities.最大公約数を返す( 3, 1 ), expected: 1 );
             Assert.AreEqual( actual: FDK.FDKUtilities.最大公約数を返す( 630, 300 ), expected: 30 );
+            Assert.AreEqual( actual: FDK.FDKUtilities.最大公約数を返す( 0, 100 ), expected: 100 );  // 0 は OK
+            Assert.AreEqual( actual: FDK.FDKUtilities.最大公約数を返す( 200, 0 ), expected: 200 );  // 0 は OK
 
             // 準正常系。
 
-            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最大公約数を返す( 1, 0 ); } );   // 0 の指定はダメ
-            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最大公約数を返す( 1, -1 ); } );   // 負数の指定もダメ
+            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最大公約数を返す( 1, -1 ); } );   // 負数はダメ
         }
 
         [TestMethod()]
@@ -69,8 +70,8 @@ namespace FDK.Tests
 
             // 準正常系。
 
-            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最小公倍数を返す( 1, 0 ); } );   // 0 の指定はダメ
-            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最小公倍数を返す( 1, -1 ); } );   // 負数の指定もダメ
+            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最小公倍数を返す( 1, 0 ); } );    // 0 はダメ
+            例外が出れば成功( () => { 結果 = FDK.FDKUtilities.最小公倍数を返す( 1, -1 ); } );   // 負数もダメ
         }
 
         [TestMethod()]
