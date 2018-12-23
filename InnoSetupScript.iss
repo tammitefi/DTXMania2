@@ -6,8 +6,8 @@
 
 #define MyAppVersion "019"
 
-#define MyAppName "DTXMania"
-#define MyAppFolderName "DTXMania"
+#define MyAppName "DTXMania2"
+#define MyAppFolderName "DTXMania2"
 #define MyAppPublisher "ＦＲＯＭ"
 #define MyAppExeName "DTXMania.exe"
 #define MyAppBin "DTXMania\bin\Release"
@@ -26,7 +26,7 @@ SourceDir=.
 ; ビルドしたインストーラ(exe)の出力先。SourceDir からの相対パス。
 OutputDir=インストーラ
 ; setup ファイル名。
-OutputBaseFilename=dtxmania{#MyAppVersion}_setup
+OutputBaseFilename=dtxmania2_{#MyAppVersion}_setup
 ; アプリ名。
 AppName={#MyAppName}
 ; アプリのバージョン。（コントロールパネル用）

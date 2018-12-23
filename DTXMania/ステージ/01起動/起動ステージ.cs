@@ -31,11 +31,6 @@ namespace DTXMania.ステージ.起動
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._表示文字列 =
-                    $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}\n" +
-                    $"{App.属性<AssemblyCopyrightAttribute>().Copyright}\n" +
-                    "\n";
-
                 this.子を追加する( this._コンソールフォント = new 画像フォント( @"$(System)images\コンソールフォント20x32.png", @"$(System)images\コンソールフォント20x32.json", 文字幅補正dpx: -6f ) );
             }
         }
@@ -58,7 +53,7 @@ namespace DTXMania.ステージ.起動
         {
             // 進行描画
 
-            this._コンソールフォント.描画する( dc, 0f, 0f, $"{App.属性<AssemblyTitleAttribute>().Title} {App.リリース番号:000}" );
+            this._コンソールフォント.描画する( dc, 0f, 0f, $"{App.属性<AssemblyTitleAttribute>().Title} r{App.リリース番号:000}" );
             this._コンソールフォント.描画する( dc, 0f, 32f, $"{App.属性<AssemblyCopyrightAttribute>().Copyright}" );
 
             switch( this.現在のフェーズ )
@@ -154,7 +149,6 @@ namespace DTXMania.ステージ.起動
 
 
         private 画像フォント _コンソールフォント = null;
-        private string _表示文字列 = "";
         private Task _構築タスク = null;
         private long _ファイル検出数 = 0;
     }

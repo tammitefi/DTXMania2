@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle( "DTXMania" )]
+[assembly: AssemblyTitle( "DTXMania2" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "DTXMania powered by YAMAHA Silent Session Drum" )]
+[assembly: AssemblyProduct( "DTXMania2 powered by YAMAHA Silent Session Drum" )]
 [assembly: AssemblyCopyright( "2000 2018 ＦＲＯＭ／Kenji Yamazaki" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

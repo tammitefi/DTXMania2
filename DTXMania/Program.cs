@@ -33,9 +33,9 @@ namespace DTXMania
             {
                 Trace.AutoFlush = true;
 
-                #region " %USERPROFILE%/AppData/DTXMania フォルダがなければ作成する。"
+                #region " %USERPROFILE%/AppData/DTXMania2 フォルダがなければ作成する。"
                 //----------------
-                var AppDataフォルダ名 = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMania\" );
+                var AppDataフォルダ名 = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMania2\" );
 
                 // なければ作成。
                 if( !( Directory.Exists( AppDataフォルダ名 ) ) )

@@ -102,7 +102,7 @@ namespace DTXMania
                 var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
                 VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
                 VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
-                VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMania\" ) );
+                VariablePath.フォルダ変数を追加または更新する( "AppData", Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create ), @"DTXMania2\" ) );
 
                 if( !( Directory.Exists( VariablePath.フォルダ変数の内容を返す( "AppData" ) ) ) )
                     Directory.CreateDirectory( VariablePath.フォルダ変数の内容を返す( "AppData" ) );  // なければ作成。
@@ -113,7 +113,7 @@ namespace DTXMania
 
                 #region " ウィンドウ初期化（システム設定復元後）"
                 //----------------
-                this.Text = "DTXMania " + App.リリース番号.ToString( "000" ) + ( App.ビュアーモードである ? " [Viewer]" : "" );
+                this.Text = "DTXMania2 r" + App.リリース番号.ToString( "000" ) + ( App.ビュアーモードである ? " [Viewer Mode]" : "" );
 
                 if( App.ビュアーモードである )
                 {
