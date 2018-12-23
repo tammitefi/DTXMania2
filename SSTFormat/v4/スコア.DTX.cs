@@ -1001,8 +1001,8 @@ namespace SSTFormat.v4
                 { 0x27, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・RGB
                 { 0x50, ( チップ種別.小節線,     true,   false ) },  // 小節線
                 { 0x51, ( チップ種別.拍線,       true,   false ) },  // 拍線
-                { 0x54, ( チップ種別.背景動画,       false,  false ) },  // 動画
-                { 0x5A, ( チップ種別.背景動画,       false,  false ) },  // 動画（全画面）
+                { 0x54, ( チップ種別.背景動画,   false,  false ) },  // 動画
+                { 0x5A, ( チップ種別.背景動画,   false,  false ) },  // 動画（全画面）
                 { 0x61, ( チップ種別.SE1,        false,  true  ) },  // SE1
                 { 0x62, ( チップ種別.SE2,        false,  true  ) },  // SE2
                 { 0x63, ( チップ種別.SE3,        false,  true  ) },  // SE3

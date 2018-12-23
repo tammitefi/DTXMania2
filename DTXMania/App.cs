@@ -61,6 +61,7 @@ namespace DTXMania
 
         public static WAV管理 WAV管理 { get; set; }
 
+        public static AVI管理 AVI管理 { get; set; }
 
         public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
 
