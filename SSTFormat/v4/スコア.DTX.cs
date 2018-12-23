@@ -255,7 +255,7 @@ namespace SSTFormat.v4
                                     // それをチップに設定する。
                                     var DTX音量 = Math.Min( Math.Max( 現在の.VOLUME定義マップ[ chip.チップサブID ], 0 ), 100 );    // 無音:0 ～ 100:原音
 
-                                    chip.音量 = 
+                                    chip.音量 =
                                         ( 100 == DTX音量 ) ? チップ.最大音量 :
                                         (int) ( DTX音量 * チップ.最大音量 / 100.0 ) + 1;
                                 }
@@ -487,7 +487,8 @@ namespace SSTFormat.v4
                 }
 
                 // ここでは、PATH_WAV はまだ反映しない。
-                現在の.スコア.WAVリスト[ 現在の.zz36進数 ] = (現在の.パラメータ, true);   // あれば上書き、なければ追加
+                現在の.スコア.WAVリスト[ 現在の.zz36進数 ] =  // あれば上書き、なければ追加
+                    (現在の.パラメータ, true);                // 既定では多重再生 ON
             }
             internal static void _コマンド_PANzz_WAVPANzz()
             {
@@ -689,6 +690,21 @@ namespace SSTFormat.v4
 
                         switch( 現在の.チャンネル番号 )
                         {
+                            // 多重再生禁止サウンド
+                            case 0x01:                                                                               // BGM
+                            case 0x61: case 0x62: case 0x63: case 0x64: case 0x65:                                   // SE
+                            case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27:  // チップ配置（ギター）
+                            case 0xA0: case 0xA1: case 0xA2: case 0xA3: case 0xA4: case 0xA5: case 0xA6: case 0xA7:  // チップ配置（ベース）
+                                // WAVの多重再生を OFF にする。
+                                {
+                                    int WAV番号 = オブジェクト値;
+                                    var wavList = 現在の.スコア.WAVリスト;
+
+                                    if( wavList.ContainsKey( WAV番号 ) )
+                                        wavList[ WAV番号 ] = (wavList[ WAV番号 ].ファイルパス, 多重再生する: false);
+                                }
+                                break;
+
                             // BPM
                             case 0x03:
                                 chip.BPM = オブジェクト値 + 現在の.BASEBPM;  // 引き当てないので、ここでBASEBPMを加算する。
@@ -700,22 +716,7 @@ namespace SSTFormat.v4
                                 現在の.BPM参照マップ.Add( chip, オブジェクト値 );  // 引き当てを予約。
                                 break;
 
-                            // SE1～5
-                            case int ch when( 0x61 <= ch && ch <= 0x65 ):
-                                _WAVの多重再生を無効にする( オブジェクト値 );
-                                break;
-
-                            // チップ配置（ギター）
-                            case int ch when( 0x20 <= ch && ch <= 0x27 ):
-                                _WAVの多重再生を無効にする( オブジェクト値 );
-                                break;
-
-                            // チップ配置（ベース）
-                            case int ch when( 0xA0 <= ch && ch <= 0xA7 ):
-                                _WAVの多重再生を無効にする( オブジェクト値 );
-                                break;
-
-                                // 空打ち（ドラム）
+                            // 空打ち（ドラム）
                             case 0xB1: 現在の.スコア.空打ちチップマップ[ レーン種別.HiHat ] = オブジェクト値; break;      // HiHat Open と共有
                             case 0xB2: 現在の.スコア.空打ちチップマップ[ レーン種別.Snare ] = オブジェクト値; break;
                             case 0xB3: 現在の.スコア.空打ちチップマップ[ レーン種別.Bass ] = オブジェクト値; break;
@@ -732,15 +733,6 @@ namespace SSTFormat.v4
                                 現在の.スコア.空打ちチップマップ[ レーン種別.LeftCrash ] = オブジェクト値;                // LeftCrash と Splash は共有
                                 現在の.スコア.空打ちチップマップ[ レーン種別.Splash ] = オブジェクト値;
                                 break;
-                        }
-
-                        // ローカル関数
-                        void _WAVの多重再生を無効にする( int WAV番号 )
-                        {
-                            var dicWAV = 現在の.スコア.WAVリスト;
-
-                            if( dicWAV.ContainsKey( WAV番号 ) )
-                                dicWAV[ WAV番号 ] = (dicWAV[ WAV番号 ].ファイルパス, 多重再生する: false);
                         }
                     }
                     //----------------

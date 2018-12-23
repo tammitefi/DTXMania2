@@ -1414,12 +1414,14 @@ namespace SSTFormat.v4
                 score.アーティスト名 = v3score.アーティスト名;
                 score.説明文 = v3score.説明文;
                 score.難易度 = v3score.難易度;
+
                 score.プレビュー画像ファイル名 = v3score.プレビュー画像ファイル名;
                 score.プレビュー音声ファイル名 = v3score.プレビュー音声ファイル名;
                 score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
                 score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
-                score.譜面ファイルの絶対パス = v3score.譜面ファイルパス;
+
                 score.背景動画ファイル名 = v3score.背景動画ID;
+                score.譜面ファイルの絶対パス = v3score.譜面ファイルパス;
                 score._PATH_WAV = v3score.PATH_WAV;
 
                 score.チップリスト = new List<チップ>();
@@ -1447,7 +1449,7 @@ namespace SSTFormat.v4
                     score.AVIリスト.Add( v3avi.Key, v3avi.Value );
 
 
-                #region " 背景動画が有効の場合の追加処理。"
+                #region " 背景動画が有効の場合に必要な追加処理。"
                 //----------------
                 if( !string.IsNullOrEmpty( score.背景動画ファイル名 ) )
                 {
