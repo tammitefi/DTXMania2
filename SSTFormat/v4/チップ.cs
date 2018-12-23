@@ -204,17 +204,20 @@ namespace SSTFormat.v4
         /// </summary>
         public チップ( v3.チップ v3chip )
         {
-            this.チップ種別 = (チップ種別) ( (int) v3chip.チップ種別 );    // 数値で継承
+            this.チップ種別 = (チップ種別) ( (int) v3chip.チップ種別 );    // 一部改名があるので数値で変換
+
             this.小節番号 = v3chip.小節番号;
-            this.小節内位置 = v3chip.小節内位置;
             this.小節解像度 = v3chip.小節解像度;
+            this.小節内位置 = v3chip.小節内位置;
+
             this.描画時刻sec = v3chip.描画時刻sec;
             this.発声時刻sec = v3chip.発声時刻sec;
-            this.チップサブID = 0;
+
+            this.チップサブID = v3chip.チップサブID;
             this.音量 = v3chip.音量;
             this.左右位置 = v3chip.左右位置;
             this.BPM = v3chip.BPM;
-            this.可視 = true;
+            this.可視 = v3chip.可視;
         }
 
 

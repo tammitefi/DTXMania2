@@ -78,24 +78,15 @@ namespace SSTFormat.v4
         // ヘッダ：ファイル・フォルダ情報
 
         /// <summary>
-        ///    この曲の BGV として再生する動画ファイルの、
+        ///    この曲の BGV/BGM として再生する動画ファイルの、
         ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
         /// <remarks>
-        ///     <see cref="チップ種別.BGV"/> のチップで再生される。
-        ///     ファイルに音声が含まれている場合、音声は無視される。
+        ///     同一ファイルをソースとして、<see cref="チップ種別.背景動画"/> のチップで動画が、
+        ///     <see cref="チップ種別.BGM"/> のチップで音声が、それぞれ再生される。
+        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画はAVIリスト、音声はWAVリストを使用する。
         /// </remarks>
-        public string BGVファイル名 { get; set; }
-
-        /// <summary>
-        ///    この曲の BGM として発声する音声ファイルの、
-        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
-        /// </summary>
-        /// <remarks>
-        ///     <see cref="チップ種別.BGM"/> のチップで再生される。
-        ///    ファイルに動画が含まれている場合、動画は無視される。
-        /// </remarks>
-        public string BGMファイル名 { get; set; }
+        public string 背景動画ファイル名 { get; set; }
 
         /// <summary>
         ///		譜面ファイルの絶対パス。
@@ -197,16 +188,6 @@ namespace SSTFormat.v4
         public Dictionary<int, string> 小節メモリスト { get; protected set; }
 
 
-        // 空うちチップマップ
-
-        /// <summary>
-        ///     レーンごとの空うちチップ番号。
-        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
-        ///		[value: zz番号]
-        /// </summary>
-        public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
-
-
         // WAVリスト
 
         /// <summary>
@@ -225,6 +206,17 @@ namespace SSTFormat.v4
         ///		[key: zz番号]
         /// </summary>
         public Dictionary<int, string> AVIリスト { get; protected set; }
+
+
+        // 空うちチップマップ
+
+        /// <summary>
+        ///     レーンごとの空うちチップ番号。
+        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
+        ///		[value: zz番号]
+        /// </summary>
+        public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
+
 
 
         // メソッド
@@ -265,20 +257,23 @@ namespace SSTFormat.v4
             this.説明文 = "";
             this.難易度 = 5.0;
             this.サウンドデバイス遅延ms = 0f;
+
             this.プレビュー画像ファイル名 = null;
             this.プレビュー音声ファイル名 = null;
             this.プレビュー動画ファイル名 = null;
+
+            this.背景動画ファイル名 = null;
             this.譜面ファイルの絶対パス = null;
             this._PATH_WAV = "";
 
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
             this.小節メモリスト = new Dictionary<int, string>();
+            this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+            this.AVIリスト = new Dictionary<int, string>();
             this.空打ちチップマップ = new Dictionary<レーン種別, int>();
             foreach( レーン種別 lane in Enum.GetValues( typeof( レーン種別 ) ) )
                 this.空打ちチップマップ.Add( lane, 0 );
-            this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
-            this.AVIリスト = new Dictionary<int, string>();
         }
 
         /// <summary>

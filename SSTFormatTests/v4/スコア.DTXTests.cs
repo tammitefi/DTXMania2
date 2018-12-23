@@ -905,7 +905,7 @@ namespace SSTFormat.v4.Tests
             Assert.AreEqual( @"sounds\Drums\cyc8sa.ogg", score.WAVリスト[ 36 + 6 ].ファイルパス );   // WAV16
 
             // チップリストチェック
-            var chips = score.チップリスト.Where( ( c ) => ( c.チップ種別 == チップ種別.BGV ) );
+            var chips = score.チップリスト.Where( ( c ) => ( c.チップ種別 == チップ種別.背景動画 ) );
             Assert.AreEqual( 1, chips.Count() );
             Assert.AreEqual( _zz36進数( "01" ), chips.ElementAt( 0 ).チップサブID );
 

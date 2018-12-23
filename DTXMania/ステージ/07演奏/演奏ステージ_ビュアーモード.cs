@@ -1164,7 +1164,7 @@ namespace DTXMania.ステージ.演奏
             {
                 #region " (A) SSTF 準拠のチップの発声 "
                 //----------------
-                if( chip.チップ種別 == チップ種別.BGV )
+                if( chip.チップ種別 == チップ種別.背景動画 )
                 {
                     // (A-a) 背景動画チップの場合 → 動画とBGMの再生を開始する。
 
@@ -1289,7 +1289,7 @@ namespace DTXMania.ステージ.演奏
                 演奏開始時刻sec = Math.Max( 0.0, 演奏開始時刻sec - 0.5 );   // 開始チップの発声時刻から少し早めの値に。
 
                 // 動画（SSTF,DTX他）とBGM（SSTF）の途中再生。
-                var 動画チップ = score.チップリスト.Where( ( chip ) => ( chip.チップ種別 == チップ種別.BGV ) ).FirstOrDefault();
+                var 動画チップ = score.チップリスト.Where( ( chip ) => ( chip.チップ種別 == チップ種別.背景動画 ) ).FirstOrDefault();
 
                 if( null != 動画チップ && this._チップの演奏状態[ 動画チップ ].ヒット済みである )
                 {

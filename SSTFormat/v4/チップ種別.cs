@@ -16,6 +16,8 @@ namespace SSTFormat.v4
         /// </summary>
         Unknown = 0,
 
+        // パッド
+
         #region " シンバル "
         //----------------
 
@@ -166,8 +168,8 @@ namespace SSTFormat.v4
         //----------------
         #endregion
 
-        #region " 自動再生 "
-        //----------------
+
+        // 自動再生
 
         /// <summary>
         ///     動画の再生を開始する。
@@ -176,7 +178,7 @@ namespace SSTFormat.v4
         ///     再生する動画のファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.AVIリスト"/> に格納される。
         ///     ファイルが音声も持つ場合でも、音声は再生されない。
         /// </remarks>
-        BGV = 25,
+        背景動画 = 25,
 
         /// <summary>
         ///     BGMの再生を開始する。v3.0以降。
@@ -184,6 +186,7 @@ namespace SSTFormat.v4
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
         ///     ファイルが動画も持つ場合でも、動画は再生されない。
+        ///     SEとの違いは、多重再生されないこと。
         /// </remarks>
         BGM = 30,
 
@@ -193,6 +196,7 @@ namespace SSTFormat.v4
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
         ///     ファイルが動画も持つ場合でも、動画は再生されない。
+        ///     BGM との違いは、多重再生されること。
         /// </remarks>
         SE1 = 31,
 
@@ -202,6 +206,7 @@ namespace SSTFormat.v4
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
         ///     ファイルが動画も持つ場合でも、動画は再生されない。
+        ///     BGM との違いは、多重再生されること。
         /// </remarks>
         SE2 = 32,
 
@@ -211,6 +216,7 @@ namespace SSTFormat.v4
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
         ///     ファイルが動画も持つ場合でも、動画は再生されない。
+        ///     BGM との違いは、多重再生されること。
         /// </remarks>
         SE3 = 33,
 
@@ -220,6 +226,7 @@ namespace SSTFormat.v4
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
         ///     ファイルが動画も持つ場合でも、動画は再生されない。
+        ///     BGM との違いは、多重再生されること。
         /// </remarks>
         SE4 = 34,
 
@@ -229,6 +236,7 @@ namespace SSTFormat.v4
         /// <remarks>
         ///     再生するサウンドのファイル名は、<see cref="チップ.チップサブID"/> をキーとする <see cref="スコア.WAVリスト"/> に格納される。
         ///     ファイルが動画も持つ場合でも、動画は再生されない。
+        ///     BGM との違いは、多重再生されること。
         /// </remarks>
         SE5 = 35,
 
@@ -250,11 +258,8 @@ namespace SSTFormat.v4
         /// </remarks>
         BassAuto = 37,
 
-        //----------------
-        #endregion
-
-        #region " 制御 "
-        //----------------
+        
+        // アクセサリ
 
         /// <summary>
         ///     BPM（Beat per Minutes；１分間の拍数）を変更する。
@@ -269,12 +274,6 @@ namespace SSTFormat.v4
         /// </summary>
         小節の先頭 = 29,
 
-        //----------------
-        #endregion
-
-        #region " アクセサリ "
-        //----------------
-
         /// <summary>
         ///     小節線を配置する。
         /// </summary>
@@ -285,27 +284,15 @@ namespace SSTFormat.v4
         /// </summary>
         拍線 = 24,
 
+
+        #region " 廃止 "
+        //----------------
+        [Obsolete]
+        小節メモ = 26,
         //----------------
         #endregion
+
 
         // ※現時点の最終値: 38
-    }
-
-    /// <summary>
-    ///		拡張メソッド。
-    /// </summary>
-    public static class チップ種別Extensions
-    {
-        #region " v5 が実装されたときに実装する。"
-        //----------------
-        /// <summary>
-        ///		SSTFormat.v4.チップ種別 を、SSTFormat.v5.チップ種別 に変換して返す。
-        /// </summary>
-        //public static v5.チップ種別 ToV5( this チップ種別 v4type )
-        //{
-        //    return (v5.チップ種別) ( (int) v4type );
-        //}
-        //----------------
-        #endregion
     }
 }

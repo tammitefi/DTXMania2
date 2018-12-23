@@ -272,6 +272,8 @@ namespace SSTFormat.v4
             }
 
 
+            #region " 解析時の状態変数。(static) "
+            //----------------
             /// <summary>
             ///     解析時の状態を保持するクラス。
             ///     static クラスなので、利用前には <see cref="状態をリセットする"/> を呼び出して前回の解析状態をクリアすること。
@@ -378,7 +380,8 @@ namespace SSTFormat.v4
                     小節長倍率マップ = new SortedDictionary<int, double>();
                 }
             }
-
+            //----------------
+            #endregion
 
             internal static bool _行をコマンドとパラメータとコメントに分解する( string 行, out string コマンド, out string コマンドzzなし, out int zz16進数, out int zz36進数, out string パラメータ, out string コメント )
             {
@@ -1006,8 +1009,8 @@ namespace SSTFormat.v4
                 { 0x27, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・RGB
                 { 0x50, ( チップ種別.小節線,     true,   false ) },  // 小節線
                 { 0x51, ( チップ種別.拍線,       true,   false ) },  // 拍線
-                { 0x54, ( チップ種別.BGV,       false,  false ) },  // 動画
-                { 0x5A, ( チップ種別.BGV,       false,  false ) },  // 動画（全画面）
+                { 0x54, ( チップ種別.背景動画,       false,  false ) },  // 動画
+                { 0x5A, ( チップ種別.背景動画,       false,  false ) },  // 動画（全画面）
                 { 0x61, ( チップ種別.SE1,        false,  true  ) },  // SE1
                 { 0x62, ( チップ種別.SE2,        false,  true  ) },  // SE2
                 { 0x63, ( チップ種別.SE3,        false,  true  ) },  // SE3

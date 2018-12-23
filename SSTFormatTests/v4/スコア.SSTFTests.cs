@@ -207,30 +207,41 @@ Part=3; Lane=HiHat; Resolution=1; Chips=0;  # HHClose
             //----------------
             #endregion
 
-            #region " PATH_WAV, BGV, BGM "
+            #region " BGV, BGM "
             //----------------
             {
                 // BGV と BGM の指定
                 var score = スコア.SSTF.文字列から生成する( @"# SSTFVersion 4.0.0.0
-BGV=bg_movie.mp4
-BGM=bg_sound.wav
+Video=bg_movie.mp4
 " );
                 score.譜面ファイルの絶対パス = @"D:\SSTF\Demo\score.sstf";
                 Assert.AreEqual( @"D:\SSTF\Demo", score.PATH_WAV );
-                Assert.AreEqual( @"bg_movie.mp4", score.BGVファイル名 );
-                Assert.AreEqual( @"bg_sound.wav", score.BGMファイル名 );
+                Assert.AreEqual( @"bg_movie.mp4", score.背景動画ファイル名 );
                 Assert.AreEqual( @"bg_movie.mp4", score.AVIリスト[ 1 ] );                // SSTF では、BGV は #AVI01 に登録される。
-                Assert.AreEqual( @"bg_sound.wav", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
+                Assert.AreEqual( @"bg_movie.mp4", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
 
-                // v3 の背景動画ID は、v4 の BGM/BGV に格納される。
+                // v3 の背景動画ID からの移行
                 score = スコア.SSTF.文字列から生成する( @"# SSTFVersion 3.4.0.0
-Video=bg_video.mp4
+Video=bg_video.mp4     # 背景動画ID
+Part = 0;              # 小節 0 の記述を開始
+Lane=Song; Resolution = 128; Chips = 77;    # 位置 77/128 に Song チップを配置する
 " );
                 score.譜面ファイルの絶対パス = null;
-                Assert.AreEqual( @"bg_video.mp4", score.BGVファイル名 ); // BGV も BGM も同じファイル名が入る。
-                Assert.AreEqual( @"bg_video.mp4", score.BGMファイル名 );
+                Assert.AreEqual( @"bg_video.mp4", score.背景動画ファイル名 );
                 Assert.AreEqual( @"bg_video.mp4", score.AVIリスト[ 1 ] );                // SSTF では、BGV は #AVI01 に登録される。
                 Assert.AreEqual( @"bg_video.mp4", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
+                var chips = score.チップリスト.Where( ( chip ) => ( chip.チップ種別 == チップ種別.背景動画 ) ); // 背景動画チップ
+                Assert.AreEqual( 1, chips.Count() );
+                Assert.AreEqual( 0, chips.ElementAt( 0 ).小節番号 );
+                Assert.AreEqual( 77, chips.ElementAt( 0 ).小節内位置 );
+                Assert.AreEqual( 128, chips.ElementAt( 0 ).小節解像度 );
+                Assert.AreEqual( 1, chips.ElementAt( 0 ).チップサブID ); // zz=01 で固定
+                chips = score.チップリスト.Where( ( chip ) => ( chip.チップ種別 == チップ種別.BGM ) );  // 背景動画と同じ位置に、BGMチップも追加される。
+                Assert.AreEqual( 1, chips.Count() );
+                Assert.AreEqual( 0, chips.ElementAt( 0 ).小節番号 );
+                Assert.AreEqual( 77, chips.ElementAt( 0 ).小節内位置 );
+                Assert.AreEqual( 128, chips.ElementAt( 0 ).小節解像度 );
+                Assert.AreEqual( 1, chips.ElementAt( 0 ).チップサブID ); // zz=01 で固定
             }
             //----------------
             #endregion
