@@ -15,17 +15,7 @@ namespace FDK
 {
     public static class FDKUtilities
     {
-        /// <summary>
-        ///		Dispose して、null を代入する。
-        /// </summary>
-        /// <param name="obj">
-        ///		IDisposable を実装するオブジェクト。
-        ///	</param>
-        public static void 解放する<T>( ref T obj ) where T : IDisposable
-        {
-            ( obj as IDisposable )?.Dispose();
-            obj = default;
-        }
+        // 数学、計算
 
         /// <summary>
         ///		深度から射影行列（定数）を計算して返す。
@@ -99,6 +89,7 @@ namespace FDK
             return 72f * 数値px / dpi;
         }
 
+
         /// <summary>
         ///		指定された位置を、それを超えないブロック境界に揃えて返す。
         /// </summary>
@@ -121,22 +112,8 @@ namespace FDK
             return ( position - ( position % blockAlign ) );
         }
 
-        /// <summary>
-        ///		このメソッドの 呼び出し元のメソッド名 を返す。デバッグログ用。
-        /// </summary>
-        public static string 現在のメソッド名
-        {
-            get
-            {
-                // 1つ前のスタックフレームを取得。
-                var prevFrame = new StackFrame( skipFrames: 1, fNeedFileInfo: false );
 
-                var クラス名 = prevFrame.GetMethod().ReflectedType.ToString();
-                var メソッド名 = prevFrame.GetMethod().Name;
-
-                return $"{クラス名}.{メソッド名}()";
-            }
-        }
+        // グラフィック
 
         /// <summary>
         ///		画像ファイルからシェーダリソースビューを作成して返す。
@@ -214,6 +191,29 @@ namespace FDK
             return 出力;
         }
 
+
+        // デバッグ
+
+        /// <summary>
+        ///		このメソッドの 呼び出し元のメソッド名 を返す。デバッグログ用。
+        /// </summary>
+        public static string 現在のメソッド名
+        {
+            get
+            {
+                // 1つ前のスタックフレームを取得。
+                var prevFrame = new StackFrame( skipFrames: 1, fNeedFileInfo: false );
+
+                var クラス名 = prevFrame.GetMethod().ReflectedType.ToString();
+                var メソッド名 = prevFrame.GetMethod().Name;
+
+                return $"{クラス名}.{メソッド名}()";
+            }
+        }
+
+
+        // シリアライズ
+
         /// <summary>
         ///		DataContract オブジェクトをシリアル化してファイルに保存する。
         /// </summary>
@@ -271,6 +271,9 @@ namespace FDK
             return dataContract;
         }
 
+        /// <summary>
+        ///     JToken に含まれる４つの要素から矩形を抽出して返す。
+        /// </summary>
         public static SharpDX.RectangleF JsonToRectangleF( Newtonsoft.Json.Linq.JToken jTokens )
         {
             return new SharpDX.RectangleF(
