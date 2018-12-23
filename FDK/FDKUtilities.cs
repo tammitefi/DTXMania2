@@ -94,7 +94,7 @@ namespace FDK
         {
             return dpi * 数値pt / 72f;
         }
-        public static float 変換_px単位からpp単位へ( float dpi, float 数値px )
+        public static float 変換_px単位からpt単位へ( float dpi, float 数値px )
         {
             return 72f * 数値px / dpi;
         }
