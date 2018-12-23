@@ -466,6 +466,60 @@ namespace SSTFormat.v4
                 }
                 //----------------
                 #endregion
+                #region " Preview.Sound "
+                //----------------
+                if( 行.StartsWith( "preview.sound", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string[] items = 行.Split( '=' );
+
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"Preview.Sound の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
+                    }
+
+                    現在の.スコア.プレビュー音声ファイル名 = items[ 1 ].Trim();
+
+                    return true;
+                }
+                //----------------
+                #endregion
+                #region " Preview.Image "
+                //----------------
+                if( 行.StartsWith( "preview.image", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string[] items = 行.Split( '=' );
+
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"Preview.Image の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
+                    }
+
+                    現在の.スコア.プレビュー画像ファイル名 = items[ 1 ].Trim();
+
+                    return true;
+                }
+                //----------------
+                #endregion
+                #region " Preview.Movie "
+                //----------------
+                if( 行.StartsWith( "preview.movie", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string[] items = 行.Split( '=' );
+
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"Preview.Movie の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
+                    }
+
+                    現在の.スコア.プレビュー動画ファイル名 = items[ 1 ].Trim();
+
+                    return true;
+                }
+                //----------------
+                #endregion
 
                 return false;   // 該当なし
             }
@@ -1190,6 +1244,24 @@ namespace SSTFormat.v4
                 //----------------
                 if( !string.IsNullOrEmpty( score.BGMファイル名 ) )
                     sw.WriteLine( $"BGM=" + score.BGMファイル名 );
+                //----------------
+                #endregion
+                #region " Preview.Sound "
+                //----------------
+                if( !string.IsNullOrEmpty( score.プレビュー音声ファイル名 ) )
+                    sw.WriteLine( $"Preview.Sound=" + score.プレビュー音声ファイル名 );
+                //----------------
+                #endregion
+                #region " Preview.Image "
+                //----------------
+                if( !string.IsNullOrEmpty( score.プレビュー画像ファイル名 ) )
+                    sw.WriteLine( $"Preview.Image=" + score.プレビュー画像ファイル名 );
+                //----------------
+                #endregion
+                #region " Preview.Movie "
+                //----------------
+                if( !string.IsNullOrEmpty( score.プレビュー動画ファイル名 ) )
+                    sw.WriteLine( $"Preview.Movie=" + score.プレビュー動画ファイル名 );
                 //----------------
                 #endregion
 
