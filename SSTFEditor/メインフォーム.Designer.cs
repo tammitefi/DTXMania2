@@ -33,6 +33,9 @@
             this.splitContainer分割パネルコンテナ = new System.Windows.Forms.SplitContainer();
             this.tabControl情報タブコンテナ = new System.Windows.Forms.TabControl();
             this.tabPage基本情報 = new System.Windows.Forms.TabPage();
+            this.pictureBoxプレビュー画像 = new System.Windows.Forms.PictureBox();
+            this.buttonプレビュー画像参照 = new System.Windows.Forms.Button();
+            this.textBoxプレビュー画像 = new System.Windows.Forms.TextBox();
             this.labelプレビュー画像 = new System.Windows.Forms.Label();
             this.buttonプレビューサウンド参照 = new System.Windows.Forms.Button();
             this.textBoxプレビュー音声 = new System.Windows.Forms.TextBox();
@@ -153,14 +156,13 @@
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem小節の挿入 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem小節の削除 = new System.Windows.Forms.ToolStripMenuItem();
-            this.textBoxプレビュー画像 = new System.Windows.Forms.TextBox();
-            this.buttonプレビュー画像参照 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer分割パネルコンテナ)).BeginInit();
             this.splitContainer分割パネルコンテナ.Panel1.SuspendLayout();
             this.splitContainer分割パネルコンテナ.Panel2.SuspendLayout();
             this.splitContainer分割パネルコンテナ.SuspendLayout();
             this.tabControl情報タブコンテナ.SuspendLayout();
             this.tabPage基本情報.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxプレビュー画像)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownメモ用小節番号)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox譜面パネル)).BeginInit();
@@ -198,6 +200,7 @@
             // tabPage基本情報
             // 
             this.tabPage基本情報.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPage基本情報.Controls.Add(this.pictureBoxプレビュー画像);
             this.tabPage基本情報.Controls.Add(this.buttonプレビュー画像参照);
             this.tabPage基本情報.Controls.Add(this.textBoxプレビュー画像);
             this.tabPage基本情報.Controls.Add(this.labelプレビュー画像);
@@ -227,6 +230,28 @@
             this.tabPage基本情報.Controls.Add(this.textBox曲名);
             resources.ApplyResources(this.tabPage基本情報, "tabPage基本情報");
             this.tabPage基本情報.Name = "tabPage基本情報";
+            // 
+            // pictureBoxプレビュー画像
+            // 
+            this.pictureBoxプレビュー画像.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxプレビュー画像.Image = global::SSTFEditor.Properties.Resources.既定のプレビュー画像;
+            resources.ApplyResources(this.pictureBoxプレビュー画像, "pictureBoxプレビュー画像");
+            this.pictureBoxプレビュー画像.Name = "pictureBoxプレビュー画像";
+            this.pictureBoxプレビュー画像.TabStop = false;
+            // 
+            // buttonプレビュー画像参照
+            // 
+            resources.ApplyResources(this.buttonプレビュー画像参照, "buttonプレビュー画像参照");
+            this.buttonプレビュー画像参照.Name = "buttonプレビュー画像参照";
+            this.buttonプレビュー画像参照.UseVisualStyleBackColor = true;
+            this.buttonプレビュー画像参照.Click += new System.EventHandler(this.buttonプレビュー画像参照_Click);
+            // 
+            // textBoxプレビュー画像
+            // 
+            resources.ApplyResources(this.textBoxプレビュー画像, "textBoxプレビュー画像");
+            this.textBoxプレビュー画像.Name = "textBoxプレビュー画像";
+            this.textBoxプレビュー画像.TextChanged += new System.EventHandler(this.textBoxプレビュー画像_TextChanged);
+            this.textBoxプレビュー画像.Validated += new System.EventHandler(this.textBoxプレビュー画像_Validated);
             // 
             // labelプレビュー画像
             // 
@@ -1111,20 +1136,6 @@
             resources.ApplyResources(this.toolStripMenuItem小節の削除, "toolStripMenuItem小節の削除");
             this.toolStripMenuItem小節の削除.Click += new System.EventHandler(this.toolStripMenuItem小節の削除_Click);
             // 
-            // textBoxプレビュー画像
-            // 
-            resources.ApplyResources(this.textBoxプレビュー画像, "textBoxプレビュー画像");
-            this.textBoxプレビュー画像.Name = "textBoxプレビュー画像";
-            this.textBoxプレビュー画像.TextChanged += new System.EventHandler(this.textBoxプレビュー画像_TextChanged);
-            this.textBoxプレビュー画像.Validated += new System.EventHandler(this.textBoxプレビュー画像_Validated);
-            // 
-            // buttonプレビュー画像参照
-            // 
-            resources.ApplyResources(this.buttonプレビュー画像参照, "buttonプレビュー画像参照");
-            this.buttonプレビュー画像参照.Name = "buttonプレビュー画像参照";
-            this.buttonプレビュー画像参照.UseVisualStyleBackColor = true;
-            this.buttonプレビュー画像参照.Click += new System.EventHandler(this.buttonプレビュー画像参照_Click);
-            // 
             // メインフォーム
             // 
             this.AllowDrop = true;
@@ -1149,6 +1160,7 @@
             this.tabControl情報タブコンテナ.ResumeLayout(false);
             this.tabPage基本情報.ResumeLayout(false);
             this.tabPage基本情報.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxプレビュー画像)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownメモ用小節番号)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox譜面パネル)).EndInit();
@@ -1289,6 +1301,7 @@
         private System.Windows.Forms.Label labelプレビュー画像;
         private System.Windows.Forms.Button buttonプレビュー画像参照;
         private System.Windows.Forms.TextBox textBoxプレビュー画像;
+        private System.Windows.Forms.PictureBox pictureBoxプレビュー画像;
     }
 }
 

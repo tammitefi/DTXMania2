@@ -1526,6 +1526,27 @@ namespace SSTFormat.v4
                 score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
                 score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
 
+                #region " 曲ファイルと同じ場所にあるプレビュー画像の検索（v3仕様）"
+                //----------------
+                if( string.IsNullOrEmpty( score.プレビュー画像ファイル名 ) && !string.IsNullOrEmpty( v3score.譜面ファイルパス ) )
+                {
+                    var _対応するサムネイル画像名 = new[] { "thumb.png", "thumb.bmp", "thumb.jpg", "thumb.jpeg" };
+
+                    var 基点フォルダ = Path.GetDirectoryName( v3score.譜面ファイルパス );
+
+                    var path =
+                        ( from ファイル名 in Directory.GetFiles( 基点フォルダ )
+                          where _対応するサムネイル画像名.Any( thumbファイル名 => ( Path.GetFileName( ファイル名 ).ToLower() == thumbファイル名 ) )
+                          select ファイル名 ).FirstOrDefault();
+
+                    if( default != path )
+                    {
+                        score.プレビュー画像ファイル名 = ( Path.IsPathRooted( path ) ) ? _絶対パスを相対パスに変換する( 基点フォルダ, path ) : path;
+                    }
+                }
+                //----------------
+                #endregion
+
                 score.BGVファイル名 = v3score.背景動画ID;    // v3では、BGV と
                 score.BGMファイル名 = v3score.背景動画ID;    // BGM は同じファイル
                 score.譜面ファイルの絶対パス = v3score.譜面ファイルパス;
@@ -1652,6 +1673,30 @@ namespace SSTFormat.v4
                 {
                 }
                 return null;
+            }
+
+            private static string _絶対パスを相対パスに変換する( string 基点フォルダの絶対パス, string 変換したいフォルダの絶対パス )
+            {
+                if( null == 変換したいフォルダの絶対パス )
+                    return null;
+
+                if( !( Path.IsPathRooted( 基点フォルダの絶対パス ) ) )
+                    throw new Exception( $"基点フォルダは絶対パスで指定してください。[{基点フォルダの絶対パス}]" );
+
+                if( !( Path.IsPathRooted( 変換したいフォルダの絶対パス ) ) )
+                    throw new Exception( $"変換対象フォルダは絶対パスで指定してください。[{変換したいフォルダの絶対パス}]" );
+
+                // 末尾は \ にしておく（"+"でパスを連結する事態を想定。Path.Combine() を使う分には、末尾に \ があってもなくてもどっちでもいい。）
+                if( '\\' != 基点フォルダの絶対パス[ 基点フォルダの絶対パス.Length - 1 ] )
+                    基点フォルダの絶対パス += @"\";
+
+                // 絶対-相対パス変換は、System.IO.Path クラスではなく System.IO.Uri クラスでしか行えない。
+                var 基点uri = new Uri( 基点フォルダの絶対パス );
+                var 変換前uri = new Uri( 変換したいフォルダの絶対パス );
+                var 変換後uri = 基点uri.MakeRelativeUri( 変換前uri );
+
+                // URI形式になっているので、パス形式に戻す。（具体的には、エスケープ文字を復元し、さらに '/' を '\' に置換する。）
+                return Uri.UnescapeDataString( 変換後uri.ToString() ).Replace( oldChar: '/', newChar: '\\' );
             }
         }
     }

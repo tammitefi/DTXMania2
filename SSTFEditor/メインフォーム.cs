@@ -1620,6 +1620,8 @@ namespace SSTFEditor
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxプレビュー画像.Text = 譜面.SSTFormatScore.プレビュー画像ファイル名;
 
+                this._プレビュー画像を更新する();
+
                 // ウィンドウのタイトルバーの表示変更（str編集中のファイル名 が確定した後に）
                 this.未保存である = true;     // 以前の状態によらず、確実に更新するようにする。
 
@@ -1824,6 +1826,23 @@ namespace SSTFEditor
                     this._WCFサービス = null;
                     this._WCFサービスチャンネル = null;
                 }
+            }
+        }
+
+        private void _プレビュー画像を更新する()
+        {
+            try
+            {
+                string path = this.textBoxプレビュー画像.Text;
+
+                if( !Path.IsPathRooted( path ) )
+                    path = Path.Combine( this._作業フォルダパス, path );
+
+                this.pictureBoxプレビュー画像.Image = Image.FromFile( path );
+            }
+            catch
+            {
+                this.pictureBoxプレビュー画像.Image = Properties.Resources.既定のプレビュー画像;
             }
         }
         //----------------
@@ -3418,6 +3437,8 @@ namespace SSTFEditor
         }
         private void textBoxプレビュー画像_Validated( object sender, EventArgs e )
         {
+            this._プレビュー画像を更新する();
+
             // 最新の UndoRedoセル の所有権を放棄する。
             this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxプレビュー画像 );
         }
@@ -3445,6 +3466,8 @@ namespace SSTFEditor
             #endregion
 
             this.textBoxプレビュー画像.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
+
+            this._プレビュー画像を更新する();
         }
         //-----------------
         #endregion

@@ -230,6 +230,7 @@
     <Content Include="Resources\StopHS.png" />
     <Content Include="Resources\UpArrowHS.png" />
     <Content Include="Resources\りらちょー.png" />
+    <None Include="Resources\既定のプレビュー画像.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -455,5 +455,15 @@ namespace SSTFEditor.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap 既定のプレビュー画像 {
+            get {
+                object obj = ResourceManager.GetObject("既定のプレビュー画像", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

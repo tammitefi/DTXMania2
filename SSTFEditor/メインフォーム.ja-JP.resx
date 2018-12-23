@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="pictureBoxプレビュー画像.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="buttonプレビュー画像参照.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBoxプレビュー画像.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelプレビュー画像.Size" type="System.Drawing.Size, System.Drawing">
     <value>73, 12</value>
@@ -127,7 +136,7 @@
   <data name="labelプレビュー画像.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="buttonプレビュー音声.ToolTip" xml:space="preserve">
+  <data name="buttonプレビューサウンド参照.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="textBoxプレビュー音声.ToolTip" xml:space="preserve">
@@ -143,7 +152,7 @@
     <value />
   </data>
   <data name="labelメモ用小節番号.Location" type="System.Drawing.Point, System.Drawing">
-    <value>151, 337</value>
+    <value>151, 526</value>
   </data>
   <data name="labelメモ用小節番号.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 12</value>
