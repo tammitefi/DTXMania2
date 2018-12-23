@@ -4,13 +4,16 @@
 ; このスクリプトは Release 版を対象にしているので、
 ; このスクリプトをコンパイルする前に Release 版をビルドしておくこと。
 
-#define MyAppVersion "018"
+#define MyAppVersion "019"
 
-#define MyAppName "DTXMania matixx"
-#define MyAppFolderName "DTXManiaMatixx"
+#define MyAppName "DTXMania2"
+#define MyAppFolderName "DTXMania2"
 #define MyAppPublisher "ＦＲＯＭ"
-#define MyAppExeName "DTXManiaMatixx.exe"
-#define MyAppBin "DTXmatixx\bin\Release"
+#define MyAppExeName "DTXMania.exe"
+#define MyAppBin "DTXMania\bin\Release"
+#define MyEditorName "SSTFEditor"
+#define MyEditorExeName "SSTFEditor.exe"
+#define MyEditorAppBin "SSTFEditor\bin\Release"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -23,7 +26,7 @@ SourceDir=.
 ; ビルドしたインストーラ(exe)の出力先。SourceDir からの相対パス。
 OutputDir=インストーラ
 ; setup ファイル名。
-OutputBaseFilename=dtxmatixx{#MyAppVersion}_setup
+OutputBaseFilename=dtxmania2_{#MyAppVersion}_setup
 ; アプリ名。
 AppName={#MyAppName}
 ; アプリのバージョン。（コントロールパネル用）
@@ -74,7 +77,9 @@ Source: "{#MyAppBin}\System\*"; DestDir: "{app}\System"; Flags: ignoreversion re
 Source: "{#MyAppBin}\x64\*"; DestDir: "{app}\x64"; Flags: ignoreversion recursesubdirs
 Source: "{#MyAppBin}\x86\*"; DestDir: "{app}\x86"; Flags: ignoreversion recursesubdirs
 Source: "{#MyAppBin}\*.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-Source: "{#MyAppBin}\DTXManiaMatixx.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "{#MyAppBin}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "{#MyEditorAppBin}\{#MyEditorExeName}"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "{#MyEditorAppBin}\ja-JP\*"; DestDir: "{app}\ja-JP"; Flags: ignoreversion recursesubdirs
 
 ; {userappdata} → インストールユーザの AppData フォルダ。（例："C:\users\<ユーザ名>\AppData\Roaming\<アプリ名>"）
 ;Source: "{#MyAppBin}\appdata_default\*"; DestDir: "{userappdata}\{#MyAppFolderName}"; Flags: ignoreversion
@@ -86,9 +91,11 @@ Source: "{#MyAppBin}\DTXManiaMatixx.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 ; プログラムグループへのショートカット。
-Name: "{group}\{#MyAppFolderName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\{#MyEditorName}"; Filename: "{app}\{#MyEditorExeName}"
 ; デスクトップへのショートカット（インストール時にユーザから指定された場合のみ）。
 Name: "{commondesktop}\{#MyAppFolderName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyEditorName}"; Filename: "{app}\{#MyEditorExeName}"; Tasks: desktopicon
 
 [Run]
 ; インストール終了後にアプリを起動する場合のタスクの定義。
