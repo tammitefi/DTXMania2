@@ -15,7 +15,8 @@ namespace SSTFEditor
         ロータム,
         フロアタム,
         右シンバル,
-        背景動画,
+        BGV,
+        BGM,
         Unknown,
     }
 }

@@ -38,7 +38,7 @@ namespace SSTFormat.v4
             { チップ種別.BPM,                レーン種別.BPM },
             { チップ種別.小節線,             レーン種別.Unknown },
             { チップ種別.拍線,               レーン種別.Unknown },
-            { チップ種別.背景動画,                レーン種別.Song },
+            { チップ種別.背景動画,           レーン種別.Song },
             { チップ種別.LeftCymbal_Mute,    レーン種別.LeftCrash },
             { チップ種別.RightCymbal_Mute,   レーン種別.RightCrash },
             { チップ種別.小節の先頭,         レーン種別.Unknown },

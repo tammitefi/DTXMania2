@@ -46,12 +46,12 @@ namespace SSTFEditor
 			{ チップ種別.Splash,             編集レーン種別.右シンバル },    //
 			{ チップ種別.LeftCymbal_Mute,    編集レーン種別.左シンバル },
             { チップ種別.RightCymbal_Mute,   編集レーン種別.右シンバル },
-            { チップ種別.背景動画,           編集レーン種別.背景動画 },
+            { チップ種別.背景動画,           編集レーン種別.BGV },
+            { チップ種別.BGM,                編集レーン種別.BGM },
             { チップ種別.小節線,             編集レーン種別.Unknown },
             { チップ種別.拍線,               編集レーン種別.Unknown },
             { チップ種別.小節メモ,           編集レーン種別.Unknown },
             { チップ種別.小節の先頭,         編集レーン種別.Unknown },
-            { チップ種別.BGM,                編集レーン種別.Unknown },
             { チップ種別.SE1,                編集レーン種別.Unknown },
             { チップ種別.SE2,                編集レーン種別.Unknown },
             { チップ種別.SE3,                編集レーン種別.Unknown },
@@ -76,7 +76,8 @@ namespace SSTFEditor
             { 編集レーン種別.ロータム, 6 },
             { 編集レーン種別.フロアタム, 7 },
             { 編集レーン種別.右シンバル, 8 },
-            { 編集レーン種別.背景動画, 9 },
+            { 編集レーン種別.BGV, 9 },
+            { 編集レーン種別.BGM, 10 },
             { 編集レーン種別.Unknown, -1 },
             //-----------------
             #endregion
@@ -414,7 +415,7 @@ namespace SSTFEditor
                                 x = 小節の描画領域px.Width - 1;
 
                             g.DrawLine(
-                                ( i == 0 || i == num - 2 ) ? this.レーン区分線太ペン : this.レーン区分線ペン,
+                                ( i == 0 || i == num - 3 ) ? this.レーン区分線太ペン : this.レーン区分線ペン,
                                 x,
                                 小節の描画領域px.Top,
                                 x,
@@ -547,6 +548,7 @@ namespace SSTFEditor
                 case チップ種別.China:
                 case チップ種別.Splash:
                 case チップ種別.背景動画:
+                case チップ種別.BGM:
                     this.チップを描画する_通常( g, eチップ, 音量, チップ描画領域, チップ内文字列 );
                     break;
 
@@ -929,7 +931,8 @@ namespace SSTFEditor
             { 編集レーン種別.ロータム,     Color.FromArgb( レーン背景色透明度, Color.Red ) },
             { 編集レーン種別.フロアタム,   Color.FromArgb( レーン背景色透明度, Color.Magenta ) },
             { 編集レーン種別.右シンバル,   Color.FromArgb( レーン背景色透明度, Color.WhiteSmoke ) },
-            { 編集レーン種別.背景動画,     Color.FromArgb( レーン背景色透明度, Color.SkyBlue ) },
+            { 編集レーン種別.BGV,          Color.FromArgb( レーン背景色透明度, Color.SkyBlue ) },
+            { 編集レーン種別.BGM,          Color.FromArgb( レーン背景色透明度, Color.SkyBlue ) },
             { 編集レーン種別.Unknown,      Color.FromArgb( レーン背景色透明度, Color.White ) },
             //-----------------
             #endregion
@@ -963,6 +966,7 @@ namespace SSTFEditor
             { チップ種別.China,              Color.FromArgb( チップ背景色透明度, Color.WhiteSmoke ) },
             { チップ種別.Splash,             Color.FromArgb( チップ背景色透明度, Color.WhiteSmoke ) },
             { チップ種別.背景動画,           Color.FromArgb( チップ背景色透明度, Color.SkyBlue ) },
+            { チップ種別.BGM,                Color.FromArgb( チップ背景色透明度, Color.SkyBlue ) },
             //-----------------
             #endregion
         };
@@ -979,7 +983,8 @@ namespace SSTFEditor
             { 編集レーン種別.ロータム,     "LT" },
             { 編集レーン種別.フロアタム,   "FT" },
             { 編集レーン種別.右シンバル,   "RC" },
-            { 編集レーン種別.背景動画,     "BGA" },
+            { 編集レーン種別.BGV,          "BGV" },
+            { 編集レーン種別.BGM,          "BGM" },
             { 編集レーン種別.Unknown,      "NG" },
             //-----------------
             #endregion

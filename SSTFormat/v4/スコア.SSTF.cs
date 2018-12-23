@@ -1211,12 +1211,22 @@ namespace SSTFormat.v4
 
                         var chips = score.チップリスト.Where( ( chip ) => ( 
                             chip.小節番号 == 小節番号 &&
-                            SSTFプロパティ.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
+                            SSTFプロパティ.チップtoレーンマップ[ chip.チップ種別 ] == laneType &&
+                            // チップ記述対象外チップ
+                            chip.チップ種別 != チップ種別.BGM &&  // 背景動画が出力されるので BGM は出力しない
+                            chip.チップ種別 != チップ種別.SE1 &&
+                            chip.チップ種別 != チップ種別.SE2 &&
+                            chip.チップ種別 != チップ種別.SE3 &&
+                            chip.チップ種別 != チップ種別.SE4 &&
+                            chip.チップ種別 != チップ種別.SE5 &&
+                            chip.チップ種別 != チップ種別.GuitarAuto &&
+                            chip.チップ種別 != チップ種別.BassAuto ) );
 
                         現在の小節に存在するチップのレーン別リスト[ laneType ] = chips.ToArray();
                     }
                     //----------------
                     #endregion
+
 
                     #region " Part を出力する。"
                     //-----------------

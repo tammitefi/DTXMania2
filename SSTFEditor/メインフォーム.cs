@@ -226,9 +226,10 @@ namespace SSTFEditor
             { チップ種別.Tom3_Rim,           "FloorTom(RimShot)" },
             { チップ種別.LeftCymbal_Mute,    "Mute" },
             { チップ種別.RightCymbal_Mute,   "Mute" },
+            { チップ種別.背景動画,           "" },
+            { チップ種別.BGM,                "" },
             { チップ種別.Unknown,            "" },
             { チップ種別.小節線,             "" },
-            { チップ種別.背景動画,           "" },
             { チップ種別.拍線,               "" },
             { チップ種別.小節メモ,           "" },
             //-----------------
