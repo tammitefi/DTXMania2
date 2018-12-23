@@ -29,6 +29,8 @@ namespace SSTFEditor
 
         public int ViewScale = 1;
 
+        public bool DisplaysConfirmOfSSTFConversion = true;
+
 
         // メソッド（保存されない）
 

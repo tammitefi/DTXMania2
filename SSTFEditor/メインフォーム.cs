@@ -1006,6 +1006,7 @@ namespace SSTFEditor
                 dialog.checkBox最近使用したファイル.CheckState = ( this.Config.ShowRecentUsedFiles ) ? CheckState.Checked : CheckState.Unchecked;
                 dialog.numericUpDown最近使用したファイルの最大表示個数.Value = this.Config.MaxOfUsedRecentFiles;
                 dialog.textBoxViewerPath.Text = this.Config.ViewerPath;
+                dialog.checkBoxSSTF変換通知ダイアログ.CheckState = ( this.Config.DisplaysConfirmOfSSTFConversion ) ? CheckState.Checked : CheckState.Unchecked;
 
                 if( DialogResult.OK == dialog.ShowDialog( this ) )
                 {
@@ -1014,6 +1015,7 @@ namespace SSTFEditor
                     this.Config.ShowRecentUsedFiles = dialog.checkBox最近使用したファイル.Checked;
                     this.Config.MaxOfUsedRecentFiles = (int) dialog.numericUpDown最近使用したファイルの最大表示個数.Value;
                     this.Config.ViewerPath = dialog.textBoxViewerPath.Text;
+                    this.Config.DisplaysConfirmOfSSTFConversion = dialog.checkBoxSSTF変換通知ダイアログ.Checked;
 
                     this._Viewer再生関連GUIのEnabledを設定する();
 
@@ -1435,6 +1437,7 @@ namespace SSTFEditor
             this.textBoxメモ.Clear();
             this.textBoxプレビュー音声.Clear();
             this.textBoxプレビュー画像.Clear();
+            this.pictureBoxプレビュー画像.Image = Properties.Resources.既定のプレビュー画像;
             //-----------------
             #endregion
             #region " Viewer 再生 "
@@ -1533,6 +1536,7 @@ namespace SSTFEditor
         {
             #region " .sstf 以外のファイルの場合、SSTF形式でインポートする旨を表示する。"
             //----------------
+            if( this.Config.DisplaysConfirmOfSSTFConversion )
             {
                 var 拡張子 = Path.GetExtension( ファイル名 ).ToLower();
 
