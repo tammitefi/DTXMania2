@@ -11,7 +11,7 @@ using System.ServiceModel.Channels;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace SSTFEditor
 {
@@ -231,7 +231,6 @@ namespace SSTFEditor
             { チップ種別.Unknown,            "" },
             { チップ種別.小節線,             "" },
             { チップ種別.拍線,               "" },
-            { チップ種別.小節メモ,           "" },
             //-----------------
             #endregion
         };
@@ -507,15 +506,6 @@ namespace SSTFEditor
                 // 選択モードだったら、全チップの選択を解除する。
                 if( this.選択モードである )
                     this.選択モード.全チップの選択を解除する();
-
-                // 背景動画が未定だったら、出力するパス内の背景動画を検索し、背景動画テキストボックスに設定する。
-                if( string.IsNullOrEmpty( this.textBox背景動画.Text ) )
-                {
-                    this.textBox背景動画.Text =
-                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( ファイルの絶対パス ) )
-                          where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
-                          select ファイル名 ).FirstOrDefault();
-                }
 
                 // SSTFファイルを出力する。
                 this.譜面.SSTFファイルを書き出す(
@@ -1569,14 +1559,6 @@ namespace SSTFEditor
 
                 // 基本情報タブを設定する。
 
-                if( string.IsNullOrEmpty( 譜面.SSTFormatScore.背景動画ID ) )
-                {
-                    譜面.SSTFormatScore.背景動画ID =
-                        ( from file in Directory.GetFiles( Path.GetDirectoryName( this._作業フォルダパス ) )    // パスは末尾が '\' でなければディレクトリとして認識されないので注意！
-                          where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
-                          select file ).FirstOrDefault();  // 複数あったら、最初に見つけたほうを採用。1つも見つからなければ null。
-                }
-
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBox曲名.Text = 譜面.SSTFormatScore.曲名;
 
@@ -1589,8 +1571,8 @@ namespace SSTFEditor
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBox説明.Text = 譜面.SSTFormatScore.説明文;
 
-                this._次のプロパティ変更がUndoRedoリストに載らないようにする();
-                this.textBox背景動画.Text = Path.GetFileName( 譜面.SSTFormatScore.背景動画ID );
+                //this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                //this.textBox背景動画.Text = Path.GetFileName( 譜面.SSTFormatScore.背景動画ID );
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxメモ.Text = ( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 0 ) ) ? this.譜面.SSTFormatScore.AVIリスト[ 0 ] : "";
@@ -3016,8 +2998,8 @@ namespace SSTFEditor
 
         protected void textBox背景動画_TextChanged( object sender, EventArgs e )
         {
-            譜面.SSTFormatScore.背景動画ID = this.textBox背景動画.Text;
-            this.未保存である = true;
+            //譜面.SSTFormatScore.背景動画ID = this.textBox背景動画.Text;
+            //this.未保存である = true;
         }
 
         protected void button背景動画参照_Click( object sender, EventArgs e )

@@ -38,18 +38,18 @@ namespace SSTFormat.v4
             { チップ種別.BPM,                レーン種別.BPM },
             { チップ種別.小節線,             レーン種別.Unknown },
             { チップ種別.拍線,               レーン種別.Unknown },
-            { チップ種別.背景動画,           レーン種別.Song },
+            { チップ種別.背景動画,           レーン種別.BGV },
             { チップ種別.LeftCymbal_Mute,    レーン種別.LeftCrash },
             { チップ種別.RightCymbal_Mute,   レーン種別.RightCrash },
             { チップ種別.小節の先頭,         レーン種別.Unknown },
-            { チップ種別.BGM,                レーン種別.Song },
-            { チップ種別.SE1,                レーン種別.Song },
-            { チップ種別.SE2,                レーン種別.Song },
-            { チップ種別.SE3,                レーン種別.Song },
-            { チップ種別.SE4,                レーン種別.Song },
-            { チップ種別.SE5,                レーン種別.Song },
-            { チップ種別.GuitarAuto,         レーン種別.Song },
-            { チップ種別.BassAuto,           レーン種別.Song },
+            { チップ種別.BGM,                レーン種別.BGM },
+            { チップ種別.SE1,                レーン種別.Unknown },    // 出力未対応
+            { チップ種別.SE2,                レーン種別.Unknown },    // 出力未対応
+            { チップ種別.SE3,                レーン種別.Unknown },    // 出力未対応
+            { チップ種別.SE4,                レーン種別.Unknown },    // 出力未対応
+            { チップ種別.SE5,                レーン種別.Unknown },    // 出力未対応
+            { チップ種別.GuitarAuto,         レーン種別.Unknown },    // 出力未対応
+            { チップ種別.BassAuto,           レーン種別.Unknown },    // 出力未対応
             //----------------
             #endregion
         };

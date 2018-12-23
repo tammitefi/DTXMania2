@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace SSTFEditor
 {

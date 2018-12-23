@@ -4,7 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace SSTFEditor
 {
@@ -184,8 +184,7 @@ namespace SSTFEditor
                 ( this.現在チップカーソルがある編集レーン == 編集レーン種別.Unknown ) ||
                 ( eチップ == チップ種別.Unknown ) ||
                 ( eチップ == チップ種別.小節線 ) ||
-                ( eチップ == チップ種別.拍線 ) ||
-                ( eチップ == チップ種別.小節メモ ) )
+                ( eチップ == チップ種別.拍線 ) )
             {
                 return;     // 描画しない。
             }

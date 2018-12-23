@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace SSTFEditor
 {
@@ -50,7 +50,6 @@ namespace SSTFEditor
             { チップ種別.BGM,                編集レーン種別.BGM },
             { チップ種別.小節線,             編集レーン種別.Unknown },
             { チップ種別.拍線,               編集レーン種別.Unknown },
-            { チップ種別.小節メモ,           編集レーン種別.Unknown },
             { チップ種別.小節の先頭,         編集レーン種別.Unknown },
             { チップ種別.SE1,                編集レーン種別.Unknown },
             { チップ種別.SE2,                編集レーン種別.Unknown },

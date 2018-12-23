@@ -18,6 +18,7 @@ namespace SSTFormat.v4
         Tom3,
         RightCrash,
         BPM,
-        Song,
+        BGV,
+        BGM,
     }
 }
