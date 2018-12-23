@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "DTXMania powereb by YAMAHA Silent Session Drum" )]
+[assembly: AssemblyProduct( "DTXMania powered by YAMAHA Silent Session Drum" )]
 [assembly: AssemblyCopyright( "2000 2018 ＦＲＯＭ／Kenji Yamazaki" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "18.1.0.0" )]
-[assembly: AssemblyFileVersion( "18.1.0.0" )]
+[assembly: AssemblyVersion( "19.0.0.0" )]
+[assembly: AssemblyFileVersion( "19.0.0.0" )]
 
 // 公開先のアセンブリを指定する
 // [assembly: InternalsVisibleTo("公開先のアセンブリ名")]

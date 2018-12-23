@@ -7,7 +7,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace DTXMania.ステージ.曲読み込み
 {
@@ -158,10 +158,10 @@ namespace DTXMania.ステージ.曲読み込み
                 var 選択曲 = App.曲ツリー.フォーカス曲ノード;
                 Debug.Assert( null != 選択曲 );
 
-                var 選択曲ファイルパス = 選択曲.曲ファイルパス;
-                Debug.Assert( 選択曲ファイルパス?.変数なしパス.Nullでも空でもない() ?? false );
+                var 選択曲ファイルの絶対パス = 選択曲.曲ファイルの絶対パス;
+                Debug.Assert( 選択曲ファイルの絶対パス?.変数なしパス.Nullでも空でもない() ?? false );
 
-                App.演奏スコア = スコア.ファイルから生成する( 選択曲ファイルパス.変数なしパス );
+                App.演奏スコア = スコア.ファイルから生成する( 選択曲ファイルの絶対パス.変数なしパス );
 
                 // 全チップの発声時刻を修正する。
 

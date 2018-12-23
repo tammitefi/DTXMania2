@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using CSCore;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.設定;
 
 namespace DTXMania.ステージ

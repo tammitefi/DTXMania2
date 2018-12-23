@@ -1592,7 +1592,7 @@ namespace SSTFEditor
                 this.textBox背景動画.Text = Path.GetFileName( 譜面.SSTFormatScore.背景動画ID );
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
-                this.textBoxメモ.Text = ( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 0 ) ) ? this.譜面.SSTFormatScore.AVIリスト[ 0 ] : "";
+                this.textBoxメモ.Text = ( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 0 ) ) ? this.譜面.SSTFormatScore.AVIリスト[ 0 ] : "";
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxサウンド遅延ms.Text = this.譜面.SSTFormatScore.サウンドデバイス遅延ms.ToString();
@@ -2493,9 +2493,9 @@ namespace SSTFEditor
                 if( 小節の下辺grid > パネル上辺grid )
                     break;  // 小節が画面上方にはみ出し切ってしまったらそこで終了。
 
-                if( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 小節番号 ) )
+                if( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 小節番号 ) )
                 {
-                    string メモ = this.譜面.SSTFormatScore.メモリスト[ 小節番号 ];
+                    string メモ = this.譜面.SSTFormatScore.小節メモリスト[ 小節番号 ];
 
                     string[] lines = メモ.Split( new string[] { Environment.NewLine }, StringSplitOptions.None );
                     int 行数 = lines.Length;
@@ -2787,17 +2787,17 @@ namespace SSTFEditor
 
                             #region " dicメモ の更新 "
                             //-----------------
-                            if( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 小節番号 ) )
+                            if( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 小節番号 ) )
                             {
                                 if( string.IsNullOrEmpty( 変更前 ) )
-                                    this.譜面.SSTFormatScore.メモリスト.Remove( 小節番号 );
+                                    this.譜面.SSTFormatScore.小節メモリスト.Remove( 小節番号 );
                                 else
-                                    this.譜面.SSTFormatScore.メモリスト[ 小節番号 ] = 変更前;
+                                    this.譜面.SSTFormatScore.小節メモリスト[ 小節番号 ] = 変更前;
                             }
                             else
                             {
                                 if( !string.IsNullOrEmpty( 変更前 ) )
-                                    this.譜面.SSTFormatScore.メモリスト.Add( 小節番号, 変更前 );
+                                    this.譜面.SSTFormatScore.小節メモリスト.Add( 小節番号, 変更前 );
                             }
                             //-----------------
                             #endregion
@@ -2816,17 +2816,17 @@ namespace SSTFEditor
 
                             #region " dicメモの更新 "
                             //-----------------
-                            if( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 小節番号 ) )
+                            if( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 小節番号 ) )
                             {
                                 if( string.IsNullOrEmpty( 変更後 ) )
-                                    this.譜面.SSTFormatScore.メモリスト.Remove( 小節番号 );
+                                    this.譜面.SSTFormatScore.小節メモリスト.Remove( 小節番号 );
                                 else
-                                    this.譜面.SSTFormatScore.メモリスト[ 小節番号 ] = 変更後;
+                                    this.譜面.SSTFormatScore.小節メモリスト[ 小節番号 ] = 変更後;
                             }
                             else
                             {
                                 if( !string.IsNullOrEmpty( 変更後 ) )
-                                    this.譜面.SSTFormatScore.メモリスト.Add( 小節番号, 変更後 );
+                                    this.譜面.SSTFormatScore.小節メモリスト.Add( 小節番号, 変更後 );
                             }
                             //-----------------
                             #endregion
@@ -2864,17 +2864,17 @@ namespace SSTFEditor
                 if( string.IsNullOrEmpty( this.textBoxメモ.Text ) )
                 {
                     // (A) 空文字列の場合
-                    if( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 小節番号 ) )
-                        this.譜面.SSTFormatScore.メモリスト.Remove( 小節番号 );        // 存在してたら削除。
+                    if( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 小節番号 ) )
+                        this.譜面.SSTFormatScore.小節メモリスト.Remove( 小節番号 );        // 存在してたら削除。
                                                                             // 存在してなかったら何もしない。
                 }
                 else
                 {
                     // (B) その他の場合
-                    if( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 小節番号 ) )
-                        this.譜面.SSTFormatScore.メモリスト[ 小節番号 ] = this.textBoxメモ.Text;     // 存在してたら更新。
+                    if( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 小節番号 ) )
+                        this.譜面.SSTFormatScore.小節メモリスト[ 小節番号 ] = this.textBoxメモ.Text;     // 存在してたら更新。
                     else
-                        this.譜面.SSTFormatScore.メモリスト.Add( 小節番号, this.textBoxメモ.Text );      // 存在してなかったら追加。
+                        this.譜面.SSTFormatScore.小節メモリスト.Add( 小節番号, this.textBoxメモ.Text );      // 存在してなかったら追加。
                 }
             }
             //-----------------
@@ -2906,8 +2906,8 @@ namespace SSTFEditor
             // 小節番号にあわせて、textBoxメモにメモを表示する。
             int 小節番号 = (int) this.numericUpDownメモ用小節番号.Value;
             this._次のプロパティ変更がUndoRedoリストに載らないようにする();
-            if( this.譜面.SSTFormatScore.メモリスト.ContainsKey( 小節番号 ) )
-                this.textBoxメモ.Text = this.譜面.SSTFormatScore.メモリスト[ 小節番号 ];
+            if( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 小節番号 ) )
+                this.textBoxメモ.Text = this.譜面.SSTFormatScore.小節メモリスト[ 小節番号 ];
             else
                 this.textBoxメモ.Text = "";
             this._次のプロパティ変更がUndoRedoリストに載るようにする();

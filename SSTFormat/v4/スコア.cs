@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public partial class スコア
     {
@@ -13,57 +13,9 @@ namespace SSTFormat.v3
         /// <summary>
         ///     このソースが実装するSSTFバージョン。
         /// </summary>
-        public static readonly Version SSTFVERSION = new Version( 3, 4, 0, 0 );
+        public static readonly Version SSTFVERSION = new Version( 4, 0, 0, 0 );
         public const double 初期BPM = 120.0;
         public const double 初期小節解像度 = 480.0;
-        public static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
-            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
-        };
-        public static readonly Dictionary<チップ種別, レーン種別> チップtoレーンマップ = new Dictionary<チップ種別, レーン種別>() {
-            #region " *** "
-            //----------------
-            { チップ種別.Unknown,            レーン種別.Unknown },
-            { チップ種別.LeftCrash,          レーン種別.LeftCrash },
-            { チップ種別.Ride,               レーン種別.Ride },
-            { チップ種別.Ride_Cup,           レーン種別.Ride },
-            { チップ種別.China,              レーン種別.China },
-            { チップ種別.Splash,             レーン種別.Splash },
-            { チップ種別.HiHat_Open,         レーン種別.HiHat },
-            { チップ種別.HiHat_HalfOpen,     レーン種別.HiHat },
-            { チップ種別.HiHat_Close,        レーン種別.HiHat },
-            { チップ種別.HiHat_Foot,         レーン種別.Foot },
-            { チップ種別.Snare,              レーン種別.Snare },
-            { チップ種別.Snare_OpenRim,      レーン種別.Snare },
-            { チップ種別.Snare_ClosedRim,    レーン種別.Snare },
-            { チップ種別.Snare_Ghost,        レーン種別.Snare },
-            { チップ種別.Bass,               レーン種別.Bass },
-            { チップ種別.LeftBass,           レーン種別.Bass },
-            { チップ種別.Tom1,               レーン種別.Tom1 },
-            { チップ種別.Tom1_Rim,           レーン種別.Tom1 },
-            { チップ種別.Tom2,               レーン種別.Tom2 },
-            { チップ種別.Tom2_Rim,           レーン種別.Tom2 },
-            { チップ種別.Tom3,               レーン種別.Tom3 },
-            { チップ種別.Tom3_Rim,           レーン種別.Tom3 },
-            { チップ種別.RightCrash,         レーン種別.RightCrash },
-            { チップ種別.BPM,                レーン種別.BPM },
-            { チップ種別.小節線,             レーン種別.Unknown },
-            { チップ種別.拍線,               レーン種別.Unknown },
-            { チップ種別.背景動画,           レーン種別.Song },
-            { チップ種別.小節メモ,           レーン種別.Unknown },
-            { チップ種別.LeftCymbal_Mute,    レーン種別.LeftCrash },
-            { チップ種別.RightCymbal_Mute,   レーン種別.RightCrash },
-            { チップ種別.小節の先頭,         レーン種別.Unknown },
-            { チップ種別.BGM,                レーン種別.Song },
-            { チップ種別.SE1,                レーン種別.Song },
-            { チップ種別.SE2,                レーン種別.Song },
-            { チップ種別.SE3,                レーン種別.Song },
-            { チップ種別.SE4,                レーン種別.Song },
-            { チップ種別.SE5,                レーン種別.Song },
-            { チップ種別.GuitarAuto,         レーン種別.Song },
-            { チップ種別.BassAuto,           レーン種別.Song },
-            //----------------
-            #endregion
-        };
 
 
         // ヘッダ
@@ -95,50 +47,90 @@ namespace SSTFormat.v3
         ///	    易:0.00～9.99:難
         /// </summary>
         public double 難易度 { get; set; }
-        /// <summary>
-        ///		プレビュー画像のファイル名。
-        /// </summary>
-        public string プレビュー画像ファイル名 { get; set; }
-
-        /// <summary>
-        ///		プレビュー音のファイル名。
-        /// </summary>
-        public string プレビュー音声ファイル名 { get; set; }
-
-        /// <summary>
-        ///		プレビュー動画のファイル名。
-        /// </summary>
-        public string プレビュー動画ファイル名 { get; set; }
 
         /// <summary>
         ///     このスコアが作成されたときのサウンドデバイスの遅延量[ミリ秒]。
         /// </summary>
         public float サウンドデバイス遅延ms { get; set; } = 0f;
 
+
+        // ヘッダ：プレビュー
+
+        /// <summary>
+        ///		プレビュー画像ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
+        /// </summary>
+        public string プレビュー画像ファイル名 { get; set; }
+
+        /// <summary>
+        ///		プレビュー音声ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
+        /// </summary>
+        public string プレビュー音声ファイル名 { get; set; }
+
+        /// <summary>
+        ///		プレビュー動画ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
+        /// </summary>
+        public string プレビュー動画ファイル名 { get; set; }
+
+
+        // ヘッダ：ファイル・フォルダ情報
+
+        /// <summary>
+        ///    この曲の BGV/BGM として再生する動画ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
+        /// </summary>
+        /// <remarks>
+        ///     同一ファイルをソースとして、<see cref="チップ種別.背景動画"/> のチップで動画が、
+        ///     <see cref="チップ種別.BGM"/> のチップで音声が、それぞれ再生される。
+        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画はAVIリスト、音声はWAVリストを使用する。
+        /// </remarks>
+        public string 背景動画ファイル名 { get; set; }
+
         /// <summary>
         ///		譜面ファイルの絶対パス。
         /// </summary>
-        public string 譜面ファイルパス { get; set; } = null;
+        public string 譜面ファイルの絶対パス { get; set; } = null;
 
         /// <summary>
-        ///		WAV, AVI, その他ファイルの基点となるフォルダの絶対パス。
-        ///		末尾は '\' 。（例: "D:\DTXData\DemoSong\Sounds\"）
+        ///     譜面ファイルのあるフォルダの絶対パス。
         /// </summary>
+        /// <remarks>
+        ///     WAV, AVI ファイルへのパスには、このフィールドではなく <see cref="PATH_WAV"/> を使うこと。
+        /// </remarks>
+        public string 譜面ファイルのあるフォルダ
+            => ( string.IsNullOrEmpty( this.譜面ファイルの絶対パス ) ) ? "" : Path.GetDirectoryName( this.譜面ファイルの絶対パス );
+
+        /// <summary>
+        ///		WAV と AVI ファイルの基点となるフォルダの絶対パス。
+        /// </summary>
+        /// <remarks>
+        ///     譜面で指定された PATH_WAV が空文字列または相対パスの場合、譜面のあるフォルダからの相対パスとしてPATH_WAVを適用した絶対パスを返す。
+        ///     　例：譜面ファイルが "D:\DTXData\DemoSong\score.sstf" であり、譜面内で PATH_WAV が未定義の場合、このプロパティは"D:\DTXData\DemoSong" を返す。
+        ///     　例：譜面ファイルが "D:\DTXData\DemoSong\score.sstf" であり、譜面内で PATH_WAV=Sounds と指定されている場合、このプロパティは"D:\DTXData\DemoSong\Sounds" を返す。
+        ///     譜面で指定された PATH_WAV が絶対パスの場合、その PATH_WAV をそのまま返す。
+        ///     　例：譜面ファイルが "D:\DTXData\DemoSong\score.sstf" であり、譜面内で PATH_WAV=E:\Sounds と指定されている場合、このプロパティは"E:\Sounds" を返す。
+        /// </remarks>
         public string PATH_WAV
         {
             get
             {
-                if( null != this.譜面ファイルパス )
-                    return Path.Combine( Path.GetDirectoryName( this.譜面ファイルパス ), this._PATH_WAV );
+                if( string.IsNullOrEmpty( this._PATH_WAV ) )
+                {
+                    // (A) PATH_WAV が未指定の場合、譜面のあるフォルダの絶対パスを返す。
+                    return this.譜面ファイルのあるフォルダ;
+                }
+                else if( !Path.IsPathRooted( this._PATH_WAV ) )
+                {
+                    // (B) 譜面で指定された PATH_WAV が空文字列または相対パスの場合、譜面のあるフォルダからの相対パスとしてPATH_WAVを適用した絶対パスを返す。
+                    return Path.Combine( this.譜面ファイルのあるフォルダ, this._PATH_WAV );
+                }
                 else
+                {
+                    // (C) 譜面で指定された PATH_WAV が絶対パスの場合、その PATH_WAV をそのまま返す。
                     return this._PATH_WAV;
-            }
-            set
-            {
-                this._PATH_WAV = value;
-
-                if( this._PATH_WAV.Last() != '\\' )
-                    this._PATH_WAV += '\\';
+                }
             }
         }
 
@@ -149,21 +141,6 @@ namespace SSTFormat.v3
         ///     このスコアに存在するすべてのチップのリスト。
         /// </summary>
         public List<チップ> チップリスト { get; protected set; }
-
-
-        // 背景動画
-
-        /// <summary>
-        ///		スコアは、単一の動画または音楽（あるいはその両方）を持つことができる。
-        ///		これは、<see cref="チップ種別.背景動画"/>の発声時に再生が開始される。
-        /// </summary>
-        /// <remarks>
-        ///     「プロトコル: 動画ID」という書式で指定する。大文字小文字は区別されない。
-        ///     　例:"nicovideo: sm12345678" ... ニコ動
-        ///     　   "file: bgv.mp4" ... ローカルの mp4 ファイル
-        ///     　   "bgv.mp4" ... プロトコルを省略してもローカルファイルとなる
-        /// </remarks>
-        public string 背景動画ID { get; set; }
 
 
         // 小節長倍率リスト
@@ -211,16 +188,6 @@ namespace SSTFormat.v3
         public Dictionary<int, string> 小節メモリスト { get; protected set; }
 
 
-        // 空うちチップマップ
-
-        /// <summary>
-        ///     レーンごとの空うちチップ番号。
-        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
-        ///		[value: zz番号]
-        /// </summary>
-        public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
-
-
         // WAVリスト
 
         /// <summary>
@@ -241,6 +208,17 @@ namespace SSTFormat.v3
         public Dictionary<int, string> AVIリスト { get; protected set; }
 
 
+        // 空うちチップマップ
+
+        /// <summary>
+        ///     レーンごとの空うちチップ番号。
+        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
+        ///		[value: zz番号]
+        /// </summary>
+        public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
+
+
+
         // メソッド
 
         public スコア()
@@ -248,20 +226,20 @@ namespace SSTFormat.v3
             this.リセットする();
         }
 
-        public static スコア ファイルから生成する( string スコアファイルパス, bool ヘッダだけ = false )
+        public static スコア ファイルから生成する( string スコアファイルの絶対パス, bool ヘッダだけ = false )
         {
             スコア score = null;
 
-            var 拡張子 = Path.GetExtension( スコアファイルパス ).ToLower();
+            var 拡張子 = Path.GetExtension( スコアファイルの絶対パス ).ToLower();
 
             switch( 拡張子 )
             {
                 case ".sstf":
-                    score = SSTF.ファイルから生成する( スコアファイルパス, ヘッダだけ );
+                    score = SSTF.ファイルから生成する( スコアファイルの絶対パス, ヘッダだけ );
                     break;
 
                 default:    // dtx, gda, 他
-                    score = DTX.ファイルから生成する( スコアファイルパス, DTX.データ種別.拡張子から判定, ヘッダだけ );
+                    score = DTX.ファイルから生成する( スコアファイルの絶対パス, DTX.データ種別.拡張子から判定, ヘッダだけ );
                     break;
             }
 
@@ -278,23 +256,24 @@ namespace SSTFormat.v3
             this.アーティスト名 = "";
             this.説明文 = "";
             this.難易度 = 5.0;
-            this.背景動画ID = null;
+            this.サウンドデバイス遅延ms = 0f;
+
             this.プレビュー画像ファイル名 = null;
             this.プレビュー音声ファイル名 = null;
             this.プレビュー動画ファイル名 = null;
-            this.サウンドデバイス遅延ms = 0f;
-            this.譜面ファイルパス = null;
+
+            this.背景動画ファイル名 = null;
+            this.譜面ファイルの絶対パス = null;
+            this._PATH_WAV = "";
 
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
             this.小節メモリスト = new Dictionary<int, string>();
+            this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+            this.AVIリスト = new Dictionary<int, string>();
             this.空打ちチップマップ = new Dictionary<レーン種別, int>();
             foreach( レーン種別 lane in Enum.GetValues( typeof( レーン種別 ) ) )
                 this.空打ちチップマップ.Add( lane, 0 );
-
-            this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
-            this.AVIリスト = new Dictionary<int, string>();
-            this._PATH_WAV = "";
         }
 
         /// <summary>
@@ -311,7 +290,7 @@ namespace SSTFormat.v3
 
         // private
 
-        internal static void _後処理を行う( スコア score )
+        internal static void _スコア読み込み時の後処理を行う( スコア score )
         {
             #region " 小節の先頭チップを追加する。"
             //----------------
@@ -408,9 +387,12 @@ namespace SSTFormat.v3
 
 
         /// <summary>
-        ///		空文字、または絶対パス。
-        ///		null は不可。
+        ///		WAV と AVI ファイルの基点となるフォルダの相対または絶対パス。
+        ///		譜面の PATH_WAV= の内容がそのまま入る。
         /// </summary>
+        /// <remarks>
+        ///     例: "Sounds"
+        /// </remarks>
         private string _PATH_WAV = "";
 
         private const double _BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );

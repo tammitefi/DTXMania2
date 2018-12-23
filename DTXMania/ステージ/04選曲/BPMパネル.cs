@@ -53,7 +53,7 @@ namespace DTXMania.ステージ.選曲
                 {
                     using( var songdb = new SongDB() )
                     {
-                        var song = songdb.Songs.Where( ( r ) => ( r.Path == this._現在表示しているノード.曲ファイルパス.変数なしパス ) ).SingleOrDefault();
+                        var song = songdb.Songs.Where( ( r ) => ( r.Path == this._現在表示しているノード.曲ファイルの絶対パス.変数なしパス ) ).SingleOrDefault();
 
                         if( null != song )
                         {

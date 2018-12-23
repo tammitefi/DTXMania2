@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public partial class スコア
     {
@@ -22,12 +22,12 @@ namespace SSTFormat.v3
             ///		ファイルからSSTFデータを読み込み、スコアを生成して返す。
             ///		読み込みに失敗した場合は、何らかの例外を発出する。
             /// </summary>
-            public static スコア ファイルから生成する( string SSTFファイルパス, bool ヘッダだけ = false )
+            public static スコア ファイルから生成する( string SSTFファイルの絶対パス, bool ヘッダだけ = false )
             {
                 // ファイルのSSTFバージョンを確認。
 
                 string 先頭行;
-                using( var sr = new StreamReader( SSTFファイルパス, Encoding.UTF8 ) )
+                using( var sr = new StreamReader( SSTFファイルの絶対パス, Encoding.UTF8 ) )
                     先頭行 = sr.ReadLine();
 
                 var SSTFバージョン = _行にSSTFVersionがあるなら解析して返す( 先頭行 ) ?? new Version( 1, 0, 0, 0 );  // 既定値
@@ -37,34 +37,35 @@ namespace SSTFormat.v3
 
                 スコア score = null;
 
-                if( 3 == SSTFバージョン.Major )
+                if( 4 == SSTFバージョン.Major )
                 {
                     #region " (A) 現行版 "
                     //----------------
                     string 全入力文字列 = null;
 
                     // ファイルの内容を一気読み。
-                    using( var sr = new StreamReader( SSTFファイルパス ) )
+                    using( var sr = new StreamReader( SSTFファイルの絶対パス ) )
                         全入力文字列 = sr.ReadToEnd();
 
                     // 読み込んだ内容でスコアを生成する。
                     score = _全行解析する( ref 全入力文字列, ヘッダだけ );
 
                     // ファイルから読み込んだ場合のみ、このメンバが有効。
-                    score.譜面ファイルパス = SSTFファイルパス;
+                    score.譜面ファイルの絶対パス = SSTFファイルの絶対パス;
                     //----------------
                     #endregion
                 }
-                else if( 3 > SSTFバージョン.Major )
+                else if( 4 > SSTFバージョン.Major )
                 {
                     #region " (B) 前方互換 "
                     //----------------
-                    using( var v2score = new SSTFormat.v2.スコア( SSTFファイルパス ) )
                     {
-                        score = _v2から移行する( v2score );
+                        var v3score = v3.スコア.SSTF.ファイルから生成する( SSTFファイルの絶対パス );
+
+                        score = _v3から移行する( v3score );
 
                         // ファイルから読み込んだ場合のみ、このメンバが有効。
-                        score.譜面ファイルパス = SSTFファイルパス;
+                        score.譜面ファイルの絶対パス = SSTFファイルの絶対パス;
                     }
                     //----------------
                     #endregion
@@ -81,23 +82,12 @@ namespace SSTFormat.v3
                 if( null == score )
                     new Exception( "スコアが生成されませんでした。" );
 
+
+                // 後処理。
+
                 if( !( ヘッダだけ ) )
                 {
-                    // ファイル以外から情報を取得する。
-
-                    if( string.IsNullOrEmpty( score.背景動画ID ) )
-                    {
-                        #region " 背景動画ファイルを検索する。"
-                        //----------------
-                        score.背景動画ID =
-                            ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
-                              where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
-                              select file ).FirstOrDefault();
-                        //----------------
-                        #endregion
-                    }
-
-                    スコア._後処理を行う( score );
+                    スコア._スコア読み込み時の後処理を行う( score );
                 }
 
                 return score;
@@ -109,7 +99,7 @@ namespace SSTFormat.v3
             /// </summary>
             public static スコア 文字列から生成する( string 全入力文字列, bool ヘッダだけ = false )
             {
-                // データのバージョンを確認。
+                // データのSSTFバージョンを確認。
 
                 string 先頭行;
                 using( var sr = new StringReader( 全入力文字列 ) )
@@ -122,40 +112,29 @@ namespace SSTFormat.v3
 
                 スコア score = null;
 
-                if( 3 == SSTFバージョン.Major )
+                if( 4 == SSTFバージョン.Major )
                 {
                     #region " (A) 現行版 "
                     //----------------
                     score = _全行解析する( ref 全入力文字列, ヘッダだけ );
 
                     // ファイルから読み込んだ場合のみ、このメンバが有効。
-                    score.譜面ファイルパス = null;
+                    score.譜面ファイルの絶対パス = null;
                     //----------------
                     #endregion
                 }
-                else if( 3 > SSTFバージョン.Major )
+                else if( 4 > SSTFバージョン.Major )
                 {
                     #region " (B) 前方互換 "
                     //----------------
-                    var 一時ファイルパス = Path.GetTempFileName();
-
-                    try
                     {
-                        // v2 にはファイルからの生成メソッドしかないので、全入力文字列を一時ファイルに出力し、
-                        using( var sw = new StreamWriter( 一時ファイルパス ) )
-                            sw.Write( 全入力文字列 );
+                        var v3score = v3.スコア.SSTF.文字列から生成する( 全入力文字列, ヘッダだけ );
 
-                        // それを再び読み込んで生成する。
-                        using( var v2score = new SSTFormat.v2.スコア( 一時ファイルパス ) )
-                            score = _v2から移行する( v2score );
+                        score = _v3から移行する( v3score );
 
                         // ファイルから読み込んだ場合のみ、このメンバが有効。
                         // ここでは便宜上ファイルを介しただけなので、このメンバは無効とする。
-                        score.譜面ファイルパス = null;
-                    }
-                    finally
-                    {
-                        File.Delete( 一時ファイルパス );
+                        score.譜面ファイルの絶対パス = null;
                     }
                     //----------------
                     #endregion
@@ -174,10 +153,7 @@ namespace SSTFormat.v3
 
                 if( !( ヘッダだけ ) )
                 {
-                    // ファイル以外から情報を取得する。
-                    //score.背景動画ファイル名 = ...     --> 文字列から生成した場合は設定しない。
-
-                    スコア._後処理を行う( score );
+                    スコア._スコア読み込み時の後処理を行う( score );
                 }
 
                 return score;
@@ -213,104 +189,11 @@ namespace SSTFormat.v3
             }
 
 
-            // private
-
-            /// <summary>
-            ///     指定された行が SSTFVersion コメントであるかを判定し、そうであるならそのバージョンを解析して返す。
-            ///     それ以外は null を返す。
-            /// </summary>
-            internal static Version _行にSSTFVersionがあるなら解析して返す( string 行 )
-            {
-                try
-                {
-                    行 = 行.Trim();
-
-                    int コメント識別子の位置 = 行.IndexOf( '#' );    // 見つからなければ -1
-
-                    if( 0 <= コメント識別子の位置 )
-                    {
-                        var コメント文 = 行.Substring( コメント識別子の位置 + 1 ).Trim();
-
-                        if( コメント文.ToLower().StartsWith( "sstfversion" ) )
-                        {
-                            return new Version( コメント文.Substring( "sstfversion".Length ) );  // 生成失敗なら例外発生
-                        }
-                    }
-                }
-                catch
-                {
-                }
-                return null;
-            }
-
-            /// <summary>
-            ///     v2のスコアをもとに、現行版のスコアを新規生成して返す。
-            /// </summary>
-            private static スコア _v2から移行する( SSTFormat.v2.スコア v2score )
-            {
-                var score = new スコア();
-
-                score.曲名 = v2score.Header.曲名;
-                score.アーティスト名 = "";               // v3で新規追加
-                score.説明文 = v2score.Header.説明文;
-                score.難易度 = 5.0;                      // v3で新規追加
-                score.背景動画ID = v2score.背景動画ファイル名;                 // v3で新規追加
-                score.プレビュー画像ファイル名 = null;        // v3で新規追加
-                score.サウンドデバイス遅延ms = v2score.Header.サウンドデバイス遅延ms;
-                //score.譜面ファイルパス = SSTFファイルパス;  --> 呼び出し元で設定すること。
-
-                score.チップリスト = new List<チップ>();
-                foreach( var v2chip in v2score.チップリスト )
-                    score.チップリスト.Add( new チップ( v2chip ) );
-
-                score.小節長倍率リスト = new List<double>();
-                foreach( var v2scale in v2score.小節長倍率リスト )
-                    score.小節長倍率リスト.Add( v2scale );
-
-                score.小節メモリスト = new Dictionary<int, string>();
-                foreach( var kvp in v2score.dicメモ )
-                    score.小節メモリスト.Add( kvp.Key, kvp.Value );
-
-                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
-                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>(); // v3で新規追加
-                score.AVIリスト = new Dictionary<int, string>();   // v3で新規追加
-                score.PATH_WAV = @"\";  // v3で新規追加
-
-                return score;
-            }
-
-            private static int _最大公約数を返す( int m, int n )
-            {
-                if( ( 0 > m ) || ( 0 > n ) )
-                    throw new Exception( "引数に負数は指定できません。" );
-
-                if( 0 == m )
-                    return n;
-
-                if( 0 == n )
-                    return m;
-
-                // ユーグリッドの互除法
-                int r;
-                while( ( r = m % n ) != 0 )
-                {
-                    m = n;
-                    n = r;
-                }
-
-                return n;
-            }
-            private static int _最小公倍数を返す( int m, int n )
-            {
-                if( ( 0 >= m ) || ( 0 >= n ) )
-                    throw new Exception( "引数に0以下の数は指定できません。" );
-
-                return ( m * n / _最大公約数を返す( m, n ) );
-            }
-
-
             // 行解析
 
+
+            #region " 解析に使う状態変数。(static) "
+            //----------------
             private static class 現在の
             {
                 public static スコア スコア;
@@ -330,6 +213,8 @@ namespace SSTFormat.v3
                     可視 = true;
                 }
             }
+            //----------------
+            #endregion
 
             internal static スコア _全行解析する( ref string 全入力文字列, bool ヘッダだけ = false )
             {
@@ -545,7 +430,7 @@ namespace SSTFormat.v3
                 #endregion
                 #region " Video "
                 //----------------
-                if( 行.StartsWith( "video", StringComparison.OrdinalIgnoreCase ) )
+                if( 行.StartsWith( "Video", StringComparison.OrdinalIgnoreCase ) )
                 {
                     string[] items = 行.Split( '=' );
 
@@ -555,7 +440,10 @@ namespace SSTFormat.v3
                         return false;
                     }
 
-                    現在の.スコア.背景動画ID = items[ 1 ].Trim();
+                    現在の.スコア.背景動画ファイル名 = items[ 1 ].Trim();
+
+                    現在の.スコア.AVIリスト[ 1 ] = 現在の.スコア.背景動画ファイル名;            // #AVI01 固定。あれば上書き、なければ追加
+                    現在の.スコア.WAVリスト[ 1 ] = (現在の.スコア.背景動画ファイル名, false);   // #WAV01 固定。あれば上書き、なければ追加
 
                     return true;
                 }
@@ -1221,10 +1109,10 @@ namespace SSTFormat.v3
                 return true;
             }
 
-            /// <summary>
+            /// <remarks>
             ///		取出文字列の先頭にある数字（小数点も有効）の連続した部分を取り出して、戻り値として返す。
             ///		また、取出文字列から取り出した数字文字列部分を除去した文字列を再度格納する。
-            /// </summary>
+            /// </remarks>
             private static string _指定された文字列の先頭から数字文字列を取り出す( ref string 取出文字列 )
             {
                 // 数字が何桁続くか数える。
@@ -1247,17 +1135,39 @@ namespace SSTFormat.v3
 
             private static void _ヘッダ行を出力する( スコア score, StreamWriter sw )
             {
-                sw.WriteLine( "Title=" + ( ( string.IsNullOrEmpty( score.曲名 ) ) ? "(no title)" : score.曲名 ) );
-
-                if( !string.IsNullOrEmpty( score.説明文 ) )
+                #region " Title "
+                //----------------
+                sw.WriteLine( "Title=" + ( ( string.IsNullOrEmpty( score.曲名 ) ) ? "(no title)" : score.曲名 ) );  // Title は必須
+                //----------------
+                #endregion
+                #region " Artist "
+                //----------------
+                if( !string.IsNullOrEmpty( score.アーティスト名 ) )    // Artist は任意
+                    sw.WriteLine( $"Artist=" + score.アーティスト名 );
+                //----------------
+                #endregion
+                #region " Description "
+                //----------------
+                if( !string.IsNullOrEmpty( score.説明文 ) )    // Description は任意
                     sw.WriteLine( $"Description=" + score.説明文.Replace( Environment.NewLine, @"\n" ) );   // 改行コードは、２文字のリテラル "\n" に置換。
-
+                                                                                                         //----------------
+                #endregion
+                #region " SoundDevice.Delay "
+                //----------------
                 sw.WriteLine( $"SoundDevice.Delay={score.サウンドデバイス遅延ms}" );
-
+                //----------------
+                #endregion
+                #region " Level "
+                //----------------
                 sw.WriteLine( $"Level={score.難易度.ToString( "0.00" )}" );
-
-                if( !string.IsNullOrEmpty( score.背景動画ID ) )
-                    sw.WriteLine( $"Video={score.背景動画ID}" );
+                //----------------
+                #endregion
+                #region " Video "
+                //----------------
+                if( !string.IsNullOrEmpty( score.背景動画ファイル名 ) )
+                    sw.WriteLine( $"Video=" + score.背景動画ファイル名 );
+                //----------------
+                #endregion
 
                 sw.WriteLine( "" );
             }
@@ -1301,7 +1211,7 @@ namespace SSTFormat.v3
 
                         var chips = score.チップリスト.Where( ( chip ) => ( 
                             chip.小節番号 == 小節番号 &&
-                            スコア.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
+                            SSTFプロパティ.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
 
                         現在の小節に存在するチップのレーン別リスト[ laneType ] = chips.ToArray();
                     }
@@ -1485,10 +1395,157 @@ namespace SSTFormat.v3
                 { "tom3",       ( チップ種別.Tom3,        true  ) },
                 { "rightcrash", ( チップ種別.RightCrash,  true  ) },
                 { "bpm",        ( チップ種別.BPM,         false ) },
-                { "song",       ( チップ種別.背景動画,    false ) },
+                { "song",       ( チップ種別.背景動画,        false ) },
                 //----------------
                 #endregion
             };
+
+
+            // マイグレーション
+
+            /// <summary>
+            ///     v3 のスコアをもとに、現行版のスコアを新規生成して返す。
+            /// </summary>
+            private static スコア _v3から移行する( v3.スコア v3score )
+            {
+                var score = new v4.スコア();
+
+                score.曲名 = v3score.曲名;
+                score.アーティスト名 = v3score.アーティスト名;
+                score.説明文 = v3score.説明文;
+                score.難易度 = v3score.難易度;
+
+                score.プレビュー画像ファイル名 = v3score.プレビュー画像ファイル名;
+                score.プレビュー音声ファイル名 = v3score.プレビュー音声ファイル名;
+                score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
+                score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
+
+                score.背景動画ファイル名 = v3score.背景動画ID;
+                score.譜面ファイルの絶対パス = v3score.譜面ファイルパス;
+                score._PATH_WAV = v3score.PATH_WAV;
+
+                score.チップリスト = new List<チップ>();
+                foreach( var v3chip in v3score.チップリスト )
+                    score.チップリスト.Add( new チップ( v3chip ) );
+
+                score.小節長倍率リスト = new List<double>();
+                foreach( var v3scale in v3score.小節長倍率リスト )
+                    score.小節長倍率リスト.Add( v3scale );
+
+                score.小節メモリスト = new Dictionary<int, string>();
+                foreach( var kvp in v3score.小節メモリスト )
+                    score.小節メモリスト.Add( kvp.Key, kvp.Value );
+
+                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
+                foreach( var v3kara in v3score.空打ちチップマップ )
+                    score.空打ちチップマップ.Add( (レーン種別) ( (int) v3kara.Key ), v3kara.Value );
+
+                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+                foreach( var v3wav in v3score.WAVリスト )
+                    score.WAVリスト.Add( v3wav.Key, v3wav.Value );
+
+                score.AVIリスト = new Dictionary<int, string>();
+                foreach( var v3avi in v3score.AVIリスト )
+                    score.AVIリスト.Add( v3avi.Key, v3avi.Value );
+
+
+                #region " 背景動画が有効の場合に必要な追加処理。"
+                //----------------
+                if( !string.IsNullOrEmpty( score.背景動画ファイル名 ) )
+                {
+                    // avi01 に登録。
+                    score.AVIリスト[ 1 ] = score.背景動画ファイル名;
+
+                    // wav01 にも登録。
+                    score.WAVリスト[ 1 ] = (score.背景動画ファイル名, false);
+
+                    // 背景動画チップと同じ場所にBGMチップを追加する。
+                    var 作業前リスト = score.チップリスト;
+                    score.チップリスト = new List<チップ>(); // Clear() はNG
+
+                    foreach( var chip in 作業前リスト )
+                    {
+                        // コピーしながら、
+                        score.チップリスト.Add( chip );
+
+                        // 必要あれば追加する。
+                        if( chip.チップ種別 == チップ種別.背景動画 )
+                        {
+                            chip.チップサブID = 1;   // zz = 01 で固定。
+
+                            var bgmChip = (チップ) chip.Clone();
+                            bgmChip.チップ種別 = チップ種別.BGM;  // チップ種別以外は共通
+
+                            score.チップリスト.Add( bgmChip );
+                        }
+                    }
+                }
+                //----------------
+                #endregion
+
+                return score;
+            }
+
+
+            // private
+
+            private static int _最大公約数を返す( int m, int n )
+            {
+                if( ( 0 > m ) || ( 0 > n ) )
+                    throw new Exception( "引数に負数は指定できません。" );
+
+                if( 0 == m )
+                    return n;
+
+                if( 0 == n )
+                    return m;
+
+                // ユーグリッドの互除法
+                int r;
+                while( ( r = m % n ) != 0 )
+                {
+                    m = n;
+                    n = r;
+                }
+
+                return n;
+            }
+
+            private static int _最小公倍数を返す( int m, int n )
+            {
+                if( ( 0 >= m ) || ( 0 >= n ) )
+                    throw new Exception( "引数に0以下の数は指定できません。" );
+
+                return ( m * n / _最大公約数を返す( m, n ) );
+            }
+
+            /// <summary>
+            ///     指定された行が SSTFVersion コメントであるかを判定し、そうであるならそのバージョンを解析して返す。
+            ///     それ以外は null を返す。
+            /// </summary>
+            internal static Version _行にSSTFVersionがあるなら解析して返す( string 行 )
+            {
+                try
+                {
+                    行 = 行.Trim();
+
+                    int コメント識別子の位置 = 行.IndexOf( '#' );    // 見つからなければ -1
+
+                    if( 0 <= コメント識別子の位置 )
+                    {
+                        var コメント文 = 行.Substring( コメント識別子の位置 + 1 ).Trim();
+
+                        if( コメント文.ToLower().StartsWith( "sstfversion" ) )
+                        {
+                            return new Version( コメント文.Substring( "sstfversion".Length ) );  // 生成失敗なら例外発生
+                        }
+                    }
+                }
+                catch
+                {
+                }
+                return null;
+            }
         }
     }
 }

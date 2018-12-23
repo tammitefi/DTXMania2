@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using FDK;
-using SSTFormatCurrent = SSTFormat.v3;
+using SSTFormatCurrent = SSTFormat.v4;
 using DTXMania.データベース.ユーザ;
 using DTXMania.データベース.曲;
 using DTXMania.ステージ.演奏;

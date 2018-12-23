@@ -111,6 +111,9 @@ namespace FDK
         /// </summary>
         public void Start( double 再生開始時刻sec )
         {
+            if( 再生開始時刻sec >= this.総演奏時間sec )
+                return;
+
             this._デコードキャンセル = new CancellationTokenSource();
             this._デコード起動完了通知 = new ManualResetEvent( false );
 

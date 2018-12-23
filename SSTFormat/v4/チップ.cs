@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SSTFormat.v2;
+using SSTFormat.v3;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public class チップ : IComparable, ICloneable
     {
@@ -178,20 +178,20 @@ namespace SSTFormat.v3
         {
             var other = obj as チップ;
 
-            if( this.小節番号 < other.小節番号 ) { return -1; }
-            if( this.小節番号 > other.小節番号 ) { return +1; }
+            if( this.小節番号 < other.小節番号 ) { return -1; } // 小さいほうが先
+            if( this.小節番号 > other.小節番号 ) { return +1; } // 大きいほうが後
 
             double dbThis = (double) this.小節内位置 / (double) this.小節解像度;
             double dbOther = (double) other.小節内位置 / (double) other.小節解像度;
 
-            if( dbThis < dbOther ) { return -1; }
-            if( dbThis > dbOther ) { return +1; }
+            if( dbThis < dbOther ) { return -1; }   // 小さいほうが先
+            if( dbThis > dbOther ) { return +1; }   // 大きいほうが後
 
 
             // グリッドが完全に等しいなら、チップの種類ごとに定義された深度で順序を決める。
 
-            if( チップ.チップの深さ[ this.チップ種別 ] > チップ.チップの深さ[ other.チップ種別 ] ) { return -1; }
-            if( チップ.チップの深さ[ this.チップ種別 ] < チップ.チップの深さ[ other.チップ種別 ] ) { return +1; }
+            if( SSTFプロパティ.チップの深さ[ this.チップ種別 ] > SSTFプロパティ.チップの深さ[ other.チップ種別 ] ) { return -1; }   // 大きいほうが先 ← 他と逆なので注意。
+            if( SSTFプロパティ.チップの深さ[ this.チップ種別 ] < SSTFプロパティ.チップの深さ[ other.チップ種別 ] ) { return +1; }   // 小さいほうが後 ←
 
             return 0;
         }
@@ -200,70 +200,28 @@ namespace SSTFormat.v3
         // 前方互換
 
         /// <summary>
-        ///		v2 からのバージョンアップ。
+        ///		v3 からのバージョンアップ。
         /// </summary>
-        public チップ( SSTFormat.v2.チップ v2chip )
+        public チップ( v3.チップ v3chip )
         {
-            this.チップ種別 = v2chip.チップ種別.ToV3();
-            this.チップサブID = 0;   // [仕様追加] v2: なし → v3: 新設
-            this.小節番号 = v2chip.小節番号;
-            this.小節内位置 = v2chip.小節内位置;
-            this.小節解像度 = v2chip.小節解像度;
-            this.描画時刻sec = v2chip.描画時刻ms / 1000.0;
-            this.発声時刻sec = v2chip.発声時刻ms / 1000.0;
-            this.音量 = v2chip.音量;
-            this.BPM = v2chip.BPM;
-            this.可視 = true; // v3で新規追加
+            this.チップ種別 = (チップ種別) ( (int) v3chip.チップ種別 );    // 一部改名があるので数値で変換
+
+            this.小節番号 = v3chip.小節番号;
+            this.小節解像度 = v3chip.小節解像度;
+            this.小節内位置 = v3chip.小節内位置;
+
+            this.描画時刻sec = v3chip.描画時刻sec;
+            this.発声時刻sec = v3chip.発声時刻sec;
+
+            this.チップサブID = v3chip.チップサブID;
+            this.音量 = v3chip.音量;
+            this.左右位置 = v3chip.左右位置;
+            this.BPM = v3chip.BPM;
+            this.可視 = v3chip.可視;
         }
 
 
         // private
-
-        protected readonly static Dictionary<チップ種別, int> チップの深さ = new Dictionary<チップ種別, int>() {
-            #region " *** "
-            //-----------------
-            { チップ種別.Ride_Cup, 50 },
-            { チップ種別.HiHat_Open, 50 },
-            { チップ種別.HiHat_HalfOpen, 50 },
-            { チップ種別.HiHat_Close, 50 },
-            { チップ種別.HiHat_Foot, 50 },
-            { チップ種別.Snare, 50 },
-            { チップ種別.Snare_OpenRim, 50 },
-            { チップ種別.Snare_ClosedRim, 50 },
-            { チップ種別.Snare_Ghost, 50 },
-            { チップ種別.Tom1, 50 },
-            { チップ種別.Tom1_Rim, 50 },
-            { チップ種別.BPM, 50 },
-            { チップ種別.Ride, 60 },
-            { チップ種別.Splash, 60 },
-            { チップ種別.Tom2, 60 },
-            { チップ種別.Tom2_Rim, 60 },
-            { チップ種別.LeftCrash, 70 },
-            { チップ種別.China, 70 },
-            { チップ種別.Tom3, 70 },
-            { チップ種別.Tom3_Rim, 70 },
-            { チップ種別.RightCrash, 70 },
-            { チップ種別.Bass, 74 },
-            { チップ種別.LeftBass, 75 },
-            { チップ種別.LeftCymbal_Mute, 76 },
-            { チップ種別.RightCymbal_Mute, 76 },
-            { チップ種別.小節線, 80 },
-            { チップ種別.拍線, 85 },
-            { チップ種別.背景動画, 90 },
-            { チップ種別.小節メモ, 99 },
-            { チップ種別.小節の先頭, 99 },
-            { チップ種別.BGM, 99 },
-            { チップ種別.SE1, 99 },
-            { チップ種別.SE2, 99 },
-            { チップ種別.SE3, 99 },
-            { チップ種別.SE4, 99 },
-            { チップ種別.SE5, 99 },
-            { チップ種別.GuitarAuto, 99 },
-            { チップ種別.BassAuto, 99 },
-            { チップ種別.Unknown, 99 },
-            //-----------------
-            #endregion
-        };
 
         private int _音量 = チップ.最大音量;
 

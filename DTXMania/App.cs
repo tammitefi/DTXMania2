@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Windows;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.ステージ;
 using DTXMania.曲;
 using DTXMania.設定;
@@ -61,6 +61,7 @@ namespace DTXMania
 
         public static WAV管理 WAV管理 { get; set; }
 
+        public static AVI管理 AVI管理 { get; set; }
 
         public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
 

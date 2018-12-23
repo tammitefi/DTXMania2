@@ -17,7 +17,17 @@ namespace FDK
 
         public Video( VariablePath ファイルパス )
         {
-            this._VideoSource = new MediaFoundationFileVideoSource( ファイルパス );
+            try
+            {
+                this._VideoSource = new MediaFoundationFileVideoSource( ファイルパス );
+            }
+            catch
+            {
+                Log.WARNING( $"動画のデコードに失敗しました。[{ファイルパス.変数付きパス}" );
+                this._VideoSource = null;
+                return;
+            }
+
             this._ファイルから生成した = true;
         }
         public Video( IVideoSource videoSource )
@@ -38,7 +48,7 @@ namespace FDK
 
         public void 再生を開始する( double 再生開始時刻sec = 0.0 )
         {
-            this._VideoSource.Start( 再生開始時刻sec );
+            this._VideoSource?.Start( 再生開始時刻sec );
 
             this._再生タイマ = new QPCTimer();
             this._再生タイマ.リセットする( QPCTimer.秒をカウントに変換して返す( 再生開始時刻sec ) );
@@ -48,7 +58,7 @@ namespace FDK
 
         public void 再生を終了する()
         {
-            this._VideoSource.Stop();
+            this._VideoSource?.Stop();
 
             this._最後に描画したフレーム?.Dispose();
             this._最後に描画したフレーム = null;

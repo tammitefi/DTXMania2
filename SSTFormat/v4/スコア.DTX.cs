@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SSTFormat.v3
+namespace SSTFormat.v4
 {
     public partial class スコア
     {
@@ -26,7 +26,7 @@ namespace SSTFormat.v3
             ///		ファイルから指定された種別のデータを読み込み、スコアを生成して返す。
             ///		読み込みに失敗した場合は、何らかの例外を発出する。
             /// </summary>
-            public static スコア ファイルから生成する( string ファイルパス, データ種別 データ種別 = データ種別.拡張子から判定, bool ヘッダだけ = false )
+            public static スコア ファイルから生成する( string ファイルの絶対パス, データ種別 データ種別 = データ種別.拡張子から判定, bool ヘッダだけ = false )
             {
                 if( データ種別 == データ種別.拡張子から判定 )
                 {
@@ -40,7 +40,7 @@ namespace SSTFormat.v3
                         { ".bme", データ種別.BME },
                     };
 
-                    string ファイルの拡張子 = Path.GetExtension( ファイルパス ).ToLower();
+                    string ファイルの拡張子 = Path.GetExtension( ファイルの絶対パス ).ToLower();
 
                     // マップから、拡張子に対応するデータ種別を取得する。
                     if( !( 拡張子toデータ種別マップ.TryGetValue( ファイルの拡張子, out データ種別 確定したデータ種別 ) ) )
@@ -57,14 +57,14 @@ namespace SSTFormat.v3
                 string 全入力文字列 = null;
 
                 // ファイルの内容を一気読み。
-                using( var sr = new StreamReader( ファイルパス, Encoding.GetEncoding( 932/*Shift-JIS*/ ) ) )
+                using( var sr = new StreamReader( ファイルの絶対パス, Encoding.GetEncoding( 932/*Shift-JIS*/ ) ) )
                     全入力文字列 = sr.ReadToEnd();
 
                 // 読み込んだ内容でスコアを生成する。
                 var score = 文字列から生成する( 全入力文字列, データ種別, ヘッダだけ );
 
                 // ファイルから読み込んだ場合のみ、このメンバが有効。
-                score.譜面ファイルパス = ファイルパス;
+                score.譜面ファイルの絶対パス = ファイルの絶対パス;
 
                 return score;
             }
@@ -80,7 +80,7 @@ namespace SSTFormat.v3
 
                 現在の.状態をリセットする();
                 現在の.スコア = new スコア();
-                現在の.スコア.譜面ファイルパス = null;    // ファイルから読み込んだ場合のみ、このメンバが有効。
+                現在の.スコア.譜面ファイルの絶対パス = null;    // ファイルから読み込んだ場合のみ、このメンバが有効。
                 現在の.データ種別 = データ種別;
 
                 全入力文字列 = 全入力文字列.Replace( '\t', ' ' );   // TAB は空白に置換しておく。
@@ -255,7 +255,7 @@ namespace SSTFormat.v3
                                     // それをチップに設定する。
                                     var DTX音量 = Math.Min( Math.Max( 現在の.VOLUME定義マップ[ chip.チップサブID ], 0 ), 100 );    // 無音:0 ～ 100:原音
 
-                                    chip.音量 = 
+                                    chip.音量 =
                                         ( 100 == DTX音量 ) ? チップ.最大音量 :
                                         (int) ( DTX音量 * チップ.最大音量 / 100.0 ) + 1;
                                 }
@@ -265,13 +265,15 @@ namespace SSTFormat.v3
                     //----------------
                     #endregion
 
-                    スコア._後処理を行う( 現在の.スコア );
+                    スコア._スコア読み込み時の後処理を行う( 現在の.スコア );
                 }
 
                 return 現在の.スコア;
             }
 
 
+            #region " 解析時の状態変数。(static) "
+            //----------------
             /// <summary>
             ///     解析時の状態を保持するクラス。
             ///     static クラスなので、利用前には <see cref="状態をリセットする"/> を呼び出して前回の解析状態をクリアすること。
@@ -378,7 +380,8 @@ namespace SSTFormat.v3
                     小節長倍率マップ = new SortedDictionary<int, double>();
                 }
             }
-
+            //----------------
+            #endregion
 
             internal static bool _行をコマンドとパラメータとコメントに分解する( string 行, out string コマンド, out string コマンドzzなし, out int zz16進数, out int zz36進数, out string パラメータ, out string コメント )
             {
@@ -468,7 +471,7 @@ namespace SSTFormat.v3
             }
             internal static void _コマンド_PATH_WAV()
             {
-                現在の.スコア.PATH_WAV = 現在の.パラメータ;
+                現在の.スコア._PATH_WAV = 現在の.パラメータ;
             }
             internal static void _コマンド_WAVzz()
             {
@@ -484,7 +487,8 @@ namespace SSTFormat.v3
                 }
 
                 // ここでは、PATH_WAV はまだ反映しない。
-                現在の.スコア.WAVリスト[ 現在の.zz36進数 ] = (現在の.パラメータ, true);   // あれば上書き、なければ追加
+                現在の.スコア.WAVリスト[ 現在の.zz36進数 ] =  // あれば上書き、なければ追加
+                    (現在の.パラメータ, true);                // 既定では多重再生 ON
             }
             internal static void _コマンド_PANzz_WAVPANzz()
             {
@@ -686,6 +690,21 @@ namespace SSTFormat.v3
 
                         switch( 現在の.チャンネル番号 )
                         {
+                            // 多重再生禁止サウンド
+                            case 0x01:                                                                               // BGM
+                            case 0x61: case 0x62: case 0x63: case 0x64: case 0x65:                                   // SE
+                            case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27:  // チップ配置（ギター）
+                            case 0xA0: case 0xA1: case 0xA2: case 0xA3: case 0xA4: case 0xA5: case 0xA6: case 0xA7:  // チップ配置（ベース）
+                                // WAVの多重再生を OFF にする。
+                                {
+                                    int WAV番号 = オブジェクト値;
+                                    var wavList = 現在の.スコア.WAVリスト;
+
+                                    if( wavList.ContainsKey( WAV番号 ) )
+                                        wavList[ WAV番号 ] = (wavList[ WAV番号 ].ファイルパス, 多重再生する: false);
+                                }
+                                break;
+
                             // BPM
                             case 0x03:
                                 chip.BPM = オブジェクト値 + 現在の.BASEBPM;  // 引き当てないので、ここでBASEBPMを加算する。
@@ -695,21 +714,6 @@ namespace SSTFormat.v3
                             case 0x08:
                                 chip.BPM = 0.0; // あとで引き当てる。BASEBPMは引き当て時に加算する。
                                 現在の.BPM参照マップ.Add( chip, オブジェクト値 );  // 引き当てを予約。
-                                break;
-
-                            // SE1～5
-                            case int ch when( 0x61 <= ch && ch <= 0x65 ):
-                                _WAVの多重再生を無効にする( オブジェクト値 );
-                                break;
-
-                            // チップ配置（ギター）
-                            case int ch when( 0x20 <= ch && ch <= 0x27 ):
-                                _WAVの多重再生を無効にする( オブジェクト値 );
-                                break;
-
-                            // チップ配置（ベース）
-                            case int ch when( 0xA0 <= ch && ch <= 0xA7 ):
-                                _WAVの多重再生を無効にする( オブジェクト値 );
                                 break;
 
                             // 空打ち（ドラム）
@@ -729,15 +733,6 @@ namespace SSTFormat.v3
                                 現在の.スコア.空打ちチップマップ[ レーン種別.LeftCrash ] = オブジェクト値;                // LeftCrash と Splash は共有
                                 現在の.スコア.空打ちチップマップ[ レーン種別.Splash ] = オブジェクト値;
                                 break;
-                        }
-
-                        // ローカル関数
-                        void _WAVの多重再生を無効にする( int WAV番号 )
-                        {
-                            var dicWAV = 現在の.スコア.WAVリスト;
-
-                            if( dicWAV.ContainsKey( WAV番号 ) )
-                                dicWAV[ WAV番号 ] = (dicWAV[ WAV番号 ].ファイルパス, 多重再生する: false);
                         }
                     }
                     //----------------

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using FDK;
-using SSTFormatCurrent = SSTFormat.v3;
+using SSTFormatCurrent = SSTFormat.v4;
 
 namespace DTXMania.データベース.曲
 {

@@ -71,7 +71,7 @@ namespace DTXMania.曲
                             this.難易度[ i ].label = block.Label[ i ];
                             this.子ノードリスト.Add( this.MusicNodes[ i ] );
 
-                            var song = songdb.Songs.Where( ( r ) => ( r.Path == this.MusicNodes[ i ].曲ファイルパス.変数なしパス ) ).SingleOrDefault();
+                            var song = songdb.Songs.Where( ( r ) => ( r.Path == this.MusicNodes[ i ].曲ファイルの絶対パス.変数なしパス ) ).SingleOrDefault();
                             this.難易度[ i ].level = ( null != song ) ? (float) song.Level : 0.00f;
                         }
                         catch
