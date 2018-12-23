@@ -60,7 +60,7 @@ namespace SSTFormat.v4
                     #region " (B) 前方互換 "
                     //----------------
                     {
-                        var v3score = v3.スコア.ファイルから生成する( SSTFファイルの絶対パス );
+                        var v3score = v3.スコア.SSTF.ファイルから生成する( SSTFファイルの絶対パス );
 
                         score = _v3から移行する( v3score );
 
@@ -189,114 +189,12 @@ namespace SSTFormat.v4
             }
 
 
-            // private
-
-            /// <summary>
-            ///     指定された行が SSTFVersion コメントであるかを判定し、そうであるならそのバージョンを解析して返す。
-            ///     それ以外は null を返す。
-            /// </summary>
-            internal static Version _行にSSTFVersionがあるなら解析して返す( string 行 )
-            {
-                try
-                {
-                    行 = 行.Trim();
-
-                    int コメント識別子の位置 = 行.IndexOf( '#' );    // 見つからなければ -1
-
-                    if( 0 <= コメント識別子の位置 )
-                    {
-                        var コメント文 = 行.Substring( コメント識別子の位置 + 1 ).Trim();
-
-                        if( コメント文.ToLower().StartsWith( "sstfversion" ) )
-                        {
-                            return new Version( コメント文.Substring( "sstfversion".Length ) );  // 生成失敗なら例外発生
-                        }
-                    }
-                }
-                catch
-                {
-                }
-                return null;
-            }
-
-            /// <summary>
-            ///     v3 のスコアをもとに、現行版のスコアを新規生成して返す。
-            /// </summary>
-            private static スコア _v3から移行する( v3.スコア v3score )
-            {
-                var score = new スコア();
-
-                score.曲名 = v3score.曲名;
-                score.アーティスト名 = v3score.アーティスト名;
-                score.説明文 = v3score.説明文;
-                score.難易度 = v3score.難易度;
-                score.プレビュー画像ファイル名 = v3score.プレビュー画像ファイル名;
-                score.プレビュー音声ファイル名 = v3score.プレビュー音声ファイル名;
-                score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
-                score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
-                //score.譜面ファイルパス = ...;  --> 呼び出し元で設定すること。
-                score._PATH_WAV = v3score.PATH_WAV;
-
-                score.チップリスト = new List<チップ>();
-                foreach( var v3chip in v3score.チップリスト )
-                    score.チップリスト.Add( new チップ( v3chip ) );
-
-                score.小節長倍率リスト = new List<double>();
-                foreach( var v3scale in v3score.小節長倍率リスト )
-                    score.小節長倍率リスト.Add( v3scale );
-
-                score.小節メモリスト = new Dictionary<int, string>();
-                foreach( var kvp in v3score.小節メモリスト )
-                    score.小節メモリスト.Add( kvp.Key, kvp.Value );
-
-                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
-                foreach( var v3kara in v3score.空打ちチップマップ )
-                    score.空打ちチップマップ.Add( (レーン種別) ( (int) v3kara.Key ), v3kara.Value );
-
-                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
-                foreach( var v3wav in v3score.WAVリスト )
-                    score.WAVリスト.Add( v3wav.Key, v3wav.Value );
-
-                score.AVIリスト = new Dictionary<int, string>();
-                foreach( var v3avi in v3score.AVIリスト )
-                    score.AVIリスト.Add( v3avi.Key, v3avi.Value );
-
-                return score;
-            }
-
-            private static int _最大公約数を返す( int m, int n )
-            {
-                if( ( 0 > m ) || ( 0 > n ) )
-                    throw new Exception( "引数に負数は指定できません。" );
-
-                if( 0 == m )
-                    return n;
-
-                if( 0 == n )
-                    return m;
-
-                // ユーグリッドの互除法
-                int r;
-                while( ( r = m % n ) != 0 )
-                {
-                    m = n;
-                    n = r;
-                }
-
-                return n;
-            }
-            private static int _最小公倍数を返す( int m, int n )
-            {
-                if( ( 0 >= m ) || ( 0 >= n ) )
-                    throw new Exception( "引数に0以下の数は指定できません。" );
-
-                return ( m * n / _最大公約数を返す( m, n ) );
-            }
-
-
             // 行解析
 
-            private static class 現在の    // 解析時の状態変数。
+
+            #region " 解析に使う状態変数。(static) "
+            //----------------
+            private static class 現在の
             {
                 public static スコア スコア;
                 public static int 行番号;
@@ -315,6 +213,8 @@ namespace SSTFormat.v4
                     可視 = true;
                 }
             }
+            //----------------
+            #endregion
 
             internal static スコア _全行解析する( ref string 全入力文字列, bool ヘッダだけ = false )
             {
@@ -1522,6 +1422,155 @@ namespace SSTFormat.v4
                 //----------------
                 #endregion
             };
+
+
+            // マイグレーション
+
+            /// <summary>
+            ///     v3 のスコアをもとに、現行版のスコアを新規生成して返す。
+            /// </summary>
+            private static スコア _v3から移行する( v3.スコア v3score )
+            {
+                var score = new スコア();
+
+                score.曲名 = v3score.曲名;
+                score.アーティスト名 = v3score.アーティスト名;
+                score.説明文 = v3score.説明文;
+                score.難易度 = v3score.難易度;
+                score.プレビュー画像ファイル名 = v3score.プレビュー画像ファイル名;
+                score.プレビュー音声ファイル名 = v3score.プレビュー音声ファイル名;
+                score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
+                score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
+                //score.譜面ファイルパス = ...;  --> 呼び出し元で設定すること。
+                score._PATH_WAV = v3score.PATH_WAV;
+
+                score.チップリスト = new List<チップ>();
+                foreach( var v3chip in v3score.チップリスト )
+                    score.チップリスト.Add( new チップ( v3chip ) );
+
+                score.小節長倍率リスト = new List<double>();
+                foreach( var v3scale in v3score.小節長倍率リスト )
+                    score.小節長倍率リスト.Add( v3scale );
+
+                score.小節メモリスト = new Dictionary<int, string>();
+                foreach( var kvp in v3score.小節メモリスト )
+                    score.小節メモリスト.Add( kvp.Key, kvp.Value );
+
+                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
+                foreach( var v3kara in v3score.空打ちチップマップ )
+                    score.空打ちチップマップ.Add( (レーン種別) ( (int) v3kara.Key ), v3kara.Value );
+
+                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+                foreach( var v3wav in v3score.WAVリスト )
+                    score.WAVリスト.Add( v3wav.Key, v3wav.Value );
+
+                score.AVIリスト = new Dictionary<int, string>();
+                foreach( var v3avi in v3score.AVIリスト )
+                    score.AVIリスト.Add( v3avi.Key, v3avi.Value );
+
+
+                #region " 背景動画IDはBGMに改名され、新しくBGMVが追加された。"
+                //----------------
+                // (1) 背景動画ID は、BGM/BGVファイル名に格納する。
+                score.BGVファイル名 = v3score.背景動画ID;
+                score.BGMファイル名 = v3score.背景動画ID;
+
+                // (2) BGVファイル名 が有効な場合、
+                if( !string.IsNullOrEmpty( score.BGVファイル名 ) )
+                {
+                    // #AVI01 に登録。
+                    score.AVIリスト[ 1 ] = score.BGVファイル名;
+
+                    // チップは、v3.チップ種別.背景動画 が v4.チップ種別.BGV に改名されているので、それをそのまま使う。
+                }
+
+                // (3) BGMファイル名 が有効な場合、
+                if( !string.IsNullOrEmpty( score.BGMファイル名 ) )
+                {
+                    // #WAV01 に登録。
+                    score.WAVリスト[ 1 ] = (score.BGMファイル名, false);
+
+                    // BGV チップ と同じ場所に BGM チップを追加する。
+                    foreach( var chip in score.チップリスト )
+                    {
+                        if( chip.チップ種別 == チップ種別.BGV )
+                        {
+                            var bgmChip = (チップ) chip.Clone();
+                            bgmChip.チップ種別 = チップ種別.BGM;  // チップ種別以外は共通
+
+                            score.チップリスト.Add( bgmChip );
+                        }
+                    }
+
+                    // ソート。
+                    score.チップリスト.Sort();
+                }
+                //----------------
+                #endregion
+
+                return score;
+            }
+
+
+            // private
+
+            private static int _最大公約数を返す( int m, int n )
+            {
+                if( ( 0 > m ) || ( 0 > n ) )
+                    throw new Exception( "引数に負数は指定できません。" );
+
+                if( 0 == m )
+                    return n;
+
+                if( 0 == n )
+                    return m;
+
+                // ユーグリッドの互除法
+                int r;
+                while( ( r = m % n ) != 0 )
+                {
+                    m = n;
+                    n = r;
+                }
+
+                return n;
+            }
+
+            private static int _最小公倍数を返す( int m, int n )
+            {
+                if( ( 0 >= m ) || ( 0 >= n ) )
+                    throw new Exception( "引数に0以下の数は指定できません。" );
+
+                return ( m * n / _最大公約数を返す( m, n ) );
+            }
+
+            /// <summary>
+            ///     指定された行が SSTFVersion コメントであるかを判定し、そうであるならそのバージョンを解析して返す。
+            ///     それ以外は null を返す。
+            /// </summary>
+            internal static Version _行にSSTFVersionがあるなら解析して返す( string 行 )
+            {
+                try
+                {
+                    行 = 行.Trim();
+
+                    int コメント識別子の位置 = 行.IndexOf( '#' );    // 見つからなければ -1
+
+                    if( 0 <= コメント識別子の位置 )
+                    {
+                        var コメント文 = 行.Substring( コメント識別子の位置 + 1 ).Trim();
+
+                        if( コメント文.ToLower().StartsWith( "sstfversion" ) )
+                        {
+                            return new Version( コメント文.Substring( "sstfversion".Length ) );  // 生成失敗なら例外発生
+                        }
+                    }
+                }
+                catch
+                {
+                }
+                return null;
+            }
         }
     }
 }

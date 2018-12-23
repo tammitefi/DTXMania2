@@ -187,7 +187,7 @@ Part=3; Lane=HiHat; Resolution=1; Chips=0;  # HHClose
             //----------------
             #endregion
 
-            #region " PATH_WAV, BGV, BGM "
+            #region " PATH_WAV "
             //----------------
             {
                 // SSTF では #PATH_WAV コマンドには対応しない。
@@ -203,10 +203,15 @@ Part=3; Lane=HiHat; Resolution=1; Chips=0;  # HHClose
 " );
                 score.譜面ファイルの絶対パス = @"D:\SSTF\Demo\score.sstf";
                 Assert.AreEqual( @"D:\SSTF\Demo", score.PATH_WAV ); // ファイルからの生成の場合 → ファイルのあるフォルダとなる
+            }
+            //----------------
+            #endregion
 
-
+            #region " PATH_WAV, BGV, BGM "
+            //----------------
+            {
                 // BGV と BGM の指定
-                score = スコア.SSTF.文字列から生成する( @"# SSTFVersion 4.0.0.0
+                var score = スコア.SSTF.文字列から生成する( @"# SSTFVersion 4.0.0.0
 BGV=bg_movie.mp4
 BGM=bg_sound.wav
 " );
@@ -216,6 +221,16 @@ BGM=bg_sound.wav
                 Assert.AreEqual( @"bg_sound.wav", score.BGMファイル名 );
                 Assert.AreEqual( @"bg_movie.mp4", score.AVIリスト[ 1 ] );                // SSTF では、BGV は #AVI01 に登録される。
                 Assert.AreEqual( @"bg_sound.wav", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
+
+                // v3 の背景動画ID は、v4 の BGM/BGV に格納される。
+                score = スコア.SSTF.文字列から生成する( @"# SSTFVersion 3.4.0.0
+Video=bg_video.mp4
+" );
+                score.譜面ファイルの絶対パス = null;
+                Assert.AreEqual( @"bg_video.mp4", score.BGVファイル名 ); // BGV も BGM も同じファイル名が入る。
+                Assert.AreEqual( @"bg_video.mp4", score.BGMファイル名 );
+                Assert.AreEqual( @"bg_video.mp4", score.AVIリスト[ 1 ] );                // SSTF では、BGV は #AVI01 に登録される。
+                Assert.AreEqual( @"bg_video.mp4", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
             }
             //----------------
             #endregion

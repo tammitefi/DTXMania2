@@ -204,7 +204,7 @@ namespace SSTFormat.v4
         /// </summary>
         public チップ( v3.チップ v3chip )
         {
-            this.チップ種別 = v3chip.チップ種別.ToV4();
+            this.チップ種別 = (チップ種別) ( (int) v3chip.チップ種別 );    // 数値で継承
             this.小節番号 = v3chip.小節番号;
             this.小節内位置 = v3chip.小節内位置;
             this.小節解像度 = v3chip.小節解像度;

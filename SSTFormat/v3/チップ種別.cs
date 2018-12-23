@@ -278,21 +278,4 @@ namespace SSTFormat.v3
 
         // ※現時点の最終値: 38
     }
-
-    /// <summary>
-    ///		拡張メソッド。
-    /// </summary>
-    public static class チップ種別Extensions
-    {
-        /// <summary>
-        ///		SSTFormat.v3.チップ種別 を、SSTFormat.v4.チップ種別 に変換して返す。
-        /// </summary>
-        public static v4.チップ種別 ToV4( this チップ種別 v3type )
-        {
-            if( v3type == v3.チップ種別.背景動画 )
-                return v4.チップ種別.BGV;                // 改名。
-            else
-                return (v4.チップ種別) ( (int) v3type );
-        }
-    }
 }
