@@ -2572,8 +2572,8 @@ namespace SSTFEditor
                 // 編集モードの場合、カーソルのgrid位置を再計算。
                 if( this.編集モードである )
                 {
-                    this.編集モード.MouseMove(
-                        new MouseEventArgs( MouseButtons.None, 0, this.編集モード.現在のチップカーソル領域.X, this.編集モード.現在のチップカーソル領域.Y, 0 ) );
+                    var cp = this.pictureBox譜面パネル.PointToClient( Cursor.Position );
+                    this.編集モード.MouseMove( new MouseEventArgs( MouseButtons.None, 0, cp.X, cp.Y, 0 ) );
                 }
 
                 // メモ用小節番号を再計算。
