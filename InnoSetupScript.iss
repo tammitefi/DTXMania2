@@ -79,6 +79,7 @@ Source: "{#MyAppBin}\x86\*"; DestDir: "{app}\x86"; Flags: ignoreversion recurses
 Source: "{#MyAppBin}\*.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "{#MyAppBin}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "{#MyEditorAppBin}\{#MyEditorExeName}"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "{#MyEditorAppBin}\ja-JP\*"; DestDir: "{app}\ja-JP"; Flags: ignoreversion recursesubdirs
 
 ; {userappdata} → インストールユーザの AppData フォルダ。（例："C:\users\<ユーザ名>\AppData\Roaming\<アプリ名>"）
 ;Source: "{#MyAppBin}\appdata_default\*"; DestDir: "{userappdata}\{#MyAppFolderName}"; Flags: ignoreversion
