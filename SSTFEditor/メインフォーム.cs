@@ -1528,6 +1528,29 @@ namespace SSTFEditor
 
         private void _ファイルを読み込む( string ファイル名 )
         {
+            #region " .sstf 以外のファイルの場合、SSTF形式でインポートする旨を表示する。"
+            //----------------
+            {
+                var 拡張子 = Path.GetExtension( ファイル名 ).ToLower();
+
+                if( 拡張子 != ".sstf" )
+                {
+                    // [編集中のデータを保存しますか？] ダイアログを表示。
+                    var result = MessageBox.Show(
+                        Properties.Resources.MSG_SSTF形式に変換します,
+                        Properties.Resources.MSG_確認ダイアログのタイトル,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question,
+                        MessageBoxDefaultButton.Button1 );
+
+                    // No なら何もしない。
+                    if( DialogResult.No == result )
+                        return;
+                }
+            }
+            //----------------
+            #endregion
+
             this._エディタを初期化する();
 
             #region " [読み込み中です] ポップアップを表示する。"

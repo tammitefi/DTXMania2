@@ -120,6 +120,9 @@
   <data name="MSG_BPM選択ダイアログの説明文" xml:space="preserve">
     <value>BPM値を設定して下さい。</value>
   </data>
+  <data name="MSG_SSTF形式に変換します" xml:space="preserve">
+    <value>SSTF形式に変換して読み込みます。よろしいですか？</value>
+  </data>
   <data name="MSG_しばらくお待ち下さい" xml:space="preserve">
     <value>しばらくお待ち下さい。</value>
   </data>

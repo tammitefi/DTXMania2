@@ -187,6 +187,15 @@ namespace SSTFEditor.Properties {
         }
         
         /// <summary>
+        ///   Are you sure you want to load it and convert to SSTFormat? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MSG_SSTF形式に変換します {
+            get {
+                return ResourceManager.GetString("MSG_SSTF形式に変換します", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Error に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MSG_エラーダイアログのタイトル {
