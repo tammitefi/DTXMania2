@@ -129,6 +129,7 @@ namespace FDK
             using( var パスジオメトリ = new PathGeometry( factory ) )
             {
                 // グリフ実行の輪郭をパスジオメトリとして取得。
+
                 using( var sink = パスジオメトリ.Open() )
                 {
                     glyphRun.FontFace.GetGlyphRunOutline(
@@ -172,7 +173,7 @@ namespace FDK
 
                     var renderTarget =
                         drawingEffect.renderTarget ??                    // 指定されたレンダーターゲットを使う。
-                        グラフィックデバイス.Instance.D2DDeviceContext;   // 指定がなければ既定のDC。
+                        グラフィックデバイス.Instance.D2DDeviceContext;  // 指定がなければ既定のDC。
 
                     this._現在の変換行列 = renderTarget.Transform;
                     this._現在のDPI = renderTarget.DotsPerInch.Width;
@@ -200,6 +201,7 @@ namespace FDK
                     }
                     //----------------
                     #endregion
+
                     #region " 文字を描画。"
                     //----------------
                     switch( drawingEffect )
@@ -324,9 +326,13 @@ namespace FDK
 
 
         private WeakReference<Factory> _wrFactory;
+
         private Color4 _既定の文字色;
+
         private Color4 _既定の背景色;
+
         private Matrix3x2 _現在の変換行列 = Matrix3x2.Identity;
+
         private float _現在のDPI = 96f;
     }
 }

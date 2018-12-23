@@ -18,6 +18,7 @@ namespace FDK
             : base( 画像ファイルパス, BindFlags.RenderTarget | BindFlags.ShaderResource )
         {
         }
+
         public 描画可能テクスチャ( Size2F サイズ )
             : base( サイズ, BindFlags.RenderTarget | BindFlags.ShaderResource )
         {
@@ -38,6 +39,7 @@ namespace FDK
                 this._Bitmap = new Bitmap1( グラフィックデバイス.Instance.D2DDeviceContext, dxgiSurface, bmpProp );
             }
         }
+
         protected override void On非活性化()
         {
             this._Bitmap?.Dispose();
@@ -70,6 +72,7 @@ namespace FDK
 
             } );
         }
+
 
         /// <summary>
         ///     テクスチャとメモリを共有するビットマップ。

@@ -50,35 +50,44 @@ namespace DTXMania
         public static ユーザ管理 ユーザ管理 { get; protected set; }
 
 
-        public static 曲ツリー 曲ツリー { get; set; }   // ビュアーモード時は未使用。
+        public static 曲ツリー 曲ツリー { get; set; }            // ビュアーモード時は未使用。
 
-        public static MusicNode ビュアー用曲ノード { get; set; } // ビュアーモードでのみ使用。
+        public static MusicNode ビュアー用曲ノード { get; set; } // ビュアーモード時のみ使用。
 
         public static MusicNode 演奏曲ノード
             => App.ビュアーモードである ? App.ビュアー用曲ノード : App.曲ツリー.フォーカス曲ノード; // MusicNode 以外は null が返される
 
+        /// <summary>
+        ///     現在演奏中のスコア。
+        ///     選曲画面で選曲するたびに更新される。
+        /// </summary>
         public static スコア 演奏スコア { get; set; }
 
+        /// <summary>
+        ///     <see cref="演奏スコア"/> に対応して生成されたWAVサウンドインスタンスの管理。
+        /// </summary>
         public static WAV管理 WAV管理 { get; set; }
 
+        /// <summary>
+        ///     <see cref="演奏スコア"/>  に対応して生成されたAVI動画インスタンスの管理。
+        /// </summary>
         public static AVI管理 AVI管理 { get; set; }
+
 
         public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
 
         public static bool ウィンドウがアクティブではない
         {
-            get
-                => !( App.ウィンドウがアクティブである );
-            set
-                => App.ウィンドウがアクティブである = !( value );
+            get => !( App.ウィンドウがアクティブである );
+            set => App.ウィンドウがアクティブである = !( value );
         }
 
         /// <summary>
-        ///		ウィンドウの表示モード（全画面 or ウィンドウ）を示す。
-        ///		true なら全画面モード、false ならウィンドウモードである。
-        ///		値を set することで、モードを変更することもできる。
+        ///		true なら全画面モード、false ならウィンドウモード。
         /// </summary>
         /// <remarks>
+        ///		ウィンドウの表示モード（全画面 or ウィンドウ）を示す。
+        ///		値を set することで、モードを変更することもできる。
         ///		正確には、「全画面(fullscreen)」ではなく「最大化(maximize)」。
         /// </remarks>
         public new static bool 全画面モード
@@ -88,6 +97,9 @@ namespace DTXMania
         }
 
 
+        /// <summary>
+        ///     コンストラクタ；アプリの初期化
+        /// </summary>
         public App( bool ビュアーモードである )
             : base( 設計画面サイズ: new SizeF( 1920f, 1080f ), 物理画面サイズ: new SizeF( 1280f, 720f ), 深度ステンシルを使う: false )
         {
@@ -117,6 +129,7 @@ namespace DTXMania
 
                 if( App.ビュアーモードである )
                 {
+                    // ビュアーモードなら、前回の位置とサイズを復元する。
                     this.StartPosition = FormStartPosition.Manual;
                     this.Location = App.システム設定.ウィンドウ表示位置Viewerモード用;
                     this.ClientSize = App.システム設定.ウィンドウサイズViewerモード用;
@@ -133,7 +146,7 @@ namespace DTXMania
                 App.ステージ管理 = new ステージ管理();
 
                 App.サウンドデバイス = new SoundDevice( CSCore.CoreAudioAPI.AudioClientShareMode.Shared );
-                App.サウンドデバイス.音量 = 0.5f;
+                App.サウンドデバイス.音量 = 0.5f; // マスタ音量（小:0～1:大）
 
                 App.サウンドタイマ = new SoundTimer( App.サウンドデバイス );
 
@@ -142,22 +155,22 @@ namespace DTXMania
                 App.ユーザ管理 = new ユーザ管理();
                 App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
 
-
                 App.曲ツリー = new 曲ツリー();
 
                 App.ビュアー用曲ノード = null;
 
+                // 以下は選曲されるまで null
                 App.演奏スコア = null;
-
                 App.WAV管理 = null;
+                App.AVI管理 = null;
 
-
+                // WCFサービス用
                 App.サービスメッセージキュー = new ServiceMessageQueue();
 
 
                 this._活性化する();
 
-                // 全画面モード； ビュアーモードでは常にウィンドウモードで起動。
+                // ビュアーモードでは常にウィンドウモードで起動。
                 base.全画面モード = (App.ビュアーモードである)  ? false : App.ユーザ管理.ログオン中のユーザ.全画面モードである;
 
                 // 最初のステージへ遷移する。
@@ -180,6 +193,9 @@ namespace DTXMania
 
                     App.ドラムサウンド?.Dispose();
                     App.ドラムサウンド = null;
+
+                    App.AVI管理?.Dispose();
+                    App.AVI管理 = null;
 
                     App.WAV管理?.Dispose();   // サウンドデバイスより先に開放すること
                     App.WAV管理 = null;
@@ -209,6 +225,9 @@ namespace DTXMania
             }
         }
 
+        /// <summary>
+        ///     メインループ。
+        /// </summary>
         public override void Run()
         {
             RenderLoop.Run( this, () => {
@@ -219,6 +238,8 @@ namespace DTXMania
                 switch( this._AppStatus )
                 {
                     case AppStatus.開始:
+
+                        // アプリは、(1)高速進行タスク と (2)進行描画タスク の２つのスレッドでループを回す。
 
                         // 高速進行タスク起動。
                         this._高速進行ステータス = new TriStateEvent( TriStateEvent.状態種別.OFF );
@@ -260,6 +281,7 @@ namespace DTXMania
 
         protected override void OnKeyDown( KeyEventArgs e )
         {
+            // F11 キーで、全画面／ウィンドウモードを切り替える。
             if( e.KeyCode == Keys.F11 )
             {
                 App.全画面モード = !( App.全画面モード );
@@ -289,6 +311,7 @@ namespace DTXMania
         {
             if( App.ビュアーモードである )
             {
+                // ビュアーモードなら、新しい位置とサイズを記憶しておく。
                 App.システム設定.ウィンドウ表示位置Viewerモード用 = this.Location;
                 App.システム設定.ウィンドウサイズViewerモード用 = this.ClientSize;
             }
@@ -296,11 +319,13 @@ namespace DTXMania
             base.OnResizeEnd( e );
         }
 
+
         // ※ Form イベントの override メソッドは描画スレッドで実行されるため、処理中に進行タスクが呼び出されると困る場合には、進行タスクとの lock を忘れないこと。
         private readonly object _高速進行と描画の同期 = new object();
 
         private enum AppStatus { 開始, 実行中, 終了 };
         private AppStatus _AppStatus = AppStatus.開始;
+
 
         /// <summary>
         ///		進行タスクの状態。
@@ -312,31 +337,35 @@ namespace DTXMania
 
 
         /// <summary>
-        ///		グローバルリソースのうち、グラフィックリソースを持つものについて、活性化がまだなら活性化する。
+        ///		グローバルリソース（Appクラスのstaticメンバ）のうち、
+        ///		グラフィックリソースを持つものについて、活性化がまだなら活性化する。
         /// </summary>
         private void _活性化する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                // 現状、以下の２つ。
                 App.ステージ管理.活性化する();
                 App.曲ツリー.活性化する();
             }
         }
 
         /// <summary>
-        ///		グローバルリソースのうち、グラフィックリソースを持つものについて、活性化中なら非活性化する。
+        ///		グローバルリソース（Appクラスのstaticメンバ）のうち、
+        ///		グラフィックリソースを持つものについて、活性化中なら非活性化する。
         /// </summary>
         private void _非活性化する()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                // 現状、以下の２つ。
                 App.ステージ管理.非活性化する();
                 App.曲ツリー.非活性化する();
             }
         }
 
         /// <summary>
-        ///		高速進行ループの処理内容。
+        ///		高速進行タスクの処理内容。
         /// </summary>
         private void _高速進行タスクエントリ()
         {
@@ -353,7 +382,7 @@ namespace DTXMania
                         break;
 
 					//App.入力管理.すべての入力デバイスをポーリングする();
-					// --> 入力ポーリングの挙動はステージごとに異なるので、それぞれのステージ内で行う。
+					// --> 入力のポーリングはここでは行わない。入力ポーリングの挙動はステージごとに異なるので、それぞれのステージ内で行うこと。
 
                     App.ステージ管理.現在のステージ.高速進行する();
 				}
@@ -367,7 +396,7 @@ namespace DTXMania
         }
 
         /// <summary>
-        ///		進行描画ループの処理内容。
+        ///		進行描画タスクの処理内容。
         /// </summary>
         private void _進行と描画を行う()
         {
@@ -591,7 +620,7 @@ namespace DTXMania
         }
 
         /// <summary>
-        ///		進行タスクを終了し、ウィンドウを閉じ、アプリを終了する。
+        ///		高速進行タスクを終了し、ウィンドウを閉じ、アプリを終了する。
         /// </summary>
         private void _アプリを終了する()
         {

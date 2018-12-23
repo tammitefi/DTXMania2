@@ -32,6 +32,7 @@ namespace FDK
                 }
             }
         }
+
         public string フォント名
         {
             get
@@ -45,6 +46,7 @@ namespace FDK
                 }
             }
         }
+
         public float フォントサイズpt
         {
             get
@@ -58,6 +60,7 @@ namespace FDK
                 }
             }
         }
+
         public FontWeight フォント幅
         {
             get
@@ -71,6 +74,7 @@ namespace FDK
                 }
             }
         }
+
         public FontStyle フォントスタイル
         {
             get
@@ -84,30 +88,19 @@ namespace FDK
                 }
             }
         }
-        public InterpolationMode 補正モード
-        {
-            get;
-            set;
-        } = InterpolationMode.Linear;
-        public RectangleF? 転送元矩形
-        {
-            get;
-            set;
-        } = null;
-        public bool 加算合成
-        {
-            get;
-            set;
-        } = false;
+
+        public InterpolationMode 補正モード { get; set; } = InterpolationMode.Linear;
+
+        public RectangleF? 転送元矩形 { get; set; } = null;
+
+        public bool 加算合成 { get; set; } = false;
+
         /// <summary>
         ///     TextLayout を作る際に使われるレイアウトサイズ[dpx]。
         ///     右揃えや下揃えなどを使う場合には、このサイズを基準にして、文字列の折り返しなどのレイアウトが行われる。
         /// </summary>
-        public Size2F レイアウトサイズdpx
-        {
-            get;
-            set;
-        } = Size2F.Zero;
+        public Size2F レイアウトサイズdpx { get; set; } = Size2F.Zero;
+
         public Color4 前景色
         {
             get
@@ -121,6 +114,7 @@ namespace FDK
                 }
             }
         }
+
         public Color4 背景色
         {
             get
@@ -134,6 +128,7 @@ namespace FDK
                 }
             }
         }
+
         public enum 効果
         {
             /// <summary>
@@ -149,6 +144,7 @@ namespace FDK
             /// </summary>
             縁取り,
         }
+
         public 効果 描画効果
         {
             get
@@ -162,6 +158,7 @@ namespace FDK
                 }
             }
         }
+        
         /// <summary>
         ///		効果が縁取りのときのみ有効。
         /// </summary>
@@ -178,16 +175,11 @@ namespace FDK
                 }
             }
         }
-        public float LineSpacing
-        {
-            get;
-            protected set;
-        }
-        public float Baseline
-        {
-            get;
-            protected set;
-        }
+
+        public float LineSpacing { get; protected set; }
+
+        public float Baseline { get; protected set; }
+
         public WordWrapping WordWrapping
         {
             get
@@ -201,6 +193,7 @@ namespace FDK
                 }
             }
         }
+
         public ParagraphAlignment ParagraphAlignment
         {
             get
@@ -214,6 +207,7 @@ namespace FDK
                 }
             }
         }
+
         public TextAlignment TextAlignment
         {
             get
@@ -227,27 +221,18 @@ namespace FDK
                 }
             }
         }
-        public TextFormat TextFormat
-        {
-            get;
-            protected set;
-        }
-        public TextLayout TextLayout
-        {
-            get;
-            protected set;
-        }
+
+        public TextFormat TextFormat { get; protected set; }
+
+        public TextLayout TextLayout { get; protected set; }
 
         /// <summary>
         ///     実際に作成されたビットマップ画像のサイズ[dpx]。
         ///     右揃えや下揃えなどを指定している場合は、このサイズは <see cref="レイアウトサイズdpx"/> に等しい。
         ///     指定していない場合は、このサイズは <see cref="_表示文字列のサイズdpx"/> に等しい。
         /// </summary>
-        public Size2F 画像サイズdpx
-        {
-            get;
-            protected set;
-        } = Size2F.Zero;
+        public Size2F 画像サイズdpx { get; protected set; } = Size2F.Zero;
+
 
         public 文字列画像()
         {
@@ -269,6 +254,7 @@ namespace FDK
             if( this.表示文字列.Nullでも空でもない() )
                 this._ビットマップを生成または更新する();
         }
+
         protected override void On非活性化()
         {
             this._TextRenderer?.Dispose();
@@ -292,6 +278,7 @@ namespace FDK
 
             this.描画する( dc, 変換行列2D, 変換行列3D, 不透明度0to1 );
         }
+
         public void 描画する( DeviceContext1 dc, Matrix3x2? 変換行列2D = null, Matrix? 変換行列3D = null, float 不透明度0to1 = 1.0f )
         {
             Debug.Assert( this.活性化している );
@@ -346,6 +333,8 @@ namespace FDK
 
             this._ビットマップを生成または更新する();
         }
+
+
         protected void _ビットマップを生成または更新する()
         {
             if( this._TextFormatを更新せよ )
@@ -468,22 +457,37 @@ namespace FDK
 
         protected SharpDX.Direct2D1.BitmapRenderTarget _Bitmap = null;
 
+
         private bool _ビットマップを更新せよ = true;
+
         private bool _TextFormatを更新せよ = true;
+
         private bool _TextLayoutを更新せよ = true;
 
         private string _表示文字列 = null;
+
         private string _フォント名 = "メイリオ";
+
         private float _フォントサイズpt = 20f;
+
         private FontWeight _フォント幅 = FontWeight.Normal;
+
         private FontStyle _フォントスタイル = FontStyle.Normal;
+
         private Color4 _前景色 = Color4.White;
+
         private Color4 _背景色 = Color4.Black;
+
         private 効果 _描画効果 = 効果.通常;
+
         private float _縁のサイズdpx = 6f;
+
         private WordWrapping _WordWrapping = WordWrapping.Wrap;
+
         private ParagraphAlignment _ParagraphAlignment = ParagraphAlignment.Near;
+
         private TextAlignment _TextAlignment = TextAlignment.Leading;
+
         private カスタムTextRenderer _TextRenderer;
 
         /// <summary>

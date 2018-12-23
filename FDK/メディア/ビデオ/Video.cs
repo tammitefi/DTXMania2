@@ -30,6 +30,7 @@ namespace FDK
 
             this._ファイルから生成した = true;
         }
+
         public Video( IVideoSource videoSource )
         {
             this._VideoSource = videoSource;
@@ -77,6 +78,7 @@ namespace FDK
 
             this.描画する( dc, 変換行列2D, 不透明度0to1 );
         }
+
         public void 描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
             if( null == this._VideoSource )
@@ -120,6 +122,7 @@ namespace FDK
 
             this.最後のフレームを再描画する( dc, 変換行列2D, 不透明度0to1 );
         }
+
         public void 最後のフレームを再描画する( DeviceContext1 dc, Matrix3x2 変換行列2D, float 不透明度0to1 = 1.0f )
         {
             if( null == this._最後に描画したフレーム )

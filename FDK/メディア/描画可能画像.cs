@@ -18,11 +18,13 @@ namespace FDK
             : base( 画像ファイルパス )
         {
         }
+
         public 描画可能画像( Size2F サイズ )
             : base( (VariablePath) null )
         {
             this._サイズ = サイズ;
         }
+
         public 描画可能画像( float width, float height )
             : base( (VariablePath) null )
         {
@@ -50,6 +52,7 @@ namespace FDK
                     } );
             }
         }
+
         protected override void On非活性化()
         {
             this._Bitmap?.Dispose();
@@ -88,6 +91,7 @@ namespace FDK
 
             } );
         }
+
 
         private Size2F _サイズ;
     }

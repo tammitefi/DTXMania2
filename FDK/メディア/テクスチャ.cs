@@ -18,34 +18,35 @@ namespace FDK
         /// <summary>
         ///		0:透明～1:不透明
         /// </summary>
-        public float 不透明度
-        {
-            get;
-            set;
-        } = 1f;
-        public bool 加算合成する
-        {
-            get;
-            set;
-        } = false;
-        public Size2F サイズ
-            => this._ShaderResourceViewSize;
+        public float 不透明度 { get; set; } = 1f;
 
+        public bool 加算合成する { get; set; } = false;
+
+        public Size2F サイズ { get; protected set; }
+
+
+        /// <summary>
+        ///     指定した画像ファイルからテクスチャを作成する。
+        /// </summary>
         public テクスチャ( VariablePath 画像ファイルパス, BindFlags bindFlags = BindFlags.ShaderResource )
         {
             this._bindFlags = bindFlags;
 
             // ↓ どちらかを選択的に指定すること。
             this._画像ファイルパス = 画像ファイルパス;  // 選択
-            this.ユーザ指定サイズ = Size2F.Zero;
+            this.ユーザ指定サイズ = Size2F.Zero;        // 非選択
         }
+
+        /// <summary>
+        ///     指定したサイズの、空のテクスチャを作成する。
+        /// </summary>
         public テクスチャ( Size2F サイズ, BindFlags bindFlags = BindFlags.ShaderResource )
         {
             this._bindFlags = bindFlags;
 
             // ↓ どちらかを選択的に指定すること。
-            this._画像ファイルパス = null;
-            this.ユーザ指定サイズ = サイズ;    // 選択
+            this._画像ファイルパス = null;      // 非選択
+            this.ユーザ指定サイズ = サイズ;     // 選択
         }
 
         protected override void On活性化()
@@ -82,7 +83,7 @@ namespace FDK
                     this._bindFlags,
                     this._画像ファイルパス );
                 this._ShaderResourceView = 戻り値.srv;
-                this._ShaderResourceViewSize = 戻り値.viewSize;
+                this.サイズ = 戻り値.viewSize;
                 this.Texture = 戻り値.texture;
             }
             else if( ( 0f < this.ユーザ指定サイズ.Width ) && ( 0f < this.ユーザ指定サイズ.Height ) )
@@ -95,7 +96,7 @@ namespace FDK
                 this._ShaderResourceView = 戻り値.srv;
                 this.Texture = 戻り値.texture;
 
-                this._ShaderResourceViewSize = this.ユーザ指定サイズ;
+                this.サイズ = this.ユーザ指定サイズ;
             }
             else
             {
@@ -104,6 +105,7 @@ namespace FDK
             //----------------
             #endregion
         }
+
         protected override void On非活性化()
         {
             this._ShaderResourceView?.Dispose();
@@ -215,12 +217,16 @@ namespace FDK
 
 
         protected Size2F ユーザ指定サイズ;
+
         protected Texture2D Texture = null;
 
+
         private VariablePath _画像ファイルパス = null;
+
         private SharpDX.Direct3D11.Buffer _ConstantBuffer = null;
+
         private ShaderResourceView _ShaderResourceView = null;
-        private Size2F _ShaderResourceViewSize;
+
         private BindFlags _bindFlags;
 
         private struct ST定数バッファの転送元データ
@@ -379,6 +385,7 @@ namespace FDK
             //----------------
             #endregion
         }
+
         public static void 全インスタンスで共有するリソースを解放する()
         {
             テクスチャ._SamplerState?.Dispose();
@@ -400,11 +407,17 @@ namespace FDK
             テクスチャ._VertexShader = null;
         }
 
+
         private static VertexShader _VertexShader = null;
+
         private static PixelShader _PixelShader = null;
+
         private static BlendState _BlendState通常合成 = null;
+
         private static BlendState _BlendState加算合成 = null;
+
         private static RasterizerState _RasterizerState = null;
+
         private static SamplerState _SamplerState = null;
     }
 }
