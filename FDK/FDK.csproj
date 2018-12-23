@@ -210,6 +210,10 @@
     <Compile Include="メディア\サウンド\SoundTimer.cs" />
     <Compile Include="メディア\サウンド\Sources\XaResampledOnMemoryWaveSource.cs" />
     <Compile Include="メディア\サウンド\Sources\XAOnMemoryWaveSource.cs" />
+    <Compile Include="メディア\ストリーミング\HttpRandomAccessStream.cs" />
+    <Compile Include="メディア\ストリーミング\MediaFoundationStreamingSources.cs" />
+    <Compile Include="メディア\ストリーミング\StreamingVideoSource.cs" />
+    <Compile Include="メディア\ストリーミング\StreamingWaveSource.cs" />
     <Compile Include="メディア\テクスチャ.cs" />
     <Compile Include="メディア\テクスチャフォント.cs" />
     <Compile Include="メディア\ビデオ\Sources\IVideoSource.cs" />
