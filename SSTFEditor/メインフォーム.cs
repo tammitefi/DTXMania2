@@ -1434,6 +1434,7 @@ namespace SSTFEditor
             this.numericUpDownメモ用小節番号.Value = 0;
             this.textBoxメモ.Clear();
             this.textBoxプレビュー音声.Clear();
+            this.textBoxプレビュー画像.Clear();
             //-----------------
             #endregion
             #region " Viewer 再生 "
@@ -1612,6 +1613,12 @@ namespace SSTFEditor
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxサウンド遅延ms.Text = this.譜面.SSTFormatScore.サウンドデバイス遅延ms.ToString();
+
+                this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                this.textBoxプレビュー音声.Text = 譜面.SSTFormatScore.プレビュー音声ファイル名;
+
+                this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                this.textBoxプレビュー画像.Text = 譜面.SSTFormatScore.プレビュー画像ファイル名;
 
                 // ウィンドウのタイトルバーの表示変更（str編集中のファイル名 が確定した後に）
                 this.未保存である = true;     // 以前の状態によらず、確実に更新するようにする。
@@ -3335,7 +3342,7 @@ namespace SSTFEditor
             //-----------------
             var dialog = new OpenFileDialog() {
                 Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,
-                Filter = Properties.Resources.MSG_画像ファイル選択ダイアログのフィルタ,
+                Filter = Properties.Resources.MSG_背景動画ファイル選択ダイアログのフィルタ,
                 FilterIndex = 1,
                 InitialDirectory = this._作業フォルダパス,
             };
@@ -3353,6 +3360,92 @@ namespace SSTFEditor
             this.textBoxプレビュー音声.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
         }
 
+        private void textBoxプレビュー画像_TextChanged( object sender, EventArgs e )
+        {
+            #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
+            //-----------------
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
+            {
+                // 最新のセルの所有者が自分？
+                var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
+
+                if( ( null != cell ) && cell.所有権がある( this.textBoxプレビュー画像 ) )
+                {
+                    // (A) 所有者である → 最新のセルの "変更後の値" を現在のコントロールの値に更新する。
+                    ( (UndoRedo.セル<string>) cell ).変更後の値 = this.textBoxプレビュー画像.Text;
+                }
+                else
+                {
+                    // (B) 所有者ではない → 以下のようにセルを新規追加する。
+                    //    "変更前の値" ← 以前の値
+                    //    "変更後の値" ← 現在の値
+                    //    "所有者ID" ← 対象となるコンポーネントオブジェクト
+                    var cc = new UndoRedo.セル<string>(
+                        所有者ID: this.textBoxプレビュー画像,
+                        Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxプレビュー画像.Text = 変更前;
+                            this.textBoxプレビュー画像.Focus();
+                        },
+                        Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxプレビュー画像.Text = 変更後;
+                            this.textBoxプレビュー画像.Focus();
+                        },
+                        変更対象: null,
+                        変更前の値: this.textBoxプレビュー画像_以前の値,
+                        変更後の値: this.textBoxプレビュー画像.Text,
+                        任意1: null,
+                        任意2: null );
+
+                    this.UndoRedo管理.セルを追加する( cc );
+
+                    // Undo ボタンを有効にする。
+                    this.UndoRedo用GUIのEnabledを設定する();
+                }
+            }
+            //-----------------
+            #endregion
+
+            this.textBoxプレビュー画像_以前の値 = this.textBoxプレビュー画像.Text;      // 以前の値 ← 現在の値
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
+            this.未保存である = true;
+
+            // スコアには随時保存する。
+            譜面.SSTFormatScore.プレビュー画像ファイル名 = this.textBoxプレビュー画像.Text;
+        }
+        private void textBoxプレビュー画像_Validated( object sender, EventArgs e )
+        {
+            // 最新の UndoRedoセル の所有権を放棄する。
+            this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxプレビュー画像 );
+        }
+        private string textBoxプレビュー画像_以前の値 = "";
+
+        private void buttonプレビュー画像参照_Click( object sender, EventArgs e )
+        {
+            #region " ファイルを開くダイアログでファイルを選択する。"
+            //-----------------
+            var dialog = new OpenFileDialog() {
+                Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,
+                Filter = Properties.Resources.MSG_画像ファイル選択ダイアログのフィルタ,
+                FilterIndex = 1,
+                InitialDirectory = this._作業フォルダパス,
+            };
+            var result = dialog.ShowDialog( this );
+
+            // メインフォームを再描画してダイアログを完全に消す。
+            this.Refresh();
+
+            // OKじゃないならここで中断。
+            if( DialogResult.OK != result )
+                return;
+            //-----------------
+            #endregion
+
+            this.textBoxプレビュー画像.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
+        }
         //-----------------
         #endregion
     }

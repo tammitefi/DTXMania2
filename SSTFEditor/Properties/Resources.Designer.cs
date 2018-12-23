@@ -322,7 +322,7 @@ namespace SSTFEditor.Properties {
         }
         
         /// <summary>
-        ///   BGV/BGM files (*.mp4;*.avi;*.wmv;*.mpg;*.mpeg;*.wav;*.ogg;*.xa;*.mp3)|*.mp4;*.avi;*.wmv;*.mpg;*.mprg;*.wav;*.ogg;*.xa;*.mp3 に類似しているローカライズされた文字列を検索します。
+        ///   Media files (*.mp4;*.avi;*.wmv;*.mpg;*.mpeg;*.wav;*.ogg;*.xa;*.mp3)|*.mp4;*.avi;*.wmv;*.mpg;*.mprg;*.wav;*.ogg;*.xa;*.mp3 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MSG_背景動画ファイル選択ダイアログのフィルタ {
             get {

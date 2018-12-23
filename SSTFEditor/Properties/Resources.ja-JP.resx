@@ -165,6 +165,9 @@
   <data name="MSG_編集中のデータを保存しますか" xml:space="preserve">
     <value>編集中のデータを保存しますか？</value>
   </data>
+  <data name="MSG_背景動画ファイル選択ダイアログのフィルタ" xml:space="preserve">
+    <value>メディアファイル (*.mp4;*.avi;*.wmv;*.mpg;*.mpeg;*.wav;*.ogg;*.xa;*.mp3)|*.mp4;*.avi;*.wmv;*.mpg;*.mprg;*.wav;*.ogg;*.xa;*.mp3</value>
+  </data>
   <data name="MSG_該当するチップはありませんでした" xml:space="preserve">
     <value>該当するチップはありませんでした。</value>
   </data>

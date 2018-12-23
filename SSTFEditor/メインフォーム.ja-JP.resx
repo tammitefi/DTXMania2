@@ -117,13 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelプレビュー画像.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 12</value>
+  </data>
+  <data name="labelプレビュー画像.Text" xml:space="preserve">
+    <value>プレビュー画像</value>
+  </data>
+  <data name="labelプレビュー画像.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="buttonプレビュー音声.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="textBoxプレビュー音声.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelプレビュー音声.Size" type="System.Drawing.Size, System.Drawing">
     <value>86, 12</value>
   </data>

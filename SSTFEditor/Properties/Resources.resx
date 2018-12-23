@@ -235,7 +235,7 @@
     <value>exe files (*.exe)|*.exe</value>
   </data>
   <data name="MSG_背景動画ファイル選択ダイアログのフィルタ" xml:space="preserve">
-    <value>BGV/BGM files (*.mp4;*.avi;*.wmv;*.mpg;*.mpeg;*.wav;*.ogg;*.xa;*.mp3)|*.mp4;*.avi;*.wmv;*.mpg;*.mprg;*.wav;*.ogg;*.xa;*.mp3</value>
+    <value>Media files (*.mp4;*.avi;*.wmv;*.mpg;*.mpeg;*.wav;*.ogg;*.xa;*.mp3)|*.mp4;*.avi;*.wmv;*.mpg;*.mprg;*.wav;*.ogg;*.xa;*.mp3</value>
   </data>
   <data name="MSG_SSTF形式に変換します" xml:space="preserve">
     <value>Are you sure you want to load it and convert to SSTFormat?</value>
