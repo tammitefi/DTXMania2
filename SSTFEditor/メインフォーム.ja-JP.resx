@@ -117,7 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="button背景動画参照.ToolTip" xml:space="preserve">
+  <data name="buttonBGM参照.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelBGM.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 12</value>
+  </data>
+  <data name="labelBGM.Text" xml:space="preserve">
+    <value>BGM</value>
+  </data>
+  <data name="labelBGM.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBoxBGM.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="buttonBGV参照.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="textBoxLevel.ToolTip" xml:space="preserve">
@@ -126,7 +142,6 @@
   <data name="trackBarLevel.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelLevel.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 12</value>
   </data>
@@ -149,7 +164,7 @@
     <value />
   </data>
   <data name="labelメモ用小節番号.Location" type="System.Drawing.Point, System.Drawing">
-    <value>147, 214</value>
+    <value>145, 321</value>
   </data>
   <data name="labelメモ用小節番号.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 12</value>
@@ -172,16 +187,16 @@
   <data name="labelメモ小節単位.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="label背景動画.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 12</value>
+  <data name="labelBGV.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 12</value>
   </data>
-  <data name="label背景動画.Text" xml:space="preserve">
-    <value>曲</value>
+  <data name="labelBGV.Text" xml:space="preserve">
+    <value>動画</value>
   </data>
-  <data name="label背景動画.ToolTip" xml:space="preserve">
+  <data name="labelBGV.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="textBox背景動画.ToolTip" xml:space="preserve">
+  <data name="textBoxBGV.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="label説明.Size" type="System.Drawing.Size, System.Drawing">

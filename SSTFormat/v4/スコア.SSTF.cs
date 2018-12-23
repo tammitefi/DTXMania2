@@ -428,22 +428,39 @@ namespace SSTFormat.v4
                 }
                 //----------------
                 #endregion
-                #region " Video "
+                #region " BGV "
                 //----------------
-                if( 行.StartsWith( "Video", StringComparison.OrdinalIgnoreCase ) )
+                if( 行.StartsWith( "BGV", StringComparison.OrdinalIgnoreCase ) )
                 {
                     string[] items = 行.Split( '=' );
 
                     if( 2 != items.Length )
                     {
-                        Trace.TraceError( $"Video の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        Trace.TraceError( $"BGV の書式が不正です。スキップします。[{現在の.行番号}行目]" );
                         return false;
                     }
 
-                    現在の.スコア.背景動画ファイル名 = items[ 1 ].Trim();
+                    現在の.スコア.BGVファイル名 = items[ 1 ].Trim();
+                    現在の.スコア.AVIリスト[ 1 ] = 現在の.スコア.BGVファイル名;            // #AVI01 固定。あれば上書き、なければ追加
 
-                    現在の.スコア.AVIリスト[ 1 ] = 現在の.スコア.背景動画ファイル名;            // #AVI01 固定。あれば上書き、なければ追加
-                    現在の.スコア.WAVリスト[ 1 ] = (現在の.スコア.背景動画ファイル名, false);   // #WAV01 固定。あれば上書き、なければ追加
+                    return true;
+                }
+                //----------------
+                #endregion
+                #region " BGM "
+                //----------------
+                if( 行.StartsWith( "BGM", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    string[] items = 行.Split( '=' );
+
+                    if( 2 != items.Length )
+                    {
+                        Trace.TraceError( $"BGM の書式が不正です。スキップします。[{現在の.行番号}行目]" );
+                        return false;
+                    }
+
+                    現在の.スコア.BGMファイル名 = items[ 1 ].Trim();
+                    現在の.スコア.WAVリスト[ 1 ] = (現在の.スコア.BGMファイル名, false);   // #WAV01 固定。あれば上書き、なければ追加
 
                     return true;
                 }
@@ -698,6 +715,7 @@ namespace SSTFormat.v4
                                 var chip = new チップ() {
                                     小節番号 = 現在の.小節番号,
                                     チップ種別 = 現在の.チップ種別,
+                                    チップサブID = ( 現在の.チップ種別 == チップ種別.背景動画 || 現在の.チップ種別 == チップ種別.BGM ) ? 1 : 0,    // AVI, WAV なら 01 固定。
                                     小節解像度 = 現在の.小節解像度,
                                     音量 = チップ.既定音量,
                                     可視 = 現在の.可視,
@@ -1162,10 +1180,16 @@ namespace SSTFormat.v4
                 sw.WriteLine( $"Level={score.難易度.ToString( "0.00" )}" );
                 //----------------
                 #endregion
-                #region " Video "
+                #region " BGV "
                 //----------------
-                if( !string.IsNullOrEmpty( score.背景動画ファイル名 ) )
-                    sw.WriteLine( $"Video=" + score.背景動画ファイル名 );
+                if( !string.IsNullOrEmpty( score.BGVファイル名 ) )
+                    sw.WriteLine( $"BGV=" + score.BGVファイル名 );
+                //----------------
+                #endregion
+                #region " BGM "
+                //----------------
+                if( !string.IsNullOrEmpty( score.BGMファイル名 ) )
+                    sw.WriteLine( $"BGM=" + score.BGMファイル名 );
                 //----------------
                 #endregion
 
@@ -1404,7 +1428,8 @@ namespace SSTFormat.v4
                 { "tom3",       ( チップ種別.Tom3,        true  ) },
                 { "rightcrash", ( チップ種別.RightCrash,  true  ) },
                 { "bpm",        ( チップ種別.BPM,         false ) },
-                { "song",       ( チップ種別.背景動画,        false ) },
+                { "bgv",        ( チップ種別.背景動画,    false ) },
+                { "bgm",        ( チップ種別.BGM,         false ) },
                 //----------------
                 #endregion
             };
@@ -1429,7 +1454,8 @@ namespace SSTFormat.v4
                 score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
                 score.サウンドデバイス遅延ms = v3score.サウンドデバイス遅延ms;
 
-                score.背景動画ファイル名 = v3score.背景動画ID;
+                score.BGVファイル名 = v3score.背景動画ID;    // v3では、BGV と
+                score.BGMファイル名 = v3score.背景動画ID;    // BGM は同じファイル
                 score.譜面ファイルの絶対パス = v3score.譜面ファイルパス;
                 score._PATH_WAV = v3score.PATH_WAV;
 
@@ -1460,13 +1486,13 @@ namespace SSTFormat.v4
 
                 #region " 背景動画が有効の場合に必要な追加処理。"
                 //----------------
-                if( !string.IsNullOrEmpty( score.背景動画ファイル名 ) )
+                if( !string.IsNullOrEmpty( score.BGVファイル名 ) )
                 {
                     // avi01 に登録。
-                    score.AVIリスト[ 1 ] = score.背景動画ファイル名;
+                    score.AVIリスト[ 1 ] = score.BGVファイル名;
 
                     // wav01 にも登録。
-                    score.WAVリスト[ 1 ] = (score.背景動画ファイル名, false);
+                    score.WAVリスト[ 1 ] = (score.BGVファイル名, false);
 
                     // 背景動画チップと同じ場所にBGMチップを追加する。
                     var 作業前リスト = score.チップリスト;

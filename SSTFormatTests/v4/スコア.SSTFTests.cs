@@ -216,7 +216,7 @@ Video=bg_movie.mp4
 " );
                 score.譜面ファイルの絶対パス = @"D:\SSTF\Demo\score.sstf";
                 Assert.AreEqual( @"D:\SSTF\Demo", score.PATH_WAV );
-                Assert.AreEqual( @"bg_movie.mp4", score.背景動画ファイル名 );
+                Assert.AreEqual( @"bg_movie.mp4", score.BGVファイル名 );
                 Assert.AreEqual( @"bg_movie.mp4", score.AVIリスト[ 1 ] );                // SSTF では、BGV は #AVI01 に登録される。
                 Assert.AreEqual( @"bg_movie.mp4", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
 
@@ -227,7 +227,7 @@ Part = 0;              # 小節 0 の記述を開始
 Lane=Song; Resolution = 128; Chips = 77;    # 位置 77/128 に Song チップを配置する
 " );
                 score.譜面ファイルの絶対パス = null;
-                Assert.AreEqual( @"bg_video.mp4", score.背景動画ファイル名 );
+                Assert.AreEqual( @"bg_video.mp4", score.BGVファイル名 );
                 Assert.AreEqual( @"bg_video.mp4", score.AVIリスト[ 1 ] );                // SSTF では、BGV は #AVI01 に登録される。
                 Assert.AreEqual( @"bg_video.mp4", score.WAVリスト[ 1 ].ファイルパス );   // SSTF では、BGM は #WAV01 に登録される。
                 var chips = score.チップリスト.Where( ( chip ) => ( chip.チップ種別 == チップ種別.背景動画 ) ); // 背景動画チップ

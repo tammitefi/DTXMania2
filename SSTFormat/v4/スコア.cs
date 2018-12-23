@@ -78,15 +78,24 @@ namespace SSTFormat.v4
         // ヘッダ：ファイル・フォルダ情報
 
         /// <summary>
-        ///    この曲の BGV/BGM として再生する動画ファイルの、
+        ///    この曲の BGV として再生する動画ファイルの、
         ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
         /// </summary>
         /// <remarks>
-        ///     同一ファイルをソースとして、<see cref="チップ種別.背景動画"/> のチップで動画が、
-        ///     <see cref="チップ種別.BGM"/> のチップで音声が、それぞれ再生される。
+        ///     このファイルをソースとして、<see cref="チップ種別.背景動画"/> のチップで動画が再生される。
         ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画はAVIリスト、音声はWAVリストを使用する。
         /// </remarks>
-        public string 背景動画ファイル名 { get; set; }
+        public string BGVファイル名 { get; set; }
+
+        /// <summary>
+        ///    この曲の BGM として再生する動画ファイルの、
+        ///    <see cref="譜面ファイルのあるフォルダ"/> からの相対パス。
+        /// </summary>
+        /// <remarks>
+        ///     このファイルをソースとして、<see cref="チップ種別.BGM"/> のチップで音声が再生される。
+        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画はAVIリスト、音声はWAVリストを使用する。
+        /// </remarks>
+        public string BGMファイル名 { get; set; }
 
         /// <summary>
         ///		譜面ファイルの絶対パス。
@@ -262,7 +271,7 @@ namespace SSTFormat.v4
             this.プレビュー音声ファイル名 = null;
             this.プレビュー動画ファイル名 = null;
 
-            this.背景動画ファイル名 = null;
+            this.BGVファイル名 = null;
             this.譜面ファイルの絶対パス = null;
             this._PATH_WAV = "";
 

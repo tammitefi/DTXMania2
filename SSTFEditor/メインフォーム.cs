@@ -1428,6 +1428,8 @@ namespace SSTFEditor
             this.textBoxLevel.Text = "5.00";
             this.trackBarLevel.Value = 500;
             this.textBox説明.Clear();
+            this.textBoxBGV.Clear();
+            this.textBoxBGM.Clear();
             this.numericUpDownメモ用小節番号.Value = 0;
             this.textBoxメモ.Clear();
             //-----------------
@@ -1571,8 +1573,11 @@ namespace SSTFEditor
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBox説明.Text = 譜面.SSTFormatScore.説明文;
 
-                //this._次のプロパティ変更がUndoRedoリストに載らないようにする();
-                //this.textBox背景動画.Text = Path.GetFileName( 譜面.SSTFormatScore.背景動画ID );
+                this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                this.textBoxBGV.Text = Path.GetFileName( 譜面.SSTFormatScore.BGVファイル名 );
+
+                this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                this.textBoxBGM.Text = Path.GetFileName( 譜面.SSTFormatScore.BGMファイル名 );
 
                 this._次のプロパティ変更がUndoRedoリストに載らないようにする();
                 this.textBoxメモ.Text = ( this.譜面.SSTFormatScore.小節メモリスト.ContainsKey( 0 ) ) ? this.譜面.SSTFormatScore.AVIリスト[ 0 ] : "";
@@ -2996,13 +3001,70 @@ namespace SSTFEditor
         }
         private string textBoxLevel_以前の値 = "5.00";
 
-        protected void textBox背景動画_TextChanged( object sender, EventArgs e )
+        protected void textBoxBGV_TextChanged( object sender, EventArgs e )
         {
-            //譜面.SSTFormatScore.背景動画ID = this.textBox背景動画.Text;
-            //this.未保存である = true;
-        }
+            #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
+            //-----------------
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
+            {
+                // 最新のセルの所有者が自分？
+                var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
 
-        protected void button背景動画参照_Click( object sender, EventArgs e )
+                if( ( null != cell ) && cell.所有権がある( this.textBoxBGV ) )
+                {
+                    // (A) 所有者である → 最新のセルの "変更後の値" を現在のコントロールの値に更新する。
+                    ( (UndoRedo.セル<string>) cell ).変更後の値 = this.textBoxBGV.Text;
+                }
+                else
+                {
+                    // (B) 所有者ではない → 以下のようにセルを新規追加する。
+                    //    "変更前の値" ← 以前の値
+                    //    "変更後の値" ← 現在の値
+                    //    "所有者ID" ← 対象となるコンポーネントオブジェクト
+                    var cc = new UndoRedo.セル<string>(
+                        所有者ID: this.textBoxBGV,
+                        Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxBGV.Text = 変更前;
+                            this.textBoxBGV.Focus();
+                        },
+                        Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxBGV.Text = 変更後;
+                            this.textBoxBGV.Focus();
+                        },
+                        変更対象: null,
+                        変更前の値: this.textBoxBGV_以前の値,
+                        変更後の値: this.textBoxBGV.Text,
+                        任意1: null,
+                        任意2: null );
+
+                    this.UndoRedo管理.セルを追加する( cc );
+
+                    // Undo ボタンを有効にする。
+                    this.UndoRedo用GUIのEnabledを設定する();
+                }
+            }
+            //-----------------
+            #endregion
+
+            this.textBoxBGV_以前の値 = this.textBoxBGV.Text;      // 以前の値 ← 現在の値
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
+            this.未保存である = true;
+
+            // スコアには随時保存する。
+            譜面.SSTFormatScore.BGVファイル名 = this.textBoxBGV.Text;
+        }
+        protected void textBoxBGV_Validated( object sender, EventArgs e )
+        {
+            // 最新の UndoRedoセル の所有権を放棄する。
+            this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxBGV );
+        }
+        private string textBoxBGV_以前の値 = "";
+
+        protected void buttonBGV参照_Click( object sender, EventArgs e )
         {
             #region " ファイルを開くダイアログでファイルを選択する。"
             //-----------------
@@ -3023,7 +3085,94 @@ namespace SSTFEditor
             //-----------------
             #endregion
 
-            this.textBox背景動画.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
+            this.textBoxBGV.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
+        }
+
+        protected void textBoxBGM_TextChanged( object sender, EventArgs e )
+        {
+            #region " この変更が Undo/Redo したことによるものではない場合、UndoRedoセルを追加 or 修正する。"
+            //-----------------
+            if( false == UndoRedo.UndoRedo管理.UndoRedoした直後である )
+            {
+                // 最新のセルの所有者が自分？
+                var cell = this.UndoRedo管理.Undoするセルを取得して返す_見るだけ();
+
+                if( ( null != cell ) && cell.所有権がある( this.textBoxBGM ) )
+                {
+                    // (A) 所有者である → 最新のセルの "変更後の値" を現在のコントロールの値に更新する。
+                    ( (UndoRedo.セル<string>) cell ).変更後の値 = this.textBoxBGM.Text;
+                }
+                else
+                {
+                    // (B) 所有者ではない → 以下のようにセルを新規追加する。
+                    //    "変更前の値" ← 以前の値
+                    //    "変更後の値" ← 現在の値
+                    //    "所有者ID" ← 対象となるコンポーネントオブジェクト
+                    var cc = new UndoRedo.セル<string>(
+                        所有者ID: this.textBoxBGM,
+                        Undoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxBGM.Text = 変更前;
+                            this.textBoxBGM.Focus();
+                        },
+                        Redoアクション: ( 変更対象, 変更前, 変更後, 任意1, 任意2 ) => {
+                            this._タブを選択する( タブ種別.基本情報 );
+                            this._次のプロパティ変更がUndoRedoリストに載らないようにする();
+                            this.textBoxBGM.Text = 変更後;
+                            this.textBoxBGM.Focus();
+                        },
+                        変更対象: null,
+                        変更前の値: this.textBoxBGM_以前の値,
+                        変更後の値: this.textBoxBGM.Text,
+                        任意1: null,
+                        任意2: null );
+
+                    this.UndoRedo管理.セルを追加する( cc );
+
+                    // Undo ボタンを有効にする。
+                    this.UndoRedo用GUIのEnabledを設定する();
+                }
+            }
+            //-----------------
+            #endregion
+
+            this.textBoxBGM_以前の値 = this.textBoxBGM.Text;      // 以前の値 ← 現在の値
+            UndoRedo.UndoRedo管理.UndoRedoした直後である = false;
+            this.未保存である = true;
+
+            // スコアには随時保存する。
+            譜面.SSTFormatScore.BGMファイル名 = this.textBoxBGM.Text;
+        }
+        private void textBoxBGM_Validated( object sender, EventArgs e )
+        {
+            // 最新の UndoRedoセル の所有権を放棄する。
+            this.UndoRedo管理.Undoするセルを取得して返す_見るだけ()?.所有権を放棄する( this.textBoxBGM );
+        }
+        private string textBoxBGM_以前の値 = "";
+
+        private void buttonBGM参照_Click( object sender, EventArgs e )
+        {
+            #region " ファイルを開くダイアログでファイルを選択する。"
+            //-----------------
+            var dialog = new OpenFileDialog() {
+                Title = Properties.Resources.MSG_ファイル選択ダイアログのタイトル,
+                Filter = Properties.Resources.MSG_背景動画ファイル選択ダイアログのフィルタ,
+                FilterIndex = 1,
+                InitialDirectory = this._作業フォルダパス,
+            };
+            var result = dialog.ShowDialog( this );
+
+            // メインフォームを再描画してダイアログを完全に消す。
+            this.Refresh();
+
+            // OKじゃないならここで中断。
+            if( DialogResult.OK != result )
+                return;
+            //-----------------
+            #endregion
+
+            this.textBoxBGM.Text = FDK.Folder.絶対パスを相対パスに変換する( this._作業フォルダパス, dialog.FileName );
         }
         //-----------------
         #endregion

@@ -695,13 +695,21 @@ namespace SSTFormat.v4
                             case 0x61: case 0x62: case 0x63: case 0x64: case 0x65:                                   // SE
                             case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27:  // チップ配置（ギター）
                             case 0xA0: case 0xA1: case 0xA2: case 0xA3: case 0xA4: case 0xA5: case 0xA6: case 0xA7:  // チップ配置（ベース）
-                                // WAVの多重再生を OFF にする。
                                 {
                                     int WAV番号 = オブジェクト値;
                                     var wavList = 現在の.スコア.WAVリスト;
 
                                     if( wavList.ContainsKey( WAV番号 ) )
+                                    {
+                                        // WAVの多重再生を OFF にする。
                                         wavList[ WAV番号 ] = (wavList[ WAV番号 ].ファイルパス, 多重再生する: false);
+
+                                        // 初めてのBGMなら、BGMファイルとしてサウンドを登録する。
+                                        if( 0x01 == 現在の.チャンネル番号 && string.IsNullOrEmpty( 現在の.スコア.BGMファイル名 ) )
+                                        {
+                                            現在の.スコア.BGMファイル名 = wavList[ WAV番号 ].ファイルパス;
+                                        }
+                                    }
                                 }
                                 break;
 
@@ -714,6 +722,24 @@ namespace SSTFormat.v4
                             case 0x08:
                                 chip.BPM = 0.0; // あとで引き当てる。BASEBPMは引き当て時に加算する。
                                 現在の.BPM参照マップ.Add( chip, オブジェクト値 );  // 引き当てを予約。
+                                break;
+
+                            // 動画
+                            case 0x54:
+                            case 0x5A:
+                                {
+                                    int AVI番号 = オブジェクト値;
+                                    var aviList = 現在の.スコア.AVIリスト;
+
+                                    if( aviList.ContainsKey( AVI番号 ) )
+                                    {
+                                        // 初めての動画なら、BGVファイルとして動画を登録する。
+                                        if( string.IsNullOrEmpty( 現在の.スコア.BGVファイル名 ) )
+                                        {
+                                            現在の.スコア.BGVファイル名 = aviList[ AVI番号 ];
+                                        }
+                                    }
+                                }
                                 break;
 
                             // 空打ち（ドラム）
