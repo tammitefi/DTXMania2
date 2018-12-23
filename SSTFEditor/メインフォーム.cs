@@ -2477,8 +2477,8 @@ namespace SSTFEditor
             // e.Delta は、スクロールバーを下へ動かしたいときに負、上へ動かしたいときに正となる。
             int 移動すべき行数 = ( -e.Delta * SystemInformation.MouseWheelScrollLines ) / 120;
 
-            // ２行＝１拍とする。
-            int 移動すべき数grid = 移動すべき行数 * ( this.GRID_PER_PART / 8 );
+            // 1行＝0.125拍とする。
+            int 移動すべき数grid = 移動すべき行数 * ( this.GRID_PER_PART / 32 );
 
             // スクロールバーのつまみを移動する。
             int 新しい位置 = this.vScrollBar譜面用垂直スクロールバー.Value + 移動すべき数grid;
