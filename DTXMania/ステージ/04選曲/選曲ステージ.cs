@@ -6,7 +6,7 @@ using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.アイキャッチ;
 using DTXMania.曲;
 

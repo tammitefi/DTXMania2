@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SSTFormat.v1;
 
 namespace SSTFormat.v2
 {
@@ -182,7 +183,7 @@ namespace SSTFormat.v2
         public void CopyFrom( SSTFormat.v1.チップ srcChip )
         {
             // プロパティ(1)
-            this.チップ種別 = this.チップ種別.FromV1( srcChip.チップ種別 );
+            this.チップ種別 = srcChip.チップ種別.ToV2();
             this.小節番号 = srcChip.小節番号;
             this.小節内位置 = srcChip.小節内位置;
             this.小節解像度 = srcChip.小節解像度;

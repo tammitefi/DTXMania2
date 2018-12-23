@@ -30,6 +30,18 @@ namespace FDK
             this._FrameQueue = null;
         }
 
+        public void Start( double 再生開始位置sec )
+        {
+            // todo: 実装する
+            throw new NotImplementedException();
+        }
+
+        public void Stop()
+        {
+            // todo: 実装する
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         ///     次に読みだされるフレームがあれば、その表示予定時刻[100ns単位]を返す。
         ///     フレームがなければ、ブロックせずにすぐ 負数 を返す。

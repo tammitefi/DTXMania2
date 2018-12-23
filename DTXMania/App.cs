@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Windows;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.ステージ;
 using DTXMania.曲;
 using DTXMania.設定;
@@ -61,6 +61,7 @@ namespace DTXMania
 
         public static WAV管理 WAV管理 { get; set; }
 
+        public static AVI管理 AVI管理 { get; set; }
 
         public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
 
@@ -98,9 +99,6 @@ namespace DTXMania
 #endif
                 App.ビュアーモードである = ビュアーモードである;
 
-                this.Text = "DTXMania " + App.リリース番号.ToString( "000" ) + ( App.ビュアーモードである ? " [Viewer]" : "" );
-
-
                 var exePath = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
                 VariablePath.フォルダ変数を追加または更新する( "Exe", $@"{exePath}\" );
                 VariablePath.フォルダ変数を追加または更新する( "System", Path.Combine( exePath, @"System\" ) );
@@ -112,6 +110,19 @@ namespace DTXMania
                 App.乱数 = new Random( DateTime.Now.Millisecond );
 
                 App.システム設定 = システム設定.復元する();
+
+                #region " ウィンドウ初期化（システム設定復元後）"
+                //----------------
+                this.Text = "DTXMania " + App.リリース番号.ToString( "000" ) + ( App.ビュアーモードである ? " [Viewer]" : "" );
+
+                if( App.ビュアーモードである )
+                {
+                    this.StartPosition = FormStartPosition.Manual;
+                    this.Location = App.システム設定.ウィンドウ表示位置Viewerモード用;
+                    this.ClientSize = App.システム設定.ウィンドウサイズViewerモード用;
+                }
+                //----------------
+                #endregion
 
                 App.入力管理 = new 入力管理( this.Handle ) {
                     キーバインディングを取得する = () => App.システム設定.キーバインディング,
@@ -274,6 +285,16 @@ namespace DTXMania
 			base.OnDeactivate( e );
 		}
 
+        protected override void OnResizeEnd( EventArgs e )
+        {
+            if( App.ビュアーモードである )
+            {
+                App.システム設定.ウィンドウ表示位置Viewerモード用 = this.Location;
+                App.システム設定.ウィンドウサイズViewerモード用 = this.ClientSize;
+            }
+
+            base.OnResizeEnd( e );
+        }
 
         // ※ Form イベントの override メソッドは描画スレッドで実行されるため、処理中に進行タスクが呼び出されると困る場合には、進行タスクとの lock を忘れないこと。
         private readonly object _高速進行と描画の同期 = new object();

@@ -44,4 +44,18 @@ namespace SSTFormat.v1
         小節の先頭 = 29,
     }
     // 増減した場合は、チップ.チップの深さ も更新すること。
+
+    /// <summary>
+    ///		拡張メソッド。
+    /// </summary>
+    public static class チップ種別Extensions
+    {
+        /// <summary>
+        ///		SSTFormat.v1.チップ種別 を、SSTFormat.v2.チップ種別 に変換して返す。
+        /// </summary>
+        public static v2.チップ種別 ToV2( this チップ種別 v1type )
+        {
+            return (v2.チップ種別) ( (int) v1type );    // 仕様に変更なし。
+        }
+    }
 }

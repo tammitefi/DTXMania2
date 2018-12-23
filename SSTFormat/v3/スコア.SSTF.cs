@@ -85,14 +85,17 @@ namespace SSTFormat.v3
                 {
                     // ファイル以外から情報を取得する。
 
-                    #region " 背景動画ファイル名を更新する。"
-                    //----------------
-                    score.背景動画ファイル名 =
-                        ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
-                          where スコア._背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
-                          select file ).FirstOrDefault();
-                    //----------------
-                    #endregion
+                    if( string.IsNullOrEmpty( score.背景動画ID ) )
+                    {
+                        #region " 背景動画ファイルを検索する。"
+                        //----------------
+                        score.背景動画ID =
+                            ( from file in Directory.GetFiles( Path.GetDirectoryName( score.譜面ファイルパス ) )
+                              where スコア.背景動画のデフォルト拡張子リスト.Any( 拡張子名 => ( Path.GetExtension( file ).ToLower() == 拡張子名 ) )
+                              select file ).FirstOrDefault();
+                        //----------------
+                        #endregion
+                    }
 
                     スコア._後処理を行う( score );
                 }
@@ -109,7 +112,7 @@ namespace SSTFormat.v3
                 // データのバージョンを確認。
 
                 string 先頭行;
-                using( var sr = new StreamReader( 全入力文字列 ) )
+                using( var sr = new StringReader( 全入力文字列 ) )
                     先頭行 = sr.ReadLine();
 
                 var SSTFバージョン = _行にSSTFVersionがあるなら解析して返す( 先頭行 ) ?? new Version( 1, 0, 0, 0 );  // 既定値
@@ -251,8 +254,7 @@ namespace SSTFormat.v3
                 score.アーティスト名 = "";               // v3で新規追加
                 score.説明文 = v2score.Header.説明文;
                 score.難易度 = 5.0;                      // v3で新規追加
-                score.背景動画ファイル名 = v2score.背景動画ファイル名;
-                score.背景動画ID = null;                 // v3で新規追加
+                score.背景動画ID = v2score.背景動画ファイル名;                 // v3で新規追加
                 score.プレビュー画像ファイル名 = null;        // v3で新規追加
                 score.サウンドデバイス遅延ms = v2score.Header.サウンドデバイス遅延ms;
                 //score.譜面ファイルパス = SSTFファイルパス;  --> 呼び出し元で設定すること。
@@ -265,11 +267,11 @@ namespace SSTFormat.v3
                 foreach( var v2scale in v2score.小節長倍率リスト )
                     score.小節長倍率リスト.Add( v2scale );
 
-                score.メモリスト = new Dictionary<int, string>();
+                score.小節メモリスト = new Dictionary<int, string>();
                 foreach( var kvp in v2score.dicメモ )
-                    score.メモリスト.Add( kvp.Key, kvp.Value );
+                    score.小節メモリスト.Add( kvp.Key, kvp.Value );
 
-                score.空打ちチップ = new Dictionary<レーン種別, int>();    // v3で新規追加
+                score.空打ちチップマップ = new Dictionary<レーン種別, int>();    // v3で新規追加
                 score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>(); // v3で新規追加
                 score.AVIリスト = new Dictionary<int, string>();   // v3で新規追加
                 score.PATH_WAV = @"\";  // v3で新規追加
@@ -279,8 +281,14 @@ namespace SSTFormat.v3
 
             private static int _最大公約数を返す( int m, int n )
             {
-                if( ( 0 >= m ) || ( 0 >= n ) )
-                    throw new Exception( "引数に0以下の数は指定できません。" );
+                if( ( 0 > m ) || ( 0 > n ) )
+                    throw new Exception( "引数に負数は指定できません。" );
+
+                if( 0 == m )
+                    return n;
+
+                if( 0 == n )
+                    return m;
 
                 // ユーグリッドの互除法
                 int r;
@@ -547,18 +555,7 @@ namespace SSTFormat.v3
                         return false;
                     }
 
-                    var videoId = items[ 1 ].Trim();
-
-                    {   // 書式確認
-                        items = videoId.Split( ':' );
-                        if( 2 != items.Length )
-                        {
-                            Trace.TraceError( $"Video の動画IDの書式が不正です。スキップします。[{現在の.行番号}行目]" );
-                            return false;
-                        }
-                    }
-
-                    現在の.スコア.背景動画ID = videoId;
+                    現在の.スコア.背景動画ID = items[ 1 ].Trim();
 
                     return true;
                 }
@@ -624,19 +621,19 @@ namespace SSTFormat.v3
                     メモ = メモ.Replace( @"\n", Environment.NewLine );
                     //-----------------
                     #endregion
-                    #region " メモが空文字列でないなら メモリスト に登録すると同時に、チップとしても追加する。"
+                    #region " メモが空文字列でないなら メモリスト に登録する。"
                     //-----------------
                     if( !( string.IsNullOrEmpty( メモ ) ) )
                     {
-                        現在の.スコア.メモリスト.Add( 小節番号, メモ );
+                        現在の.スコア.小節メモリスト.Add( 小節番号, メモ );
 
-                        現在の.スコア.チップリスト.Add(
-                            new チップ() {
-                                チップ種別 = チップ種別.小節メモ,
-                                小節番号 = 小節番号,
-                                小節内位置 = 0,
-                                小節解像度 = 1,
-                            } );
+                        //現在の.スコア.チップリスト.Add(
+                        //    new チップ() {
+                        //        チップ種別 = チップ種別.小節メモ,       --> チップは廃止。（不要）
+                        //        小節番号 = 小節番号,
+                        //        小節内位置 = 0,
+                        //        小節解像度 = 1,
+                        //    } );
                     }
                     //-----------------
                     #endregion
@@ -1259,6 +1256,9 @@ namespace SSTFormat.v3
 
                 sw.WriteLine( $"Level={score.難易度.ToString( "0.00" )}" );
 
+                if( !string.IsNullOrEmpty( score.背景動画ID ) )
+                    sw.WriteLine( $"Video={score.背景動画ID}" );
+
                 sw.WriteLine( "" );
             }
 
@@ -1269,7 +1269,7 @@ namespace SSTFormat.v3
                 // 小節番号について昇順に出力。
                 for( int i = 0; i <= 最大小節番号; i++ )
                 {
-                    if( score.メモリスト.TryGetValue( i, out string メモ ) )
+                    if( score.小節メモリスト.TryGetValue( i, out string メモ ) )
                     {
                         メモ = メモ.Replace( Environment.NewLine, @"\n" );  // 改行コードは、２文字のリテラル "\n" に置換。
 
@@ -1290,40 +1290,29 @@ namespace SSTFormat.v3
                 // すべての小節番号について……
                 for( int 小節番号 = 0; 小節番号 <= 最終小節番号; 小節番号++ )
                 {
-                    var レーン別チップリスト = new Dictionary<レーン種別, チップ[]>();    // 現在の小節に存在するチップをレーンごとにまとめたリスト
+                    var 現在の小節に存在するチップのレーン別リスト = new Dictionary<レーン種別, チップ[]>();
 
-                    #region "  レーン別チップリスト を作成する。"
-                    //-----------------
+                    #region " 現在の小節に存在するチップのレーン別リストを作成する。"
+                    //----------------
                     foreach( レーン種別 laneType in Enum.GetValues( typeof( レーン種別 ) ) )
                     {
-                        var chips =
-                            from chip in score.チップリスト
-                            where (
-                                chip.小節番号 == 小節番号 &&
-                                chip.チップ種別 != チップ種別.小節線 &&      // 以下は出力対象外のチップ種別。
-                                chip.チップ種別 != チップ種別.拍線 &&
-                                chip.チップ種別 != チップ種別.小節メモ &&
-                                chip.チップ種別 != チップ種別.小節の先頭 &&
-                                chip.チップ種別 != チップ種別.BGM &&
-                                chip.チップ種別 != チップ種別.SE1 &&
-                                chip.チップ種別 != チップ種別.SE2 &&
-                                chip.チップ種別 != チップ種別.SE3 &&
-                                chip.チップ種別 != チップ種別.SE4 &&
-                                chip.チップ種別 != チップ種別.SE5 &&
-                                chip.チップ種別 != チップ種別.GuitarAuto &&
-                                chip.チップ種別 != チップ種別.BassAuto &&
-                                chip.チップ種別 != チップ種別.Unknown )
-                            select chip;
+                        if( laneType == レーン種別.Unknown ) // チップ記述対象外レーン
+                            continue;
 
-                        レーン別チップリスト[ laneType ] = chips.ToArray();
+                        var chips = score.チップリスト.Where( ( chip ) => ( 
+                            chip.小節番号 == 小節番号 &&
+                            スコア.チップtoレーンマップ[ chip.チップ種別 ] == laneType ) );
+
+                        現在の小節に存在するチップのレーン別リスト[ laneType ] = chips.ToArray();
                     }
-                    //-----------------
+                    //----------------
                     #endregion
 
                     #region " Part を出力する。"
                     //-----------------
                     {
                         var options = ( score.小節長倍率リスト[ 小節番号 ] == 1.0 ) ? "" : $"s{score.小節長倍率リスト[ 小節番号 ].ToString()}";     // 小節長倍率指定
+
                         sw.WriteLine( $"Part = {小節番号.ToString()}{options};" );
                     }
                     //-----------------
@@ -1331,7 +1320,8 @@ namespace SSTFormat.v3
 
                     foreach( レーン種別 laneType in Enum.GetValues( typeof( レーン種別 ) ) )
                     {
-                        if( 0 == レーン別チップリスト[ laneType ].Length )
+                        if( !( 現在の小節に存在するチップのレーン別リスト.ContainsKey( laneType ) ) ||
+                            0 == 現在の小節に存在するチップのレーン別リスト[ laneType ].Length )
                             continue;
 
                         #region " Lane を出力する。"
@@ -1345,7 +1335,7 @@ namespace SSTFormat.v3
                         {
                             // チップの 位置 と 解像度 を約分する。
 
-                            foreach( var chip in レーン別チップリスト[ laneType ] )
+                            foreach( var chip in 現在の小節に存在するチップのレーン別リスト[ laneType ] )
                             {
                                 var 最大公約数 = _最大公約数を返す( chip.小節内位置, chip.小節解像度 );
 
@@ -1357,19 +1347,18 @@ namespace SSTFormat.v3
                             // この小節の解像度を、チップの解像度の最小公倍数から算出する。
 
                             int この小節の解像度 = 1;
-
-                            foreach( var chip in レーン別チップリスト[ laneType ] )
+                            foreach( var chip in 現在の小節に存在するチップのレーン別リスト[ laneType ] )
                                 この小節の解像度 = _最小公倍数を返す( この小節の解像度, chip.小節解像度 );
 
 
                             // 算出した解像度を、Resolution として出力する。
 
-                            sw.Write( $"Resolution = {この小節の解像度}; " );
+                            sw.Write( $"Resolution={この小節の解像度}; " );
 
                            
                             // Resolution にあわせて、チップの位置と解像度を修正する。
 
-                            foreach( var chip in レーン別チップリスト[ laneType ] )
+                            foreach( var chip in 現在の小節に存在するチップのレーン別リスト[ laneType ] )
                             {
                                 int 倍率 = この小節の解像度 / chip.小節解像度;      // 必ず割り切れる。（この小節の解像度はチップの小節解像度の最小公倍数なので）
 
@@ -1382,11 +1371,11 @@ namespace SSTFormat.v3
 
                         #region " Chips を出力する。"
                         //----------------
-                        sw.Write( "Chips = " );
+                        sw.Write( "Chips=" );
 
-                        for( int i = 0; i < レーン別チップリスト[ laneType ].Length; i++ )
+                        for( int i = 0; i < 現在の小節に存在するチップのレーン別リスト[ laneType ].Length; i++ )
                         {
-                            var chip = レーン別チップリスト[ laneType ][ i ];
+                            var chip = 現在の小節に存在するチップのレーン別リスト[ laneType ][ i ];
 
 
                             // 位置を出力。
@@ -1465,7 +1454,7 @@ namespace SSTFormat.v3
 
                             // 区切り文字(,) または 終端文字(;) を出力。
 
-                            bool 最後のチップである = ( i == レーン別チップリスト[ laneType ].Length - 1 );
+                            bool 最後のチップである = ( i == 現在の小節に存在するチップのレーン別リスト[ laneType ].Length - 1 );
                             sw.Write( 最後のチップである ? ";" : "," );
                         }
                         //----------------
@@ -1488,6 +1477,7 @@ namespace SSTFormat.v3
                 { "china",      ( チップ種別.China,       true  ) },
                 { "splash",     ( チップ種別.Splash,      true  ) },
                 { "hihat",      ( チップ種別.HiHat_Close, true  ) },
+                { "foot",       ( チップ種別.HiHat_Foot,  true  ) },
                 { "snare",      ( チップ種別.Snare,       true  ) },
                 { "bass",       ( チップ種別.Bass,        true  ) },
                 { "tom1",       ( チップ種別.Tom1,        true  ) },

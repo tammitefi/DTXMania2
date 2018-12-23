@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FDK;
-using SSTFormatCurrent = SSTFormat.v3;
+using SSTFormatCurrent = SSTFormat.v4;
 using DTXMania.設定;
 
 using Record = DTXMania.データベース.ユーザ.Record06;

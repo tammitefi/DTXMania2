@@ -6,9 +6,7 @@ using FDK;
 using DTXMania.入力;
 using DTXMania.ステージ.演奏;
 using DTXMania.設定;
-
-using チップ種別 = SSTFormat.v3.チップ種別;
-using レーン種別 = SSTFormat.v3.レーン種別;
+using SSTFormat.v4;
 
 namespace DTXMania.設定
 {
@@ -716,11 +714,11 @@ namespace DTXMania.設定
                     },
                     //----------------
                     #endregion
-                    #region " チップ種別.背景動画 "
+                    #region " チップ種別.BGV "
                     //----------------
                     [ チップ種別.背景動画 ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.背景動画,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.BGV,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -734,32 +732,6 @@ namespace DTXMania.設定
                         AutoPlayON_Miss判定 = false,
                         AutoPlayOFF_自動ヒット_再生 = true,
                         AutoPlayOFF_自動ヒット_非表示 = true,
-                        AutoPlayOFF_自動ヒット_判定 = false,
-                        AutoPlayOFF_ユーザヒット_再生 = false,
-                        AutoPlayOFF_ユーザヒット_非表示 = false,
-                        AutoPlayOFF_ユーザヒット_判定 = false,
-                        AutoPlayOFF_Miss判定 = false,
-                    },
-                    //----------------
-                    #endregion
-                    #region " チップ種別.小節メモ "
-                    //----------------
-                    [ チップ種別.小節メモ ] = new ドラムチッププロパティ() {
-                        チップ種別 = チップ種別.小節メモ,
-                        レーン種別 = レーン種別.Unknown,
-                        表示レーン種別 = 表示レーン種別.Unknown,
-                        表示チップ種別 = 表示チップ種別.Unknown,
-                        ドラム入力種別 = ドラム入力種別.Unknown,
-                        AutoPlay種別 = AutoPlay種別.Unknown,
-                        入力グループ種別 = 入力グループ種別.Unknown,
-                        発声前消音 = false,
-                        消音グループ種別 = 消音グループ種別.Unknown,
-                        AutoPlayON_自動ヒット_再生 = false,
-                        AutoPlayON_自動ヒット_非表示 = false,
-                        AutoPlayON_自動ヒット_判定 = false,
-                        AutoPlayON_Miss判定 = false,
-                        AutoPlayOFF_自動ヒット_再生 = false,
-                        AutoPlayOFF_自動ヒット_非表示 = false,
                         AutoPlayOFF_自動ヒット_判定 = false,
                         AutoPlayOFF_ユーザヒット_再生 = false,
                         AutoPlayOFF_ユーザヒット_非表示 = false,
@@ -850,7 +822,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.BGM ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.BGM,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.BGM,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -876,7 +848,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.SE1 ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.SE1,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -902,7 +874,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.SE2 ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.SE2,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -928,7 +900,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.SE3 ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.SE3,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -954,7 +926,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.SE4 ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.SE4,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -980,7 +952,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.SE5 ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.SE5,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -1006,7 +978,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.GuitarAuto ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.GuitarAuto,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,
@@ -1032,7 +1004,7 @@ namespace DTXMania.設定
                     //----------------
                     [ チップ種別.BassAuto ] = new ドラムチッププロパティ() {
                         チップ種別 = チップ種別.BassAuto,
-                        レーン種別 = レーン種別.Song,
+                        レーン種別 = レーン種別.Unknown,
                         表示レーン種別 = 表示レーン種別.Unknown,
                         表示チップ種別 = 表示チップ種別.Unknown,
                         ドラム入力種別 = ドラム入力種別.Unknown,

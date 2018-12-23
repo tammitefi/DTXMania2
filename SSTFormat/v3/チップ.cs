@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SSTFormat.v2;
 
 namespace SSTFormat.v3
 {
     public class チップ : IComparable, ICloneable
     {
+        // 定数
+
         public const int 最大音量 = 8;
         public const int 既定音量 = 7;
+
+
+        // チップの種類
 
         public チップ種別 チップ種別 { get; set; } = チップ種別.Unknown;
 
@@ -61,8 +67,10 @@ namespace SSTFormat.v3
 
         /// <summary>
         ///		チップの種別をより詳細に示すためのユーザ定義ID。
-        ///		今のところ、DTXから変換した場合に、ここにオブジェクト値が格納される。
         /// </summary>
+        /// <remarks>
+        ///		今のところ、DTXから変換した場合に、ここにオブジェクト値が格納される。
+        /// </remarks>
         public int チップサブID { get; set; } = 0;
 
         /// <summary>
@@ -113,25 +121,38 @@ namespace SSTFormat.v3
         }
 
         /// <summary>
-        ///     浅いコピーを生成して返す。
+        ///     チップの深いコピーを生成して返す。
         /// </summary>
-        public チップ Clone()
+        public virtual object Clone()
         {
-            return (チップ) this.MemberwiseClone();
-        }
+            // 浅いコピー
+            var dst = this.MemberwiseClone();
 
-        /// <summary>
-        ///     深いコピーを生成して返す。
-        /// </summary>
-        object ICloneable.Clone()
-        {
-            var dst = this.Clone();
-
-            // 参照型フィールドのコピーが必要ならここに記述すること。
+            // 参照型フィールドのコピー：必要ならここに記述すること。
 
             return dst;
         }
 
+        /// <summary>
+        ///     チップの内容を自身にコピーする。
+        /// </summary>
+        public void CopyFrom( チップ src )
+        {
+            this.チップ種別 = src.チップ種別;
+
+            this.小節番号 = src.小節番号;
+            this.小節解像度 = src.小節解像度;
+            this.小節内位置 = src.小節内位置;
+
+            this.描画時刻sec = src.描画時刻sec;
+            this.発声時刻sec = src.発声時刻sec;
+
+            this.チップサブID = src.チップサブID;
+            this.音量 = src.音量;
+            this.左右位置 = src.左右位置;
+            this.BPM = src.BPM;
+            this.可視 = src.可視;
+        }
 
         // 概要:
         //     現在のインスタンスを同じ型の別のオブジェクトと比較して、並べ替え順序において、現在のインスタンスの位置が同じ型の別のオブジェクトの前、後ろ、または同じのいずれであるかを示す整数を返します。
@@ -183,7 +204,7 @@ namespace SSTFormat.v3
         /// </summary>
         public チップ( SSTFormat.v2.チップ v2chip )
         {
-            this.チップ種別 = this.チップ種別.FromV2( v2chip.チップ種別 );
+            this.チップ種別 = v2chip.チップ種別.ToV3();
             this.チップサブID = 0;   // [仕様追加] v2: なし → v3: 新設
             this.小節番号 = v2chip.小節番号;
             this.小節内位置 = v2chip.小節内位置;

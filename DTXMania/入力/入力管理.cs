@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.設定;
 
 namespace DTXMania.入力

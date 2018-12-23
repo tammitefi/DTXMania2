@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace DTXMania.ステージ.演奏
 {

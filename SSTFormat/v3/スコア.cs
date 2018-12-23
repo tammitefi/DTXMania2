@@ -13,11 +13,57 @@ namespace SSTFormat.v3
         /// <summary>
         ///     このソースが実装するSSTFバージョン。
         /// </summary>
-        public static readonly Version SSTFVERSION = new Version( 3, 3, 0, 0 );
-
+        public static readonly Version SSTFVERSION = new Version( 3, 4, 0, 0 );
         public const double 初期BPM = 120.0;
-
         public const double 初期小節解像度 = 480.0;
+        public static readonly List<string> 背景動画のデフォルト拡張子リスト = new List<string>() {
+            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
+        };
+        public static readonly Dictionary<チップ種別, レーン種別> チップtoレーンマップ = new Dictionary<チップ種別, レーン種別>() {
+            #region " *** "
+            //----------------
+            { チップ種別.Unknown,            レーン種別.Unknown },
+            { チップ種別.LeftCrash,          レーン種別.LeftCrash },
+            { チップ種別.Ride,               レーン種別.Ride },
+            { チップ種別.Ride_Cup,           レーン種別.Ride },
+            { チップ種別.China,              レーン種別.China },
+            { チップ種別.Splash,             レーン種別.Splash },
+            { チップ種別.HiHat_Open,         レーン種別.HiHat },
+            { チップ種別.HiHat_HalfOpen,     レーン種別.HiHat },
+            { チップ種別.HiHat_Close,        レーン種別.HiHat },
+            { チップ種別.HiHat_Foot,         レーン種別.Foot },
+            { チップ種別.Snare,              レーン種別.Snare },
+            { チップ種別.Snare_OpenRim,      レーン種別.Snare },
+            { チップ種別.Snare_ClosedRim,    レーン種別.Snare },
+            { チップ種別.Snare_Ghost,        レーン種別.Snare },
+            { チップ種別.Bass,               レーン種別.Bass },
+            { チップ種別.LeftBass,           レーン種別.Bass },
+            { チップ種別.Tom1,               レーン種別.Tom1 },
+            { チップ種別.Tom1_Rim,           レーン種別.Tom1 },
+            { チップ種別.Tom2,               レーン種別.Tom2 },
+            { チップ種別.Tom2_Rim,           レーン種別.Tom2 },
+            { チップ種別.Tom3,               レーン種別.Tom3 },
+            { チップ種別.Tom3_Rim,           レーン種別.Tom3 },
+            { チップ種別.RightCrash,         レーン種別.RightCrash },
+            { チップ種別.BPM,                レーン種別.BPM },
+            { チップ種別.小節線,             レーン種別.Unknown },
+            { チップ種別.拍線,               レーン種別.Unknown },
+            { チップ種別.背景動画,           レーン種別.Song },
+            { チップ種別.小節メモ,           レーン種別.Unknown },
+            { チップ種別.LeftCymbal_Mute,    レーン種別.LeftCrash },
+            { チップ種別.RightCymbal_Mute,   レーン種別.RightCrash },
+            { チップ種別.小節の先頭,         レーン種別.Unknown },
+            { チップ種別.BGM,                レーン種別.Song },
+            { チップ種別.SE1,                レーン種別.Song },
+            { チップ種別.SE2,                レーン種別.Song },
+            { チップ種別.SE3,                レーン種別.Song },
+            { チップ種別.SE4,                レーン種別.Song },
+            { チップ種別.SE5,                レーン種別.Song },
+            { チップ種別.GuitarAuto,         レーン種別.Song },
+            { チップ種別.BassAuto,           レーン種別.Song },
+            //----------------
+            #endregion
+        };
 
 
         // ヘッダ
@@ -49,23 +95,6 @@ namespace SSTFormat.v3
         ///	    易:0.00～9.99:難
         /// </summary>
         public double 難易度 { get; set; }
-
-        /// <summary>
-        ///		スコアは、単一の動画または音楽ファイルを持つことができる。
-        ///		このファイルは、<see cref="チップ種別.BGM"/>の発声時に再生が開始される。
-        /// </summary>
-        public string 背景動画ファイル名 { get; set; }
-
-        /// <summary>
-        ///     動画のID。
-        ///     指定がある（非nullの）場合、<see cref="背景動画ファイル名"/>より優先される。
-        /// </summary>
-        /// <remarks>
-        ///     書式: "プロトコル: 動画ID", 大文字小文字は区別されない。
-        ///     　例: ニコニコ動画の場合 …… "NicoVideo: sm12345678"
-        /// </remarks>
-        public string 背景動画ID { get; set; }
-
         /// <summary>
         ///		プレビュー画像のファイル名。
         /// </summary>
@@ -91,91 +120,6 @@ namespace SSTFormat.v3
         /// </summary>
         public string 譜面ファイルパス { get; set; } = null;
 
-
-        // 譜面
-
-        /// <summary>
-        ///     このスコアに存在するすべてのチップのリスト。
-        /// </summary>
-        public List<チップ> チップリスト { get; protected set; }
-
-
-        /// <summary>
-        ///     小節ごとの倍率。
-        ///		インデックス番号が小節番号を表し、小節 0 から最大小節まで、すべての小節の倍率がこのリストに含まれる。
-        /// </summary>
-        public List<double> 小節長倍率リスト { get; protected set; }
-
-        public double 小節長倍率を取得する( int 小節番号 )
-        {
-            // 小節長倍率リスト が短ければ増設する。
-            if( 小節番号 >= this.小節長倍率リスト.Count )
-            {
-                int 不足数 = 小節番号 - this.小節長倍率リスト.Count + 1;
-                for( int i = 0; i < 不足数; i++ )
-                    this.小節長倍率リスト.Add( 1.0 );
-            }
-
-            // 小節番号に対応する倍率を返す。
-            return this.小節長倍率リスト[ 小節番号 ];
-        }
-
-        public void 小節長倍率を設定する( int 小節番号, double 倍率 )
-        {
-            // 小節長倍率リスト が短ければ増設する。
-            if( 小節番号 >= this.小節長倍率リスト.Count )
-            {
-                int 不足数 = 小節番号 - this.小節長倍率リスト.Count + 1;
-                for( int i = 0; i < 不足数; i++ )
-                    this.小節長倍率リスト.Add( 1.0 );
-            }
-
-            // 小節番号に対応付けて倍率を登録する。
-            this.小節長倍率リスト[ 小節番号 ] = 倍率;
-        }
-
-
-        /// <summary>
-        ///     この譜面における最後（最大）の小節番号。
-        /// </summary>
-        public int 最大小節番号を返す()
-        {
-            if( 0 < this.チップリスト.Count )
-                return this.チップリスト.Max( ( chip ) => chip.小節番号 );
-
-            return -1;
-        }
-
-        /// <summary>
-        ///     メモリスト。
-        ///     [key: 小節番号, value:メモ]
-        /// </summary>
-        public Dictionary<int, string> メモリスト { get; protected set; }
-
-        /// <summary>
-        ///     レーンごとの空うちチップ番号。
-        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
-        ///		[value: zz番号]
-        /// </summary>
-        public Dictionary<レーン種別, int> 空打ちチップ { get; protected set; }
-
-
-        // WAV/AVI
-
-        /// <summary>
-        ///		#WAVzz で指定された、サウンドファイルへの相対パス他。
-        ///		パスの基点は、#PATH_WAV があればそこ、なければ曲譜面ファイルと同じ場所。
-        ///		[key: zz番号]
-        /// </summary>
-        public Dictionary<int, (string ファイルパス, bool 多重再生する)> WAVリスト { get; protected set; }
-
-        /// <summary>
-        ///		#AVIzz で指定された、動画ファイルへの相対パス。
-        ///		パスの基点は、#PATH_WAV があればそこ、なければ曲譜面ファイルと同じ場所。
-        ///		[key: zz番号]
-        /// </summary>
-        public Dictionary<int, string> AVIリスト { get; protected set; }
-
         /// <summary>
         ///		WAV, AVI, その他ファイルの基点となるフォルダの絶対パス。
         ///		末尾は '\' 。（例: "D:\DTXData\DemoSong\Sounds\"）
@@ -197,6 +141,104 @@ namespace SSTFormat.v3
                     this._PATH_WAV += '\\';
             }
         }
+
+
+        // チップリスト
+
+        /// <summary>
+        ///     このスコアに存在するすべてのチップのリスト。
+        /// </summary>
+        public List<チップ> チップリスト { get; protected set; }
+
+
+        // 背景動画
+
+        /// <summary>
+        ///		スコアは、単一の動画または音楽（あるいはその両方）を持つことができる。
+        ///		これは、<see cref="チップ種別.背景動画"/>の発声時に再生が開始される。
+        /// </summary>
+        /// <remarks>
+        ///     「プロトコル: 動画ID」という書式で指定する。大文字小文字は区別されない。
+        ///     　例:"nicovideo: sm12345678" ... ニコ動
+        ///     　   "file: bgv.mp4" ... ローカルの mp4 ファイル
+        ///     　   "bgv.mp4" ... プロトコルを省略してもローカルファイルとなる
+        /// </remarks>
+        public string 背景動画ID { get; set; }
+
+
+        // 小節長倍率リスト
+
+        /// <summary>
+        ///     小節ごとの倍率。
+        ///		インデックス番号が小節番号を表し、小節 0 から最大小節まで、すべての小節の倍率がこのリストに含まれる。
+        /// </summary>
+        public List<double> 小節長倍率リスト { get; protected set; }
+
+        public double 小節長倍率を取得する( int 小節番号 )
+        {
+            // 小節長倍率リスト が短ければ増設する。
+            if( 小節番号 >= this.小節長倍率リスト.Count )
+            {
+                int 不足数 = 小節番号 - this.小節長倍率リスト.Count + 1;
+                for( int i = 0; i < 不足数; i++ )
+                    this.小節長倍率リスト.Add( 1.0 );
+            }
+
+            // 小節番号に対応する倍率を返す。
+            return this.小節長倍率リスト[ 小節番号 ];
+        }
+        public void 小節長倍率を設定する( int 小節番号, double 倍率 )
+        {
+            // 小節長倍率リスト が短ければ増設する。
+            if( 小節番号 >= this.小節長倍率リスト.Count )
+            {
+                int 不足数 = 小節番号 - this.小節長倍率リスト.Count + 1;
+                for( int i = 0; i < 不足数; i++ )
+                    this.小節長倍率リスト.Add( 1.0 );
+            }
+
+            // 小節番号に対応付けて倍率を登録する。
+            this.小節長倍率リスト[ 小節番号 ] = 倍率;
+        }
+
+
+        // 小節メモリスト
+
+        /// <summary>
+        ///     メモリスト。
+        ///     [key: 小節番号, value:メモ]
+        /// </summary>
+        public Dictionary<int, string> 小節メモリスト { get; protected set; }
+
+
+        // 空うちチップマップ
+
+        /// <summary>
+        ///     レーンごとの空うちチップ番号。
+        ///		空打ちチップが指定されている場合はそのWAVzzのzz番号を、指定されていないなら 0 を保持する。
+        ///		[value: zz番号]
+        /// </summary>
+        public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
+
+
+        // WAVリスト
+
+        /// <summary>
+        ///		#WAVzz で指定された、サウンドファイルへの相対パス他。
+        ///		パスの基点は、#PATH_WAV があればそこ、なければ曲譜面ファイルと同じ場所。
+        ///		[key: zz番号]
+        /// </summary>
+        public Dictionary<int, (string ファイルパス, bool 多重再生する)> WAVリスト { get; protected set; }
+
+
+        // AVIリスト
+
+        /// <summary>
+        ///		#AVIzz で指定された、動画ファイルへの相対パス。
+        ///		パスの基点は、#PATH_WAV があればそこ、なければ曲譜面ファイルと同じ場所。
+        ///		[key: zz番号]
+        /// </summary>
+        public Dictionary<int, string> AVIリスト { get; protected set; }
 
 
         // メソッド
@@ -223,8 +265,8 @@ namespace SSTFormat.v3
                     break;
             }
 
-            if( !( ヘッダだけ ) )
-                _後処理を行う( score );
+            //if( !( ヘッダだけ ) )
+            //    _後処理を行う( score ); --> 生成メソッドの中で行っておくこと。
 
             return score;
         }
@@ -236,7 +278,6 @@ namespace SSTFormat.v3
             this.アーティスト名 = "";
             this.説明文 = "";
             this.難易度 = 5.0;
-            this.背景動画ファイル名 = null;
             this.背景動画ID = null;
             this.プレビュー画像ファイル名 = null;
             this.プレビュー音声ファイル名 = null;
@@ -246,14 +287,25 @@ namespace SSTFormat.v3
 
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
-            this.メモリスト = new Dictionary<int, string>();
-            this.空打ちチップ = new Dictionary<レーン種別, int>();
+            this.小節メモリスト = new Dictionary<int, string>();
+            this.空打ちチップマップ = new Dictionary<レーン種別, int>();
             foreach( レーン種別 lane in Enum.GetValues( typeof( レーン種別 ) ) )
-                this.空打ちチップ.Add( lane, 0 );
+                this.空打ちチップマップ.Add( lane, 0 );
 
             this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
             this.AVIリスト = new Dictionary<int, string>();
             this._PATH_WAV = "";
+        }
+
+        /// <summary>
+        ///     この譜面における最後（最大）の小節番号。
+        /// </summary>
+        public int 最大小節番号を返す()
+        {
+            if( 0 < this.チップリスト.Count )
+                return this.チップリスト.Max( ( chip ) => chip.小節番号 );
+
+            return -1;
         }
 
 
@@ -354,15 +406,15 @@ namespace SSTFormat.v3
             #endregion
         }
 
+
         /// <summary>
         ///		空文字、または絶対パス。
         ///		null は不可。
         /// </summary>
         private string _PATH_WAV = "";
+
         private const double _BPM初期値固定での1小節4拍の時間ms = ( 60.0 * 1000 ) / ( スコア.初期BPM / 4.0 );
+
         private const double _BPM初期値固定での1小節4拍の時間sec = 60.0 / ( スコア.初期BPM / 4.0 );
-        protected static readonly List<string> _背景動画のデフォルト拡張子リスト = new List<string>() {
-            ".mp4", ".avi", ".wmv", ".mpg", ".mpeg"
-        };
     }
 }

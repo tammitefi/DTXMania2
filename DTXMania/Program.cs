@@ -66,8 +66,9 @@ namespace DTXMania
                 if( !options.解析する( args ) )
                 {
                     // 利用法を表示して終了。
-                    Log.WriteLine( options.Usage );     // ログと
-                    Console.WriteLine( options.Usage ); // 標準出力の両方へ
+                    Log.WriteLine( options.Usage );               // ログと
+                    using( var console = new FDK.Console() )
+                        console.Out?.WriteLine( options.Usage );  // 標準出力の両方へ
                     return;
                 }
                 //----------------

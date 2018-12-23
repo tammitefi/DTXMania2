@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using SharpDX;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 
 namespace DTXMania.曲
 {

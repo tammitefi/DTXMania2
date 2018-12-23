@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using CSCore;
 using FDK;
-using SSTFormat.v3;
+using SSTFormat.v4;
 using DTXMania.設定;
 
 namespace DTXMania.曲
 {
     /// <summary>
-    ///		主にDTXファイルの #WAV サウンドを管理する。
+    ///		<see cref="スコア.WAVリスト"/> の各サウンドインスタンスを管理する。
     /// </summary>
     class WAV管理 : IDisposable
     {
@@ -46,6 +46,9 @@ namespace DTXMania.曲
         /// </summary>
         /// <param name="wav番号">登録する番号。0～1295。すでに登録されている場合は上書き更新される。</param>
         /// <param name="サウンドファイル">登録するサウンドファイルのパス。</param>
+        /// <remarks>
+        ///     サウンドの生成に失敗した場合には登録を行わない。
+        /// </remarks>
         public void 登録する( SoundDevice device, int wav番号, VariablePath サウンドファイル, bool 多重再生する )
         {
             #region " パラメータチェック。"
@@ -99,7 +102,7 @@ namespace DTXMania.曲
         ///		指定した番号のWAVを、指定したチップ種別として発声する。
         /// </summary>
         /// <param name="音量">0:無音～1:原音</param>
-        public void 発声する( int WAV番号, チップ種別 chipType, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量 = 1f )
+        public void 発声する( int WAV番号, チップ種別 chipType, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量 = 1f, double 再生開始時刻sec = 0.0 )
         {
             // 未登録の WAV番号 は無視。
             if( !( this._WavContexts.ContainsKey( WAV番号 ) ) )
@@ -116,7 +119,7 @@ namespace DTXMania.曲
             }
 
             // 発声する。
-            this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量 );
+            this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量, 再生開始時刻sec );
         }
 
         public void すべての発声を停止する()
@@ -177,7 +180,7 @@ namespace DTXMania.曲
             ///		指定したチップ種別扱いでWAVサウンドを発声する。
             /// </summary>
             /// <param name="音量">0:無音～1:原音</param>
-            public void 発声する( 消音グループ種別 muteGroupType, float 音量 )
+            public void 発声する( 消音グループ種別 muteGroupType, float 音量, double 再生開始時刻sec = 0.0 )
             {
                 this.最後に発声したときの消音グループ種別 = muteGroupType;
 
@@ -186,7 +189,7 @@ namespace DTXMania.曲
                     ( 0f > 音量 ) ? 0f : 
                     ( 1f < 音量 ) ? 1f : 音量;
                 this.Sounds[ this._次に再生するSound番号 ].Volume = 音量;
-                this.Sounds[ this._次に再生するSound番号 ].Play( 0 );
+                this.Sounds[ this._次に再生するSound番号 ].Play( 再生開始時刻sec );
 
                 // サウンドローテーション。
                 this._次に再生するSound番号 = ( this._次に再生するSound番号 + 1 ) % this.Sounds.Length;
