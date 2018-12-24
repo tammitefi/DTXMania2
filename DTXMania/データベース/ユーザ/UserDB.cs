@@ -23,13 +23,15 @@ namespace DTXMania.データベース.ユーザ
     {
         public const long VERSION = 6;  // 最新バージョンを指定（その２）
 
+        public static readonly VariablePath ユーザDBファイルパス = @"$(AppData)UserDB.sqlite3";
+
         public Table<User> Users
             => base.DataContext.GetTable<User>();
         public Table<Record> Records
             => base.DataContext.GetTable<Record>();
 
         public UserDB()
-            : base( @"$(AppData)UserDB.sqlite3", VERSION )
+            : base( ユーザDBファイルパス, VERSION )
         {
         }
 

@@ -31,11 +31,12 @@ namespace DTXMania.ステージ.オプション設定
         public Color4 ヘッダ色 { get; set; } = ヘッダ色種別.青;
 
 
-        public パネル( string パネル名, Action<パネル> 値の変更処理 = null )
+        public パネル( string パネル名, Action<パネル> 値の変更処理 = null, Color4? ヘッダ色 = null )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.パネル名 = パネル名;
+                this.ヘッダ色 = ( ヘッダ色.HasValue ) ? ヘッダ色.Value : ヘッダ色種別.青;
                 this._値の変更処理 = 値の変更処理;
 
                 this.子を追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );

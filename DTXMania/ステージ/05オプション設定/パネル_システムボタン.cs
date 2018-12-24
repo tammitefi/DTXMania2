@@ -14,8 +14,8 @@ namespace DTXMania.ステージ.オプション設定
     /// </summary>
     class パネル_システムボタン : パネル
     {
-        public パネル_システムボタン( string パネル名 )
-            : base( パネル名, null )
+        public パネル_システムボタン( string パネル名, Action<パネル> 値の変更処理 = null )
+            : base( パネル名, 値の変更処理 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {

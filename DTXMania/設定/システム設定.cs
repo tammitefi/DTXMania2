@@ -54,6 +54,8 @@ namespace DTXMania.設定
         [DataMember( Name = "ClientSizeOfViewerMode", Order = 10 )]
         public Size ウィンドウサイズViewerモード用 { get; set; }
 
+        public static readonly VariablePath システム設定ファイルパス = @"$(AppData)Configuration.json";
+
 
         public システム設定()
         {
@@ -73,7 +75,7 @@ namespace DTXMania.設定
 				try
 				{
 					// コンフィグのバージョン番号を取得。
-					var jobj = JObject.Parse( File.ReadAllText( _ファイルパス.変数なしパス ) ); // いったん型なしで読み込む
+					var jobj = JObject.Parse( File.ReadAllText( システム設定ファイルパス.変数なしパス ) ); // いったん型なしで読み込む
 					int configVersion = ( (int?) jobj[ "Version" ] ) ?? 0;
 
 					// バージョン別に読み込み。
@@ -82,7 +84,7 @@ namespace DTXMania.設定
 						case 1:
 							// Release 015 以降
 							設定 = JsonConvert.DeserializeObject<システム設定>( jobj.ToString() );
-							Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
+							Log.Info( $"システム設定をファイルから復元しました。[{システム設定ファイルパス.変数付きパス}]" );
 							break;
 
 						case 0:
@@ -90,14 +92,14 @@ namespace DTXMania.設定
 							//----------------
 							try
 							{
-								設定 = FDKUtilities.復元する<システム設定>( _ファイルパス, UseSimpleDictionaryFormat: false );
-								Log.Info( $"システム設定をファイルから復元しました。[{_ファイルパス.変数付きパス}]" );
+								設定 = FDKUtilities.復元する<システム設定>( システム設定ファイルパス, UseSimpleDictionaryFormat: false );
+								Log.Info( $"システム設定をファイルから復元しました。[{システム設定ファイルパス.変数付きパス}]" );
 							}
 							catch
 							{
-								Log.WARNING( $"復元に失敗したので、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+								Log.WARNING( $"復元に失敗したので、新規に作成して保存します。[{システム設定ファイルパス.変数付きパス}]" );
 								設定 = new システム設定();
-								FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+								FDKUtilities.保存する( 設定, システム設定ファイルパス, UseSimpleDictionaryFormat: false );
 							}
 							return 設定;
 						//----------------
@@ -111,16 +113,16 @@ namespace DTXMania.設定
 				}
 				catch( FileNotFoundException )
 				{
-					Log.Info( $"ファイルが存在しないため、新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+					Log.Info( $"ファイルが存在しないため、新規に作成して保存します。[{システム設定ファイルパス.変数付きパス}]" );
 					設定 = new システム設定();
-					FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+					FDKUtilities.保存する( 設定, システム設定ファイルパス, UseSimpleDictionaryFormat: false );
 					return 設定;
 				}
 				catch
 				{
-					Log.ERROR( $"ファイルの内容に誤りがあります。新規に作成して保存します。[{_ファイルパス.変数付きパス}]" );
+					Log.ERROR( $"ファイルの内容に誤りがあります。新規に作成して保存します。[{システム設定ファイルパス.変数付きパス}]" );
 					設定 = new システム設定();
-					FDKUtilities.保存する( 設定, _ファイルパス, UseSimpleDictionaryFormat: false );
+					FDKUtilities.保存する( 設定, システム設定ファイルパス, UseSimpleDictionaryFormat: false );
 					return 設定;
 				}
 			}
@@ -136,15 +138,13 @@ namespace DTXMania.設定
                         //FDKUtilities.保存する( this, _ファイルパス, UseSimpleDictionaryFormat: false );
                         //break;
                     case 1:
-                        File.WriteAllText( _ファイルパス.変数なしパス, JsonConvert.SerializeObject( this, Formatting.Indented ) );
-                        Log.Info( $"システム設定 を保存しました。[{_ファイルパス.変数付きパス}]" );
+                        File.WriteAllText( システム設定ファイルパス.変数なしパス, JsonConvert.SerializeObject( this, Formatting.Indented ) );
+                        Log.Info( $"システム設定 を保存しました。[{システム設定ファイルパス.変数付きパス}]" );
                         break;
                 }
             }
         }
 
-
-        private static readonly VariablePath _ファイルパス = @"$(AppData)Configuration.json";
 
         /// <summary>
         ///		<see cref="曲検索フォルダ"/> のシリアライゼーションのための仲介役。

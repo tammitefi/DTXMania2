@@ -30,8 +30,8 @@ namespace DTXMania.ステージ.オプション設定
         }
 
 
-        public パネル_フォルダ( string パネル名, パネル_フォルダ 親パネル, IEnumerable<パネル> 初期子パネルリスト = null )
-            : base( パネル名 )
+        public パネル_フォルダ( string パネル名, パネル_フォルダ 親パネル, IEnumerable<パネル> 初期子パネルリスト = null, Action<パネル> 値の変更処理 = null )
+            : base( パネル名, 値の変更処理, ヘッダ色種別.赤 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {

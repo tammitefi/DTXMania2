@@ -20,11 +20,14 @@ namespace DTXMania.データベース.曲
     {
         public const long VERSION = 3;  // 最新バージョンを指定(2/2)。
 
+        public static readonly VariablePath 曲DBファイルパス = @"$(AppData)SongDB.sqlite3";
+
         public Table<Song> Songs
             => base.DataContext.GetTable<Song>();
 
+
         public SongDB()
-            : base( @"$(AppData)SongDB.sqlite3", VERSION )
+            : base( 曲DBファイルパス, VERSION )
         {
         }
 
