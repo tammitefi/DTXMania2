@@ -16,13 +16,12 @@ namespace FDK
         /// <summary>
         ///		画像の生成に成功していれば true 。
         /// </summary>
-        public bool 生成成功
-            => ( null != this._Bitmap );
+        public bool 生成成功 => ( null != this._Bitmap );
+        
         /// <summary>
         ///		画像の生成に失敗していれば true 。
         /// </summary>
-        public bool 生成失敗
-            => !( this.生成成功 );
+        public bool 生成失敗 => !( this.生成成功 );
 
         public Size2F サイズ
         {
@@ -38,18 +37,13 @@ namespace FDK
                 }
             }
         }
-        public InterpolationMode 補正モード
-        {
-            get;
-            set;
-        } = InterpolationMode.Linear;
-        public bool 加算合成
-        {
-            get;
-            set;
-        } = false;
-        public Bitmap1 Bitmap
-            => this._Bitmap;
+
+        public InterpolationMode 補正モード { get; set; } = InterpolationMode.Linear;
+
+        public bool 加算合成 { get; set; } = false;
+
+        public Bitmap1 Bitmap => this._Bitmap;
+
 
         public 画像( VariablePath 画像ファイルパス )
         {
@@ -60,6 +54,7 @@ namespace FDK
         {
             this._Bitmapを生成する();
         }
+
         protected override void On非活性化()
         {
             this._Bitmap?.Dispose();
@@ -140,6 +135,7 @@ namespace FDK
 
             } );
         }
+        
         /// <summary>
         ///		画像を描画する。
         /// </summary>
@@ -188,8 +184,11 @@ namespace FDK
             } );
         }
 
+
         protected VariablePath _画像ファイルパス = null;
+
         protected Bitmap1 _Bitmap = null;
+
 
         protected void _Bitmapを生成する( BitmapProperties1 bitmapProperties1 = null )
         {

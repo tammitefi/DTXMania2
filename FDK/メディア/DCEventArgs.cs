@@ -8,11 +8,7 @@ namespace FDK
 {
     public class DCEventArgs
     {
-        public DeviceContext1 dc
-        {
-            get;
-            protected set;
-        } = null;
+        public DeviceContext1 dc { get; protected set; } = null;
 
         public DCEventArgs( DeviceContext1 dc )
         {

@@ -138,6 +138,8 @@ namespace DTXMania.ステージ.演奏
 
             // WAVを生成する。
 
+            App.WAVキャッシュレンタル.世代を進める();
+
             App.WAV管理?.Dispose();
             App.WAV管理 = new 曲.WAV管理();
 

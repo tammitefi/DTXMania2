@@ -15,23 +15,20 @@ namespace FDK
     /// </summary>
     public class 矩形リスト
     {
-        public Dictionary<string, RectangleF> 文字列to矩形
-        {
-            get;
-        } = new Dictionary<string, RectangleF>();
+        public Dictionary<string, RectangleF> 文字列to矩形 { get; } = new Dictionary<string, RectangleF>();
 
         /// <summary>
         ///		キー（文字列）に対応する矩形を返す。
         /// </summary>
         /// <param name="文字列">キー文字列。</param>
         /// <returns>キー文字列に対応する矩形。Null許容型であり、キーが存在していなければ null を返す。</returns>
-        public RectangleF? this[ string 文字列 ]
-            => this.文字列to矩形.ContainsKey( 文字列 ) ? this.文字列to矩形[ 文字列 ] : (RectangleF?) null;
+        public RectangleF? this[ string 文字列 ] => this.文字列to矩形.ContainsKey( 文字列 ) ? this.文字列to矩形[ 文字列 ] : (RectangleF?) null;
 
 
         public 矩形リスト()
         {
         }
+
         public 矩形リスト( VariablePath ファイルパス )
             : this()
         {
@@ -42,7 +39,7 @@ namespace FDK
         {
             this.文字列to矩形.Clear();
 
-            if( false == File.Exists( ファイルパス.変数なしパス ) )
+            if( !File.Exists( ファイルパス.変数なしパス ) )
                 throw new FileNotFoundException( $"矩形リストXmlファイルが存在しません。[{ファイルパス.変数付きパス}]" );
 
             try

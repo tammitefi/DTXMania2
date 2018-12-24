@@ -740,6 +740,32 @@ namespace DTXMania.設定
                     },
                     //----------------
                     #endregion
+                    #region " チップ種別.小節メモ "
+                    //----------------
+                    [ チップ種別.小節メモ ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.小節メモ,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = false,
+                        AutoPlayON_自動ヒット_非表示 = false,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = false,
+                        AutoPlayOFF_自動ヒット_非表示 = false,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
                     #region " チップ種別.LeftCymbal_Mute "
                     //----------------
                     [ チップ種別.LeftCymbal_Mute ] = new ドラムチッププロパティ() {

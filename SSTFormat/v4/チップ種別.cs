@@ -287,7 +287,6 @@ namespace SSTFormat.v4
 
         #region " 廃止 "
         //----------------
-        [Obsolete]
         小節メモ = 26,
         //----------------
         #endregion

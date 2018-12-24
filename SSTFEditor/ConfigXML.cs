@@ -73,13 +73,13 @@ namespace SSTFEditor
             // 一覧の先頭に登録する。
             this.RecentUsedFiles.Insert( 0, ファイル名 );
 
-            // 10個以上は記録しない。
-            if( this.RecentUsedFiles.Count > 10 )
+            // 一定以上は記録しない。
+            if( this.RecentUsedFiles.Count > this.MaxOfUsedRecentFiles )
             {
-                int 超えてる数 = this.RecentUsedFiles.Count - 10;
+                int 超えてる数 = this.RecentUsedFiles.Count - this.MaxOfUsedRecentFiles;
 
                 for( int i = 超えてる数; i > 0; i-- )
-                    this.RecentUsedFiles.RemoveAt( 10 + i - 1 );
+                    this.RecentUsedFiles.RemoveAt( this.MaxOfUsedRecentFiles + i - 1 );
             }
         }
     }

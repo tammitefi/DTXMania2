@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 namespace FDK
 {
     /// <summary>
-    ///		任意個の文字を格納した一枚のテクスチャ画像と、それぞれの文字領域の矩形リストから、
+    ///		任意個の文字を並べた一枚のテクスチャ画像と、それぞれの文字領域の矩形リストから、
     ///		文字列を連続するテクスチャ画像で表示する。
     /// </summary>
     public class テクスチャフォント : Activity
@@ -82,7 +82,9 @@ namespace FDK
             }
         }
 
+
         private テクスチャ _文字盤 = null;
+
         private JObject _文字盤設定 = null;
     }
 }

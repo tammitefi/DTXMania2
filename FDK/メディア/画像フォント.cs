@@ -17,25 +17,19 @@ namespace FDK
         /// <summary>
         ///		それぞれの文字矩形の幅に加算する補正値。
         /// </summary>
-        public float 文字幅補正dpx
-        {
-            get;
-            set;
-        } = 0f;
+        public float 文字幅補正dpx { get; set; } = 0f;
 
         /// <summary>
         ///		透明: 0 ～ 1 :不透明
         /// </summary>
-        public float 不透明度
-        {
-            get;
-            set;
-        } = 1f;
+        public float 不透明度 { get; set; } = 1f;
+
 
         public 画像フォント( VariablePath 文字盤の画像ファイルパス, VariablePath 文字盤設定ファイルパス, float 文字幅補正dpx = 0f, float 不透明度 = 1f )
             : this( 文字盤の画像ファイルパス, JObject.Parse( File.ReadAllText( 文字盤設定ファイルパス.変数なしパス ) ), 文字幅補正dpx, 不透明度 )
         {
         }
+
         public 画像フォント( VariablePath 文字盤の画像ファイルパス, JObject 文字盤設定, float 文字幅補正dpx = 0f, float 不透明度 = 1f )
         {
             this.子を追加する( this._文字盤 = new 画像( 文字盤の画像ファイルパス ) );
@@ -98,8 +92,10 @@ namespace FDK
                 基点のX位置 += ( 文字矩形.Width + this.文字幅補正dpx );
             }
         }
+
         
         private 画像 _文字盤 = null;
+
         private Dictionary<string, RectangleF> _矩形リスト = null;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FDK.メディア;
+using FDK;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FDK.メディア.Tests
+namespace FDK.Tests
 {
 	[TestClass()]
 	public class 矩形リストTests

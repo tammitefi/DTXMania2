@@ -63,7 +63,7 @@ namespace DTXMania
 
                 #region " コマンドライン引数を解析する。"
                 //----------------
-                if( !options.解析する( args ) )
+                if( !options.解析する( args ) ) // 解析に失敗すればfalse
                 {
                     // 利用法を表示して終了。
                     Log.WriteLine( options.Usage );               // ログと
@@ -81,13 +81,13 @@ namespace DTXMania
                 {
                     if( _WCFサービスを取得する( 1, out var factory, out var service, out var serviceChannel ) )
                     {
-                        // (A) すでに起動しているアプリへ処理を委託。
+                        // (A) 取得できた　→　すでに起動しているアプリへ処理を委託。
                         _起動済みのアプリケーションに処理を委託する( service, options );
                         _WCFサービスを解放する( factory, service, serviceChannel );
                     }
                     else
                     {
-                        // (B) 自分がビュアーとして起動し、処理を自分へ委託。
+                        // (B) 取得失敗　→　自分がビュアーとして起動し、処理を自分へ委託。
                         _アプリケーションをビュアーモードで起動する( options );
                     }
                 }
@@ -127,7 +127,7 @@ namespace DTXMania
                 {
                     factory = new ChannelFactory<IDTXManiaService>( new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ) );
                     service = factory.CreateChannel( new EndpointAddress( endPointUri ) );
-                    serviceChannel = service as IClientChannel; // サービスとチャンネルは同じオブジェクト。
+                    serviceChannel = service as IClientChannel; // サービスとチャンネルは同じインスタンス。
                     serviceChannel.Open();
                     return true;    // 取得成功。
                 }
@@ -159,9 +159,9 @@ namespace DTXMania
 
             // 名前付きパイプにバインドしたエンドポイントをサービスホストへ追加する。
             serviceHost.AddServiceEndpoint(
-                typeof( IDTXManiaService ),     // 公開するインターフェース
+                typeof( IDTXManiaService ),                                 // 公開するインターフェース
                 new NetNamedPipeBinding( NetNamedPipeSecurityMode.None ),   // 名前付きパイプ
-                endPointName ); // 公開するエンドポイント
+                endPointName );                                             // 公開するエンドポイント
 
             // WCFサービスの受付を開始する。
             try
