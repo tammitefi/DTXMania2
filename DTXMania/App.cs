@@ -49,7 +49,7 @@ namespace DTXMania
 
         public static ユーザ管理 ユーザ管理 { get; protected set; }
 
-
+        
         public static 曲ツリー 曲ツリー { get; set; }            // ビュアーモード時は未使用。
 
         public static MusicNode ビュアー用曲ノード { get; set; } // ビュアーモード時のみ使用。
@@ -72,6 +72,11 @@ namespace DTXMania
         ///     <see cref="演奏スコア"/>  に対応して生成されたAVI動画インスタンスの管理。
         /// </summary>
         public static AVI管理 AVI管理 { get; set; }
+
+        /// <summary>
+        ///     <see cref="WAV管理"/> で使用される、サウンドのサンプルストリームインスタンスをキャッシュ管理する。
+        /// </summary>
+        public static キャッシュデータレンタル<CSCore.ISampleSource> WAVキャッシュレンタル { get; protected set; }
 
 
         public static bool ウィンドウがアクティブである { get; set; } = false;    // DirectInput 用。
@@ -157,9 +162,12 @@ namespace DTXMania
 
                 App.曲ツリー = new 曲ツリー();
 
-                App.ビュアー用曲ノード = null;
+                App.WAVキャッシュレンタル = new キャッシュデータレンタル<CSCore.ISampleSource>() {
+                    ファイルからデータを生成する = ( path ) => SampleSourceFactory.Create( App.サウンドデバイス, path ),
+                };
 
                 // 以下は選曲されるまで null
+                App.ビュアー用曲ノード = null;
                 App.演奏スコア = null;
                 App.WAV管理 = null;
                 App.AVI管理 = null;
@@ -199,6 +207,9 @@ namespace DTXMania
 
                     App.WAV管理?.Dispose();   // サウンドデバイスより先に開放すること
                     App.WAV管理 = null;
+
+                    App.WAVキャッシュレンタル?.Dispose();
+                    App.WAVキャッシュレンタル = null;
 
                     App.サウンドタイマ?.Dispose();
                     App.サウンドタイマ = null;

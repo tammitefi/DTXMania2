@@ -64,9 +64,9 @@ namespace FDK
             // 今回の世代では貸与されなかった（＝最終貸与世代が現時点の世代ではない）キャッシュデータをすべて破棄する。
 
             var 削除対象リスト =
-                from kvp in this._キャッシュデータリスト
-                where ( kvp.Value.最終貸与世代 < 現世代 )
-                select kvp.Key;
+                ( from kvp in this._キャッシュデータリスト
+                  where ( kvp.Value.最終貸与世代 < 現世代 )
+                  select kvp.Key ).ToArray();   // foreach 内で Remove できるようにコピー（配列化）する。
 
             foreach( var key in 削除対象リスト )
             {
@@ -84,7 +84,7 @@ namespace FDK
         ///     指定されたファイルに対応するデータを（未生成なら）生成し、返す。
         ///     生成に失敗したら null。
         /// </summary>
-        public T 作成して貸与する( VariablePath ファイルパス )
+        public T 作成する( VariablePath ファイルパス )
         {
             try
             {

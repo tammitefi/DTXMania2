@@ -12,10 +12,13 @@ namespace DTXMania.曲
 {
     /// <summary>
     ///		<see cref="スコア.WAVリスト"/> の各サウンドインスタンスを管理する。
+    ///		サウンドの作成には <see cref="App.WAVキャッシュレンタル"/> を使用する。
     /// </summary>
     class WAV管理 : IDisposable
     {
-        /// <param name="多重度">１サウンドの最大多重発声数。1以上。</param>
+        /// <param name="多重度">
+        ///     １サウンドの最大多重発声数。1以上。
+        /// </param>
         public WAV管理( int 多重度 = 4 )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -25,7 +28,7 @@ namespace DTXMania.曲
 
                 this._既定の多重度 = 多重度;
 
-                this._WavContexts = new Dictionary<int, WavContext>();
+                this._WAV情報リスト = new Dictionary<int, WAV情報>();
             }
         }
 
@@ -33,11 +36,10 @@ namespace DTXMania.曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                foreach( var kvp in this._WavContexts )
+                foreach( var kvp in this._WAV情報リスト )
                     kvp.Value.Dispose();
 
-                this._WavContexts.Clear();
-                this._WavContexts = null;
+                this._WAV情報リスト = null;
             }
         }
 
@@ -67,23 +69,23 @@ namespace DTXMania.曲
             //----------------
             #endregion
 
-            // 先に SampleSource を生成する。
+            // 先に ISampleSource を生成する。
 
-            var sampleSource = SampleSourceFactory.Create( device, サウンドファイル.変数なしパス );
+            var サンプルソース = App.WAVキャッシュレンタル.作成する( サウンドファイル );
 
-            if( null == sampleSource )
+            if( null == サンプルソース )
             {
                 Log.WARNING( $"サウンドのデコードに失敗しました。[{サウンドファイル.変数付きパス}" );
                 return;
             }
 
-            // 新しいContextを生成して、サウンドを登録する。
+            // サウンドを登録する。
 
-            if( this._WavContexts.ContainsKey( wav番号 ) )
-                this._WavContexts[ wav番号 ].Dispose();  // すでに登録済みなら解放する。
+            if( this._WAV情報リスト.ContainsKey( wav番号 ) )
+                this._WAV情報リスト[ wav番号 ].Dispose();  // すでに登録済みなら解放する。
 
-            this._WavContexts[ wav番号 ] = new WavContext( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
-            this._WavContexts[ wav番号 ].サウンドを生成する( device, sampleSource );
+            this._WAV情報リスト[ wav番号 ] = new WAV情報( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
+            this._WAV情報リスト[ wav番号 ].サウンドを生成する( device, サンプルソース );
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
         }
@@ -96,7 +98,7 @@ namespace DTXMania.曲
         {
             // 未登録の WAV番号 は無視。
 
-            if( !( this._WavContexts.ContainsKey( WAV番号 ) ) )
+            if( !( this._WAV情報リスト.ContainsKey( WAV番号 ) ) )
                 return;
 
 
@@ -105,7 +107,7 @@ namespace DTXMania.曲
             if( 発声前に消音する && muteGroupType != 消音グループ種別.Unknown )
             {
                 // 発生時に指定された消音グループ種別に属するWAVサウンドをすべて停止する。
-                var 停止するWavContexts = this._WavContexts.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
+                var 停止するWavContexts = this._WAV情報リスト.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
 
                 foreach( var kvp in 停止するWavContexts )
                     kvp.Value.発声を停止する();
@@ -114,20 +116,27 @@ namespace DTXMania.曲
 
             // 発声する。
 
-            this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量, 再生開始時刻sec );
+            this._WAV情報リスト[ WAV番号 ].発声する( muteGroupType, 音量, 再生開始時刻sec );
         }
 
         public void すべての発声を停止する()
         {
-            foreach( var kvp in this._WavContexts )
+            foreach( var kvp in this._WAV情報リスト )
                 kvp.Value.発声を停止する();
         }
 
-        
+
+        private readonly int _既定の多重度;
+
+        /// <summary>
+        ///		全WAVの管理DB。KeyはWAV番号。
+        /// </summary>
+        private Dictionary<int, WAV情報> _WAV情報リスト = null;
+
         /// <summary>
         ///		WAV ごとの管理情報。
         /// </summary>
-        private class WavContext : IDisposable
+        private class WAV情報 : IDisposable
         {
             /// <summary>
             ///		0～1295。
@@ -135,26 +144,22 @@ namespace DTXMania.曲
             public int WAV番号;
 
             /// <summary>
-            ///		この WAV に対応するサンプルソース（デコード済みサウンドデータ）。
-            /// </summary>
-            public ISampleSource SampleSource;
-
-            /// <summary>
             ///		この WAV に対応するサウンド。
-            ///		サウンドデータとして <see cref="SampleSource"/> を使用し、多重度の数だけ存在することができる。
             /// </summary>
+            /// <remarks>
+            ///		サウンドデータとして <see cref="SampleSource"/> を使用し、多重度の数だけ存在することができる。
+            /// </remarks>
             public Sound[] Sounds;
 
             public 消音グループ種別 最後に発声したときの消音グループ種別 { get; protected set; } = 消音グループ種別.Unknown;
 
 
-            public WavContext( int wav番号, int 多重度 )
+            public WAV情報( int wav番号, int 多重度 )
             {
                 if( ( 0 > wav番号 ) || ( 36 * 36 <= wav番号 ) )
                     throw new ArgumentOutOfRangeException( "WAV番号が不正です。" );
 
                 this.WAV番号 = wav番号;
-                this.SampleSource = null;
                 this.Sounds = new Sound[ 多重度 ];
             }
 
@@ -166,9 +171,6 @@ namespace DTXMania.曲
                         sd.Dispose();
                     this.Sounds = null;
                 }
-
-                this.SampleSource?.Dispose();
-                this.SampleSource = null;
             }
 
 
@@ -177,10 +179,8 @@ namespace DTXMania.曲
             /// </summary>
             public void サウンドを生成する( SoundDevice device, ISampleSource sampleSource )
             {
-                this.SampleSource = sampleSource;
-
                 for( int i = 0; i < this.Sounds.Length; i++ )
-                    this.Sounds[ i ] = new Sound( device, this.SampleSource );
+                    this.Sounds[ i ] = new Sound( device, sampleSource );
             }
 
             /// <summary>
@@ -211,12 +211,5 @@ namespace DTXMania.曲
 
             private int _次に再生するSound番号 = 0;
         }
-
-        /// <summary>
-        ///		全WAVの管理DB。KeyはWAV番号。
-        /// </summary>
-        private Dictionary<int, WavContext> _WavContexts = null;
-
-        private readonly int _既定の多重度;
     }
 }
