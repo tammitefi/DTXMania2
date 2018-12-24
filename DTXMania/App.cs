@@ -282,7 +282,7 @@ namespace DTXMania
             }
             catch( Exception e )
             {
-                Log.ERROR( $"システム設定ファイルの削除に失敗しました。[{vpath.変数付きパス}][{e.Message}]" );
+                Log.ERROR( $"システム設定ファイルの削除に失敗しました。[{vpath.変数付きパス}][{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
             }
 
             App.システム設定 = システム設定.復元する(); // ファイルがない場合、新規に作られる
@@ -299,7 +299,7 @@ namespace DTXMania
             }
             catch( Exception e )
             {
-                Log.ERROR( $"曲データベースファイルの削除に失敗しました。[{vpath.変数付きパス}][{e.Message}]" );
+                Log.ERROR( $"曲データベースファイルの削除に失敗しました。[{vpath.変数付きパス}][{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
             }
         }
 
@@ -314,7 +314,7 @@ namespace DTXMania
             }
             catch( Exception e )
             {
-                Log.ERROR( $"ユーザデータベースファイルの削除に失敗しました。[{vpath.変数付きパス}][{e.Message}]" );
+                Log.ERROR( $"ユーザデータベースファイルの削除に失敗しました。[{vpath.変数付きパス}][{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
             }
 
             App.ユーザ管理 = new ユーザ管理();    // 再生成。
