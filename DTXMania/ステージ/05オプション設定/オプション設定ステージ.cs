@@ -23,18 +23,6 @@ namespace DTXMania.ステージ.オプション設定
         }
         public フェーズ 現在のフェーズ { get; protected set; }
 
-        /// <summary>
-        ///		パネルの識別に <see cref="パネル.パネル名"/> を使う場合、
-        ///		その文字列を識別子として扱えるよう、ここで一元的に定義しておく。
-        /// </summary>
-        public class 項目名
-        {
-			public const string 入力割り当て = "入力割り当て";
-			public const string 曲読み込みフォルダ = "曲読み込みフォルダ";
-            public const string 設定完了 = "設定完了";
-            public const string 設定完了_戻る = "設定完了（戻る）";
-        }
-
 
         public オプション設定ステージ()
         {
@@ -282,15 +270,15 @@ namespace DTXMania.ステージ.オプション設定
                 #region "「入力割り当て」パネル "
                 //----------------
                 this._ルートパネルフォルダ.子パネルリスト.Add(
-                    new パネル( 項目名.入力割り当て ) {
+                    this._パネル_入力割り当て = new パネル( "入力割り当て" ) {
                         ヘッダ色 = パネル.ヘッダ色種別.赤,
                     } );
 				//----------------
 				#endregion
-				#region "「曲選択フォルダ割り当て」パネル "
+				#region "「曲読み込みフォルダ」パネル "
 				//----------------
 				this._ルートパネルフォルダ.子パネルリスト.Add(
-					new パネル( 項目名.曲読み込みフォルダ ) {
+                    this._パネル_曲読み込みフォルダ = new パネル( "曲読み込みフォルダ" ) {
 						ヘッダ色 = パネル.ヘッダ色種別.赤,
 					} );
                 //----------------
@@ -308,29 +296,36 @@ namespace DTXMania.ステージ.オプション設定
                     //----------------
                     自動演奏フォルダ.子パネルリスト = new SelectableList<パネル>();
 
+                    自動演奏フォルダ.子パネルリスト.Add(
+                        this._パネル_自動演奏_すべてONOFF = new パネル( "すべてON/OFF" ) );
+
+                    this._パネル_自動演奏_ONOFFトグルリスト = new List<パネル_ONOFFトグル>();
+
                     foreach( AutoPlay種別 apType in Enum.GetValues( typeof( AutoPlay種別 ) ) )
                     {
                         if( apType == AutoPlay種別.Unknown )
                             continue;
 
-                        自動演奏フォルダ.子パネルリスト.Add(
+                        var typePanel = new パネル_ONOFFトグル(
 
-                            new パネル_ONOFFトグル(
+                            パネル名:
+                                apType.ToString(),
 
-                                パネル名:
-                                    apType.ToString(),
+                            初期状態はON:
+                                ( user.AutoPlay[ apType ] ),
 
-                                初期状態はON:
-                                    ( user.AutoPlay[ apType ] ),
+                            値の変更処理:
+                                new Action<パネル>( ( panel ) => {
+                                    user.AutoPlay[ apType ] = ( (パネル_ONOFFトグル) panel ).ONである;
+                                } )
+                        );
 
-                                値の変更処理:
-                                    new Action<パネル>( ( panel ) => {
-                                        user.AutoPlay[ apType ] = ( (パネル_ONOFFトグル) panel ).ONである;
-                                    } )
-                            ) );
+                        自動演奏フォルダ.子パネルリスト.Add( typePanel );
+                        this._パネル_自動演奏_ONOFFトグルリスト.Add( typePanel );
                     }
 
-                    自動演奏フォルダ.子パネルリスト.Add( new パネル_システムボタン( 項目名.設定完了_戻る ) );
+                    自動演奏フォルダ.子パネルリスト.Add(
+                        this._パネル_自動演奏_設定完了_戻る = new パネル_システムボタン( "設定完了（戻る）" ) );
 
                     自動演奏フォルダ.子パネルリスト.SelectFirst();
                     //----------------
@@ -342,7 +337,7 @@ namespace DTXMania.ステージ.オプション設定
                 #region "「設定完了」システムボタン "
                 //----------------
                 this._ルートパネルフォルダ.子パネルリスト.Add(
-                    new パネル_システムボタン( 項目名.設定完了 ) );
+                    this._パネル_設定完了 = new パネル_システムボタン( "設定完了" ) );
                 //----------------
                 #endregion
 
@@ -371,7 +366,7 @@ namespace DTXMania.ステージ.オプション設定
 
         public override void 進行描画する( DeviceContext1 dc )
         {
-            // 進行描画。
+            // (1) 全フェーズ共通の進行描画。
 
             if( this._初めての進行描画 )
             {
@@ -382,11 +377,17 @@ namespace DTXMania.ステージ.オプション設定
             this._舞台画像.進行描画する( dc );
             this._パネルリスト.進行描画する( dc, 613f, 0f );
 
+
+            // (2) フェーズ別の進行描画。
+
             switch( this.現在のフェーズ )
             {
                 case フェーズ.フェードイン:
                     this._パネルリスト.フェードインを開始する();
                     this.現在のフェーズ = フェーズ.表示;
+                    break;
+
+                case フェーズ.表示:
                     break;
 
                 case フェーズ.入力割り当て:
@@ -412,18 +413,22 @@ namespace DTXMania.ステージ.オプション設定
 					}
 					break;
 
-				case フェーズ.フェードアウト:
+                case フェーズ.曲読み込みフォルダ変更済み:
+                    break;
+
+                case フェーズ.フェードアウト:
                     App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.アイキャッチ.フェーズ.クローズ完了 )
                         this.現在のフェーズ = フェーズ.確定;
                     break;
 
-				case フェーズ.曲読み込みフォルダ変更済み:
-                default:
+                case フェーズ.確定:
+                case フェーズ.キャンセル:
                     break;
             }
 
-            // 入力。
+            
+            // (3) フェーズ別の入力。
 
             App.入力管理.すべての入力デバイスをポーリングする();
 
@@ -455,6 +460,8 @@ namespace DTXMania.ステージ.オプション設定
                     }
                     else if( App.入力管理.確定キーが入力された() )
                     {
+                        #region " 選択中のパネルの型と名前に応じて処理分岐。"
+                        //----------------
                         switch( this._パネルリスト.現在選択中のパネル )
                         {
                             case パネル_フォルダ folder:
@@ -462,34 +469,40 @@ namespace DTXMania.ステージ.オプション設定
                                 this._パネルリスト.フェードインを開始する();
                                 break;
 
-                            case パネル panel:
-                                switch( panel.パネル名 )
+                            case パネル panel when( panel.パネル名 == this._パネル_入力割り当て.パネル名 ):
+                                this.現在のフェーズ = フェーズ.入力割り当て;
+                                break;
+
+                            case パネル panel when( panel.パネル名 == this._パネル_曲読み込みフォルダ.パネル名 ):
+                                this.現在のフェーズ = フェーズ.曲読み込みフォルダ割り当て;
+                                break;
+
+                            case パネル panel when( panel.パネル名 == this._パネル_設定完了.パネル名 ):
+                                this._パネルリスト.フェードアウトを開始する();
+                                App.ステージ管理.アイキャッチを選択しクローズする( nameof( アイキャッチ.シャッター ) );
+                                this.現在のフェーズ = フェーズ.フェードアウト;
+                                break;
+
+                            case パネル panel when( panel.パネル名 == this._パネル_自動演奏_設定完了_戻る.パネル名 ):
+                                this._パネルリスト.親のパネルを選択する();
+                                this._パネルリスト.フェードインを開始する();
+                                break;
+
+                            case パネル panel when( panel.パネル名 == this._パネル_自動演奏_すべてONOFF.パネル名 ):
                                 {
-                                    case 項目名.入力割り当て:
-                                        this.現在のフェーズ = フェーズ.入力割り当て;
-                                        break;
+                                    bool 設定値 = !( this._パネル_自動演奏_ONOFFトグルリスト[ 0 ].ONである );  // 最初の項目値の反対にそろえる
 
-									case 項目名.曲読み込みフォルダ:
-										this.現在のフェーズ = フェーズ.曲読み込みフォルダ割り当て;
-										break;
-
-									case 項目名.設定完了:
-                                        this._パネルリスト.フェードアウトを開始する();
-                                        App.ステージ管理.アイキャッチを選択しクローズする( nameof( アイキャッチ.シャッター ) );
-                                        this.現在のフェーズ = フェーズ.フェードアウト;
-                                        break;
-
-                                    case 項目名.設定完了_戻る:
-                                        this._パネルリスト.親のパネルを選択する();
-                                        this._パネルリスト.フェードインを開始する();
-                                        break;
-
-                                    default:
-                                        this._パネルリスト.現在選択中のパネル.確定キーが入力された();
-                                        break;
+                                    foreach( var typePanel in this._パネル_自動演奏_ONOFFトグルリスト )
+                                        typePanel.ONである = 設定値;
                                 }
                                 break;
+
+                            default:
+                                this._パネルリスト.現在選択中のパネル.確定キーが入力された();    // パネルに処理させる
+                                break;
                         }
+                        //----------------
+                        #endregion
                     }
 
                     break;
@@ -498,8 +511,21 @@ namespace DTXMania.ステージ.オプション設定
 
 
         private bool _初めての進行描画 = true;
+
         private 舞台画像 _舞台画像 = null;
+
         private パネルリスト _パネルリスト = null;
+
         private パネル_フォルダ _ルートパネルフォルダ = null;
+
+
+        // 以下、コード内で参照が必要なパネルのホルダ。
+
+        private パネル _パネル_入力割り当て = null;
+        private パネル _パネル_曲読み込みフォルダ = null;
+        private パネル _パネル_自動演奏_すべてONOFF = null;
+        private List<パネル_ONOFFトグル> _パネル_自動演奏_ONOFFトグルリスト = null;
+        private パネル_システムボタン _パネル_自動演奏_設定完了_戻る = null;
+        private パネル_システムボタン _パネル_設定完了 = null;
     }
 }
