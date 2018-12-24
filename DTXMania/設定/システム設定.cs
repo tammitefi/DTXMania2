@@ -22,6 +22,8 @@ namespace DTXMania.設定
     [KnownType( typeof( キーバインディング ) )]
     class システム設定 : IExtensibleDataObject
     {
+        public static readonly VariablePath システム設定ファイルパス = @"$(AppData)Configuration.json";
+
         /// <summary>
         ///     このクラスのバージョン。
         /// </summary>
@@ -53,8 +55,6 @@ namespace DTXMania.設定
 
         [DataMember( Name = "ClientSizeOfViewerMode", Order = 10 )]
         public Size ウィンドウサイズViewerモード用 { get; set; }
-
-        public static readonly VariablePath システム設定ファイルパス = @"$(AppData)Configuration.json";
 
 
         public システム設定()
@@ -152,6 +152,8 @@ namespace DTXMania.設定
         [DataMember( Name = "SongPaths", Order = 10 )]
         private List<string> _曲検索フォルダProxy = null;
 
+
+        // シリアライズ関連
 
         /// <summary>
         ///		コンストラクタまたは逆シリアル化前（復元前）に呼び出される。
