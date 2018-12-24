@@ -199,6 +199,7 @@
     <Compile Include="メディア\XML.cs" />
     <Compile Include="メディア\カスタムTextRenderer.cs" />
     <Compile Include="メディア\グラフィックデバイス.cs" />
+    <Compile Include="キャッシュデータレンタル.cs" />
     <Compile Include="メディア\サウンド\Sources\MediaFoundationOnMemoryWaveSource.cs" />
     <Compile Include="メディア\サウンド\Sources\MediaFoundationOnStreamingWaveSource.cs" />
     <Compile Include="メディア\サウンド\Mixer.cs" />

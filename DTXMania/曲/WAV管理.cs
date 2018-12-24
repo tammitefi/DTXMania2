@@ -68,32 +68,22 @@ namespace DTXMania.曲
             #endregion
 
             // 先に SampleSource を生成する。
-            var sampleSource = (ISampleSource) null;
-            try
-            {
-                sampleSource = SampleSourceFactory.Create( device, サウンドファイル.変数なしパス );
-            }
-            catch
+
+            var sampleSource = SampleSourceFactory.Create( device, サウンドファイル.変数なしパス );
+
+            if( null == sampleSource )
             {
                 Log.WARNING( $"サウンドのデコードに失敗しました。[{サウンドファイル.変数付きパス}" );
                 return;
             }
 
-            // すでに登録済みなら解放する。
+            // 新しいContextを生成して、サウンドを登録する。
+
             if( this._WavContexts.ContainsKey( wav番号 ) )
-                this._WavContexts[ wav番号 ].Dispose();
+                this._WavContexts[ wav番号 ].Dispose();  // すでに登録済みなら解放する。
 
-            // 新しいContextを生成して登録する。
-            {
-                var context = new WavContext( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
-
-                context.SampleSource = sampleSource;
-
-                for( int i = 0; i < context.Sounds.Length; i++ )
-                    context.Sounds[ i ] = new Sound( device, context.SampleSource );
-
-                this._WavContexts[ wav番号 ] = context;
-            }
+            this._WavContexts[ wav番号 ] = new WavContext( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
+            this._WavContexts[ wav番号 ].サウンドを生成する( device, sampleSource );
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
         }
@@ -105,32 +95,37 @@ namespace DTXMania.曲
         public void 発声する( int WAV番号, チップ種別 chipType, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量 = 1f, double 再生開始時刻sec = 0.0 )
         {
             // 未登録の WAV番号 は無視。
+
             if( !( this._WavContexts.ContainsKey( WAV番号 ) ) )
                 return;
 
+
             // 消音する（必要あれば）。
+
             if( 発声前に消音する && muteGroupType != 消音グループ種別.Unknown )
             {
                 // 発生時に指定された消音グループ種別に属するWAVサウンドをすべて停止する。
                 var 停止するWavContexts = this._WavContexts.Where( ( kvp ) => ( kvp.Value.最後に発声したときの消音グループ種別 == muteGroupType ) );
-                foreach( var wavContext in 停止するWavContexts )
-                    foreach( var sound in wavContext.Value.Sounds )
-                        sound.Stop();
+
+                foreach( var kvp in 停止するWavContexts )
+                    kvp.Value.発声を停止する();
             }
 
+
             // 発声する。
+
             this._WavContexts[ WAV番号 ].発声する( muteGroupType, 音量, 再生開始時刻sec );
         }
 
         public void すべての発声を停止する()
         {
             foreach( var kvp in this._WavContexts )
-                kvp.Value.Dispose();
+                kvp.Value.発声を停止する();
         }
 
-
+        
         /// <summary>
-        ///		１つの WAV に相当する管理情報。
+        ///		WAV ごとの管理情報。
         /// </summary>
         private class WavContext : IDisposable
         {
@@ -176,6 +171,18 @@ namespace DTXMania.曲
                 this.SampleSource = null;
             }
 
+
+            /// <summary>
+            ///     多重度の数だけ Sound を生成する。ただしソースは共通。
+            /// </summary>
+            public void サウンドを生成する( SoundDevice device, ISampleSource sampleSource )
+            {
+                this.SampleSource = sampleSource;
+
+                for( int i = 0; i < this.Sounds.Length; i++ )
+                    this.Sounds[ i ] = new Sound( device, this.SampleSource );
+            }
+
             /// <summary>
             ///		指定したチップ種別扱いでWAVサウンドを発声する。
             /// </summary>
@@ -193,6 +200,12 @@ namespace DTXMania.曲
 
                 // サウンドローテーション。
                 this._次に再生するSound番号 = ( this._次に再生するSound番号 + 1 ) % this.Sounds.Length;
+            }
+
+            public void 発声を停止する()
+            {
+                foreach( var sound in this.Sounds )
+                    sound.Stop();
             }
 
 

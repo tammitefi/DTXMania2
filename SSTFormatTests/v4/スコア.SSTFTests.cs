@@ -212,7 +212,8 @@ Part=3; Lane=HiHat; Resolution=1; Chips=0;  # HHClose
             {
                 // BGV と BGM の指定
                 var score = スコア.SSTF.文字列から生成する( @"# SSTFVersion 4.0.0.0
-Video=bg_movie.mp4
+BGV=bg_movie.mp4
+BGM=bg_movie.mp4
 " );
                 score.譜面ファイルの絶対パス = @"D:\SSTF\Demo\score.sstf";
                 Assert.AreEqual( @"D:\SSTF\Demo", score.PATH_WAV );

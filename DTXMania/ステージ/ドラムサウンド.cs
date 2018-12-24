@@ -98,24 +98,37 @@ namespace DTXMania.ステージ
 
             lock( this._Sound利用権 )
             {
-                // すでに辞書に存在してるなら、解放してから削除する。
+                // コンテキストを作成する。
+
+                var context = new ドラムサウンド情報( this._多重度 );
+
+
+                // サウンドファイルを読み込んでデコードする。
+
+                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
+
+                if( null == context.SampleSource )
+                {
+                    Log.ERROR( $"サウンドの生成に失敗しました。[{サウンドファイルパス.変数付きパス}]" );
+                    context.Dispose();
+                    return;
+                }
+
+                // 多重度分のサウンドを生成する。
+
+                for( int i = 0; i < context.Sounds.Length; i++ )
+                    context.Sounds[ i ] = new Sound( App.サウンドデバイス, context.SampleSource );
+
+
+                // コンテキストを辞書に追加する。
+                
                 if( this._チップtoコンテキスト.ContainsKey( (chipType, subChipId) ) )
                 {
+                    // すでに辞書に存在してるなら、解放してから削除する。
                     this._チップtoコンテキスト[ (chipType, subChipId) ]?.Dispose();
                     this._チップtoコンテキスト.Remove( (chipType, subChipId) );
                 }
 
-                // コンテキストを作成する。
-                var context = new ドラムサウンド情報( this._多重度 );
-
-                // サウンドファイルを読み込んでデコードする。
-                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
-
-                // 多重度分のサウンドを生成する。
-                for( int i = 0; i < context.Sounds.Length; i++ )
-                    context.Sounds[ i ] = new Sound( App.サウンドデバイス, context.SampleSource );
-
-                // コンテキストを辞書に追加する。
                 this._チップtoコンテキスト.Add( (chipType, subChipId), context );
 
                 Log.Info( $"ドラムサウンドを生成しました。[({chipType.ToString()},{subChipId}) = {サウンドファイルパス.変数付きパス}]" );

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "FDKTests" )]
-[assembly: AssemblyCopyright( "Copyright © 2016 2017 くまかみ工房" )]
+[assembly: AssemblyCopyright( "Copyright ©  2018" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
-[assembly: Guid( "a82bf10a-79ce-4edd-8ca3-e2e1c981158a" )]
+[assembly: Guid( "49864666-a028-4877-92a4-8200fe9d3c7e" )]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、以下のように '*' を使用してビルド番号とリビジョン番号を 
 // 既定値にすることができます:
 //[アセンブリ: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "24.5.0.0" )]
-[assembly: AssemblyFileVersion( "24.5.0.0" )]
+[assembly: AssemblyVersion( "1.0.0.0" )]
+[assembly: AssemblyFileVersion( "1.0.0.0" )]
