@@ -104,6 +104,10 @@ namespace DTXMania.データベース
 
             this.Connection?.Close();
             this.Connection?.Dispose();
+
+            // SQLite は接続を切断した後もロックを維持するので、GC でそれを解放する。
+            // 参考: https://stackoverrun.com/ja/q/3363188
+            GC.Collect();
         }
 
 
