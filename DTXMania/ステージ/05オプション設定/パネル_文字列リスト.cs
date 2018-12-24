@@ -19,7 +19,7 @@ namespace DTXMania.ステージ.オプション設定
         public List<string> 選択肢リスト { get; protected set; } = new List<string>();
 
 
-        public パネル_文字列リスト( string パネル名, int 初期選択肢番号 = 0, IEnumerable<string> 選択肢初期値s = null, Action<パネル> 値の変更処理 = null )
+        public パネル_文字列リスト( string パネル名, IEnumerable<string> 選択肢初期値リスト = null, int 初期選択肢番号 = 0, Action<パネル> 値の変更処理 = null )
             : base( パネル名, 値の変更処理 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -27,9 +27,9 @@ namespace DTXMania.ステージ.オプション設定
                 this.現在選択されている選択肢の番号 = 初期選択肢番号;
 
                 // 初期値があるなら設定する。
-                if( null != 選択肢初期値s )
+                if( null != 選択肢初期値リスト )
                 {
-                    foreach( var item in 選択肢初期値s )
+                    foreach( var item in 選択肢初期値リスト )
                         this.選択肢リスト.Add( item );
                 }
 
@@ -120,6 +120,7 @@ namespace DTXMania.ステージ.オプション設定
             => $"{this.パネル名}, 選択肢: [{string.Join( ",", this.選択肢リスト )}]";
 
 
+        // 各文字列は画像で保持。
         private Dictionary<string, 文字列画像> _選択肢文字列画像リスト = null;
     }
 }

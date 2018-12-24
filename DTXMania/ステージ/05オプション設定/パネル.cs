@@ -194,6 +194,7 @@ namespace DTXMania.ステージ.オプション設定
             => $"{this.パネル名}";
 
 
+        // パネル名は画像で保持。
         protected 文字列画像 _パネル名画像 = null;
 
         protected Action<パネル> _値の変更処理 = null;
