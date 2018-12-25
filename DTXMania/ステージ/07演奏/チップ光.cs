@@ -6,7 +6,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -26,7 +25,18 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._放射光設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\チップ光.json" ).変数なしパス ) );
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\チップ光.yaml" );
+
+                var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                var deserializer = new YamlDotNet.Serialization.Deserializer();
+                var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                this._放射光の矩形リスト = new Dictionary<string, RectangleF>();
+                foreach( var kvp in yamlMap.矩形リスト )
+                {
+                    if( 4 == kvp.Value.Length )
+                        this._放射光の矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                }
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown,      new 表示レーンステータス( 表示レーン種別.Unknown ) },
@@ -146,7 +156,7 @@ namespace DTXMania.ステージ.演奏
 
                         // (1) 放射光 の進行描画。
                         {
-                            var 転送元矩形dpx = FDKUtilities.JsonToRectangleF( this._放射光設定[ "矩形リスト" ][ レーン.ToString() ] );
+                            var 転送元矩形dpx = this._放射光の矩形リスト[ レーン.ToString() ];
                             var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
 
                             var 変換行列2D =
@@ -160,7 +170,7 @@ namespace DTXMania.ステージ.演奏
 
                         // (2) 光輪 の進行描画。
                         {
-                            var 転送元矩形dpx = FDKUtilities.JsonToRectangleF( this._放射光設定[ "矩形リスト" ][ レーン.ToString() ] );
+                            var 転送元矩形dpx = this._放射光の矩形リスト[ レーン.ToString() ];
                             var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
 
                             var 変換行列2D =
@@ -188,7 +198,7 @@ namespace DTXMania.ステージ.演奏
 
         private 画像 _放射光 = null;
         private 画像 _光輪 = null;
-        private JObject _放射光設定 = null;
+        private Dictionary<string, RectangleF> _放射光の矩形リスト = null;
 
         /// <summary>
         ///		以下の画像のアニメ＆表示管理を行うクラス。
@@ -247,5 +257,11 @@ namespace DTXMania.ステージ.演奏
             }
         }
         private Dictionary<表示レーン種別, 表示レーンステータス> _レーンtoステータス = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

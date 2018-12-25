@@ -4,30 +4,27 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Runtime.Serialization;
 using SharpDX.DirectInput;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization;
 using FDK;
 using DTXMania.入力;
 
 namespace DTXMania.設定
 {
-    [DataContract( Name = "KeyBindings", Namespace = "" )]
-    class キーバインディング : IExtensibleDataObject, ICloneable
+    internal class キーバインディング : ICloneable
     {
         /// <summary>
         ///		入力コードのマッピング用 Dictionary のキーとなる型。
         ///		入力は、デバイスID（入力デバイスの内部識別用ID; FDKのIInputEvent.DeviceIDと同じ）と、
         ///		キー（キーコード、ノート番号などデバイスから得られる入力値）の組で定義される。
         /// </summary>
-        [DataContract( Name = "IDとキー", Namespace = "" )]
-        [TypeConverter( typeof( IdKeyConverter ) )]
-        public struct IdKey
+        public struct IdKey : IYamlConvertible
         {
-            [DataMember]
-            public int deviceId;
-
-            [DataMember]
-            public int key;
+            public int deviceId { get; set; }
+            public int key { get; set; }
 
             public IdKey( int deviceId, int key )
             {
@@ -50,45 +47,44 @@ namespace DTXMania.設定
             public override string ToString()
                 => $"{this.deviceId},{this.key}";
 
-            /// <summary>
-            ///     IdKey と string との相互変換。シリアライズ時に必要。
-            /// </summary>
-            public class IdKeyConverter : TypeConverter
+            void IYamlConvertible.Read( IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer )
             {
-                public override bool CanConvertFrom( ITypeDescriptorContext context, Type sourceType )
-                    => ( sourceType == typeof( string ) ) ? true : base.CanConvertFrom( context, sourceType );
-                public override object ConvertFrom( ITypeDescriptorContext context, CultureInfo culture, object value )
-                    => ( value is string strvalue ) ? new IdKey( strvalue ) : base.ConvertFrom( context, culture, value );
-                public override bool CanConvertTo( ITypeDescriptorContext context, Type destinationType )
-                    => ( destinationType == typeof( string ) ) ? true : base.CanConvertTo( context, destinationType );
-                public override object ConvertTo( ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType )
-                    => ( destinationType == typeof( string ) && ( value is IdKey idkey ) ) ? idkey.ToString() : base.ConvertTo( context, culture, value, destinationType );
+                var devkey = (string) nestedObjectDeserializer( typeof( string ) );
+
+                string 正規表現パターン = $@"^(\d+),(\d+)$";  // \d は10進数数字
+                var m = Regex.Match( devkey, 正規表現パターン, RegexOptions.IgnoreCase );
+
+                if( m.Success && ( 3 <= m.Groups.Count ) )
+                {
+                    this.deviceId = int.Parse( m.Groups[ 1 ].Value );
+                    this.key = int.Parse( m.Groups[ 2 ].Value );
+                }
+            }
+            void IYamlConvertible.Write( IEmitter emitter, ObjectSerializer nestedObjectSerializer )
+            {
+                nestedObjectSerializer( $"{this.deviceId},{this.key}" );
             }
         }
-
 
         /// <summary>
         ///		MIDI番号(0～7)とMIDIデバイス名のマッピング用 Dictionary。
         /// </summary>
-        [DataMember]
         public Dictionary<int, string> MIDIデバイス番号toデバイス名 { get; protected set; }
 
         /// <summary>
         ///		キーボードの入力（DirectInputのKey値）からドラム入力へのマッピング用 Dictionary 。
         /// </summary>
-        [DataMember]
+        [Description( "キーボードの入力割り当て（デバイスID,キーID: ドラム入力種別）" )]
         public Dictionary<IdKey, ドラム入力種別> キーボードtoドラム { get; protected set; }
+
 
         /// <summary>
         ///		MIDI入力の入力（MIDIノート番号）からドラム入力へのマッピング用 Dictionary 。
         /// </summary>
-        [DataMember]
         public Dictionary<IdKey, ドラム入力種別> MIDItoドラム { get; protected set; }
 
-        [DataMember]
         public int FootPedal最小値 { get; set; }
 
-        [DataMember]
         public int FootPedal最大値 { get; set; }
 
 
@@ -96,49 +92,6 @@ namespace DTXMania.設定
         ///		コンストラクタ。
         /// </summary>
         public キーバインディング()
-        {
-            this.OnDeserializing( new StreamingContext() );
-        }
-
-        /// <summary>
-        ///     メンバを共有しない深いコピーを返す。
-        /// </summary>
-        public object Clone()
-        {
-            var clone = new キーバインディング();
-
-
-            clone.MIDIデバイス番号toデバイス名 = new Dictionary<int, string>();
-
-            foreach( var kvp in this.MIDIデバイス番号toデバイス名 )
-                clone.MIDIデバイス番号toデバイス名.Add( kvp.Key, kvp.Value );
-
-
-            clone.キーボードtoドラム = new Dictionary<IdKey, ドラム入力種別>();
-
-            foreach( var kvp in this.キーボードtoドラム )
-                clone.キーボードtoドラム.Add( kvp.Key, kvp.Value );
-
-
-            clone.MIDItoドラム = new Dictionary<IdKey, ドラム入力種別>();
-
-            foreach( var kvp in this.MIDItoドラム )
-                clone.MIDItoドラム.Add( kvp.Key, kvp.Value );
-
-            clone.FootPedal最小値 = this.FootPedal最小値;
-            clone.FootPedal最大値 = this.FootPedal最大値;
-
-            return clone;
-        }
-
-
-        /// <summary>
-        ///		コンストラクタまたは逆シリアル化前（復元前）に呼び出される。
-        ///		ここでは主に、メンバを規定値で初期化する。
-        /// </summary>
-        /// <param name="sc">未使用。</param>
-        [OnDeserializing]
-        private void OnDeserializing( StreamingContext sc )
         {
             this.FootPedal最小値 = 0;
             this.FootPedal最大値 = 90; // VH-11 の Normal Resolution での最大値
@@ -192,52 +145,37 @@ namespace DTXMania.設定
                 { new IdKey( 0,  38 ), ドラム入力種別.Snare },
                 { new IdKey( 0,  40 ), ドラム入力種別.Snare },
                 { new IdKey( 0,  37 ), ドラム入力種別.Snare },
-			};
+            };
         }
 
         /// <summary>
-        ///		逆シリアル化後（復元後）に呼び出される。
-        ///		DataMember を使って他の 非DataMember を初期化する、などの処理を行う。
+        ///     メンバを共有しない深いコピーを返す。
         /// </summary>
-        /// <param name="sc">未使用。</param>
-        [OnDeserialized]
-        private void OnDeserialized( StreamingContext sc )
+        public object Clone()
         {
+            var clone = new キーバインディング();
+
+
+            clone.MIDIデバイス番号toデバイス名 = new Dictionary<int, string>();
+
+            foreach( var kvp in this.MIDIデバイス番号toデバイス名 )
+                clone.MIDIデバイス番号toデバイス名.Add( kvp.Key, kvp.Value );
+
+            clone.キーボードtoドラム = new Dictionary<IdKey, ドラム入力種別>();
+
+            foreach( var kvp in this.キーボードtoドラム )
+                clone.キーボードtoドラム.Add( kvp.Key, kvp.Value );
+
+            clone.MIDItoドラム = new Dictionary<IdKey, ドラム入力種別>();
+
+            foreach( var kvp in this.MIDItoドラム )
+                clone.MIDItoドラム.Add( kvp.Key, kvp.Value );
+
+            clone.FootPedal最小値 = this.FootPedal最小値;
+            clone.FootPedal最大値 = this.FootPedal最大値;
+
+            return clone;
         }
-
-        /// <summary>
-        ///		シリアル化前に呼び出される。
-        ///		非DataMember を使って保存用の DataMember を初期化する、などの処理を行う。
-        /// </summary>
-        /// <param name="sc">未使用。</param>
-        [OnSerializing]
-        private void OnSerializing( StreamingContext sc )
-        {
-        }
-
-        /// <summary>
-        ///		シリアル化後に呼び出される。
-        ///		ログの出力などの処理を行う。
-        /// </summary>
-        /// <param name="sc">未使用。</param>
-        [OnSerialized]
-        private void OnSerialized( StreamingContext sc )
-        {
-        }
-
-        #region " IExtensibleDataObject の実装 "
-        //----------------
-        private ExtensionDataObject _ExData;
-
-        public virtual ExtensionDataObject ExtensionData
-        {
-            get
-                => this._ExData;
-
-            set
-                => this._ExData = value;
-        }
-        //----------------
-        #endregion
+        
     }
 }

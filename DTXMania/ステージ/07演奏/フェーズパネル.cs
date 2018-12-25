@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -36,8 +35,20 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\演奏位置カーソル.yaml" );
+
+                var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                var deserializer = new YamlDotNet.Serialization.Deserializer();
+                var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                this._演奏位置カーソルの矩形リスト = new Dictionary<string, RectangleF>();
+                foreach( var kvp in yamlMap.矩形リスト )
+                {
+                    if( 4 == kvp.Value.Length )
+                        this._演奏位置カーソルの矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                }
+
                 this._現在位置 = 0.0f;
-                this._演奏位置カーソル画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\演奏位置カーソル.json" ).変数なしパス ) );
                 this._初めての進行描画 = true;
             }
         }
@@ -58,21 +69,21 @@ namespace DTXMania.ステージ.演奏
 
             var 中央位置dpx = new Vector2( 1308f, 876f - this._現在位置 * 767f );
 
-            var バー矩形 = FDKUtilities.JsonToRectangleF( this._演奏位置カーソル画像設定[ "矩形リスト" ][ "Bar" ] );
+            var バー矩形 = this._演奏位置カーソルの矩形リスト[ "Bar" ];
             this._演奏位置カーソル画像.描画する(
                 dc,
                 中央位置dpx.X - バー矩形.Width / 2f,
                 中央位置dpx.Y - バー矩形.Height / 2f,
                 転送元矩形: バー矩形 );
 
-            var 左三角矩形 = FDKUtilities.JsonToRectangleF( this._演奏位置カーソル画像設定[ "矩形リスト" ][ "Left" ] );
+            var 左三角矩形 = this._演奏位置カーソルの矩形リスト[ "Left" ];
             this._演奏位置カーソル画像.描画する(
                 dc,
                 中央位置dpx.X - 左三角矩形.Width / 2f - this._左右三角アニメ用カウンタ.現在値の割合 * 40f,
                 中央位置dpx.Y - 左三角矩形.Height / 2f,
                 転送元矩形: 左三角矩形 );
 
-            var 右三角矩形 = FDKUtilities.JsonToRectangleF( this._演奏位置カーソル画像設定[ "矩形リスト" ][ "Right" ] );
+            var 右三角矩形 = this._演奏位置カーソルの矩形リスト[ "Right" ];
             this._演奏位置カーソル画像.描画する(
                 dc,
                 中央位置dpx.X - 右三角矩形.Width / 2f + this._左右三角アニメ用カウンタ.現在値の割合 * 40f,
@@ -83,7 +94,13 @@ namespace DTXMania.ステージ.演奏
         private bool _初めての進行描画 = true;
         private float _現在位置 = 0.0f;
         private 画像 _演奏位置カーソル画像 = null;
-        private JObject _演奏位置カーソル画像設定 = null;
+        private Dictionary<string, RectangleF> _演奏位置カーソルの矩形リスト = null;
         private LoopCounter _左右三角アニメ用カウンタ = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

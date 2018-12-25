@@ -6,8 +6,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectInput;
-using CSCore;
-using Newtonsoft.Json.Linq;
 using FDK;
 using SSTFormat.v4;
 using DTXMania.設定;
@@ -69,7 +67,7 @@ namespace DTXMania.ステージ.演奏
                 this.子を追加する( this._FPS = new FPS() );
                 this.子を追加する( this._数字フォント中グレー48x64 = new 画像フォント(
                    @"$(System)images\数字フォント中ホワイト48x64.png",
-                   @"$(System)images\数字フォント中48x64矩形リスト.json",
+                   @"$(System)images\数字フォント中48x64矩形リスト.yaml",
                    文字幅補正dpx: -16f,
                    不透明度: 0.3f ) );
             }
@@ -79,9 +77,24 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                {
+                    var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\ドラムチップ.yaml" );
+
+                    var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                    var deserializer = new YamlDotNet.Serialization.Deserializer();
+                    var yamlMap = deserializer.Deserialize<YAMLマップ_ドラムチップ>( yaml );
+
+                    this._ドラムチップの縦方向中央位置 = yamlMap.縦方向中央位置;
+                    this._ドラムチップの矩形リスト = new Dictionary<string, RectangleF>();
+                    foreach( var kvp in yamlMap.矩形リスト )
+                    {
+                        if( 4 == kvp.Value.Length )
+                            this._ドラムチップの矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                    }
+                }
+
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
-                this._ドラムチップ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\ドラムチップ.json" ).変数なしパス ) );
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
                 レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
@@ -771,11 +784,12 @@ namespace DTXMania.ステージ.演奏
         }
 
         private 画像 _ドラムチップ画像 = null;
-        private JObject _ドラムチップ画像設定 = null;
+        private Dictionary<string, RectangleF> _ドラムチップの矩形リスト = null;
+        private float _ドラムチップの縦方向中央位置 = 0f;
         private LoopCounter _ドラムチップアニメ = null;
         private void _チップを描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
-            Debug.Assert( null != this._ドラムチップ画像設定 );
+            Debug.Assert( null != this._ドラムチップの矩形リスト );
 
             this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
 
@@ -833,14 +847,14 @@ namespace DTXMania.ステージ.演奏
                 if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
                     ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
-                    var たて方向中央位置dpx = (float) ( this._ドラムチップ画像設定[ "縦方向中央位置" ] );
+                    var たて方向中央位置dpx = this._ドラムチップの縦方向中央位置;
                     var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ 表示レーン種別 ];
                     var 中央位置Xdpx = 左端位置dpx + レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ 表示レーン種別 ] / 2f;
 
                     #region " チップ背景（あれば）を描画する。"
                     //----------------
                     {
-                        var 矩形 = FDKUtilities.JsonToRectangleF( this._ドラムチップ画像設定[ "矩形リスト" ][ 表示チップ種別.ToString() + "_back" ] );
+                        var 矩形 = this._ドラムチップの矩形リスト[ 表示チップ種別.ToString() + "_back" ];
 
                         if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
@@ -924,7 +938,7 @@ namespace DTXMania.ステージ.演奏
                     #region " チップ本体を描画する。"
                     //----------------
                     {
-                        var 矩形 = FDKUtilities.JsonToRectangleF( this._ドラムチップ画像設定[ "矩形リスト" ][ 表示チップ種別.ToString() ] );
+                        var 矩形 = this._ドラムチップの矩形リスト[ 表示チップ種別.ToString() ];
 
                         if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
@@ -1168,5 +1182,12 @@ namespace DTXMania.ステージ.演奏
 
 
         private bool _初めての進行描画 = true;
+
+
+        private class YAMLマップ_ドラムチップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+            public float 縦方向中央位置 { get; set; }
+        }
     }
 }
