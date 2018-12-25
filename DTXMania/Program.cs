@@ -22,6 +22,7 @@ namespace DTXMania
         public static readonly string endPointName = "Viewer";
         public static readonly string endPointUri = $"{serviceUri}/{endPointName}";
 
+
         // メインエントリ。
         [STAThread]
         static void Main( string[] args )

@@ -6,7 +6,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -25,7 +24,18 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._判定文字列画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\判定文字列.json" ).変数なしパス ) );
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\判定文字列.yaml" );
+
+                var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                var deserializer = new YamlDotNet.Serialization.Deserializer();
+                var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                this._判定文字列の矩形リスト = new Dictionary<string, RectangleF>();
+                foreach( var kvp in yamlMap.矩形リスト )
+                {
+                    if( 4 == kvp.Value.Length )
+                        this._判定文字列の矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                }
 
                 this._レーンtoステータス = new Dictionary<表示レーン種別, 表示レーンステータス>() {
                     { 表示レーン種別.Unknown,      new 表示レーンステータス( 表示レーン種別.Unknown ) },
@@ -249,7 +259,7 @@ namespace DTXMania.ステージ.演奏
                             //----------------
                             if( null != status.光のストーリーボード )
                             {
-                                var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._判定文字列画像設定[ "矩形リスト" ][ "PERFECT光" ] );
+                                var 転送元矩形 = this._判定文字列の矩形リスト[ "PERFECT光" ];
                                 var 転送元矩形の中心dpx = new Vector2( 転送元矩形.Width / 2f, 転送元矩形.Height / 2f );
 
                                 var 変換行列2D =
@@ -273,7 +283,7 @@ namespace DTXMania.ステージ.演奏
                             //----------------
                             if( null != status.文字列影のストーリーボード )
                             {
-                                var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._判定文字列画像設定[ "矩形リスト" ][ status.判定種別.ToString() ] );
+                                var 転送元矩形 = this._判定文字列の矩形リスト[ status.判定種別.ToString() ];
 
                                 var 変換行列2D =
                                     Matrix3x2.Translation(
@@ -293,7 +303,7 @@ namespace DTXMania.ステージ.演奏
                             //----------------
                             if( null != status.文字列本体のストーリーボード )
                             {
-                                var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._判定文字列画像設定[ "矩形リスト" ][ status.判定種別.ToString() ] );
+                                var 転送元矩形 = this._判定文字列の矩形リスト[ status.判定種別.ToString() ];
 
                                 var sx = (float) status.文字列本体のX方向拡大率.Value;
                                 var sy = (float) status.文字列本体のY方向拡大率.Value;
@@ -334,7 +344,7 @@ namespace DTXMania.ステージ.演奏
 
         private 画像 _判定文字列画像 = null;
 
-        private JObject _判定文字列画像設定 = null;
+        private Dictionary<string, RectangleF> _判定文字列の矩形リスト = null;
 
         /// <summary>
         ///		以下の画像のアニメ＆表示管理を行うクラス。
@@ -468,5 +478,11 @@ namespace DTXMania.ステージ.演奏
         }
 
         private Dictionary<表示レーン種別, 表示レーンステータス> _レーンtoステータス = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

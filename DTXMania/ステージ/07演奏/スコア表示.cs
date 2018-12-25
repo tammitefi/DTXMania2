@@ -6,7 +6,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -29,7 +28,18 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._スコア数字画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\スコア数字.json" ).変数なしパス ) );
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\スコア数字.yaml" );
+
+                var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                var deserializer = new YamlDotNet.Serialization.Deserializer();
+                var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                this._スコア数字の矩形リスト = new Dictionary<string, RectangleF>();
+                foreach( var kvp in yamlMap.矩形リスト )
+                {
+                    if( 4 == kvp.Value.Length )
+                        this._スコア数字の矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                }
 
                 // 表示用
                 this._現在表示中のスコア = 0;
@@ -92,7 +102,7 @@ namespace DTXMania.ステージ.演奏
                         this._各桁のアニメ[ i ].跳ね開始( am, 0.0 );
                     }
 
-                    var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._スコア数字画像設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
+                    var 転送元矩形 = this._スコア数字の矩形リスト[ 数字[ i ].ToString() ];
 
                     dc.Transform =
                         //Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
@@ -125,7 +135,7 @@ namespace DTXMania.ステージ.演奏
         private int _前回表示したスコア = 0;
 
         private 画像 _スコア数字画像 = null;
-        private JObject _スコア数字画像設定 = null;
+        private Dictionary<string, RectangleF> _スコア数字の矩形リスト = null;
         private Dictionary<判定種別, int> _判定toヒット数 = null;
         private string _前回表示した数字 = "        0";
 
@@ -167,5 +177,11 @@ namespace DTXMania.ステージ.演奏
             }
         };
         private 各桁のアニメ[] _各桁のアニメ = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

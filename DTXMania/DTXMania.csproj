@@ -105,9 +105,6 @@
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="protobuf-net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.3.0.0-alpha.3\lib\net462\protobuf-net.dll</HintPath>
@@ -360,19 +357,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="System\Images\コンソールフォント20x32.json">
+    <None Include="System\Images\コンソールフォント20x32.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏\レーン配置\TypeB.json">
+    <None Include="System\Images\演奏\レーン配置\TypeB.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏\レーン配置\TypeD.json">
+    <None Include="System\Images\演奏\レーン配置\TypeD.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏\レーン配置\TypeA.json">
+    <None Include="System\Images\演奏\レーン配置\TypeA.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏\レーン配置\TypeC.json">
+    <None Include="System\Images\演奏\レーン配置\TypeC.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="設定\ベストプラクティス：DataContractのバージョン管理.md" />
@@ -724,67 +721,67 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\コンボ文字.json">
+    <None Include="System\Images\演奏\コンボ文字.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\スコア数字.json">
+    <None Include="System\Images\演奏\スコア数字.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\チップ光.json">
+    <None Include="System\Images\演奏\チップ光.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\ドラムチップ.json">
+    <None Include="System\Images\演奏\ドラムチップ.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\ドラムパッド.json">
+    <None Include="System\Images\演奏\ドラムパッド.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パッド矢印.json">
+    <None Include="System\Images\パッド矢印.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パラメータ文字_小.json">
+    <None Include="System\Images\パラメータ文字_小.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パラメータ文字_大.json">
+    <None Include="System\Images\パラメータ文字_大.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\パラメータ文字_大太斜.json">
+    <None Include="System\Images\パラメータ文字_大太斜.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\パラメータ用判定種別文字.json">
+    <None Include="System\Images\演奏\パラメータ用判定種別文字.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\レーンフラッシュ.json">
+    <None Include="System\Images\演奏\レーンフラッシュ.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\演奏位置カーソル.json">
+    <None Include="System\Images\演奏\演奏位置カーソル.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\判定文字列.json">
+    <None Include="System\Images\演奏\判定文字列.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -805,7 +802,7 @@
     <None Include="System\Images\数字フォント中グレー48x64.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\数字フォント中48x64矩形リスト.json">
+    <None Include="System\Images\数字フォント中48x64矩形リスト.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

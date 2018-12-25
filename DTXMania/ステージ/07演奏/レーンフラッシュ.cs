@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -24,7 +23,19 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this._レーンフラッシュ画像設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\レーンフラッシュ.json" ).変数なしパス ) );
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\レーンフラッシュ.yaml" );
+
+                var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                var deserializer = new YamlDotNet.Serialization.Deserializer();
+                var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                this._レーンフラッシュの矩形リスト = new Dictionary<string, RectangleF>();
+                foreach( var kvp in yamlMap.矩形リスト )
+                {
+                    if( 4 == kvp.Value.Length )
+                        this._レーンフラッシュの矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                }
+
                 this._レーンtoレーンContext = new Dictionary<表示レーン種別, レーンContext>();
 
                 foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
@@ -33,7 +44,7 @@ namespace DTXMania.ステージ.演奏
                         開始位置dpx = new Vector2(
                             x: レーンフレーム.領域.X + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
                             y: レーンフレーム.領域.Bottom ),
-                        転送元矩形 = FDKUtilities.JsonToRectangleF( this._レーンフラッシュ画像設定[ "矩形リスト" ][ lane.ToString() ] ),
+                        転送元矩形 = this._レーンフラッシュの矩形リスト[ lane.ToString() ],
                         アニメカウンタ = new Counter(),
                     } );
                 }
@@ -79,6 +90,12 @@ namespace DTXMania.ステージ.演奏
         private Dictionary<表示レーン種別, レーンContext> _レーンtoレーンContext = null;
 
         private 画像 _レーンフラッシュ画像 = null;
-        private JObject _レーンフラッシュ画像設定 = null;
+        private Dictionary<string, RectangleF> _レーンフラッシュの矩形リスト = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }
