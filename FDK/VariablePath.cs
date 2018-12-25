@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace FDK
 {
@@ -13,33 +14,29 @@ namespace FDK
     /// <remarks>
     ///     <see cref="VariablePath"/> 型と string は、暗黙的に相互変換できる。
     /// </remarks>
-    public class VariablePath : FDK.Folder
+    public class VariablePath : FDK.Folder, IYamlConvertible
     {
         /// <summary>
         ///		管理しているパスにフォルダ変数が含まれている場合、それを展開して返す。
         /// </summary>
-        public string 変数なしパス
-        {
-            get;
-            protected set;
-        } = null;
+        public string 変数なしパス { get; protected set; } = null;
 
         /// <summary>
         ///		管理しているパスにフォルダ変数に置き換えられる場所があるなら、それを置き換えて返す。
         /// </summary>
-        public string 変数付きパス
+        public string 変数付きパス { get; protected set; } = null;
+
+        public VariablePath()
         {
-            get;
-            protected set;
-        } = null;
+            // Yamlデシリアライズのためにデフォルトコンストラクタが必要。
+        }
 
         /// <param name="パス">
         ///		管理したいパス文字列。変数付き・変数なしのどちらを指定してもいい。
         /// </param>
         public VariablePath( string パス )
         {
-            this.変数なしパス = Folder.絶対パスに含まれるフォルダ変数を展開して返す( パス );
-            this.変数付きパス = Folder.絶対パスをフォルダ変数付き絶対パスに変換して返す( this.変数なしパス );
+            this._初期化( パス );
         }
 
         /// <summary>
@@ -60,5 +57,26 @@ namespace FDK
         /// </summary>
         public override string ToString()
             => this.変数付きパス;
+
+
+        private void _初期化( string パス )
+        {
+            this.変数なしパス = Folder.絶対パスに含まれるフォルダ変数を展開して返す( パス );
+            this.変数付きパス = Folder.絶対パスをフォルダ変数付き絶対パスに変換して返す( this.変数なしパス );
+        }
+
+
+        // Yaml から変換する
+        void IYamlConvertible.Read( YamlDotNet.Core.IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer )
+        {
+            var vpath = (string) nestedObjectDeserializer( typeof( string ) );
+            this._初期化( vpath );
+        }
+
+        // Yaml に変換する
+        void IYamlConvertible.Write( YamlDotNet.Core.IEmitter emitter, ObjectSerializer nestedObjectSerializer )
+        {
+            nestedObjectSerializer( this.変数付きパス );
+        }
     }
 }
