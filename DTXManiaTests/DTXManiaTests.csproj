@@ -84,11 +84,16 @@
     <Compile Include="CommandLineOptionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ステージ\演奏\成績Tests.cs" />
+    <Compile Include="設定\キーバインディングTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTXMania\DTXMania.csproj">
       <Project>{736be388-5ec5-4bf9-838b-8580c9a8da9c}</Project>
       <Name>DTXMania</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FDK\FDK.csproj">
+      <Project>{0e35c4ac-6e28-4a09-a6ce-05d177800051}</Project>
+      <Name>FDK</Name>
     </ProjectReference>
     <ProjectReference Include="..\SSTFormat\SSTFormat.csproj">
       <Project>{93b53767-a0a5-431c-9ec7-b23dbffb10ec}</Project>

@@ -198,6 +198,9 @@
     <Compile Include="カウンタ\経過時間測定.cs" />
     <Compile Include="シリアライズ\XML\SerializableDictionary.cs" />
     <Compile Include="シリアライズ\XML\Serializer.cs" />
+    <Compile Include="シリアライズ\YAML\CommentGatheringTypeInspector.cs" />
+    <Compile Include="シリアライズ\YAML\CommentsObjectDescriptor.cs" />
+    <Compile Include="シリアライズ\YAML\CommentsObjectGraphVisitor.cs" />
     <Compile Include="メディア\DCEventArgs.cs" />
     <Compile Include="メディア\XML.cs" />
     <Compile Include="メディア\カスタムTextRenderer.cs" />
