@@ -9,7 +9,7 @@ using DTXMania.入力;
 
 namespace DTXMania.ステージ.オプション設定
 {
-    public partial class 曲読み込みフォルダ割り当てダイアログ : Form
+    partial class 曲読み込みフォルダ割り当てダイアログ : Form
     {
         public 曲読み込みフォルダ割り当てダイアログ()
         {

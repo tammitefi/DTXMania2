@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DTXMania.ステージ.演奏
 {
-    public enum 判定種別
+    enum 判定種別
     {
         PERFECT,
         GREAT,

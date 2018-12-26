@@ -5,8 +5,7 @@ using System.Linq;
 
 namespace DTXMania
 {
-    
-    public class CommandLineOptions
+    class CommandLineOptions
     {
         public readonly string Usage =
             "DTXMania " + App.リリース番号.ToString( "000" ) + "\n" +

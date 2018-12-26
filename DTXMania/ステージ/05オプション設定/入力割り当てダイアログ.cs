@@ -13,7 +13,7 @@ namespace DTXMania.ステージ.オプション設定
     /// <summary>
     ///     ドラム入力の割り当て画面。
     /// </summary>
-    public partial class 入力割り当てダイアログ : Form
+    partial class 入力割り当てダイアログ : Form
     {
         public 入力割り当てダイアログ()
         {

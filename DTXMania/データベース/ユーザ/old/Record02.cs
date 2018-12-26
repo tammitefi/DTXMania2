@@ -16,7 +16,7 @@ namespace DTXMania.データベース.ユーザ.old
     ///		なし
     /// </remarks>
     [Table( Name = "Records" )]   // テーブル名は複数形
-    public class Record02 : ICloneable
+    class Record02 : ICloneable
     {
         /// <summary>
         ///		ユーザを一意に識別するID。
