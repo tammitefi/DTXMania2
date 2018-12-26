@@ -9,21 +9,34 @@ using FDK;
 namespace DTXMania.ステージ.オプション設定
 {
     /// <summary>
-    ///		スクロール速度専用の数値ボックス。
+    ///		数値ボックス。整数のみ、単位表示は任意。
     /// </summary>
-    class パネル_譜面スピード : パネル
+    class パネル_整数 : パネル
     {
-        protected const double 最小倍率 = 0.5;
-        protected const double 最大倍率 = 8.0;
+        public int 最小値 { get; }
+
+        public int 最大値 { get; }
+
+        public int 現在の値 { get; set; }
+
+        public int 増加減単位値 { get; set; }
+
+        public string 単位 { get; set; }
 
 
-        public パネル_譜面スピード( string パネル名 )
-            : base( パネル名, null )
+        public パネル_整数( string パネル名, int 最小値, int 最大値, int 初期値, int 増加減単位値 = 1, string 単位 = "", Action<パネル> 値の変更処理 = null, Color4? ヘッダ色 = null )
+            : base( パネル名, 値の変更処理, ヘッダ色 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                this.最小値 = 最小値;
+                this.最大値 = 最大値;
+                this.現在の値 = 初期値;
+                this.増加減単位値 = 増加減単位値;
+                this.単位 = 単位;
+
                 this.子を追加する( this._項目画像 = new 文字列画像() { 表示文字列 = "", フォントサイズpt = 34f, 前景色 = Color4.White } );
-                Log.Info( $"譜面スピードパネルを生成しました。[{this}]" );
+                Log.Info( $"整数パネルを生成しました。[{this}]" );
             }
         }
 
@@ -39,32 +52,30 @@ namespace DTXMania.ステージ.オプション設定
 
         public override void 左移動キーが入力された()
         {
-            // 譜面スクロール値を減らす。
-            App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 = Math.Max( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 - 0.5, 最小倍率 );
+            // 値を減らす。
+            this.現在の値 = Math.Max( this.最小値, this.現在の値 - this.増加減単位値 );
 
             base.左移動キーが入力された(); // 忘れないこと
         }
 
         public override void 右移動キーが入力された()
         {
-            // 譜面スクロール値を増やす。
-            App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 = Math.Min( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 + 0.5, 最大倍率 );
+            // 値を増やす。
+            this.現在の値 = Math.Min( this.最大値, this.現在の値 + this.増加減単位値 );
 
             base.右移動キーが入力された(); // 忘れないこと
         }
 
         public override void 確定キーが入力された()
         {
-            // 譜面スクロール値を増やす。
+            // 値を増やす。
+            this.現在の値 = ( this.現在の値 + this.増加減単位値 );
 
-            App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 += 0.5;
+            // 最大値を超えたら最小値へループ。
+            if( this.現在の値 > this.最大値 )
+                this.現在の値 = this.最小値;
 
-            // 最大値を超えたら最小値に戻る。
-
-            if( 最大倍率 < App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 )
-                App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 = 最小倍率;
-
-            base.確定キーが入力された();
+            base.確定キーが入力された();  // 忘れないこと
         }
 
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
@@ -76,7 +87,7 @@ namespace DTXMania.ステージ.オプション設定
 
             // (2) 値を描画。
 
-            this._項目画像.表示文字列 = "×　" + App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度.ToString( "0.0" );
+            this._項目画像.表示文字列 = $"{this.現在の値.ToString()} {this.単位}";
             this._項目画像.ビットマップを生成または更新する();      // このあと画像のサイズが必要になるので、先に生成/更新する。
 
             float 拡大率Y = (float) this._パネルの高さ割合.Value;
@@ -97,6 +108,9 @@ namespace DTXMania.ステージ.オプション設定
                 X方向拡大率: 拡大率X,
                 Y方向拡大率: 拡大率Y );
         }
+
+        public override string ToString()
+            => $"{this.パネル名}, 最小値:{this.最小値}, 最大値:{this.最大値}, 増加減単位値:{this.増加減単位値}, 現在の値:{this.現在の値}";
 
 
         private 文字列画像 _項目画像 = null;

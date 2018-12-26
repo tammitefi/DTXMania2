@@ -73,14 +73,14 @@ namespace DTXMania.ステージ.オプション設定
         {
             this.現在選択されている選択肢の番号 = ( this.現在選択されている選択肢の番号 - 1 + this.選択肢リスト.Count ) % this.選択肢リスト.Count;
 
-            this._値の変更処理?.Invoke( this );
+            base.左移動キーが入力された(); // 忘れないこと
         }
 
         public override void 右移動キーが入力された()
         {
             this.現在選択されている選択肢の番号 = ( this.現在選択されている選択肢の番号 + 1 ) % this.選択肢リスト.Count;
 
-            this._値の変更処理?.Invoke( this );
+            base.右移動キーが入力された(); // 忘れないこと
         }
 
         public override void 確定キーが入力された()

@@ -201,6 +201,7 @@
     <Compile Include="アイキャッチ\アイキャッチ.cs" />
     <Compile Include="アイキャッチ\シャッター.cs" />
     <Compile Include="アイキャッチ\半回転黒フェード.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_整数.cs" />
     <Compile Include="ステージ\05オプション設定\曲読み込みフォルダ割り当てダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -283,6 +284,7 @@
     <Compile Include="データベース\ユーザ\old\User03.cs" />
     <Compile Include="データベース\ユーザ\old\User04.cs" />
     <Compile Include="データベース\ユーザ\old\User05.cs" />
+    <Compile Include="データベース\ユーザ\User07.cs" />
     <Compile Include="データベース\曲\old\Song01.cs" />
     <Compile Include="データベース\曲\old\Song02.cs" />
     <Compile Include="入力\ドラム入力イベント.cs" />
@@ -304,7 +306,7 @@
     <Compile Include="データベース\曲\SongDB.cs" />
     <Compile Include="データベース\SQLiteDBBase.cs" />
     <Compile Include="データベース\ユーザ\Record06.cs" />
-    <Compile Include="データベース\ユーザ\User06.cs" />
+    <Compile Include="データベース\ユーザ\old\User06.cs" />
     <Compile Include="データベース\ユーザ\UserDB.cs" />
     <Compile Include="データベース\曲\Song03.cs" />
     <Compile Include="未処理例外検出ダイアログ.cs">

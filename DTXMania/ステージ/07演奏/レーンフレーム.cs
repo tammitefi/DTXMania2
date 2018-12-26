@@ -133,18 +133,25 @@ namespace DTXMania.ステージ.演奏
             }
         }
 
-        public void 描画する( DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc, int BGAの透明度 )
         {
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
-                using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, 現在のレーン配置.レーン色 ) )
+
+                var レーン色 = 現在のレーン配置.レーン色;
+                レーン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
+                using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, レーン色 ) )
                 {
                     dc.FillRectangle( レーンフレーム.領域, laneBrush );
                 }
 
+
                 // レーンラインを描画する。
-                using( var laneLineBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, 現在のレーン配置.レーンライン色 ) )
+
+                var レーンライン色 = 現在のレーン配置.レーンライン色;
+                レーンライン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
+                using( var laneLineBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, レーンライン色 ) )
                 {
                     for( int i = 0; i < 現在のレーン配置.レーンライン.Length; i++ )
                     {

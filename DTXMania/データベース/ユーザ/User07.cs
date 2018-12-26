@@ -9,10 +9,10 @@ namespace DTXMania.データベース.ユーザ
 {
     /// <summary>
     ///		ユーザテーブルのエンティティクラス。
-    ///		バージョン 6。
+    ///		バージョン 7。
     /// </summary>
     [Table( Name = "Users" )]   // テーブル名は複数形
-    class User06 : ICloneable
+    class User07 : ICloneable
     {
         /// <summary>
         ///		ユーザを一意に識別する文字列。主キー。
@@ -182,12 +182,20 @@ namespace DTXMania.データベース.ユーザ
         [Column( DbType = "NVARCHAR", CanBeNull = false )]
         public string LaneType { get; set; }
 
+        /// <summary>
+        ///     レーンの透過度[%]。
+        ///     0:完全不透明 ～ 100:完全透明
+        /// </summary>
+        [Column( DbType = "INT", CanBeNull = false )]
+        public int LaneTrans { get; set; }
+
+
         ///////////////////////////
 
         /// <summary>
         ///		既定値で初期化。
         /// </summary>
-        public User06()
+        public User07()
         {
             this.Id = "Anonymous";
             this.Name = "Anonymous";
@@ -213,12 +221,13 @@ namespace DTXMania.データベース.ユーザ
             this.SplashLeft = 1;
             this.DrumSound = 1;
             this.LaneType = "TypeA";
+            this.LaneTrans = 50;
         }
 
         // ICloneable 実装
-        public User06 Clone()
+        public User07 Clone()
         {
-            return (User06) this.MemberwiseClone();
+            return (User07) this.MemberwiseClone();
         }
         object ICloneable.Clone()
         {
@@ -227,6 +236,7 @@ namespace DTXMania.データベース.ユーザ
 
         public override string ToString()
             => $"Id:{this.Id}, Name:{this.Name}";
+
 
         ///////////////////////////
 
@@ -258,6 +268,7 @@ namespace DTXMania.データベース.ユーザ
             @", SplashLeft INTEGER NOT NULL" +
             @", DrumSound INTEGER NOT NULL" +
             @", LaneType NVARCHAR NOT NULL" +
+            @", LaneTrans INTEGER NOT NULL" +
             @")";
     }
 }
