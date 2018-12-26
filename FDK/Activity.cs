@@ -68,7 +68,7 @@ namespace FDK
         ///		この Activity を初期化し、進行や描画を行える状態にする。
         ///		これにはデバイス依存リソースの作成も含まれる。
         /// </summary>
-        public virtual void 活性化する()
+        public void 活性化する()
         {
             if( this.活性化している )
                 return;
@@ -86,7 +86,7 @@ namespace FDK
         ///		この Activity を終了し、進行や描画を行わない状態に戻す。
         ///		これにはデバイス依存リソースの解放も含まれる。
         /// </summary>
-        public virtual void 非活性化する()
+        public void 非活性化する()
         {
             if( this.活性化していない )
                 return;

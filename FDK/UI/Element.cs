@@ -134,7 +134,7 @@ namespace FDK.UI
         /// <remarks>
         ///     このクラスだけでなくこのクラスからの派生クラスすべてで実行する必要があるコードは、<see cref="On活性化(グラフィックデバイス)"/> ではなくここで実行する。
         /// </remarks>
-        public override void 活性化する()
+        public new void 活性化する()
         {
             this._設計画面サイズdpx = グラフィックデバイス.Instance.設計画面サイズ;
 
