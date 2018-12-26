@@ -107,7 +107,14 @@ namespace DTXMania.ステージ.オプション設定
 										item.割り当て可能 = false;
 									}
 
-									this._一定時間が経っていれば空行を挿入する();
+                                    // 既に割り当てられていたらそのドラム種別を表示。
+                                    var drumType = this._変更後のキーバインディング.キーボードtoドラム
+                                        .Where( ( kvp ) => ( kvp.Key.deviceId == item.inputEvent.DeviceID && kvp.Key.key == item.inputEvent.Key ) )
+                                        .Select( ( kvp ) => kvp.Value );
+                                    if( 0 < drumType.Count() )
+                                        item.Text += $" （現在の割り当て: {drumType.ElementAt( 0 )}）";
+
+                                    this._一定時間が経っていれば空行を挿入する();
 
 									this.listView入力リスト.Items.Add( item );
 									this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
@@ -163,7 +170,14 @@ namespace DTXMania.ステージ.オプション設定
                                     //----------------
                                     var item = new ListViewItem入力リスト用( InputDeviceType.MidiIn, inputEvent );
 
-									this._一定時間が経っていれば空行を挿入する();
+                                    // 既に割り当てられていたらそのドラム種別を表示。
+                                    var drumType = this._変更後のキーバインディング.MIDItoドラム
+                                        .Where( ( kvp ) => ( kvp.Key.deviceId == item.inputEvent.DeviceID && kvp.Key.key == item.inputEvent.Key ) )
+                                        .Select( ( kvp ) => kvp.Value );
+                                    if( 0 < drumType.Count() )
+                                        item.Text += $" （現在の割り当て: {drumType.ElementAt( 0 )}）";
+
+                                    this._一定時間が経っていれば空行を挿入する();
 
 									this.listView入力リスト.Items.Add( item );
 									this.listView入力リスト.EnsureVisible( this.listView入力リスト.Items.Count - 1 );
