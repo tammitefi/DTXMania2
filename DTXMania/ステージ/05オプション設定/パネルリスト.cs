@@ -16,6 +16,9 @@ namespace DTXMania.ステージ.オプション設定
         public パネル 現在選択中のパネル
             => this._現在のパネルフォルダ.子パネルリスト.SelectedItem;
 
+        public パネル_フォルダ 現在のパネルフォルダ
+            => this._現在のパネルフォルダ;
+
 
         public パネルリスト()
         {
