@@ -154,7 +154,7 @@ namespace DTXMania.曲
 
             this._プレビュー音声再生タイマ?.Dispose();
             this._プレビュー音声再生タイマ = new System.Windows.Forms.Timer() {
-                Interval = 1000,
+                Interval = 500, // ミリ秒
             };
 
             // Tick イベントでは、プレビュー音声を読み込んで再生する。
