@@ -18,6 +18,7 @@ namespace DTXMania.曲
     {
         /// <summary>
         ///		この曲ノードに対応する曲ファイル。
+        ///		絶対パス。
         /// </summary>
         public VariablePath 曲ファイルの絶対パス { get; protected set; } = null;
 
@@ -28,6 +29,7 @@ namespace DTXMania.曲
 
         /// <summary>
         ///		この曲ノードに対応する動画ファイル。
+        ///		曲ファイルからの相対パス。
         /// </summary>
         public VariablePath 動画ファイルパス { get; protected set; } = null;
 
@@ -54,8 +56,11 @@ namespace DTXMania.曲
                 this.曲ファイルハッシュ = song.HashId;
                 this.難易度[ 3 ] = ("FREE", (float) song.Level);       // [3]:MASTER相当。set.def 内にある MusicNode でも同じ。
 
-                if( song.PreImage.Nullでも空でもない() && File.Exists( song.PreImage ) )   // DB に保存されている値があり、そのファイルが存在する
-                    this.子を追加する( this.ノード画像 = new テクスチャ( song.PreImage ) );
+                if( song.PreImage.Nullでも空でもない() )
+                {
+                    var プレビュー画像ファイルの絶対パス = Path.Combine( Path.GetDirectoryName( song.Path ), song.PreImage );
+                    this.子を追加する( this.ノード画像 = new テクスチャ( プレビュー画像ファイルの絶対パス ) );
+                }
             }
         }
     }

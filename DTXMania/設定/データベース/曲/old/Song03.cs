@@ -4,7 +4,7 @@ using System.Data.Linq.Mapping;
 using System.Diagnostics;
 using System.Linq;
 
-namespace DTXMania.データベース.曲
+namespace DTXMania.データベース.曲.old
 {
     /// <summary>
     ///		曲テーブルのエンティティクラス。
@@ -118,7 +118,8 @@ namespace DTXMania.データベース.曲
         public int TotalNotes_RightCymbal { get; set; }
 
         /// <summary>
-        ///		曲のプレビュー画像。
+        ///		曲のプレビュー画像ファイルのパス。
+        ///		曲譜面ファイル（<see cref="Path"/>）からの相対パス。
         /// </summary>
         [Column( DbType = "NVARCHAR" )]
         public string PreImage { get; set; }

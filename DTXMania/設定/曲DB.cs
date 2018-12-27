@@ -11,7 +11,7 @@ using DTXMania.データベース.ユーザ;
 using DTXMania.データベース.曲;
 using DTXMania.ステージ.演奏;
 
-using Song = DTXMania.データベース.曲.Song03;
+using Song = DTXMania.データベース.曲.Song04;
 using Record = DTXMania.データベース.ユーザ.Record06;
 
 namespace DTXMania.設定
