@@ -104,7 +104,7 @@ namespace FDK
         }
 
         public void Play( double 再生開始位置sec )
-            => this.Play( this._秒ToFrame( 再生開始位置sec ) );
+            => this.Play( this.秒ToFrame( 再生開始位置sec ) );
 
         public int Read( float[] buffer, int offset, int count )
         {
@@ -133,17 +133,7 @@ namespace FDK
             }
         }
 
-
-        private WeakReference<SoundDevice> _DeviceRef = null;
-
-        private ISampleSource _BaseSampleSource = null;
-
-        private long _Position = 0;
-
-        private float _Volume = 1.0f;
-
-
-        private long _秒ToFrame( double 時間sec )
+        internal long 秒ToFrame( double 時間sec )
         {
             if( null == this._BaseSampleSource )
                 return 0;
@@ -152,7 +142,7 @@ namespace FDK
             return (long) ( 時間sec * wf.SampleRate + 0.5 ); // +0.5 で四捨五入ができる
         }
 
-        private double _FrameTo秒( long 時間frame )
+        internal double FrameTo秒( long 時間frame )
         {
             if( null == this._BaseSampleSource )
                 return 0;
@@ -160,5 +150,14 @@ namespace FDK
             var wf = this._BaseSampleSource.WaveFormat;
             return (double) 時間frame / wf.SampleRate;
         }
+
+
+        private WeakReference<SoundDevice> _DeviceRef = null;
+
+        private ISampleSource _BaseSampleSource = null;
+
+        private long _Position = 0;
+
+        private float _Volume = 1.0f;
     }
 }
