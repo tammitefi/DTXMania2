@@ -18,6 +18,12 @@ namespace FDK
         /// </summary>
         public static ISampleSource Create( SoundDevice device, VariablePath ファイルパス )
         {
+            if( !( File.Exists( ファイルパス.変数なしパス ) ) )
+            {
+                Log.ERROR( $"ファイルが存在しません。[{ファイルパス.変数付きパス}]" );
+                return null;
+            }
+
             var 拡張子 = Path.GetExtension( ファイルパス.変数なしパス ).ToLower();
 
             if( ".ogg" == 拡張子 )
