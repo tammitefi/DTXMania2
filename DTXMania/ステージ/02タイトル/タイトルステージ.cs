@@ -38,15 +38,24 @@ namespace DTXMania.ステージ.タイトル
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this._帯ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( 0f, 0f, 0f, 0.8f ) );
+
+                App.システムサウンド.再生する( 設定.システムサウンド種別.タイトルステージ_開始音 );
+                App.システムサウンド.再生する( 設定.システムサウンド種別.タイトルステージ_ループBGM, ループ再生する: true );
+
                 this.現在のフェーズ = フェーズ.表示;
 
                 base.On活性化();
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                App.システムサウンド.停止する( 設定.システムサウンド種別.タイトルステージ_開始音 );
+                App.システムサウンド.停止する( 設定.システムサウンド種別.タイトルステージ_ループBGM );
+                //App.システムサウンド.停止する( 設定.システムサウンド種別.タイトルステージ_確定音 );  --> ならしっぱなしでいい
+
                 this._帯ブラシ?.Dispose();
                 this._帯ブラシ = null;
 
@@ -80,6 +89,7 @@ namespace DTXMania.ステージ.タイトル
                         if( App.入力管理.確定キーが入力された() )
                         {
                             Log.Info( $"確定キーが入力されました。フェードアウトを開始します。" );
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.タイトルステージ_確定音 );
                             App.ステージ管理.アイキャッチを選択しクローズする( nameof( シャッター ) );
                             this.現在のフェーズ = フェーズ.フェードアウト;
                         }

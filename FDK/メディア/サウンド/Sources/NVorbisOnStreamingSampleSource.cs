@@ -37,7 +37,6 @@ namespace FDK
         public long Length
             => ( this.CanSeek ) ? this._vorbisReader.TotalSamples * this.WaveFormat.Channels : 0;   // TotalSamples はフレーム数を返す。
 
-
         public NVorbisOnStreamingSampleSource( Stream stream, WaveFormat deviceFormat )
         {
             if( null == stream )

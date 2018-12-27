@@ -60,8 +60,7 @@ namespace FDK
             using( var vorbisSource = new NVorbisOnStreamingSampleSource( stream, deviceFormat ) )
             using( var resampler = new DmoResampler( vorbisSource.ToWaveSource(), this.WaveFormat ) )
             {
-                // resampler.Length はサンプル単位ではなくフレーム単位。
-                var サイズbyte = resampler.Length * resampler.WaveFormat.Channels; // 実際のサイズはチャンネル倍ある。
+                var サイズbyte = resampler.Length;
 
                 this._DecodedWaveData = new byte[ サイズbyte ];
                 resampler.Read( this._DecodedWaveData, 0, (int) サイズbyte );  // でもこっちはバイト単位。

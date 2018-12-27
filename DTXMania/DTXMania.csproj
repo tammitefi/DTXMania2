@@ -274,6 +274,8 @@
     <Compile Include="ステージ\04選曲\難易度と成績.cs" />
     <Compile Include="ステージ\青い線.cs" />
     <Compile Include="ステージ\04選曲\選曲ステージ.cs" />
+    <Compile Include="設定\システムサウンド.cs" />
+    <Compile Include="設定\システムサウンド種別.cs" />
     <Compile Include="設定\データベース\ユーザ\old\Record01.cs" />
     <Compile Include="設定\データベース\ユーザ\old\Record02.cs" />
     <Compile Include="設定\データベース\ユーザ\old\Record03.cs" />
@@ -374,6 +376,39 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\演奏\レーン配置\TypeC.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\カーソル移動音.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\ステージクリア.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\ステージ失敗.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\タイトルステージ_確定音.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\フルコンボ.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\取消音.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\変更音.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\歓声.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\決定音.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\認証ステージ_ログイン音.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\sounds\presets\default\選曲ステージ_曲決定音.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="設定\ベストプラクティス：DataContractのバージョン管理.md" />
@@ -815,6 +850,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using CSCore;
 
-namespace FDK.メディア.サウンド
+namespace FDK
 {
     /// <summary>
     ///     多重再生ができるSound。
@@ -49,17 +49,27 @@ namespace FDK.メディア.サウンド
             this.サウンドリスト = null;
         }
 
-        public void Play( long 再生開始位置frame = 0 )
+        public void Play( long 再生開始位置frame = 0, bool ループ再生する = false )
         {
             // サウンドを再生する。
-            this.サウンドリスト[ this._次に再生するサウンドのインデックス ].Play( 再生開始位置frame );
+            this.サウンドリスト[ this._次に再生するサウンドのインデックス ].Play( 再生開始位置frame, ループ再生する );
 
             // サウンドローテーション。
-            this._次に再生するサウンドのインデックス = ( this._次に再生するサウンドのインデックス + 1 ) % this.多重度;
+            if( !( ループ再生する ) )  // ループ再生時はローテーションしない。
+                this._次に再生するサウンドのインデックス = ( this._次に再生するサウンドのインデックス + 1 ) % this.多重度;
         }
 
-        public void Play( double 再生開始位置sec )
-            => this.Play( this._秒ToFrame( 再生開始位置sec ) );
+        public void Play( double 再生開始位置sec, bool ループ再生する = false )
+            => this.Play( this._秒ToFrame( 再生開始位置sec ), ループ再生する );
+
+        public void Stop()
+        {
+            foreach( var sound in this.サウンドリスト )
+                sound.Stop();
+        }
+
+        public bool いずれかが再生中である
+            => this.サウンドリスト.Any( ( sound ) => sound.再生中である );
 
 
         protected int 多重度;

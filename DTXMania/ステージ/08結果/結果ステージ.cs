@@ -72,6 +72,8 @@ namespace DTXMania.ステージ.結果
 
                 this._結果 = this.結果を取得する();
 
+                App.システムサウンド.再生する( システムサウンド種別.ステージクリア );
+
                 // 成績をDBに記録。
                 曲DB.成績を追加または更新する( this._結果, App.ユーザ管理.ログオン中のユーザ.ユーザID, 選択曲.曲ファイルハッシュ );
 
@@ -80,14 +82,18 @@ namespace DTXMania.ステージ.結果
 
                 this._黒マスクブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( Color3.Black, 0.75f ) );
                 this._プレビュー枠ブラシ = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, new Color4( 0xFF209292 ) );
+
                 this.現在のフェーズ = フェーズ.表示;
                 this._初めての進行描画 = true;
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                App.システムサウンド.停止する( システムサウンド種別.ステージクリア );
+
                 this._結果 = null;
 
                 this._黒マスクブラシ?.Dispose();
@@ -133,6 +139,7 @@ namespace DTXMania.ステージ.結果
                 case フェーズ.表示:
                     if( App.入力管理.確定キーが入力された() )
                     {
+                        App.システムサウンド.再生する( システムサウンド種別.取消音 );    // 確定だけど取消音
                         App.ステージ管理.アイキャッチを選択しクローズする( nameof( シャッター ) );
                         this.現在のフェーズ = フェーズ.フェードアウト;
                     }

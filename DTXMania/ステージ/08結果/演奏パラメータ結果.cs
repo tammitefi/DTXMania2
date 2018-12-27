@@ -25,6 +25,8 @@ namespace DTXMania.ステージ.結果
             {
                 base.On活性化();
 
+                this._フルコンボ再生済み = false;
+
                 var animation = グラフィックデバイス.Instance.Animation;
 
                 this._パラメータアニメ = new パラメータアニメ( animation.Manager );
@@ -74,6 +76,15 @@ namespace DTXMania.ステージ.結果
 
         public override void 描画する( DeviceContext1 dc, float x, float y, 成績 結果 )
         {
+            // パラメータアニメが完了してからフルコンボチェック。
+            if( this._パラメータアニメ.ストーリーボード.Status == StoryboardStatus.Ready && !(this._フルコンボ再生済み ) )
+            {
+                if( 結果.MaxCombo == 結果.総ノーツ数 )
+                    App.システムサウンド.再生する( 設定.システムサウンド種別.フルコンボ );
+
+                this._フルコンボ再生済み = true; // 再生してようがしてまいが
+            }
+
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 var pretrans = dc.Transform;
@@ -158,5 +169,8 @@ namespace DTXMania.ステージ.結果
         private パラメータアニメ _パラメータアニメ = null;
 
         protected new const float _改行幅dpx = 27f;
+
+
+        private bool _フルコンボ再生済み = false;
     }
 }

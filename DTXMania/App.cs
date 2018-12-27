@@ -37,6 +37,8 @@ namespace DTXMania
 
         public static システム設定 システム設定 { get; protected set; }
 
+        public static システムサウンド システムサウンド { get; protected set; }
+
         public static 入力管理 入力管理 { get; set; }
 
         public static ステージ管理 ステージ管理 { get; protected set; }
@@ -157,6 +159,8 @@ namespace DTXMania
 
                 App.ドラムサウンド = new ドラムサウンド();
 
+                App.システムサウンド = new システムサウンド();
+
                 App.ユーザ管理 = new ユーザ管理();
                 App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
 
@@ -198,6 +202,9 @@ namespace DTXMania
 
                     App.ユーザ管理?.Dispose();
                     App.ユーザ管理 = null;
+
+                    App.システムサウンド?.Dispose();
+                    App.システムサウンド = null;
 
                     App.ドラムサウンド?.Dispose();
                     App.ドラムサウンド = null;
@@ -636,7 +643,9 @@ namespace DTXMania
                                 // ビュアーモードならクリアフェーズを維持。（サービスメッセージ待ち。）
                             }
                             else
+                            {
                                 App.ステージ管理.ステージを遷移する( nameof( ステージ.結果.結果ステージ ) );
+                            }
                         }
                         //----------------
                         #endregion
