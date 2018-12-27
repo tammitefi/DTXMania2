@@ -16,8 +16,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._パネル = new 画像( @"$(System)images\演奏\曲名パネル.png" ) );
-                this.子を追加する( this._曲名画像 = new 文字列画像() {
+                this.子Activityを追加する( this._パネル = new 画像( @"$(System)images\演奏\曲名パネル.png" ) );
+                this.子Activityを追加する( this._曲名画像 = new 文字列画像() {
                     フォント名 = "HGMaruGothicMPRO",
                     フォントサイズpt = 26f,
                     フォント幅 = FontWeight.Regular,
@@ -27,7 +27,7 @@ namespace DTXMania.ステージ.演奏
                     前景色 = Color4.Black,
                     背景色 = Color4.White,
                 } );
-                this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
+                this.子Activityを追加する( this._サブタイトル画像 = new 文字列画像() {
                     フォント名 = "HGMaruGothicMPRO",
                     フォントサイズpt = 18f,
                     フォント幅 = FontWeight.Regular,

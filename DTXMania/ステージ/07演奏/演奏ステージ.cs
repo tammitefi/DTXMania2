@@ -43,29 +43,29 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
-                this.子を追加する( this._レーンフレーム = new レーンフレーム() );
-                this.子を追加する( this._曲名パネル = new 曲名パネル() );
-                this.子を追加する( this._ドラムパッド = new ドラムパッド() );
-                this.子を追加する( this._ヒットバー = new ヒットバー() );
-                this.子を追加する( this._レーンフラッシュ = new レーンフラッシュ() );
-                this.子を追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
-                this.子を追加する( this._判定文字列 = new 判定文字列() );
-                this.子を追加する( this._チップ光 = new チップ光() );
-                this.子を追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
-                this.子を追加する( this._右サイドクリアパネル = new 右サイドクリアパネル() );
-                this.子を追加する( this._判定パラメータ表示 = new 判定パラメータ表示() );
-                this.子を追加する( this._フェーズパネル = new フェーズパネル() );
-                this.子を追加する( this._コンボ表示 = new コンボ表示() );
-                this.子を追加する( this._カウントマップライン = new カウントマップライン() );
-                this.子を追加する( this._スコア表示 = new スコア表示() );
-                this.子を追加する( this._プレイヤー名表示 = new プレイヤー名表示() );
-                this.子を追加する( this._譜面スクロール速度 = new 譜面スクロール速度() );
-                this.子を追加する( this._達成率表示 = new 達成率表示() );
-                this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
-                this.子を追加する( this._エキサイトゲージ = new エキサイトゲージ() );
-                this.子を追加する( this._FPS = new FPS() );
-                this.子を追加する( this._数字フォント中グレー48x64 = new 画像フォント(
+                this.子Activityを追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
+                this.子Activityを追加する( this._レーンフレーム = new レーンフレーム() );
+                this.子Activityを追加する( this._曲名パネル = new 曲名パネル() );
+                this.子Activityを追加する( this._ドラムパッド = new ドラムパッド() );
+                this.子Activityを追加する( this._ヒットバー = new ヒットバー() );
+                this.子Activityを追加する( this._レーンフラッシュ = new レーンフラッシュ() );
+                this.子Activityを追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
+                this.子Activityを追加する( this._判定文字列 = new 判定文字列() );
+                this.子Activityを追加する( this._チップ光 = new チップ光() );
+                this.子Activityを追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
+                this.子Activityを追加する( this._右サイドクリアパネル = new 右サイドクリアパネル() );
+                this.子Activityを追加する( this._判定パラメータ表示 = new 判定パラメータ表示() );
+                this.子Activityを追加する( this._フェーズパネル = new フェーズパネル() );
+                this.子Activityを追加する( this._コンボ表示 = new コンボ表示() );
+                this.子Activityを追加する( this._カウントマップライン = new カウントマップライン() );
+                this.子Activityを追加する( this._スコア表示 = new スコア表示() );
+                this.子Activityを追加する( this._プレイヤー名表示 = new プレイヤー名表示() );
+                this.子Activityを追加する( this._譜面スクロール速度 = new 譜面スクロール速度() );
+                this.子Activityを追加する( this._達成率表示 = new 達成率表示() );
+                this.子Activityを追加する( this._曲別SKILL = new 曲別SKILL() );
+                this.子Activityを追加する( this._エキサイトゲージ = new エキサイトゲージ() );
+                this.子Activityを追加する( this._FPS = new FPS() );
+                this.子Activityを追加する( this._数字フォント中グレー48x64 = new 画像フォント(
                    @"$(System)images\数字フォント中ホワイト48x64.png",
                    @"$(System)images\数字フォント中48x64矩形リスト.yaml",
                    文字幅補正dpx: -16f,

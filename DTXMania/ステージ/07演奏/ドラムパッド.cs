@@ -15,7 +15,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
+                this.子Activityを追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
             }
         }
 

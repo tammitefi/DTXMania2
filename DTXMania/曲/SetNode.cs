@@ -93,7 +93,7 @@ namespace DTXMania.曲
 
             if( null != サムネイル画像ファイルパス )
             {
-                this.子を追加する( this._ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
+                this.子Activityを追加する( this._ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
             }
         }
 

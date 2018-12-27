@@ -16,7 +16,7 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲\枠ランナー.png" ) );
+                this.子Activityを追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲\枠ランナー.png" ) );
             }
         }
 

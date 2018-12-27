@@ -19,7 +19,7 @@ namespace DTXMania.ステージ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._矢印画像 = new 画像( @"$(System)images\パッド矢印.png" ) );
+                this.子Activityを追加する( this._矢印画像 = new 画像( @"$(System)images\パッド矢印.png" ) );
 
                 var yaml = File.ReadAllText( new VariablePath( @"$(System)images\パッド矢印.yaml" ).変数なしパス );
                 var deserializer = new YamlDotNet.Serialization.Deserializer();

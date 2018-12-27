@@ -217,7 +217,7 @@ namespace DTXMania.曲
             };
 
             //this.子を追加する( this._ノード画像 );	--> 派生クラスのコンストラクタで追加することができる。
-            this.子を追加する( this._曲名テクスチャ = new 曲名() );
+            this.子Activityを追加する( this._曲名テクスチャ = new 曲名() );
         }
 
         protected override void On活性化()

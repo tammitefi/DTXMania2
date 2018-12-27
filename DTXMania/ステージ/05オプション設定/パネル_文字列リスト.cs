@@ -53,7 +53,7 @@ namespace DTXMania.ステージ.オプション設定
 
                 this._選択肢文字列画像リスト.Add( this.選択肢リスト[ i ], image );
 
-                this.子を追加する( image );
+                this.子Activityを追加する( image );
             }
 
             base.On活性化();   //忘れないこと
@@ -62,7 +62,7 @@ namespace DTXMania.ステージ.オプション設定
         protected override void On非活性化()
         {
             foreach( var kvp in this._選択肢文字列画像リスト )
-                this.子を削除する( kvp.Value );
+                this.子Activityを削除する( kvp.Value );
 
             this._選択肢文字列画像リスト = null;
 

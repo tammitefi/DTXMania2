@@ -24,8 +24,8 @@ namespace DTXMania.ステージ.オプション設定
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._青い線 = new 青い線() );
-                this.子を追加する( this._パッド矢印 = new パッド矢印() );
+                this.子Activityを追加する( this._青い線 = new 青い線() );
+                this.子Activityを追加する( this._パッド矢印 = new パッド矢印() );
 
                 this._ルートパネルフォルダ = null;
                 this._現在のパネルフォルダ = null;

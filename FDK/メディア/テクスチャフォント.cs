@@ -19,7 +19,7 @@ namespace FDK
         /// </summary>
         public テクスチャフォント( VariablePath 文字盤の画像ファイルパス, VariablePath 文字盤設定ファイルパス )
         {
-            this.子を追加する( this._文字盤 = new テクスチャ( 文字盤の画像ファイルパス ) );
+            this.子Activityを追加する( this._文字盤 = new テクスチャ( 文字盤の画像ファイルパス ) );
 
             var yaml = File.ReadAllText( 文字盤設定ファイルパス.変数なしパス );
             var deserializer = new YamlDotNet.Serialization.Deserializer();

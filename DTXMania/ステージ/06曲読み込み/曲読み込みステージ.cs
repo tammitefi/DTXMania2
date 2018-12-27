@@ -27,9 +27,9 @@ namespace DTXMania.ステージ.曲読み込み
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._舞台画像 = new 舞台画像() );
-                this.子を追加する( this._注意文 = new 画像( @"$(System)images\曲読み込み\ご注意ください.png" ) );
-                this.子を追加する( this._曲名画像 = new 文字列画像() {
+                this.子Activityを追加する( this._舞台画像 = new 舞台画像() );
+                this.子Activityを追加する( this._注意文 = new 画像( @"$(System)images\曲読み込み\ご注意ください.png" ) );
+                this.子Activityを追加する( this._曲名画像 = new 文字列画像() {
                     フォント名 = "HGMaruGothicMPRO",
                     フォントサイズpt = 70f,
                     フォント幅 = FontWeight.Regular,
@@ -39,7 +39,7 @@ namespace DTXMania.ステージ.曲読み込み
                     前景色 = Color4.Black,
                     背景色 = Color4.White,
                 } );
-                this.子を追加する( this._サブタイトル画像 = new 文字列画像() {
+                this.子Activityを追加する( this._サブタイトル画像 = new 文字列画像() {
                     フォント名 = "HGMaruGothicMPRO",
                     フォントサイズpt = 45f,
                     フォント幅 = FontWeight.Regular,
@@ -49,8 +49,8 @@ namespace DTXMania.ステージ.曲読み込み
                     前景色 = Color4.Black,
                     背景色 = Color4.White,
                 } );
-                this.子を追加する( this._プレビュー画像 = new プレビュー画像() );
-                this.子を追加する( this._難易度 = new 難易度() );
+                this.子Activityを追加する( this._プレビュー画像 = new プレビュー画像() );
+                this.子Activityを追加する( this._難易度 = new 難易度() );
             }
         }
 

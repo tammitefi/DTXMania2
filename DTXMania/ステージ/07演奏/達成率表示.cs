@@ -14,8 +14,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.yaml", 文字幅補正dpx: 0f ) );
-                this.子を追加する( this._達成率ロゴ画像 = new 画像( @"$(System)images\達成率ロゴ.png" ) );
+                this.子Activityを追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大.png", @"$(System)images\パラメータ文字_大.yaml", 文字幅補正dpx: 0f ) );
+                this.子Activityを追加する( this._達成率ロゴ画像 = new 画像( @"$(System)images\達成率ロゴ.png" ) );
             }
         }
 

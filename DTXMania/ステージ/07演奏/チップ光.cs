@@ -16,8 +16,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._放射光 = new 画像( @"$(System)images\演奏\チップ光.png" ) { 加算合成 = true } );
-                this.子を追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
+                this.子Activityを追加する( this._放射光 = new 画像( @"$(System)images\演奏\チップ光.png" ) { 加算合成 = true } );
+                this.子Activityを追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
             }
         }
 

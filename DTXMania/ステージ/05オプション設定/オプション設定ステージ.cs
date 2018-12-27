@@ -29,8 +29,8 @@ namespace DTXMania.ステージ.オプション設定
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._舞台画像 = new 舞台画像() );
-                this.子を追加する( this._パネルリスト = new パネルリスト() );
+                this.子Activityを追加する( this._舞台画像 = new 舞台画像() );
+                this.子Activityを追加する( this._パネルリスト = new パネルリスト() );
                 //this.子を追加する( this._ルートパネルフォルダ = new パネル_フォルダ( "Root", null, null ) ); --> 活性化のたびに、子パネルとまとめて動的に追加する。
             }
         }

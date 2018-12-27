@@ -26,7 +26,7 @@ namespace FDK
 
         public 画像フォント( VariablePath 文字盤の画像ファイルパス, VariablePath 文字盤設定ファイルパス, float 文字幅補正dpx = 0f, float 不透明度 = 1f )
         {
-            this.子を追加する( this._文字盤 = new 画像( 文字盤の画像ファイルパス ) );
+            this.子Activityを追加する( this._文字盤 = new 画像( 文字盤の画像ファイルパス ) );
 
             this.文字幅補正dpx = 文字幅補正dpx;
             this.不透明度 = 不透明度;

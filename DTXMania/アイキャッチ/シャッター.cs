@@ -15,7 +15,7 @@ namespace DTXMania.アイキャッチ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
+                this.子Activityを追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
             }
         }
 

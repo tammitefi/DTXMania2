@@ -35,7 +35,7 @@ namespace DTXMania.ステージ.オプション設定
                 this.増加減単位値 = 増加減単位値;
                 this.単位 = 単位;
 
-                this.子を追加する( this._項目画像 = new 文字列画像() { 表示文字列 = "", フォントサイズpt = 34f, 前景色 = Color4.White } );
+                this.子Activityを追加する( this._項目画像 = new 文字列画像() { 表示文字列 = "", フォントサイズpt = 34f, 前景色 = Color4.White } );
                 Log.Info( $"整数パネルを生成しました。[{this}]" );
             }
         }

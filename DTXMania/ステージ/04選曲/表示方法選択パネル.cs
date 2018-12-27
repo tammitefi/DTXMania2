@@ -31,7 +31,7 @@ namespace DTXMania.ステージ.選曲
                 this._表示開始位置 = this._指定した表示方法が選択位置に来る場合の表示開始位置を返す( this.現在の表示方法 );
 
                 foreach( var p in this._パネルs )
-                    this.子を追加する( p.画像 = new 画像( p.vpath ) );
+                    this.子Activityを追加する( p.画像 = new 画像( p.vpath ) );
             }
         }
         protected override void On活性化()

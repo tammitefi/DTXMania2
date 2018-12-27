@@ -37,14 +37,14 @@ namespace FDK.UI
             this.位置dpx = 位置dpx ?? Vector2.Zero;
             this.拡大率 = 拡大率 ?? Vector2.One;
 
-            this.子を追加する( this._画像 = new 描画可能画像( imagePath ) );
+            this.子Activityを追加する( this._画像 = new 描画可能画像( imagePath ) );
         }
         public Image( Size2F サイズdpx, Vector2? 位置dpx = null, Vector2? 拡大率 = null )
         {
             this.位置dpx = 位置dpx ?? Vector2.Zero;
             this.拡大率 = 拡大率 ?? Vector2.One;
 
-            this.子を追加する( this._画像 = new 描画可能画像( this.サイズdpx ) );
+            this.子Activityを追加する( this._画像 = new 描画可能画像( this.サイズdpx ) );
         }
 
         public void 画像へ描画する( Action<DeviceContext1> action )

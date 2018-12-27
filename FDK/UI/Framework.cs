@@ -21,7 +21,7 @@ namespace FDK.UI
 
         public Framework()
         {
-            this.子を追加する( this.Root = new RootElement() {
+            this.子Activityを追加する( this.Root = new RootElement() {
                 位置dpx = new Vector2( 0f, 0f ),
                 サイズdpx = グラフィックデバイス.Instance.設計画面サイズ,
                 背景色 = Color.Transparent,
@@ -37,7 +37,7 @@ namespace FDK.UI
             if( this.活性化している )
                 this.Root.非活性化する();
 
-            this.Root.子リストをクリアする();
+            this.Root.子Activityリストをクリアする();
 
             if( this.活性化している )
                 this.Root.活性化する();

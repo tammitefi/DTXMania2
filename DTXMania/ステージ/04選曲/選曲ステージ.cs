@@ -30,17 +30,17 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
-                this.子を追加する( this._曲リスト = new 曲リスト() );
-                this.子を追加する( this._難易度と成績 = new 難易度と成績() );
-                this.子を追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
-                this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
-                this.子を追加する( this._青い線 = new 青い線() );
-                this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
-                this.子を追加する( this._BPMパネル = new BPMパネル() );
-                this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
-                this.子を追加する( this._表示方法選択パネル = new 表示方法選択パネル() );
-				this.子を追加する( this._SongNotFound = new 文字列画像() {
+                this.子Activityを追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
+                this.子Activityを追加する( this._曲リスト = new 曲リスト() );
+                this.子Activityを追加する( this._難易度と成績 = new 難易度と成績() );
+                this.子Activityを追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
+                this.子Activityを追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
+                this.子Activityを追加する( this._青い線 = new 青い線() );
+                this.子Activityを追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
+                this.子Activityを追加する( this._BPMパネル = new BPMパネル() );
+                this.子Activityを追加する( this._曲別SKILL = new 曲別SKILL() );
+                this.子Activityを追加する( this._表示方法選択パネル = new 表示方法選択パネル() );
+				this.子Activityを追加する( this._SongNotFound = new 文字列画像() {
 					表示文字列 =
 					"Song not found...\n" +
 					"Hit BDx2 (in default SPACEx2) to select song folders."

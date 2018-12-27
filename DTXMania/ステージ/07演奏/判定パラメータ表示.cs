@@ -15,8 +15,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.yaml" ) );
-                this.子を追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
+                this.子Activityを追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.yaml" ) );
+                this.子Activityを追加する( this._判定種別文字 = new 画像( @"$(System)images\演奏\パラメータ用判定種別文字.png" ) );
             }
         }
 

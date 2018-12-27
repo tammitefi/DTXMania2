@@ -49,9 +49,9 @@ namespace DTXMania.アイキャッチ
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
-                this.子を追加する( this._画面BC_アイキャッチ遷移画面1_回転中 = new 舞台画像() );
-                this.子を追加する( this._画面D_アイキャッチ遷移画面2_逆回転中 = new 舞台画像() );
+                this.子Activityを追加する( this._ロゴ = new 画像( @"$(System)images\タイトルロゴ.png" ) );
+                this.子Activityを追加する( this._画面BC_アイキャッチ遷移画面1_回転中 = new 舞台画像() );
+                this.子Activityを追加する( this._画面D_アイキャッチ遷移画面2_逆回転中 = new 舞台画像() );
             }
         }
 

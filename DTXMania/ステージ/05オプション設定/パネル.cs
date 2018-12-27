@@ -39,7 +39,7 @@ namespace DTXMania.ステージ.オプション設定
                 this.ヘッダ色 = ( ヘッダ色.HasValue ) ? ヘッダ色.Value : ヘッダ色種別.青;
                 this._値の変更処理 = 値の変更処理;
 
-                this.子を追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
+                this.子Activityを追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
             }
         }
 

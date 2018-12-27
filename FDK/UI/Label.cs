@@ -135,7 +135,7 @@ namespace FDK.UI
         public Label( string テキスト, Size2F サイズdpx, Vector2? 位置dpx = null )
             :base( サイズdpx, 位置dpx )
         {
-            this.子を追加する( this._文字列画像 = new 文字列画像() {
+            this.子Activityを追加する( this._文字列画像 = new 文字列画像() {
                 フォント名 = "メイリオ",
                 フォント幅 = FontWeight.Normal,
                 フォントスタイル = FontStyle.Normal,
