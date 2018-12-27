@@ -20,7 +20,7 @@ namespace FDK.UI
         public TextArea( VariablePath 画像ファイル, 矩形リスト セル矩形, Size2F サイズdpx, Vector2? 位置dpx = null, float fontSize = 18f )
             : base( 画像ファイル, セル矩形, サイズdpx, 位置dpx )
         {
-            this.子を追加する( this.ラベル = new Label(
+            this.子Activityを追加する( this.ラベル = new Label(
                 "テキスト\nエリア",
                 サイズdpx ) {
                 フォントサイズpt = fontSize,

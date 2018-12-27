@@ -6,7 +6,7 @@ using FDK;
 using DTXMania.データベース.ユーザ;
 using DTXMania.ステージ.演奏;
 
-using User = DTXMania.データベース.ユーザ.User06;
+using User = DTXMania.データベース.ユーザ.User07;
 
 namespace DTXMania.設定
 {
@@ -28,26 +28,20 @@ namespace DTXMania.設定
 
         public bool 全画面モードである
         {
-            get
-                => ( 0 != this._User.Fullscreen );
-            set
-                => this._User.Fullscreen = value ? 1 : 0;
+            get => ( 0 != this._User.Fullscreen );
+            set => this._User.Fullscreen = value ? 1 : 0;
         }
 
         public double 譜面スクロール速度
         {
-            get
-                => this._User.ScrollSpeed;
-            set
-                => this._User.ScrollSpeed = value;
+            get => this._User.ScrollSpeed;
+            set => this._User.ScrollSpeed = value;
         }
 
         public bool シンバルフリーモードである
         {
-            get
-                => ( 0 != this._User.CymbalFree );
-            set
-                => this._User.CymbalFree = value ? 1 : 0;
+            get => ( 0 != this._User.CymbalFree );
+            set => this._User.CymbalFree = value ? 1 : 0;
         }
 
         public bool AutoPlayがすべてONである
@@ -74,10 +68,8 @@ namespace DTXMania.設定
 
         public PlayMode 演奏モード
         {
-            get
-                => (PlayMode) this._User.PlayMode;
-            set
-                => this._User.PlayMode = (int) value;
+            get => (PlayMode) this._User.PlayMode;
+            set => this._User.PlayMode = (int) value;
         }
 
         public 表示レーンの左右 表示レーンの左右
@@ -100,18 +92,20 @@ namespace DTXMania.設定
 
         public bool ドラムの音を発声する
         {
-            get
-                => ( 0 != this._User.DrumSound );
-            set
-                => this._User.DrumSound = value ? 1 : 0;
+            get => ( 0 != this._User.DrumSound );
+            set => this._User.DrumSound = value ? 1 : 0;
         }
 
         public string レーン配置
         {
-            get
-                => this._User.LaneType;
-            set
-                => this._User.LaneType = value;
+            get => this._User.LaneType;
+            set => this._User.LaneType = value;
+        }
+
+        public int レーンの透明度
+        {
+            get => this._User.LaneTrans;
+            set => this._User.LaneTrans = value;
         }
 
 

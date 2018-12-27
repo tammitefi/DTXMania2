@@ -34,7 +34,7 @@ namespace DTXMania.アイキャッチ
                 foreach( var s in this._文字アニメーション )
                 {
                     s.画像.加算合成 = true;
-                    this.子を追加する( s.画像 );
+                    this.子Activityを追加する( s.画像 );
                 }
                 //----------------
                 #endregion
@@ -74,7 +74,7 @@ namespace DTXMania.アイキャッチ
                 {
                     foreach( var s in this._文字アニメーション )
                     {
-                        this.子を削除する( s.画像 );
+                        this.子Activityを削除する( s.画像 );
                         s.Dispose();
                     }
                     this._文字アニメーション = null;

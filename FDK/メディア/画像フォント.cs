@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 
 namespace FDK
 {
@@ -26,22 +25,21 @@ namespace FDK
 
 
         public 画像フォント( VariablePath 文字盤の画像ファイルパス, VariablePath 文字盤設定ファイルパス, float 文字幅補正dpx = 0f, float 不透明度 = 1f )
-            : this( 文字盤の画像ファイルパス, JObject.Parse( File.ReadAllText( 文字盤設定ファイルパス.変数なしパス ) ), 文字幅補正dpx, 不透明度 )
         {
-        }
+            this.子Activityを追加する( this._文字盤 = new 画像( 文字盤の画像ファイルパス ) );
 
-        public 画像フォント( VariablePath 文字盤の画像ファイルパス, JObject 文字盤設定, float 文字幅補正dpx = 0f, float 不透明度 = 1f )
-        {
-            this.子を追加する( this._文字盤 = new 画像( 文字盤の画像ファイルパス ) );
             this.文字幅補正dpx = 文字幅補正dpx;
             this.不透明度 = 不透明度;
 
-            // 高速化のために、JObject を Dictionary に変換。
-            this._矩形リスト = new Dictionary<string, SharpDX.RectangleF>();
-            foreach( JProperty rc in 文字盤設定[ "矩形リスト" ].Where(
-                ( jtoken ) => ( jtoken is JProperty && jtoken.Values().Count() == 4 && ( (JProperty) jtoken ).Value.Type == JTokenType.Array ) ) )  // 要素4個の配列のみ抽出
+            var yaml = File.ReadAllText( 文字盤設定ファイルパス.変数なしパス );
+            var deserializer = new YamlDotNet.Serialization.Deserializer();
+            var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+            this._矩形リスト = new Dictionary<string, RectangleF>();
+            foreach( var kvp in yamlMap.矩形リスト )
             {
-                this._矩形リスト.Add( rc.Name, FDKUtilities.JsonToRectangleF( rc.Value ) );
+                if( 4 == kvp.Value.Length )
+                    this._矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
             }
         }
 
@@ -96,6 +94,12 @@ namespace FDK
         
         private 画像 _文字盤 = null;
 
-        private Dictionary<string, RectangleF> _矩形リスト = null;
+        internal protected Dictionary<string, RectangleF> _矩形リスト = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

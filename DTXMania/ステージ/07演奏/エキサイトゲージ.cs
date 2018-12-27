@@ -15,8 +15,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
-                this.子を追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
+                this.子Activityを追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
+                this.子Activityを追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
             }
         }
 

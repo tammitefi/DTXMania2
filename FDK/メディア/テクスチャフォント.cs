@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using SharpDX;
-using Newtonsoft.Json.Linq;
 
 namespace FDK
 {
@@ -19,18 +18,19 @@ namespace FDK
         ///		指定された画像ファイルと矩形リストファイルを使って、テクスチャフォントを生成する。
         /// </summary>
         public テクスチャフォント( VariablePath 文字盤の画像ファイルパス, VariablePath 文字盤設定ファイルパス )
-            : this( 文字盤の画像ファイルパス, JObject.Parse( File.ReadAllText( 文字盤設定ファイルパス.変数なしパス ) ) )
         {
-        }
-        
-        /// <summary>
-        ///		コンストラクタ。
-        ///		指定された画像ファイルと矩形リストを使って、テクスチャフォントを生成する。
-        /// </summary>
-        public テクスチャフォント( VariablePath 文字盤の画像ファイルパス, JObject 文字盤設定 )
-        {
-            this.子を追加する( this._文字盤 = new テクスチャ( 文字盤の画像ファイルパス ) );
-            this._文字盤設定 = 文字盤設定;
+            this.子Activityを追加する( this._文字盤 = new テクスチャ( 文字盤の画像ファイルパス ) );
+
+            var yaml = File.ReadAllText( 文字盤設定ファイルパス.変数なしパス );
+            var deserializer = new YamlDotNet.Serialization.Deserializer();
+            var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+            this._文字盤の矩形リスト = new Dictionary<string, RectangleF>();
+            foreach( var kvp in yamlMap.矩形リスト )
+            {
+                if( 4 == kvp.Value.Length )
+                    this._文字盤の矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+            }
         }
 
         /// <param name="文字列全体のワールド変換行列">
@@ -43,11 +43,10 @@ namespace FDK
 
             // 有効文字（矩形リストに登録されている文字）の矩形、文字数を抽出し、文字列全体のサイズを計算する。
 
-            var rclist = this._文字盤設定[ "矩形リスト" ];
             var 有効文字矩形リスト =
                 from 文字 in 表示文字列
-                where ( null != rclist[ 文字.ToString() ] )
-                select FDKUtilities.JsonToRectangleF( rclist[ 文字.ToString() ] );
+                where ( null != this._文字盤の矩形リスト[ 文字.ToString() ] )
+                select this._文字盤の矩形リスト[ 文字.ToString() ];
 
             int 有効文字数 = 有効文字矩形リスト.Count();
             if( 0 == 有効文字数 )
@@ -85,6 +84,12 @@ namespace FDK
 
         private テクスチャ _文字盤 = null;
 
-        private JObject _文字盤設定 = null;
+        private Dictionary<string, RectangleF> _文字盤の矩形リスト = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

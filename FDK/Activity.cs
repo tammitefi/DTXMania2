@@ -21,8 +21,8 @@ namespace FDK
         ///		　・子Activity の生成と子リストへの追加は、親Activity の On活性化() で行う。
         ///		　・子リストからの削除は、親Activity の On非活性化() で行う。
         /// </remarks>
-        public IReadOnlyList<Activity> 子リスト
-            => this._子リスト;
+        public IReadOnlyList<Activity> 子Activityリスト
+            => this._子Activityリスト;
 
         public bool 活性化している
         {
@@ -39,36 +39,36 @@ namespace FDK
                 => this.活性化している = !( value );
         }
 
-        public Activity 親
+        public Activity 親Activity
         {
             get;
             protected set;
         } = null;
 
-        public void 子を追加する( Activity 子 )
+        public void 子Activityを追加する( Activity 子 )
         {
-            Debug.Assert( ( null == 子.親 ), "このActivityには、すでに親Activityが存在しています。" );
+            Debug.Assert( ( null == 子.親Activity ), "このActivityには、すでに親Activityが存在しています。" );
 
-            子.親 = this;
-            this._子リスト.Add( 子 );
+            子.親Activity = this;
+            this._子Activityリスト.Add( 子 );
         }
-        public void 子を削除する( Activity 子 )
+        public void 子Activityを削除する( Activity 子 )
         {
-            Debug.Assert( this._子リスト.Contains( 子 ), "指定されたActivityは子リストに存在していません。" );
+            Debug.Assert( this._子Activityリスト.Contains( 子 ), "指定されたActivityは子リストに存在していません。" );
 
-            子.親 = null;
-            this._子リスト.Remove( 子 );
+            子.親Activity = null;
+            this._子Activityリスト.Remove( 子 );
         }
-        public void 子リストをクリアする()
+        public void 子Activityリストをクリアする()
         {
-            this._子リスト.Clear(); // Dispose はしない。
+            this._子Activityリスト.Clear(); // Dispose はしない。
         }
 
         /// <summary>
         ///		この Activity を初期化し、進行や描画を行える状態にする。
         ///		これにはデバイス依存リソースの作成も含まれる。
         /// </summary>
-        public virtual void 活性化する()
+        public void 活性化する()
         {
             if( this.活性化している )
                 return;
@@ -78,7 +78,7 @@ namespace FDK
             this.活性化している = true;
 
             // (2) すべての子Activityを活性化する。
-            foreach( var child in this.子リスト )
+            foreach( var child in this.子Activityリスト )
                 child.活性化する();
         }
 
@@ -86,13 +86,13 @@ namespace FDK
         ///		この Activity を終了し、進行や描画を行わない状態に戻す。
         ///		これにはデバイス依存リソースの解放も含まれる。
         /// </summary>
-        public virtual void 非活性化する()
+        public void 非活性化する()
         {
             if( this.活性化していない )
                 return;
 
             // (1) すべての子Activityを非活性化する。
-            foreach( var child in this.子リスト )
+            foreach( var child in this.子Activityリスト )
                 child.非活性化する();
 
             // (2) 自分を非活性化する。
@@ -115,6 +115,6 @@ namespace FDK
         }
 
 
-        private List<Activity> _子リスト = new List<Activity>();
+        private List<Activity> _子Activityリスト = new List<Activity>();
     }
 }

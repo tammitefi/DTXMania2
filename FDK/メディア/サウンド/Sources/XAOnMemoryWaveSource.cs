@@ -9,34 +9,27 @@ using CSCore;
 namespace FDK
 {
     /// <summary>
-    ///		指定されたメディアファイルを XA としてデコードして、<see cref="CSCore.IWaveAggregator"/> オブジェクトを生成する。
+    ///		指定されたメディアファイルを XA としてデコードして、<see cref="CSCore.IWaveSource"/> オブジェクトを生成する。
     ///		リサンプラーなし版。
     /// </summary>
     unsafe class XAOnMemoryWaveSource : IWaveSource
     {
         public bool CanSeek => true; // オンメモリなので常にサポートする。
 
-        public WaveFormat WaveFormat
-        {
-            get;
-            protected set;
-        } = null;
+        public WaveFormat WaveFormat { get; protected set; } = null;
 
         /// <summary>
         ///		デコード後のオーディオデータのすべての長さ[byte]。
         /// </summary>
-        public long Length
-            => this._DecodedWaveData.Length;
+        public long Length => this._DecodedWaveData.Length;
 
         /// <summary>
         ///		現在の再生位置[byte]。
         /// </summary>
         public long Position
         {
-            get
-                => this._Position;
-            set
-                => this._Position = FDKUtilities.位置をブロック境界単位にそろえて返す( value, this.WaveFormat.BlockAlign );
+            get => this._Position;
+            set => this._Position = FDKUtilities.位置をブロック境界単位にそろえて返す( value, this.WaveFormat.BlockAlign );
         }
 
         /// <summary>

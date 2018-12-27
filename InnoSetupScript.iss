@@ -4,7 +4,7 @@
 ; このスクリプトは Release 版を対象にしているので、
 ; このスクリプトをコンパイルする前に Release 版をビルドしておくこと。
 
-#define MyAppVersion "020"
+#define MyAppVersion "021"
 
 #define MyAppName "DTXMania2"
 #define MyAppFolderName "DTXMania2"
@@ -24,7 +24,7 @@ AppId={{C47F4435-C3B5-43A2-8E5A-607C2FE6CB39}
 ; このスクリプトの基本となるフォルダ。このスクリプトファイルからの相対パス。
 SourceDir=.
 ; ビルドしたインストーラ(exe)の出力先。SourceDir からの相対パス。
-OutputDir=インストーラ
+OutputDir=アーカイブ
 ; setup ファイル名。
 OutputBaseFilename=dtxmania2_{#MyAppVersion}_setup
 ; アプリ名。

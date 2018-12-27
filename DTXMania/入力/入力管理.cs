@@ -265,7 +265,11 @@ namespace DTXMania.入力
         /// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
         public bool キャンセルキーが入力された()
         {
-            return this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Escape );
+            return
+                this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Escape ) ||
+                this.ドラムのいずれか１つが入力された( new[] {
+                    ドラム入力種別.Tom3,
+                    ドラム入力種別.Tom3_Rim } );
         }
 
         /// <summary>
@@ -274,12 +278,11 @@ namespace DTXMania.入力
         /// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
         public bool 上移動キーが入力された()
         {
-            return this.ドラムのいずれか１つが入力された(
-                new[] {
+            return
+                this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Up ) ||
+                this.ドラムのいずれか１つが入力された( new[] {
                     ドラム入力種別.Tom1,
-                    ドラム入力種別.Tom1_Rim,
-                } )
-                || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Up );
+                    ドラム入力種別.Tom1_Rim } );
         }
 
         /// <summary>
@@ -288,12 +291,11 @@ namespace DTXMania.入力
         /// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
         public bool 下移動キーが入力された()
         {
-            return this.ドラムのいずれか１つが入力された(
-                new[] {
+            return
+                this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Down ) ||
+                this.ドラムのいずれか１つが入力された( new[] {
                     ドラム入力種別.Tom2,
-                    ドラム入力種別.Tom2_Rim,
-                } )
-                || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Down );
+                    ドラム入力種別.Tom2_Rim } );
         }
 
         /// <summary>
@@ -302,13 +304,12 @@ namespace DTXMania.入力
         /// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
         public bool 左移動キーが入力された()
         {
-            return this.ドラムのいずれか１つが入力された(
-                new[] {
+            return
+                this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Left ) ||
+                this.ドラムのいずれか１つが入力された( new[] {
                     ドラム入力種別.Snare,
                     ドラム入力種別.Snare_ClosedRim,
-                    ドラム入力種別.Snare_OpenRim,
-                } )
-                || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Left );
+                    ドラム入力種別.Snare_OpenRim } );
         }
 
         /// <summary>
@@ -317,12 +318,11 @@ namespace DTXMania.入力
         /// <returns><see cref="ポーリング結果"/>に含まれていれば true。</returns>
         public bool 右移動キーが入力された()
         {
-            return this.ドラムのいずれか１つが入力された(
-                new[] {
+            return
+                this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Right ) ||
+                this.ドラムのいずれか１つが入力された( new[] {
                     ドラム入力種別.Tom3,
-                    ドラム入力種別.Tom3_Rim,
-                } )
-                || this.Keyboard.キーが押された( 0, SharpDX.DirectInput.Key.Right );
+                    ドラム入力種別.Tom3_Rim } );
         }
 
         /// <summary>

@@ -39,6 +39,22 @@ namespace FDK
                 //----------------
                 #endregion
             }
+            if( ".wav" == 拡張子 )
+            {
+                #region " WAV "
+                //----------------
+                try
+                {
+                    return new WavResampledOnMemoryWaveSource( ファイルパス, device.WaveFormat )
+                        .ToSampleSource();
+                }
+                catch
+                {
+                    // ダメだったので次へ。
+                }
+                //----------------
+                #endregion
+            }
             if( ".xa" == 拡張子 )
             {
                 #region " XA "

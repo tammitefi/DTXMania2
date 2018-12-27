@@ -47,7 +47,7 @@ namespace FDK.UI
             this.広い部分の描画方法 = 広い部分の描画方法種別.拡大縮小描画;
             this.ラベル = ラベル;
 
-            this.子を追加する( this._ボタンラベル = new Label(
+            this.子Activityを追加する( this._ボタンラベル = new Label(
                 this.ラベル,
                 サイズdpx ) {
                 ParagraphAlignment = ParagraphAlignment.Center,

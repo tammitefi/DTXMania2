@@ -11,7 +11,7 @@ using DTXMania.データベース.ユーザ;
 using DTXMania.データベース.曲;
 using DTXMania.ステージ.演奏;
 
-using Song = DTXMania.データベース.曲.Song03;
+using Song = DTXMania.データベース.曲.Song04;
 using Record = DTXMania.データベース.ユーザ.Record06;
 
 namespace DTXMania.設定
@@ -201,7 +201,7 @@ namespace DTXMania.設定
             }
             catch( Exception e )
             {
-                Log.ERROR( $"曲DBへの曲の追加に失敗しました。({e.Message})[{曲ファイルパス.変数付きパス}]" );
+                Log.ERROR( $"曲DBへの曲の追加に失敗しました。({VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )})[{曲ファイルパス.変数付きパス}]" );
                 //throw;
             }
         }

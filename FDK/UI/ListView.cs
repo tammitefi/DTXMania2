@@ -68,7 +68,7 @@ namespace FDK.UI
             this._先頭に表示されている項目番号 = 0;
             this._フォーカスされている項目番号 = -1;
 
-            this.子を追加する( this.ウィンドウ画像 = new 描画可能画像( this.サイズdpx ) );
+            this.子Activityを追加する( this.ウィンドウ画像 = new 描画可能画像( this.サイズdpx ) );
         }
 
         public void 項目を追加する( ListViewItem item )
@@ -76,7 +76,7 @@ namespace FDK.UI
             item.サイズdpx = new Size2F( this.クライアント矩形dpx.Width, this.クライアント矩形dpx.Height );
 
             this.項目リスト.Add( item );
-            this.子を追加する( item );
+            this.子Activityを追加する( item );
         }
 
         /// <summary>
@@ -187,8 +187,8 @@ namespace FDK.UI
                     this.サイズdpx = 高さに合わせたサイズdpx;
 
                     this.ウィンドウ画像.非活性化する();
-                    this.子を削除する( this.ウィンドウ画像 );
-                    this.子を追加する( this.ウィンドウ画像 = new 描画可能画像( this.サイズdpx ) );
+                    this.子Activityを削除する( this.ウィンドウ画像 );
+                    this.子Activityを追加する( this.ウィンドウ画像 = new 描画可能画像( this.サイズdpx ) );
                     this.ウィンドウ画像.活性化する();
                 }
             }
@@ -201,7 +201,7 @@ namespace FDK.UI
                 dcw.Clear( Color.Transparent );
 
                 // 全項目を不可視で初期化。
-                foreach( var 子 in this.子リスト )
+                foreach( var 子 in this.子Activityリスト )
                 {
                     if( 子 is ListViewItem item )
                         item.可視 = false;

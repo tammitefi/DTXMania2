@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
+using YamlDotNet.Serialization;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -45,9 +45,10 @@ namespace DTXMania.ステージ.演奏
             ///		レーンラインの領域。
             ///		<see cref="レーンフレーム.領域"/>.Left からの相対値[dpx]。
             /// </summary>
-            public List<RectangleF> レーンライン;
+            public RectangleF[] レーンライン;
 
             public Color4 レーン色;
+
             public Color4 レーンライン色;
         }
         public static レーン配置 現在のレーン配置 { get; private set; }
@@ -57,48 +58,54 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                // レーン配置フォルダから、レーン配置に適合する設定ファイルを検索。
+
                 var root = new VariablePath( @"$(System)images\演奏\レーン配置" );
+
                 レーン配置リスト = new Dictionary<string, レーン配置>();
-
-                // images フォルダから、レーン配置に適合する設定ファイルを検索。
-
-                foreach( var fileInfo in new DirectoryInfo( root.変数なしパス ).GetFiles( "*.json", SearchOption.TopDirectoryOnly ) )
+                foreach( var fileInfo in new DirectoryInfo( root.変数なしパス ).GetFiles( "*.yaml", SearchOption.TopDirectoryOnly ) )
                 {
                     var 拡張子なしのファイル名 = Path.GetFileNameWithoutExtension( fileInfo.Name );
-
-                    レーン配置リスト.Add( 拡張子なしのファイル名, new レーン配置 { 配置名 = 拡張子なしのファイル名 } );   // 名前だけ
+                    レーン配置リスト[ 拡張子なしのファイル名] = new レーン配置 { 配置名 = 拡張子なしのファイル名 };
                 }
+
 
                 // 各設定ファイルから設定を読み込む。
 
                 foreach( var kvp in レーン配置リスト )
                 {
-                    var 設定ファイルパス = Path.Combine( root.変数なしパス, kvp.Key + ".json" );
-                    var 設定 = JObject.Parse( File.ReadAllText( 設定ファイルパス ) );
+                    var 設定ファイルパス = new VariablePath( Path.Combine( root.変数なしパス, kvp.Key + ".yaml" ) );
 
-                    kvp.Value.表示レーンの左端位置dpx = new Dictionary<表示レーン種別, float>();
-                    kvp.Value.表示レーンの幅dpx = new Dictionary<表示レーン種別, float>();
-
-                    foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
+                    try
                     {
-                        kvp.Value.表示レーンの左端位置dpx.Add( lane, (float) 設定[ "左端位置" ][ lane.ToString() ] );
-                        kvp.Value.表示レーンの幅dpx.Add( lane, (float) 設定[ "幅" ][ lane.ToString() ] );
+                        var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                        var deserializer = new Deserializer();
+                        var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                        kvp.Value.表示レーンの左端位置dpx = yamlMap.左端位置;
+                        kvp.Value.表示レーンの幅dpx = yamlMap.幅;
+                        kvp.Value.レーンライン = new RectangleF[ yamlMap.レーンライン.Length ];
+                        for( int i = 0; i < yamlMap.レーンライン.Length; i++ )
+                        {
+                            if( 4 == yamlMap.レーンライン[ i ].Length )
+                                kvp.Value.レーンライン[ i ] = new RectangleF( yamlMap.レーンライン[ i ][ 0 ], yamlMap.レーンライン[ i ][ 1 ], yamlMap.レーンライン[ i ][ 2 ], yamlMap.レーンライン[ i ][ 3 ] );
+                        }
+                        kvp.Value.レーン色 = new Color4( Convert.ToUInt32( yamlMap.レーン色, 16 ) );
+                        kvp.Value.レーンライン色 = new Color4( Convert.ToUInt32( yamlMap.レーンライン色, 16 ) );
+
+                        Log.Info( $"{設定ファイルパス.変数付きパス} ... 完了" );
+                    }
+                    catch( Exception e )
+                    {
+                        Log.Info( $"{設定ファイルパス.変数付きパス} ... 失敗 [{Folder.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
                     }
 
-                    kvp.Value.レーンライン = new List<RectangleF>();
-
-                    foreach( var rcline in 設定[ "レーンライン" ] )
-                        kvp.Value.レーンライン.Add( FDKUtilities.JsonToRectangleF( rcline ) );
-
-                    kvp.Value.レーン色 = new Color4( Convert.ToUInt32( (string) 設定[ "レーン色" ], 16 ) );
-                    kvp.Value.レーンライン色 = new Color4( Convert.ToUInt32( (string) 設定[ "レーンライン色" ], 16 ) );
-
-                    Log.Info( $"{new VariablePath( 設定ファイルパス ).変数付きパス} ... 完了" );
                 }
 
                 レーン配置を設定する( "TypeA" );
             }
         }
+
         public static void レーン配置を設定する( string レーン配置名 )
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -126,20 +133,27 @@ namespace DTXMania.ステージ.演奏
             }
         }
 
-        public void 描画する( DeviceContext1 dc )
+        public void 描画する( DeviceContext1 dc, int BGAの透明度 )
         {
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
-                using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, 現在のレーン配置.レーン色 ) )
+
+                var レーン色 = 現在のレーン配置.レーン色;
+                レーン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
+                using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, レーン色 ) )
                 {
                     dc.FillRectangle( レーンフレーム.領域, laneBrush );
                 }
 
+
                 // レーンラインを描画する。
-                using( var laneLineBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, 現在のレーン配置.レーンライン色 ) )
+
+                var レーンライン色 = 現在のレーン配置.レーンライン色;
+                レーンライン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
+                using( var laneLineBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, レーンライン色 ) )
                 {
-                    for( int i = 0; i < 現在のレーン配置.レーンライン.Count; i++ )
+                    for( int i = 0; i < 現在のレーン配置.レーンライン.Length; i++ )
                     {
                         var rc = 現在のレーン配置.レーンライン[ i ];
                         rc.Left += レーンフレーム.領域.Left;
@@ -149,6 +163,16 @@ namespace DTXMania.ステージ.演奏
                 }
 
             } );
+        }
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<表示レーン種別, float> 左端位置 { get; set; }
+            public Dictionary<表示レーン種別, float> 幅 { get; set; }
+            public float[][] レーンライン { get; set; }
+            public string レーン色 { get; set; }
+            public string レーンライン色 { get; set; }
         }
     }
 }

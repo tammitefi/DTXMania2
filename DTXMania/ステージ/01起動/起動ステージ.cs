@@ -21,6 +21,7 @@ namespace DTXMania.ステージ.起動
             開始,
             曲ツリー構築中,
             ドラムサウンド構築中,
+            開始音終了待ち,
             確定,
             キャンセル,
         }
@@ -31,7 +32,7 @@ namespace DTXMania.ステージ.起動
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._コンソールフォント = new 画像フォント( @"$(System)images\コンソールフォント20x32.png", @"$(System)images\コンソールフォント20x32.json", 文字幅補正dpx: -6f ) );
+                this.子Activityを追加する( this._コンソールフォント = new 画像フォント( @"$(System)images\コンソールフォント20x32.png", @"$(System)images\コンソールフォント20x32.yaml", 文字幅補正dpx: -6f ) );
             }
         }
 
@@ -39,13 +40,28 @@ namespace DTXMania.ステージ.起動
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                if( !App.ビュアーモードである )
+                {
+                    App.システムサウンド.再生する( 設定.システムサウンド種別.起動ステージ_開始音 );
+                    App.システムサウンド.再生する( 設定.システムサウンド種別.起動ステージ_ループBGM, ループ再生する: true );
+                }
+
+                this._コンソール表示内容 = new List<string>() {
+                    $"{App.属性<AssemblyTitleAttribute>().Title} r{App.リリース番号:000}",
+                    $"{App.属性<AssemblyCopyrightAttribute>().Copyright}",
+                    $"",
+                };
+
                 this.現在のフェーズ = フェーズ.開始;
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                App.システムサウンド.停止する( 設定.システムサウンド種別.起動ステージ_開始音 );
+                App.システムサウンド.停止する( 設定.システムサウンド種別.起動ステージ_ループBGM );
             }
         }
 
@@ -53,8 +69,8 @@ namespace DTXMania.ステージ.起動
         {
             // 進行描画
 
-            this._コンソールフォント.描画する( dc, 0f, 0f, $"{App.属性<AssemblyTitleAttribute>().Title} r{App.リリース番号:000}" );
-            this._コンソールフォント.描画する( dc, 0f, 32f, $"{App.属性<AssemblyCopyrightAttribute>().Copyright}" );
+            for( int i = 0; i < this._コンソール表示内容.Count; i++ )
+                this._コンソールフォント.描画する( dc, 0f, i * 32f, this._コンソール表示内容[ i ] );
 
             switch( this.現在のフェーズ )
             {
@@ -88,6 +104,8 @@ namespace DTXMania.ステージ.起動
                         } );
                     }
 
+                    this._コンソール表示内容.Add( "" );
+
                     this.現在のフェーズ = フェーズ.曲ツリー構築中;
                     //----------------
                     #endregion
@@ -99,20 +117,21 @@ namespace DTXMania.ステージ.起動
                     if( App.ビュアーモードである )
                     {
                         // ビュアーモードならスキップ。
-                        this._コンソールフォント.描画する( dc, 0f, 96f, $"Loading and decoding sounds ..." );
+                        this._コンソール表示内容.Add( $"Loading and decoding sounds ..." );
                         this.現在のフェーズ = フェーズ.ドラムサウンド構築中;
                     }
                     else
                     {
                         // 構築タスクの進捗表示。
-                        this._コンソールフォント.描画する( dc, 0f, 96f, $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}" );
+                        this._コンソール表示内容.RemoveAt( this._コンソール表示内容.Count - 1 );
+                        this._コンソール表示内容.Add( $"Enumerating and loading score properties from file ... {Interlocked.Read( ref this._ファイル検出数 )}" );
 
                         // 構築タスクが完了したら、次のフェーズへ遷移する。
                         if( this._構築タスク.IsCompleted || this._構築タスク.IsCanceled )
                         {
                             App.曲ツリー.活性化する();
 
-                            this._コンソールフォント.描画する( dc, 0f, 128f, $"Loading and decoding sounds ..." );
+                            this._コンソール表示内容.Add( $"Loading and decoding sounds ..." );
                             this.現在のフェーズ = フェーズ.ドラムサウンド構築中;
                         }
                     }
@@ -125,8 +144,21 @@ namespace DTXMania.ステージ.起動
                     //----------------
                     {
                         App.ドラムサウンド.初期化する();
-                        this.現在のフェーズ = フェーズ.確定;
+
+                        this._コンソール表示内容.RemoveAt( this._コンソール表示内容.Count - 1 );
+                        this._コンソール表示内容.Add( $"Loading and decoding sounds ... done." );
+
+                        this.現在のフェーズ = フェーズ.開始音終了待ち;
                     }
+                    //----------------
+                    #endregion
+                    break;
+
+                case フェーズ.開始音終了待ち:
+                    #region " 起動ステージ_開始音 が終了するまで待つ。"
+                    //----------------
+                    if( !App.システムサウンド.再生中( 設定.システムサウンド種別.起動ステージ_開始音 ) )
+                        this.現在のフェーズ = フェーズ.確定; // 再生が終わったのでフェーズ遷移。
                     //----------------
                     #endregion
                     break;
@@ -149,6 +181,7 @@ namespace DTXMania.ステージ.起動
 
 
         private 画像フォント _コンソールフォント = null;
+        private List<string> _コンソール表示内容 = null;
         private Task _構築タスク = null;
         private long _ファイル検出数 = 0;
     }

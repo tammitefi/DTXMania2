@@ -6,7 +6,6 @@ using System.Linq;
 using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
-using Newtonsoft.Json.Linq;
 using FDK;
 
 namespace DTXMania.ステージ.演奏
@@ -17,7 +16,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._コンボ文字画像 = new 画像( @"$(System)images\演奏\コンボ文字.png" ) );
+                this.子Activityを追加する( this._コンボ文字画像 = new 画像( @"$(System)images\演奏\コンボ文字.png" ) );
             }
         }
 
@@ -27,7 +26,19 @@ namespace DTXMania.ステージ.演奏
             {
                 this._前回表示した値 = 0;
                 this._前回表示した数字 = "    ";
-                this._コンボ文字設定 = JObject.Parse( File.ReadAllText( new VariablePath( @"$(System)images\演奏\コンボ文字.json" ).変数なしパス ) );
+
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\コンボ文字.yaml" );
+
+                var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
+                var deserializer = new YamlDotNet.Serialization.Deserializer();
+                var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
+
+                this._コンボ文字の矩形リスト = new Dictionary<string, RectangleF>();
+                foreach( var kvp in yamlMap.矩形リスト )
+                {
+                    if( 4 == kvp.Value.Length )
+                        this._コンボ文字の矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
+                }
 
                 this._各桁のアニメ = new 各桁のアニメ[ 4 ];
                 for( int i = 0; i < this._各桁のアニメ.Length; i++ )
@@ -77,7 +88,7 @@ namespace DTXMania.ステージ.演奏
             var 全体のサイズ = new Vector2( 0f, 0f );
             for( int i = 0; i < 数字.Length; i++ )
             {
-                var 矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
+                var 矩形 = this._コンボ文字の矩形リスト[ 数字[ i ].ToString() ];
                 全体のサイズ.X += 矩形.Width + 文字間隔補正;      // 合計
                 全体のサイズ.Y = Math.Max( 全体のサイズ.Y, 矩形.Height ); // 最大値
             }
@@ -119,7 +130,7 @@ namespace DTXMania.ステージ.演奏
                             }
                         }
 
-                        var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ 数字[ i ].ToString() ] );
+                        var 転送元矩形 = this._コンボ文字の矩形リスト[ 数字[ i ].ToString() ];
 
                         dc.Transform =
                             Matrix3x2.Scaling( 画像矩形から表示矩形への拡大率 ) *
@@ -139,7 +150,7 @@ namespace DTXMania.ステージ.演奏
                 #region " Combo を描画。"
                 //----------------
                 {
-                    var 転送元矩形 = FDKUtilities.JsonToRectangleF( this._コンボ文字設定[ "矩形リスト" ][ "Combo" ] );
+                    var 転送元矩形 = this._コンボ文字の矩形リスト[ "Combo" ];
                     var 文字の位置 = new Vector2( 0f, 130f );
 
                     dc.Transform =
@@ -165,7 +176,7 @@ namespace DTXMania.ステージ.演奏
         private int _前回表示した値 = 0;
         private string _前回表示した数字 = "    ";
         private 画像 _コンボ文字画像 = null;
-        private JObject _コンボ文字設定 = null;
+        private Dictionary<string, RectangleF> _コンボ文字の矩形リスト = null;
 
         
         // 桁ごとのアニメーション
@@ -282,5 +293,11 @@ namespace DTXMania.ステージ.演奏
             }
         };
         private 百ごとのアニメ _百ごとのアニメ = null;
+
+
+        private class YAMLマップ
+        {
+            public Dictionary<string, float[]> 矩形リスト { get; set; }
+        }
     }
 }

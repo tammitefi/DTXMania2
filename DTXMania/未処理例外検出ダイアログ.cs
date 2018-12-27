@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace DTXMania
 {
-    public partial class 未処理例外検出ダイアログ : Form
+    partial class 未処理例外検出ダイアログ : Form
     {
         public 未処理例外検出ダイアログ()
         {

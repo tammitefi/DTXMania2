@@ -18,6 +18,7 @@ namespace DTXMania.曲
     {
         /// <summary>
         ///		この曲ノードに対応する曲ファイル。
+        ///		絶対パス。
         /// </summary>
         public VariablePath 曲ファイルの絶対パス { get; protected set; } = null;
 
@@ -28,6 +29,7 @@ namespace DTXMania.曲
 
         /// <summary>
         ///		この曲ノードに対応する動画ファイル。
+        ///		曲ファイルからの相対パス。
         /// </summary>
         public VariablePath 動画ファイルパス { get; protected set; } = null;
 
@@ -54,37 +56,15 @@ namespace DTXMania.曲
                 this.曲ファイルハッシュ = song.HashId;
                 this.難易度[ 3 ] = ("FREE", (float) song.Level);       // [3]:MASTER相当。set.def 内にある MusicNode でも同じ。
 
-                // サムネイル画像を決定する。
-                string サムネイル画像ファイルパス = null;
-                if( song.PreImage.Nullでも空でもない() && File.Exists( song.PreImage ) )
+                if( song.PreImage.Nullでも空でもない() )
                 {
-                    // (A) DB に保存されている値があり、そのファイルが存在するなら、それを使う。
-                    サムネイル画像ファイルパス = song.PreImage;
+                    var プレビュー画像ファイルの絶対パス = Path.Combine( Path.GetDirectoryName( song.Path ), song.PreImage );
+                    this.子Activityを追加する( this.ノード画像 = new テクスチャ( プレビュー画像ファイルの絶対パス ) );
                 }
-                else
-                {
-                    // (B) DB に保存されてない場合、曲ファイルと同じ場所に画像ファイルがあるなら、それをノード画像として採用する。
-                    サムネイル画像ファイルパス =
-                        ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルの絶対パス.変数なしパス ) )
-                          where _対応するサムネイル画像名.Any( thumbファイル名 => ( Path.GetFileName( ファイル名 ).ToLower() == thumbファイル名 ) )
-                          select ファイル名 ).FirstOrDefault();
-                }
-                if( null != サムネイル画像ファイルパス )
-                {
-                    this.子を追加する( this.ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
-                }
+
+                if( song.PreSound.Nullでも空でもない() )
+                    this.プレビュー音声ファイルの絶対パス = Path.Combine( Path.GetDirectoryName( song.Path ), song.PreSound );
             }
-
-            // 曲ファイルと同じ場所に（対応する拡張子を持った）動画ファイルがあるなら、それを背景動画として採用する。
-            this.動画ファイルパス = new VariablePath(
-                ( from ファイル名 in Directory.GetFiles( Path.GetDirectoryName( this.曲ファイルの絶対パス.変数なしパス ) )
-                  where _対応する動画の拡張子.Any( 拡張子名 => ( Path.GetExtension( ファイル名 ).ToLower() == 拡張子名 ) )
-                  select ファイル名 ).FirstOrDefault() );
         }
-
-
-        private readonly string[] _対応する動画の拡張子 = { ".mp4", ".avi" };
-
-        private readonly string[] _対応するサムネイル画像名 = { "thumb.png", "thumb.bmp", "thumb.jpg", "thumb.jpeg" };
     }
 }

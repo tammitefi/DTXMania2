@@ -86,11 +86,8 @@
     <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
       <HintPath>..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NVorbis, Version=0.8.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NVorbis.0.8.5.0\lib\NVorbis.dll</HintPath>
+    <Reference Include="NVorbis, Version=0.8.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
@@ -147,6 +144,9 @@
     <Reference Include="Windows">
       <HintPath>C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.16299.0\Windows.winmd</HintPath>
     </Reference>
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.5.3.0\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity.cs" />
@@ -195,11 +195,15 @@
     <Compile Include="カウンタ\経過時間測定.cs" />
     <Compile Include="シリアライズ\XML\SerializableDictionary.cs" />
     <Compile Include="シリアライズ\XML\Serializer.cs" />
+    <Compile Include="シリアライズ\YAML\CommentGatheringTypeInspector.cs" />
+    <Compile Include="シリアライズ\YAML\CommentsObjectDescriptor.cs" />
+    <Compile Include="シリアライズ\YAML\CommentsObjectGraphVisitor.cs" />
     <Compile Include="メディア\DCEventArgs.cs" />
     <Compile Include="メディア\XML.cs" />
     <Compile Include="メディア\カスタムTextRenderer.cs" />
     <Compile Include="メディア\グラフィックデバイス.cs" />
     <Compile Include="キャッシュデータレンタル.cs" />
+    <Compile Include="メディア\サウンド\PolySound.cs" />
     <Compile Include="メディア\サウンド\Sources\MediaFoundationOnMemoryWaveSource.cs" />
     <Compile Include="メディア\サウンド\Sources\MediaFoundationOnStreamingWaveSource.cs" />
     <Compile Include="メディア\サウンド\Mixer.cs" />
@@ -209,6 +213,8 @@
     <Compile Include="メディア\サウンド\Sound.cs" />
     <Compile Include="メディア\サウンド\SoundDevice.cs" />
     <Compile Include="メディア\サウンド\SoundTimer.cs" />
+    <Compile Include="メディア\サウンド\Sources\WavOnMemoryWaveSource.cs" />
+    <Compile Include="メディア\サウンド\Sources\WavResampledOnMemoryWaveSource.cs" />
     <Compile Include="メディア\サウンド\Sources\XaResampledOnMemoryWaveSource.cs" />
     <Compile Include="メディア\サウンド\Sources\XAOnMemoryWaveSource.cs" />
     <Compile Include="メディア\ストリーミング\HttpRandomAccessStream.cs" />

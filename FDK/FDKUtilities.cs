@@ -270,17 +270,5 @@ namespace FDK
 
             return dataContract;
         }
-
-        /// <summary>
-        ///     JToken に含まれる４つの要素から矩形を抽出して返す。
-        /// </summary>
-        public static SharpDX.RectangleF JsonToRectangleF( Newtonsoft.Json.Linq.JToken jTokens )
-        {
-            return new SharpDX.RectangleF(
-                (float) jTokens[ 0 ],        // x
-                (float) jTokens[ 1 ],        // y
-                (float) jTokens[ 2 ],        // w
-                (float) jTokens[ 3 ] );      // h
-        }
     }
 }

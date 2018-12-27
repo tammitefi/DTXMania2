@@ -91,7 +91,7 @@ namespace FDK
             }
             catch( Exception e )
             {
-                Log.ERROR( $"矩形リストXmlファイルの読み込みに失敗しました。{e.Message}[{ファイルパス.変数付きパス}]" );
+                Log.ERROR( $"矩形リストXmlファイルの読み込みに失敗しました。{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}[{ファイルパス.変数付きパス}]" );
             }
         }
 

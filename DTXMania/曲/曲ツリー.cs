@@ -64,7 +64,7 @@ namespace DTXMania.曲
         }
 
         /// <summary>
-        ///		現在選択されているノードが対応している、現在の難易度アンカに一番近い難易度（0:BASIC～4:ULTIMATE）を返す。
+        ///		現在選択されているノードが対応している、現在の <see cref="_難易度アンカ"/> に一番近い難易度（0:BASIC～4:ULTIMATE）を返す。
         /// </summary>
         public int フォーカス難易度
         {
@@ -90,6 +90,16 @@ namespace DTXMania.曲
         ///		変更するには、変更先のリスト内の任意のノードを選択すること。
         /// </summary>
         public SelectableList<Node> フォーカスリスト { get; protected set; } = null;
+
+        /// <summary>
+        ///     フォーカスノードが変更された場合に発生するイベント。
+        /// </summary>
+        /// <remarks>
+        ///     選択されたノードと、選択が解除されたノードは、必ずしも同じNodeリストに存在するとは限らない。
+        ///     例えば、BOXを移動する場合、選択されるNodeは移動後のNodeリストに、選択が解除されたNodeは移動前のNodeリストに、それぞれ存在する。
+        ///     この場合、後者はすでに非活性化されているので注意すること。
+        /// </remarks>
+        public event EventHandler<(Node 選択されたNode, Node 選択が解除されたNode)> フォーカスノードが変更された;
 
 
         // 構築・破棄
@@ -117,6 +127,7 @@ namespace DTXMania.曲
                 //this._難易度アンカ = 3;		-> 初期化せず、前回の値を継承する。
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -349,34 +360,51 @@ namespace DTXMania.曲
                 var 親ノード = ノード?.親ノード ?? this.ルートノード;
                 Trace.Assert( null != 親ノード?.子ノードリスト );
 
-                var 旧フォーカスリスト = this.フォーカスリスト;  // 初回は null 。
 
+                // 必要あればフォーカスリストを変更。
+
+                var 旧フォーカスリスト = this.フォーカスリスト;  // 初回は null 。
                 this.フォーカスリスト = 親ノード.子ノードリスト;   // 常に非null。（先のAssertで保証されている。）
 
-                if( null != ノード )
+                if( 旧フォーカスリスト == this.フォーカスリスト )
                 {
-                    // (A) ノードの指定がある（非null）なら、それを選択する。
-                    this.フォーカスリスト.SelectItem( ノード );
+                    // (A) フォーカスリストが変更されない場合；必要あればフォーカスノードを変更。
+
+                    if( null != ノード )
+                    {
+                        // ノードの指定がある（非null）なら、それを選択する。
+                        this.フォーカスリスト.SelectItem( ノード );
+                    }
+                    else
+                    {
+                        // ノードの指定がない（null）なら、フォーカスノードは現状のまま維持する。
+                    }
                 }
                 else
                 {
-                    // (B) ノードの指定がない（null）なら、フォーカスノードは現状のまま維持する。
-                }
+                    // (B) フォーカスリストが変更される場合
 
-                if( 旧フォーカスリスト != this.フォーカスリスト )
-                {
                     Log.Info( "フォーカスリストが変更されました。" );
 
                     if( this.活性化している )
                     {
                         if( null != 旧フォーカスリスト ) // 初回は null 。
                         {
+                            旧フォーカスリスト.SelectionChanged -= this.フォーカスリスト_SelectionChanged;   // ハンドラ削除
                             foreach( var node in 旧フォーカスリスト )
                                 node.非活性化する();
                         }
 
                         foreach( var node in this.フォーカスリスト )
                             node.活性化する();
+
+                        if( null != ノード )
+                            this.フォーカスリスト.SelectItem( ノード );    // イベントハンドラ登録前
+
+                        this.フォーカスリスト.SelectionChanged += this.フォーカスリスト_SelectionChanged;   // ハンドラ登録
+
+                        // 手動でイベントを発火。
+                        this.フォーカスノードが変更された?.Invoke( this.フォーカスリスト, (this.フォーカスリスト?.SelectedItem, 旧フォーカスリスト?.SelectedItem) );
                     }
                 }
             }
@@ -413,6 +441,18 @@ namespace DTXMania.曲
         }
 
 
+        /// <summary>
+        ///     ユーザが希望している難易度。
+        /// </summary>
         private int _難易度アンカ = 3;
+
+
+        private void フォーカスリスト_SelectionChanged( object sender, (Node 選択されたItem, Node 選択が解除されたItem) e )
+        {
+            // 間接呼び出し；
+            // フォーカスリストの SelectedChanged イベントハンドラ　→　このクラス内で変更されうる
+            // 外部に対するイベントハンドラ　→　このクラス内では変更されない
+            this.フォーカスノードが変更された?.Invoke( sender, e );
+        }
     }
 }

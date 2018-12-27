@@ -46,6 +46,9 @@ namespace DTXMania.曲
             }
         }
 
+        public override string プレビュー音声ファイルの絶対パス
+            => this.MusicNodes[ App.曲ツリー.フォーカス難易度 ].プレビュー音声ファイルの絶対パス;
+
 
         public SetNode()
         {
@@ -90,10 +93,9 @@ namespace DTXMania.曲
 
             if( null != サムネイル画像ファイルパス )
             {
-                this.子を追加する( this._ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
+                this.子Activityを追加する( this._ノード画像 = new テクスチャ( サムネイル画像ファイルパス ) );
             }
         }
-
 
         protected override void On活性化()
         {
@@ -105,6 +107,7 @@ namespace DTXMania.曲
 
             base.On活性化();
         }
+
         protected override void On非活性化()
         {
             foreach( var node in this.MusicNodes )
@@ -116,6 +119,7 @@ namespace DTXMania.曲
             base.On非活性化();
         }
 
+        
 
         private テクスチャ _ノード画像 = null;
 

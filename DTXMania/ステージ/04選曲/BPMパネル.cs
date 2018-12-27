@@ -17,8 +17,8 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._BPMパネル = new 画像( @"$(System)images\選曲\BPMパネル.png" ) );
-                this.子を追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.json", 文字幅補正dpx: 0f ) );
+                this.子Activityを追加する( this._BPMパネル = new 画像( @"$(System)images\選曲\BPMパネル.png" ) );
+                this.子Activityを追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.yaml", 文字幅補正dpx: 0f ) );
             }
         }
 

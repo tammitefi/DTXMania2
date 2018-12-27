@@ -16,7 +16,7 @@ namespace DTXMania.ステージ.演奏
 
         public ヒットバー()
         {
-            this.子を追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏\ヒットバー.png" ) );
+            this.子Activityを追加する( this._ヒットバー画像 = new 画像( @"$(System)images\演奏\ヒットバー.png" ) );
         }
 
         protected override void On活性化()

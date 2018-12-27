@@ -13,8 +13,11 @@ namespace DTXMania.ステージ.選曲
 {
     /// <summary>
     ///		曲のリスト表示、選択、スクロール。
-    ///		画面に表示される曲は8行だが、スクロールを勘案して上下に１行ずつ追加し、計10行として扱う。
     /// </summary>
+    /// <remarks>
+    ///     <see cref="曲ツリー.フォーカスリスト"/> を表示する。
+    ///		画面に表示される曲は8行だが、スクロールを勘案して上下に１行ずつ追加し、計10行として扱う。
+    /// </remarks>
     class 曲リスト : Activity
     {
         public 曲リスト()
@@ -28,6 +31,8 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                App.曲ツリー.フォーカスノードが変更された += this.曲ツリー_フォーカスノードが変更された;
+
                 #region " フォーカスノードを初期化する。"
                 //----------------
                 {
@@ -48,6 +53,7 @@ namespace DTXMania.ステージ.選曲
                     else
                     {
                         // (B) なんらかのノードを選択中なら、それを継続して使用する（フォーカスノードをリセットしない）。
+                        tree.フォーカスノード.プレビュー音声を再生する();
                     }
                 }
                 //----------------
@@ -64,6 +70,7 @@ namespace DTXMania.ステージ.選曲
                 this._初めての進行描画 = true;
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -180,6 +187,7 @@ namespace DTXMania.ステージ.選曲
 
             this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
         }
+
         public void 次のノードを選択する()
         {
             this._カーソル位置++;     // 上限なし
@@ -188,6 +196,7 @@ namespace DTXMania.ステージ.選曲
 
             this._選択ノードのオフセットアニメをリセットする( グラフィックデバイス.Instance.Animation );
         }
+
         public void BOXに入る()
         {
             this._カーソル位置 = 4;
@@ -196,6 +205,7 @@ namespace DTXMania.ステージ.選曲
 
             App.曲ツリー.フォーカスする( App.曲ツリー.フォーカスノード.子ノードリスト[ 0 ] );
         }
+
         public void BOXから出る()
         {
             this._カーソル位置 = 4;
@@ -204,37 +214,50 @@ namespace DTXMania.ステージ.選曲
 
             App.曲ツリー.フォーカスする( App.曲ツリー.フォーカスノード.親ノード );
         }
+
         public void 難易度アンカをひとつ増やす()
         {
             App.曲ツリー.難易度アンカをひとつ増やす();
         }
 
+
         private bool _初めての進行描画 = true;
+        
         /// <summary>
         ///		曲リスト（10行分！）の合計表示領域の左上隅の座標。
         ///		基準というのは、曲リストがスクロールしていないとき、という意味。
         /// </summary>
         private readonly Vector3 _曲リストの基準左上隅座標dpx = new Vector3( 1065f, 145f - _ノードの高さdpx, 0f );
+
         private readonly Vector3 _サムネイル表示サイズdpx = new Vector3( 100f, 100f, 0f );
+
         private const float _ノードの高さdpx = ( 913f / 8f );
+
         private Dictionary<Node, 文字列画像> _ノードto曲名画像 = new Dictionary<Node, 文字列画像>();
+
         private Dictionary<Node, 文字列画像> _ノードtoサブタイトル画像 = new Dictionary<Node, 文字列画像>();
+        
         /// <summary>
         ///		静止時は 4 。曲リストがスクロールしているときは、4より大きい整数（下から上にスクロール中）か、
         ///		または 4 より小さい整数（上から下にスクロール中）になる。
         /// </summary>
         private int _カーソル位置 = 4;
+
         private 定間隔進行 _スクロール用カウンタ = null;
+        
         /// <summary>
         ///		-100～100。曲リスト全体の表示位置を、負数は 上 へ、正数は 下 へずらす 。（正負と上下の対応に注意。）
         /// </summary>
         private int _曲リスト全体のY軸移動オフセット = 0;
+        
         /// <summary>
         ///		選択中の曲ノードエリアを左にずらす度合い。
         ///		-50f ～ 0f [dpx] 。
         /// </summary>
         private Variable _選択ノードの表示オフセットdpx = null;
+
         private Storyboard _選択ノードの表示オフセットのストーリーボード = null;
+
 
         /// <param name="行番号">
         ///		一番上:0 ～ 9:一番下。
@@ -490,6 +513,7 @@ namespace DTXMania.ステージ.選曲
             //----------------
             #endregion
         }
+
         private void _選択ノードのオフセットアニメをリセットする( アニメーション管理 am )
         {
             this._選択ノードの表示オフセットdpx?.Dispose();
@@ -507,6 +531,19 @@ namespace DTXMania.ステージ.選曲
             }
 
             this._選択ノードの表示オフセットのストーリーボード.Schedule( am.Timer.Time );
+        }
+
+
+        private void 曲ツリー_フォーカスノードが変更された( object sender, (Node 選択されたNode, Node 選択が解除されたNode) e )
+        {
+            // (1) 選択解除曲のプレビュー音声を止める。
+
+            e.選択が解除されたNode?.プレビュー音声を停止する();
+
+
+            // (2) 選択曲のプレビュー音声を生成し、再生を始める。
+
+            e.選択されたNode?.プレビュー音声を再生する();
         }
     }
 }

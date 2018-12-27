@@ -37,6 +37,8 @@ namespace DTXMania
 
         public static システム設定 システム設定 { get; protected set; }
 
+        public static システムサウンド システムサウンド { get; protected set; }
+
         public static 入力管理 入力管理 { get; set; }
 
         public static ステージ管理 ステージ管理 { get; protected set; }
@@ -157,6 +159,8 @@ namespace DTXMania
 
                 App.ドラムサウンド = new ドラムサウンド();
 
+                App.システムサウンド = new システムサウンド();
+
                 App.ユーザ管理 = new ユーザ管理();
                 App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
 
@@ -198,6 +202,9 @@ namespace DTXMania
 
                     App.ユーザ管理?.Dispose();
                     App.ユーザ管理 = null;
+
+                    App.システムサウンド?.Dispose();
+                    App.システムサウンド = null;
 
                     App.ドラムサウンド?.Dispose();
                     App.ドラムサウンド = null;
@@ -272,6 +279,55 @@ namespace DTXMania
 
             } );
         }
+
+        public static void システム設定を初期化する()
+        {
+            var vpath = システム設定.システム設定ファイルパス;
+            try
+            {
+                File.Delete( vpath.変数なしパス );  // ファイルがない場合には例外は出ない
+            }
+            catch( Exception e )
+            {
+                Log.ERROR( $"システム設定ファイルの削除に失敗しました。[{vpath.変数付きパス}][{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
+            }
+
+            App.システム設定 = システム設定.復元する(); // ファイルがない場合、新規に作られる
+        }
+
+        public static void 曲データベースを初期化する()
+        {
+            App.曲ツリー.非活性化する();
+
+            var vpath = データベース.曲.SongDB.曲DBファイルパス;
+            try
+            {
+                File.Delete( vpath.変数なしパス );  // ファイルがない場合には例外は出ない
+            }
+            catch( Exception e )
+            {
+                Log.ERROR( $"曲データベースファイルの削除に失敗しました。[{vpath.変数付きパス}][{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
+            }
+        }
+
+        public static void ユーザデータベースを初期化する()
+        {
+            App.ユーザ管理.Dispose();
+
+            var vpath = データベース.ユーザ.UserDB.ユーザDBファイルパス;
+            try
+            {
+                File.Delete( vpath.変数なしパス );  // ファイルがない場合には例外は出ない
+            }
+            catch( Exception e )
+            {
+                Log.ERROR( $"ユーザデータベースファイルの削除に失敗しました。[{vpath.変数付きパス}][{VariablePath.絶対パスをフォルダ変数付き絶対パスに変換して返す( e.Message )}]" );
+            }
+
+            App.ユーザ管理 = new ユーザ管理();    // 再生成。
+            App.ユーザ管理.ユーザリスト.SelectItem( ( user ) => ( user.ユーザID == "AutoPlayer" ) );  // ひとまずAutoPlayerを選択。
+        }
+
 
         protected override void OnClosing( CancelEventArgs e )
         {
@@ -544,9 +600,9 @@ namespace DTXMania
                         }
                         //----------------
                         #endregion
-                        #region " 曲読み込みフォルダ変更 → 曲読み込みステージへ "
+                        #region " 再起動 → 起動ステージへ "
                         //----------------
-                        if( stage.現在のフェーズ == ステージ.オプション設定.オプション設定ステージ.フェーズ.曲読み込みフォルダ変更済み )
+                        if( stage.現在のフェーズ == ステージ.オプション設定.オプション設定ステージ.フェーズ.再起動 )
                         {
                             App.ステージ管理.ステージを遷移する( nameof( ステージ.起動.起動ステージ ) );
                         }
@@ -587,7 +643,9 @@ namespace DTXMania
                                 // ビュアーモードならクリアフェーズを維持。（サービスメッセージ待ち。）
                             }
                             else
+                            {
                                 App.ステージ管理.ステージを遷移する( nameof( ステージ.結果.結果ステージ ) );
+                            }
                         }
                         //----------------
                         #endregion

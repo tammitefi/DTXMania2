@@ -69,7 +69,7 @@ namespace FDK.UI
             {
                 var rc = new RectangleF( this.位置dpx.X, this.位置dpx.Y, this.サイズdpx.Width, this.サイズdpx.Height );
 
-                if( ( null != this.親 ) && ( this.親 is Element 親要素 ) )
+                if( ( null != this.親Activity ) && ( this.親Activity is Element 親要素 ) )
                 {
                     var parentRect = 親要素.クライアント矩形のスクリーン座標dpx;
                     rc.Offset( parentRect.X, parentRect.Y );
@@ -134,7 +134,7 @@ namespace FDK.UI
         /// <remarks>
         ///     このクラスだけでなくこのクラスからの派生クラスすべてで実行する必要があるコードは、<see cref="On活性化(グラフィックデバイス)"/> ではなくここで実行する。
         /// </remarks>
-        public override void 活性化する()
+        public new void 活性化する()
         {
             this._設計画面サイズdpx = グラフィックデバイス.Instance.設計画面サイズ;
 
@@ -160,7 +160,7 @@ namespace FDK.UI
         {
             // Element ツリーのルート要素を取得。
             var Root = this;
-            while( ( null != Root.親 ) && ( Root.親 is Element 親要素 ) )
+            while( ( null != Root.親Activity ) && ( Root.親Activity is Element 親要素 ) )
                 Root = 親要素;
 
             // 自分をフォーカスすることをルート要素に通知。
@@ -179,7 +179,7 @@ namespace FDK.UI
 
             var クリッピング後のウィンドウ矩形dpx = this.ウィンドウ矩形dpx;
 
-            if( ( null != this.親 ) && ( this.親 is Element 親要素 ) )
+            if( ( null != this.親Activity ) && ( this.親Activity is Element 親要素 ) )
             {
                 // 親があるなら、親のクライアント矩形（スクリーン座標）でクリッピング。
                 クリッピング後のウィンドウ矩形dpx = RectangleF.Intersect( クリッピング後のウィンドウ矩形dpx, 親要素.クライアント矩形のスクリーン座標dpx );
@@ -205,9 +205,9 @@ namespace FDK.UI
             } );
 
             // クライアント矩形内に、子要素を昇順に描画する。
-            for( int i = 0; i < this.子リスト.Count; i++ )
+            for( int i = 0; i < this.子Activityリスト.Count; i++ )
             {
-                if( this.子リスト[ i ] is Element 子要素 )
+                if( this.子Activityリスト[ i ] is Element 子要素 )
                 {
                     if( 子要素.活性化していない )
                         子要素.活性化する();
@@ -229,9 +229,9 @@ namespace FDK.UI
             else
             {
                 // 子要素を降順（描画順の逆）にチェックする。
-                for( int i = this.子リスト.Count - 1; i >= 0; i-- )
+                for( int i = this.子Activityリスト.Count - 1; i >= 0; i-- )
                 {
-                    if( this.子リスト[ i ] is Element 子要素 )
+                    if( this.子Activityリスト[ i ] is Element 子要素 )
                         子要素.InvokeKeyDown( e );
                 }
             }
@@ -370,9 +370,9 @@ namespace FDK.UI
                 bool キャッチした = false;
 
                 // 子要素を降順（描画順の逆）にチェックする。
-                for( int i = 要素.子リスト.Count - 1; i >= 0; i-- )
+                for( int i = 要素.子Activityリスト.Count - 1; i >= 0; i-- )
                 {
-                    if( 要素.子リスト[ i ] is Element 子要素 &&
+                    if( 要素.子Activityリスト[ i ] is Element 子要素 &&
                         子要素.可視 &&
                         //子要素.ヒットチェックあり &&      // ヒットチェックなしの場合でも、その子孫はチェック対象。
                         子要素.ヒットチェック( マウス位置dpx ) )
@@ -443,7 +443,7 @@ namespace FDK.UI
 
                 // (2) すべての子要素についてチェック。
                 // 　　親が不可視なら子はチェックしないが、親がヒットチェックなしでも子はチェックする。
-                foreach( var 子 in this.子リスト )
+                foreach( var 子 in this.子Activityリスト )
                 {
                     if( 子 is Element 子要素 )
                     {
@@ -458,9 +458,9 @@ namespace FDK.UI
             bool キャッチした = false;
 
             // すべての子について深さ優先で降順（描画順の逆）にヒットチェック。
-            for( int i = this.子リスト.Count - 1; i >= 0; i-- )
+            for( int i = this.子Activityリスト.Count - 1; i >= 0; i-- )
             {
-                if( this.子リスト[ i ] is Element 子要素 && 子要素.可視 )
+                if( this.子Activityリスト[ i ] is Element 子要素 && 子要素.可視 )
                 {
                     if( 子要素._MouseMoveのヒットチェック( e ) )  // 深さ優先（子優先）; ヒットチェックなしでも子孫はチェックする。
                     {
@@ -493,7 +493,7 @@ namespace FDK.UI
         private void _フォーカスを通知する( Element 対象要素, UIEventArgs e )
         {
             // すべての子要素について...
-            foreach( Element 子要素 in this.子リスト.Where( ( 子 ) => ( 子 is Element ) ) )
+            foreach( Element 子要素 in this.子Activityリスト.Where( ( 子 ) => ( 子 is Element ) ) )
             {
                 bool 子要素はフォーカス対象である = ( 子要素 == 対象要素 );
 

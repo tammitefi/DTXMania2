@@ -29,7 +29,7 @@ namespace FDK.UI
             : base( サイズdpx, 位置dpx )
         {
             var 表示欄マージンdpx = 矩形リスト.Margin変換( 表示欄セル矩形[ "Margin" ].Value );
-            this.子を追加する( this._表示欄 = new TextArea(
+            this.子Activityを追加する( this._表示欄 = new TextArea(
                 表示欄画像ファイル,
                 表示欄セル矩形,
                 new Size2F(
@@ -44,7 +44,7 @@ namespace FDK.UI
             this._表示欄.MouseDown += this._表示欄_MouseDown;
 
             var 選択欄マージンdpx = 矩形リスト.Margin変換( 選択欄セル矩形[ "Margin" ].Value );
-            this.子を追加する( this._選択欄 = new ListView(
+            this.子Activityを追加する( this._選択欄 = new ListView(
                 選択欄画像ファイル,
                 選択欄セル矩形,
                 new Size2F(
@@ -62,7 +62,7 @@ namespace FDK.UI
 
             var ボタンマージンdpx = 矩形リスト.Margin変換( アローボタンセル矩形[ "Margin" ].Value );
             var ボタン幅dpx = Math.Max( 0f, this._表示欄.クライアント矩形dpx.Height - ボタンマージンdpx.Top - ボタンマージンdpx.Bottom );
-            this.子を追加する( this._アローボタン = new Button(
+            this.子Activityを追加する( this._アローボタン = new Button(
                 "-",
                 アローボタン通常時画像ファイル,
                 アローボタン押下時画像ファイル,

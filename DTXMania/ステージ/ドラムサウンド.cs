@@ -55,83 +55,30 @@ namespace DTXMania.ステージ
                     this._チップtoコンテキスト = new Dictionary<(チップ種別 chipType, int サブチップID), ドラムサウンド情報>();
 
                     // SSTの既定のサウンドを、subChipId = 0 としてプリセット登録する。
-                    this.登録する( チップ種別.LeftCrash, 0, @"$(System)sounds\drums\LeftCrash.wav" );
-                    this.登録する( チップ種別.Ride, 0, @"$(System)sounds\drums\Ride.wav" );
-                    this.登録する( チップ種別.Ride_Cup, 0, @"$(System)sounds\drums\RideCup.wav" );
-                    this.登録する( チップ種別.China, 0, @"$(System)sounds\drums\China.wav" );
-                    this.登録する( チップ種別.Splash, 0, @"$(System)sounds\drums\Splash.wav" );
-                    this.登録する( チップ種別.HiHat_Open, 0, @"$(System)sounds\drums\HiHatOpen.wav" );
-                    this.登録する( チップ種別.HiHat_HalfOpen, 0, @"$(System)sounds\drums\HiHatHalfOpen.wav" );
-                    this.登録する( チップ種別.HiHat_Close, 0, @"$(System)sounds\drums\HiHatClose.wav" );
-                    this.登録する( チップ種別.HiHat_Foot, 0, @"$(System)sounds\drums\HiHatFoot.wav" );
-                    this.登録する( チップ種別.Snare, 0, @"$(System)sounds\drums\Snare.wav" );
-                    this.登録する( チップ種別.Snare_OpenRim, 0, @"$(System)sounds\drums\SnareOpenRim.wav" );
-                    this.登録する( チップ種別.Snare_ClosedRim, 0, @"$(System)sounds\drums\SnareClosedRim.wav" );
-                    this.登録する( チップ種別.Snare_Ghost, 0, @"$(System)sounds\drums\SnareGhost.wav" );
-                    this.登録する( チップ種別.Bass, 0, @"$(System)sounds\drums\Bass.wav" );
-                    this.登録する( チップ種別.Tom1, 0, @"$(System)sounds\drums\Tom1.wav" );
-                    this.登録する( チップ種別.Tom1_Rim, 0, @"$(System)sounds\drums\Tom1Rim.wav" );
-                    this.登録する( チップ種別.Tom2, 0, @"$(System)sounds\drums\Tom2.wav" );
-                    this.登録する( チップ種別.Tom2_Rim, 0, @"$(System)sounds\drums\Tom2Rim.wav" );
-                    this.登録する( チップ種別.Tom3, 0, @"$(System)sounds\drums\Tom3.wav" );
-                    this.登録する( チップ種別.Tom3_Rim, 0, @"$(System)sounds\drums\Tom3Rim.wav" );
-                    this.登録する( チップ種別.RightCrash, 0, @"$(System)sounds\drums\RightCrash.wav" );
-                    this.登録する( チップ種別.LeftCymbal_Mute, 0, @"$(System)sounds\drums\LeftCymbalMute.wav" );
-                    this.登録する( チップ種別.RightCymbal_Mute, 0, @"$(System)sounds\drums\RightCymbalMute.wav" );
+                    this._登録する( チップ種別.LeftCrash, 0, @"$(System)sounds\drums\LeftCrash.wav" );
+                    this._登録する( チップ種別.Ride, 0, @"$(System)sounds\drums\Ride.wav" );
+                    this._登録する( チップ種別.Ride_Cup, 0, @"$(System)sounds\drums\RideCup.wav" );
+                    this._登録する( チップ種別.China, 0, @"$(System)sounds\drums\China.wav" );
+                    this._登録する( チップ種別.Splash, 0, @"$(System)sounds\drums\Splash.wav" );
+                    this._登録する( チップ種別.HiHat_Open, 0, @"$(System)sounds\drums\HiHatOpen.wav" );
+                    this._登録する( チップ種別.HiHat_HalfOpen, 0, @"$(System)sounds\drums\HiHatHalfOpen.wav" );
+                    this._登録する( チップ種別.HiHat_Close, 0, @"$(System)sounds\drums\HiHatClose.wav" );
+                    this._登録する( チップ種別.HiHat_Foot, 0, @"$(System)sounds\drums\HiHatFoot.wav" );
+                    this._登録する( チップ種別.Snare, 0, @"$(System)sounds\drums\Snare.wav" );
+                    this._登録する( チップ種別.Snare_OpenRim, 0, @"$(System)sounds\drums\SnareOpenRim.wav" );
+                    this._登録する( チップ種別.Snare_ClosedRim, 0, @"$(System)sounds\drums\SnareClosedRim.wav" );
+                    this._登録する( チップ種別.Snare_Ghost, 0, @"$(System)sounds\drums\SnareGhost.wav" );
+                    this._登録する( チップ種別.Bass, 0, @"$(System)sounds\drums\Bass.wav" );
+                    this._登録する( チップ種別.Tom1, 0, @"$(System)sounds\drums\Tom1.wav" );
+                    this._登録する( チップ種別.Tom1_Rim, 0, @"$(System)sounds\drums\Tom1Rim.wav" );
+                    this._登録する( チップ種別.Tom2, 0, @"$(System)sounds\drums\Tom2.wav" );
+                    this._登録する( チップ種別.Tom2_Rim, 0, @"$(System)sounds\drums\Tom2Rim.wav" );
+                    this._登録する( チップ種別.Tom3, 0, @"$(System)sounds\drums\Tom3.wav" );
+                    this._登録する( チップ種別.Tom3_Rim, 0, @"$(System)sounds\drums\Tom3Rim.wav" );
+                    this._登録する( チップ種別.RightCrash, 0, @"$(System)sounds\drums\RightCrash.wav" );
+                    this._登録する( チップ種別.LeftCymbal_Mute, 0, @"$(System)sounds\drums\LeftCymbalMute.wav" );
+                    this._登録する( チップ種別.RightCymbal_Mute, 0, @"$(System)sounds\drums\RightCymbalMute.wav" );
                 }
-            }
-        }
-
-        /// <summary>
-        ///     チップ種別とサブチップIDの組に対応するドラムサウンドファイルを登録する。
-        /// </summary>
-        /// <param name="chipType">登録するチップ種別。</param>
-        /// <param name="subChipId">登録するサブチップID。</param>
-        /// <param name="サウンドファイルパス">割り当てるドラムサウンドファイルのパス。</param>
-        public void 登録する( チップ種別 chipType, int subChipId, VariablePath サウンドファイルパス )
-        {
-            if( !( File.Exists( サウンドファイルパス.変数なしパス ) ) )
-            {
-                Log.ERROR( $"サウンドファイルが存在しません。[{サウンドファイルパス.変数付きパス}]" );
-                return;
-            }
-
-            lock( this._Sound利用権 )
-            {
-                // コンテキストを作成する。
-
-                var context = new ドラムサウンド情報( this._多重度 );
-
-
-                // サウンドファイルを読み込んでデコードする。
-
-                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
-
-                if( null == context.SampleSource )
-                {
-                    Log.ERROR( $"サウンドの生成に失敗しました。[{サウンドファイルパス.変数付きパス}]" );
-                    context.Dispose();
-                    return;
-                }
-
-                // 多重度分のサウンドを生成する。
-
-                for( int i = 0; i < context.Sounds.Length; i++ )
-                    context.Sounds[ i ] = new Sound( App.サウンドデバイス, context.SampleSource );
-
-
-                // コンテキストを辞書に追加する。
-                
-                if( this._チップtoコンテキスト.ContainsKey( (chipType, subChipId) ) )
-                {
-                    // すでに辞書に存在してるなら、解放してから削除する。
-                    this._チップtoコンテキスト[ (chipType, subChipId) ]?.Dispose();
-                    this._チップtoコンテキスト.Remove( (chipType, subChipId) );
-                }
-
-                this._チップtoコンテキスト.Add( (chipType, subChipId), context );
-
-                Log.Info( $"ドラムサウンドを生成しました。[({chipType.ToString()},{subChipId}) = {サウンドファイルパス.変数付きパス}]" );
             }
         }
 
@@ -224,5 +171,53 @@ namespace DTXMania.ステージ
         private Dictionary<(チップ種別 chipType, int サブチップID), ドラムサウンド情報> _チップtoコンテキスト = null;
 
         private readonly object _Sound利用権 = new object();
+
+
+        private void _登録する( チップ種別 chipType, int subChipId, VariablePath サウンドファイルパス )
+        {
+            if( !( File.Exists( サウンドファイルパス.変数なしパス ) ) )
+            {
+                Log.ERROR( $"サウンドファイルが存在しません。[{サウンドファイルパス.変数付きパス}]" );
+                return;
+            }
+
+            lock( this._Sound利用権 )
+            {
+                // コンテキストを作成する。
+
+                var context = new ドラムサウンド情報( this._多重度 );
+
+
+                // サウンドファイルを読み込んでデコードする。
+
+                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
+
+                if( null == context.SampleSource )
+                {
+                    Log.ERROR( $"サウンドの生成に失敗しました。[{サウンドファイルパス.変数付きパス}]" );
+                    context.Dispose();
+                    return;
+                }
+
+                // 多重度分のサウンドを生成する。
+
+                for( int i = 0; i < context.Sounds.Length; i++ )
+                    context.Sounds[ i ] = new Sound( App.サウンドデバイス, context.SampleSource );
+
+
+                // コンテキストを辞書に追加する。
+
+                if( this._チップtoコンテキスト.ContainsKey( (chipType, subChipId) ) )
+                {
+                    // すでに辞書に存在してるなら、解放してから削除する。
+                    this._チップtoコンテキスト[ (chipType, subChipId) ]?.Dispose();
+                    this._チップtoコンテキスト.Remove( (chipType, subChipId) );
+                }
+
+                this._チップtoコンテキスト.Add( (chipType, subChipId), context );
+
+                Log.Info( $"ドラムサウンドを生成しました。[({chipType.ToString()},{subChipId}) = {サウンドファイルパス.変数付きパス}]" );
+            }
+        }
     }
 }

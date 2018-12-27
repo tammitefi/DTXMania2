@@ -55,6 +55,8 @@ namespace FDK
                 => this._Volume = Math.Max( value, 0 );
         }
 
+        public bool IsLoop { get; set; } = false;
+
 
         public Sound( SoundDevice device, ISampleSource sampleSource )
             : this( device )
@@ -80,7 +82,7 @@ namespace FDK
             this._DeviceRef = null;
         }
 
-        public void Play( long 再生開始位置frame = 0 )
+        public void Play( long 再生開始位置frame = 0, bool ループ再生する = false )
         {
             if( null == this._BaseSampleSource )
                 throw new InvalidOperationException( "サンプルソースが null です。" );
@@ -99,30 +101,45 @@ namespace FDK
                 }
 
                 // ミキサーに追加（＝再生開始）。
+                this.IsLoop = ループ再生する;
                 device.Mixer.AddSound( this );
             }
         }
 
-        public void Play( double 再生開始位置sec )
-            => this.Play( this._秒ToFrame( 再生開始位置sec ) );
+        public void Play( double 再生開始位置sec, bool ループ再生する = false )
+            => this.Play( this.秒ToFrame( 再生開始位置sec ), ループ再生する );
 
         public int Read( float[] buffer, int offset, int count )
         {
             if( null == this._BaseSampleSource )
-                return 0;
+                return 0;   // 再生終了
 
             if( this._BaseSampleSource.Length <= this._Position )   // 最後まで再生済み、または次のストリームデータが届いていない
             {
-                Array.Clear( buffer, offset, count );   // 全部ゼロで埋めて返す。
-                return count;
+                if( this.IsLoop )
+                {
+                    Array.Clear( buffer, offset, count );   // 全部ゼロで埋めて返す。
+                    this._Position = 0; // 再生をループ。
+                    return count;
+                }
+                else
+                {
+                    return 0;   // 再生終了
+                }
             }
+            else
+            {
+                // １つの BaseSampleSource を複数の Sound で共有するために、Position は Sound ごとに管理している。
+                this._BaseSampleSource.Position = this._Position;
+                var readCount = this._BaseSampleSource.Read( buffer, offset, count );   // 読み込み。
 
-            // １つの BaseSampleSource を複数の Sound で共有するために、Position は Sound ごとに管理している。
-            this._BaseSampleSource.Position = this._Position;
-            var readCount = this._BaseSampleSource.Read( buffer, offset, count );   // 読み込み。
-            this._Position = this._BaseSampleSource.Position;
+                this._Position = this._BaseSampleSource.Position;
 
-            return readCount;
+                if( 0 == readCount && this.IsLoop )
+                    this._Position = 0; // 再生をループ。
+
+                return readCount;
+            }
         }
 
         public void Stop()
@@ -133,17 +150,7 @@ namespace FDK
             }
         }
 
-
-        private WeakReference<SoundDevice> _DeviceRef = null;
-
-        private ISampleSource _BaseSampleSource = null;
-
-        private long _Position = 0;
-
-        private float _Volume = 1.0f;
-
-
-        private long _秒ToFrame( double 時間sec )
+        internal long 秒ToFrame( double 時間sec )
         {
             if( null == this._BaseSampleSource )
                 return 0;
@@ -152,7 +159,7 @@ namespace FDK
             return (long) ( 時間sec * wf.SampleRate + 0.5 ); // +0.5 で四捨五入ができる
         }
 
-        private double _FrameTo秒( long 時間frame )
+        internal double FrameTo秒( long 時間frame )
         {
             if( null == this._BaseSampleSource )
                 return 0;
@@ -160,5 +167,14 @@ namespace FDK
             var wf = this._BaseSampleSource.WaveFormat;
             return (double) 時間frame / wf.SampleRate;
         }
+
+
+        private WeakReference<SoundDevice> _DeviceRef = null;
+
+        private ISampleSource _BaseSampleSource = null;
+
+        private long _Position = 0;
+
+        private float _Volume = 1.0f;
     }
 }

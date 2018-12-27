@@ -17,7 +17,7 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._背景画像 = new 画像( @"$(System)images\選曲\曲ステータスパネル.png" ) );
+                this.子Activityを追加する( this._背景画像 = new 画像( @"$(System)images\選曲\曲ステータスパネル.png" ) );
             }
         }
 

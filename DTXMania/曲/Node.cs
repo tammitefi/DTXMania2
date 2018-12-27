@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
@@ -141,6 +143,69 @@ namespace DTXMania.曲
         public static テクスチャ 既定のノード画像 { get; protected set; } = null;
 
 
+        // プレビュー音声関連
+
+        public void プレビュー音声を再生する()
+        {
+            if( this.プレビュー音声ファイルの絶対パス?.Nullまたは空である() ?? true )
+                return;
+
+            // 一定期間ごとに Tick イベントを呼び出すタイマを作成。
+
+            this._プレビュー音声再生タイマ?.Dispose();
+            this._プレビュー音声再生タイマ = new System.Windows.Forms.Timer() {
+                Interval = 1000,
+            };
+
+            // Tick イベントでは、プレビュー音声を読み込んで再生する。
+
+            this._プレビュー音声再生タイマ.Tick += ( sender, e ) => { // このタスクはGUIスレッドで処理される（非同期ではない）。
+
+                this._プレビュー音声を生成する();
+                this._プレビュー音声?.Play();
+
+                this._プレビュー音声再生タイマ.Stop();    // 実行停止。２回目以降の Tick はない。
+            };
+
+            this._プレビュー音声再生タイマ.Start();
+        }
+
+        public void プレビュー音声を停止する()
+        {
+            this._プレビュー音声再生タイマ?.Stop();
+            this._プレビュー音声再生タイマ?.Dispose();
+            this._プレビュー音声再生タイマ = null;
+
+            this._プレビュー音声?.Stop();
+        }
+
+        public virtual string プレビュー音声ファイルの絶対パス { get; protected set; } = null;
+
+        protected CSCore.ISampleSource _プレビュー音声ソース = null;  // 未対応、または生成に失敗した場合は null。
+
+        protected Sound _プレビュー音声 = null;    // 未使用なら null。
+
+        private System.Windows.Forms.Timer _プレビュー音声再生タイマ = null;
+
+
+        protected void _プレビュー音声を生成する()
+        {
+            if( null != this._プレビュー音声 )
+                return; // 生成済み
+
+            if( this.プレビュー音声ファイルの絶対パス.Nullまたは空である() )
+                return; // 指定なし
+
+            if( null == this._プレビュー音声ソース )  // 未生成の場合
+                this._プレビュー音声ソース = SampleSourceFactory.Create( App.サウンドデバイス, new VariablePath( this.プレビュー音声ファイルの絶対パス ).変数なしパス );
+
+            if( null != this._プレビュー音声ソース )
+                this._プレビュー音声 = new Sound( App.サウンドデバイス, this._プレビュー音声ソース );
+        }
+
+
+        // メソッド
+
         public Node()
         {
             this.難易度 = new(string, float)[]{
@@ -152,7 +217,7 @@ namespace DTXMania.曲
             };
 
             //this.子を追加する( this._ノード画像 );	--> 派生クラスのコンストラクタで追加することができる。
-            this.子を追加する( this._曲名テクスチャ = new 曲名() );
+            this.子Activityを追加する( this._曲名テクスチャ = new 曲名() );
         }
 
         protected override void On活性化()
@@ -164,8 +229,17 @@ namespace DTXMania.曲
                 Node.既定のノード画像.活性化する();
             }
         }
+
         protected override void On非活性化()
         {
+            this.プレビュー音声を停止する();
+
+            this._プレビュー音声?.Dispose();
+            this._プレビュー音声 = null;
+
+            this._プレビュー音声ソース?.Dispose();
+            this._プレビュー音声ソース = null;
+
             // 全インスタンスで共有する static メンバが生成な済みなら解放する。
             if( null != Node.既定のノード画像 )
             {

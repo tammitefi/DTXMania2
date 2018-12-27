@@ -14,8 +14,8 @@ namespace DTXMania.ステージ.オプション設定
     /// </summary>
     class パネル_システムボタン : パネル
     {
-        public パネル_システムボタン( string パネル名 )
-            : base( パネル名, null )
+        public パネル_システムボタン( string パネル名, Action<パネル> 値の変更処理 = null )
+            : base( パネル名, 値の変更処理 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
@@ -28,6 +28,7 @@ namespace DTXMania.ステージ.オプション設定
         {
             base.On活性化();   //忘れないこと
         }
+
         protected override void On非活性化()
         {
             base.On非活性化();   //忘れないこと
@@ -40,12 +41,17 @@ namespace DTXMania.ステージ.オプション設定
             float テキストの上下マージン = 72f * ( 1f - 拡大率Y ) / 2f;
             var テキスト矩形 = new RectangleF( left + 32f, top + 12f + テキストの上下マージン, 294f, 72f * 拡大率Y );
 
+            // (1) パネルの下地部分の描画。
+
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 using( var テキスト背景色 = new SolidColorBrush( dc, Color.LightGray ) )
                     dc.FillRectangle( テキスト矩形, テキスト背景色 );
 
             } );
+
+
+            // (2) パネル名の描画。
 
             float 拡大率X = Math.Min( 1f, ( テキスト矩形.Width - 20f ) / this._パネル名画像.画像サイズdpx.Width );    // -20 は左右マージンの最低値[dpx]
 

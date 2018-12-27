@@ -38,7 +38,7 @@ namespace FDK
 
         public FPS()
         {
-            this.子を追加する( this._FPSパラメータ = new 文字列画像() );
+            this.子Activityを追加する( this._FPSパラメータ = new 文字列画像() );
 
             this._初めてのFPS更新 = true;
             this._現在のFPS = 0;

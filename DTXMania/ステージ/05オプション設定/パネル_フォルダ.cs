@@ -8,7 +8,7 @@ using FDK;
 namespace DTXMania.ステージ.オプション設定
 {
     /// <summary>
-    ///		子パネルリストに入ることができるフォルダ。
+    ///		子パネルリストを持つフォルダ。
     ///		子パネルリストの活性化・非活性化はこのクラスで行う。
     /// </summary>
     class パネル_フォルダ : パネル
@@ -30,13 +30,12 @@ namespace DTXMania.ステージ.オプション設定
         }
 
 
-        public パネル_フォルダ( string パネル名, パネル_フォルダ 親パネル, IEnumerable<パネル> 初期子パネルリスト = null )
-            : base( パネル名 )
+        public パネル_フォルダ( string パネル名, パネル_フォルダ 親パネル, IEnumerable<パネル> 初期子パネルリスト = null, Action<パネル> 値の変更処理 = null )
+            : base( パネル名, 値の変更処理, ヘッダ色種別.赤 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.親パネル = 親パネル;
-
                 this.子パネルリスト = new SelectableList<パネル>();
 
                 if( null != 初期子パネルリスト )
@@ -46,6 +45,7 @@ namespace DTXMania.ステージ.オプション設定
 
                     this._子パネルリスト.SelectFirst();
                 }
+
                 Log.Info( $"フォルダパネルを生成しました。[{this}]" );
             }
         }
@@ -57,6 +57,7 @@ namespace DTXMania.ステージ.オプション設定
             foreach( var panel in this.子パネルリスト )
                 panel.活性化する();
         }
+
         protected override void On非活性化()
         {
             foreach( var panel in this.子パネルリスト )
@@ -67,11 +68,12 @@ namespace DTXMania.ステージ.オプション設定
 
         public override void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
-            // パネルの共通部分を描画。
+            // パネルの下地と名前を描画。
             base.進行描画する( dc, left, top, 選択中 );
 
-            // 項目部分の描画はなし。
+            // その他の描画があれば、ここに記述する。
         }
+
 
         protected SelectableList<パネル> _子パネルリスト = null;
     }

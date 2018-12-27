@@ -30,17 +30,17 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
-                this.子を追加する( this._曲リスト = new 曲リスト() );
-                this.子を追加する( this._難易度と成績 = new 難易度と成績() );
-                this.子を追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
-                this.子を追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
-                this.子を追加する( this._青い線 = new 青い線() );
-                this.子を追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
-                this.子を追加する( this._BPMパネル = new BPMパネル() );
-                this.子を追加する( this._曲別SKILL = new 曲別SKILL() );
-                this.子を追加する( this._表示方法選択パネル = new 表示方法選択パネル() );
-				this.子を追加する( this._SongNotFound = new 文字列画像() {
+                this.子Activityを追加する( this._舞台画像 = new 舞台画像( @"$(System)images\舞台_暗.jpg" ) );
+                this.子Activityを追加する( this._曲リスト = new 曲リスト() );
+                this.子Activityを追加する( this._難易度と成績 = new 難易度と成績() );
+                this.子Activityを追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
+                this.子Activityを追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
+                this.子Activityを追加する( this._青い線 = new 青い線() );
+                this.子Activityを追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
+                this.子Activityを追加する( this._BPMパネル = new BPMパネル() );
+                this.子Activityを追加する( this._曲別SKILL = new 曲別SKILL() );
+                this.子Activityを追加する( this._表示方法選択パネル = new 表示方法選択パネル() );
+				this.子Activityを追加する( this._SongNotFound = new 文字列画像() {
 					表示文字列 =
 					"Song not found...\n" +
 					"Hit BDx2 (in default SPACEx2) to select song folders."
@@ -67,10 +67,13 @@ namespace DTXMania.ステージ.選曲
                 this._プレビュー枠の長さdpx = null;
                 this._導線のストーリーボード = null;
 
+                App.システムサウンド.再生する( 設定.システムサウンド種別.選曲ステージ_開始音 );
+
                 this.現在のフェーズ = フェーズ.フェードイン;
                 this._初めての進行描画 = true;
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -164,15 +167,21 @@ namespace DTXMania.ステージ.選曲
                         //----------------
                         if( App.曲ツリー.フォーカスノード is BoxNode boxNode )
                         {
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.決定音 );
                             this._曲リスト.BOXに入る();
                         }
                         else if( App.曲ツリー.フォーカスノード is BackNode backNode )
                         {
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.決定音 );
                             this._曲リスト.BOXから出る();
                         }
                         else if( null != App.曲ツリー.フォーカスノード )
                         {
                             // 選曲する
+
+                            App.曲ツリー.フォーカスノード.プレビュー音声を停止する();
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.選曲ステージ_曲決定音 );
+
                             App.ステージ管理.アイキャッチを選択しクローズする( nameof( GO ) );
                             this.現在のフェーズ = フェーズ.フェードアウト;
                         }
@@ -183,7 +192,19 @@ namespace DTXMania.ステージ.選曲
                     {
                         #region " キャンセル "
                         //----------------
-                        this.現在のフェーズ = フェーズ.キャンセル;
+                        {
+                            App.曲ツリー.フォーカスノード.プレビュー音声を停止する();
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.取消音 );
+
+                            if( App.曲ツリー.フォーカスノード.親ノード != App.曲ツリー.ルートノード )
+                            {
+                                this._曲リスト.BOXから出る();
+                            }
+                            else
+                            {
+                                this.現在のフェーズ = フェーズ.キャンセル;
+                            }
+                        }
                         //----------------
                         #endregion
                     }
@@ -193,6 +214,8 @@ namespace DTXMania.ステージ.選曲
                         //----------------
                         if( null != App.曲ツリー.フォーカスノード )
                         {
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.カーソル移動音 );
+
                             //App.曲ツリー.前のノードをフォーカスする();	--> 曲リストへ委譲
                             this._曲リスト.前のノードを選択する();
                             this._導線アニメをリセットする();
@@ -206,6 +229,8 @@ namespace DTXMania.ステージ.選曲
                         //----------------
                         if( null != App.曲ツリー.フォーカスノード )
                         {
+                            App.システムサウンド.再生する( 設定.システムサウンド種別.カーソル移動音 );
+
                             //App.曲ツリー.次のノードをフォーカスする();	--> 曲リストへ委譲
                             this._曲リスト.次のノードを選択する();
                             this._導線アニメをリセットする();
@@ -217,6 +242,7 @@ namespace DTXMania.ステージ.選曲
                     {
                         #region " 左移動 "
                         //----------------
+                        App.システムサウンド.再生する( 設定.システムサウンド種別.変更音 );
                         this._表示方法選択パネル.前のパネルを選択する();
                         //----------------
                         #endregion
@@ -225,6 +251,7 @@ namespace DTXMania.ステージ.選曲
                     {
                         #region " 右移動 "
                         //----------------
+                        App.システムサウンド.再生する( 設定.システムサウンド種別.変更音 );
                         this._表示方法選択パネル.次のパネルを選択する();
                         //----------------
                         #endregion
@@ -233,8 +260,12 @@ namespace DTXMania.ステージ.選曲
                     {
                         #region " HH×2 → 難易度変更 "
                         //----------------
-                        //App.曲ツリー.難易度アンカをひとつ増やす();	--> 曲リストへ委譲
+                        App.曲ツリー.フォーカスノード?.プレビュー音声を停止する();
+
+                        App.システムサウンド.再生する( 設定.システムサウンド種別.変更音 );
                         this._曲リスト.難易度アンカをひとつ増やす();
+
+                        App.曲ツリー.フォーカスノード?.プレビュー音声を再生する();
                         //----------------
                         #endregion
                     }
@@ -242,6 +273,8 @@ namespace DTXMania.ステージ.選曲
                     {
                         #region " BD×2 → オプション設定 "
                         //----------------
+                        App.曲ツリー.フォーカスノード.プレビュー音声を停止する();
+                        App.システムサウンド.再生する( 設定.システムサウンド種別.決定音 );
                         this.現在のフェーズ = フェーズ.確定_設定;
                         //----------------
                         #endregion

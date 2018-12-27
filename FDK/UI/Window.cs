@@ -75,15 +75,15 @@ namespace FDK.UI
             this._最大左枠幅dpx = Math.Max( this._左上矩形.Width, Math.Max( this._左辺矩形.Width, this._左下矩形.Width ) );
             this._最大右枠幅dpx = Math.Max( this._右上矩形.Width, Math.Max( this._右辺矩形.Width, this._右下矩形.Width ) );
 
-            this.子を追加する( this.通常時セル画像 = new 画像( 画像ファイル ) );
+            this.子Activityを追加する( this.通常時セル画像 = new 画像( 画像ファイル ) );
 
             if( null != 押下時画像ファイル )
-                this.子を追加する( this.押下時セル画像 = new 画像( 押下時画像ファイル ) );   // オプション
+                this.子Activityを追加する( this.押下時セル画像 = new 画像( 押下時画像ファイル ) );   // オプション
 
             if( null != フォーカス時画像ファイル )
-                this.子を追加する( this.フォーカス時セル画像 = new 画像( フォーカス時画像ファイル ) );    // オプション
+                this.子Activityを追加する( this.フォーカス時セル画像 = new 画像( フォーカス時画像ファイル ) );    // オプション
 
-            this.子を追加する( this.全体画像 = new 描画可能画像( this.サイズdpx_枠込み ) );
+            this.子Activityを追加する( this.全体画像 = new 描画可能画像( this.サイズdpx_枠込み ) );
         }
 
         protected override void On活性化()
@@ -176,8 +176,8 @@ namespace FDK.UI
             if( this.サイズdpx_枠込み != this.全体画像.サイズ )
             {
                 this.全体画像.非活性化する();
-                this.子を削除する( this.全体画像 );
-                this.子を追加する( this.全体画像 = new 描画可能画像( this.サイズdpx_枠込み ) );
+                this.子Activityを削除する( this.全体画像 );
+                this.子Activityを追加する( this.全体画像 = new 描画可能画像( this.サイズdpx_枠込み ) );
                 this.全体画像.活性化する();
             }
 

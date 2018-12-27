@@ -11,6 +11,7 @@ namespace DTXMania.ステージ.オプション設定
 {
     /// <summary>
     ///		すべてのパネルのベースとなるクラス。
+    ///		名前だけのパネルとしても使う。
     /// </summary>
     class パネル : Activity
     {
@@ -30,14 +31,15 @@ namespace DTXMania.ステージ.オプション設定
         public Color4 ヘッダ色 { get; set; } = ヘッダ色種別.青;
 
 
-        public パネル( string パネル名, Action<パネル> 値の変更処理 = null )
+        public パネル( string パネル名, Action<パネル> 値の変更処理 = null, Color4? ヘッダ色 = null )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.パネル名 = パネル名;
+                this.ヘッダ色 = ( ヘッダ色.HasValue ) ? ヘッダ色.Value : ヘッダ色種別.青;
                 this._値の変更処理 = 値の変更処理;
 
-                this.子を追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
+                this.子Activityを追加する( this._パネル名画像 = new 文字列画像() { 表示文字列 = this.パネル名, フォントサイズpt = 34f, 前景色 = Color4.White } );
             }
         }
 
@@ -95,6 +97,7 @@ namespace DTXMania.ステージ.オプション設定
                 this._パネルのストーリーボード.Schedule( animation.Timer.Time );
             }
         }
+
         public void フェードアウトを開始する( double 遅延sec, double 速度倍率 = 1.0 )
         {
             //using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -128,18 +131,21 @@ namespace DTXMania.ステージ.オプション設定
 
             this._値の変更処理?.Invoke( this );
         }
+
         public virtual void 左移動キーが入力された()
         {
             // 必要あれば、派生クラスで実装すること。
 
             this._値の変更処理?.Invoke( this );
         }
+
         public virtual void 右移動キーが入力された()
         {
             // 必要あれば、派生クラスで実装すること。
 
             this._値の変更処理?.Invoke( this );
         }
+
         public virtual void 進行描画する( DeviceContext1 dc, float left, float top, bool 選択中 )
         {
             float 拡大率Y = (float) this._パネルの高さ割合.Value;
@@ -151,10 +157,13 @@ namespace DTXMania.ステージ.オプション設定
 
             if( 選択中 )
             {
-                // 選択パネルは、パネル矩形を左右にちょっと大きくする。
+                // 選択されているパネルは、パネル矩形を左右にちょっと大きくする。
                 パネル矩形.Left -= 38f;
                 パネル矩形.Width += 38f * 2f;
             }
+
+
+            // (1) パネルの下地部分の描画。
 
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
@@ -168,6 +177,9 @@ namespace DTXMania.ステージ.オプション設定
                 }
 
             } );
+
+
+            // (2) パネル名の描画。
 
             float 拡大率X = Math.Min( 1f, ( テキスト矩形.Width - 20f ) / this._パネル名画像.画像サイズdpx.Width );    // -20 は左右マージンの最低値[dpx]
 
@@ -183,20 +195,25 @@ namespace DTXMania.ステージ.オプション設定
             => $"{this.パネル名}";
 
 
+        // パネル名は画像で保持。
         protected 文字列画像 _パネル名画像 = null;
+
         protected Action<パネル> _値の変更処理 = null;
 
         /// <summary>
         ///		項目部分のサイズ。
         ///		left と top は、パネルほ left,top からの相対値。
         /// </summary>
-        protected RectangleF 項目領域
-            => new RectangleF( +322f, +0f, 342f, サイズ.Height );
+        protected RectangleF 項目領域 = new RectangleF( +322f, +0f, 342f, サイズ.Height );
 
         /// <summary>
         ///		0.0:ゼロ ～ 1.0:原寸
         /// </summary>
         protected Variable _パネルの高さ割合 = null;
+
+        /// <summary>
+        ///     フェードイン・アウトアニメーション用
+        /// </summary>
         protected Storyboard _パネルのストーリーボード = null;
     }
 }

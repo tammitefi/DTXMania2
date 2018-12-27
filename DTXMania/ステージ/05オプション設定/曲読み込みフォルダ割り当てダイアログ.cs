@@ -9,94 +9,97 @@ using DTXMania.入力;
 
 namespace DTXMania.ステージ.オプション設定
 {
-    public partial class 曲読み込みフォルダ割り当てダイアログ : Form
+    partial class 曲読み込みフォルダ割り当てダイアログ : Form
     {
         public 曲読み込みフォルダ割り当てダイアログ()
         {
             InitializeComponent();
-
-            // 物理画面のサイズに応じて、フォームのサイズを変更。
-            //this.Scale(
-            //    new System.Drawing.SizeF(
-            //        Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX横 ),
-            //        Math.Max( 1f, グラフィックデバイス.Instance.拡大率DPXtoPX縦 ) ) );
         }
 
+        /// <summary>
+        ///     ダイアログを表示する。
+        ///     設定が保存されたら true、キャンセルされたら false を返す。
+        /// </summary>
         public bool 表示する()
         {
 			using( Log.Block( FDKUtilities.現在のメソッド名 ) )
 			{
-				bool 変更された = false;
+				bool キャンセルされた = false;
 
-				// メインウィンドウ用の入力管理をいったん破棄し、このウィンドウ用の入力管理を生成する。
+				// (1) メインウィンドウ用の入力管理をいったん破棄し、このダイアログ用の入力管理を生成する。
+
 				App.入力管理.Dispose();
+
 				using( var 入力管理 = new 入力管理( this.Handle ) )
 				{
 					入力管理.キーバインディングを取得する = () => App.システム設定.キーバインディング;
 					入力管理.キーバインディングを保存する = () => App.システム設定.保存する();
 					入力管理.初期化する();
 
-					#region " 現在の設定で初期値。"
-					//----------------
-					foreach( var vpath in App.システム設定.曲検索フォルダ )
+                    // (2) ダイアログの表示から終了までを実行。
+
+                    #region " 現在の設定で初期化。"
+                    //----------------
+                    foreach( var vpath in App.システム設定.曲検索フォルダ )
 						this.listViewフォルダ一覧.Items.Add( new ListViewItem( $"{vpath.変数なしパス}" ) );	// ここでは変数なしでパスを表示する。
 
 					this._変更あり = false;
-					//----------------
-					#endregion
+                    //----------------
+                    #endregion
 
-					var dr = DialogResult.OK;
+                    #region " ダイアログの表示と設定値の保存。"
+                    //----------------
+                    {
+                        Cursor.Show();
 
-					#region " ダイアログの表示から終了まで "
-					//----------------
-					Cursor.Show();
+                        var dr = this.ShowDialog( Program.App );
 
-                    dr = this.ShowDialog( Program.App );
+                        if( App.全画面モード )
+                            Cursor.Hide();
 
-					if( App.全画面モード )
-						Cursor.Hide();
-					//----------------
-					#endregion
+                        if( dr == DialogResult.OK )
+                        {
+                            // 変更後の設定を保存。
 
-					if( dr == DialogResult.OK )
-					{
-						#region " 変更後の設定を保存。"
-						//----------------
-						App.システム設定.曲検索フォルダ.Clear();
-						foreach( ListViewItem item in this.listViewフォルダ一覧.Items )
-							App.システム設定.曲検索フォルダ.Add( new VariablePath( item.SubItems[ 0 ].Text ) );
+                            App.システム設定.曲検索フォルダ.Clear();
+                            foreach( ListViewItem item in this.listViewフォルダ一覧.Items )
+                                App.システム設定.曲検索フォルダ.Add( new VariablePath( item.SubItems[ 0 ].Text ) );
 
-						App.システム設定.保存する();
-						//----------------
-						#endregion
+                            App.システム設定.保存する();
 
-						変更された = true;
-					}
-					else
-					{
-						Log.Info( "キャンセルされました。" );
-						変更された = false;
-					}
-				}
+                            キャンセルされた = false;
+                        }
+                        else
+                        {
+                            Log.Info( "キャンセルされました。" );
+                            キャンセルされた = true;
+                        }
+                    }
+                    //----------------
+                    #endregion
+                }
 
-				// メインウィンドウ用の入力管理を復活。
-				App.入力管理 = new 入力管理( Program.App.Handle ) {
+                // (3) メインウィンドウ用の入力管理を復活させる。
+
+                App.入力管理 = new 入力管理( Program.App.Handle ) {
 					キーバインディングを取得する = () => App.システム設定.キーバインディング,
 					キーバインディングを保存する = () => App.システム設定.保存する(),
 				};
 				App.入力管理.初期化する();
 
-				return 変更された;
+                return !( キャンセルされた );
 			}
         }
 
 
         private bool _変更あり;
 
+
+        // イベント
+
         private void _FormClosing( object sender, FormClosingEventArgs e )
         {
-            // ※ウィンドウを閉じようとした時も Cancel になる。
-            if( this.DialogResult == DialogResult.Cancel && this._変更あり )
+            if( this.DialogResult == DialogResult.Cancel && this._変更あり )    // ウィンドウを閉じようとした時も Cancel になる。
             {
                 var dr = MessageBoxEx.Show( "変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
 
@@ -104,6 +107,7 @@ namespace DTXMania.ステージ.オプション設定
                     e.Cancel = true;
             }
         }
+
 		private void listViewフォルダ一覧_SelectedIndexChanged( object sender, EventArgs e )
 		{
 			if( 0 < this.listViewフォルダ一覧.SelectedItems.Count )
@@ -117,6 +121,7 @@ namespace DTXMania.ステージ.オプション設定
 				this.button削除.Enabled = false;
 			}
 		}
+
 		private void button選択_Click( object sender, EventArgs e )
 		{
 			// フォルダ選択ダイアログを生成する。
@@ -126,7 +131,7 @@ namespace DTXMania.ステージ.オプション設定
 				AllowNonFileSystemItems = false,
 			} )
 			{
-				// ダイアログの表示から終了。
+				// ダイアログを表示。
 				if( dialog.ShowDialog( this.Handle ) == CommonFileDialogResult.Ok )
 				{
 					// 選択されたフォルダを曲読み込みフォルダリストに追加する。
@@ -141,6 +146,7 @@ namespace DTXMania.ステージ.オプション設定
 				}
 			}
 		}
+
 		private void button削除_Click( object sender, EventArgs e )
 		{
 			foreach( int selectedIndex in this.listViewフォルダ一覧.SelectedIndices )

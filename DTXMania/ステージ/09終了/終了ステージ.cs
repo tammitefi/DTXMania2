@@ -13,6 +13,7 @@ namespace DTXMania.ステージ.終了
         {
             開始,
             表示中,
+            開始音終了待ち,
             確定,
         }
         public フェーズ 現在のフェーズ { get; protected set; }
@@ -21,7 +22,7 @@ namespace DTXMania.ステージ.終了
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子を追加する( this._背景画像 = new 画像( @"$(System)images\終了\終了画面.jpg" ) );
+                this.子Activityを追加する( this._背景画像 = new 画像( @"$(System)images\終了\終了画面.jpg" ) );
             }
         }
 
@@ -29,6 +30,8 @@ namespace DTXMania.ステージ.終了
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                App.システムサウンド.再生する( 設定.システムサウンド種別.終了ステージ_開始音 );
+
                 this.現在のフェーズ = フェーズ.開始;
             }
         }
@@ -36,6 +39,7 @@ namespace DTXMania.ステージ.終了
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                App.システムサウンド.停止する( 設定.システムサウンド種別.終了ステージ_開始音 );
             }
         }
 
@@ -49,11 +53,20 @@ namespace DTXMania.ステージ.終了
                     break;
 
                 case フェーズ.表示中:
-                    this._背景画像.描画する( dc );
-
-                    if( this._カウンタ.終了値に達した )
                     {
-                        this.現在のフェーズ = フェーズ.確定;
+                        this._背景画像.描画する( dc );
+
+                        if( this._カウンタ.終了値に達した )
+                            this.現在のフェーズ = フェーズ.開始音終了待ち;
+                    }
+                    break;
+
+                case フェーズ.開始音終了待ち:
+                    {
+                        this._背景画像.描画する( dc );
+
+                        if( !App.システムサウンド.再生中( 設定.システムサウンド種別.終了ステージ_開始音 ) )
+                            this.現在のフェーズ = フェーズ.確定; // 再生が終わったのでフェーズ遷移。
                     }
                     break;
 
