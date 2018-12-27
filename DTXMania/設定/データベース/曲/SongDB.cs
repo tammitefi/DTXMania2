@@ -174,19 +174,35 @@ namespace DTXMania.データベース.曲
                     #region " 3 → 4 "
                     //----------------
                     // 変更点：
-                    // ・Preimage フィールドの内容が、絶対パスから、曲譜面ファイルからの相対パスに変更。
+                    // ・PreImage カラムの内容を、絶対パスから、曲譜面ファイルからの相対パスに変更。
+                    // ・PreSound カラムを追加。
                     this.DataContext.SubmitChanges();
                     using( var transaction = this.Connection.BeginTransaction() )
                     {
                         try
                         {
-                            // すべてのレコードについて、変更のあったカラムを更新する。
-                            var song03s = this.DataContext.GetTable<Song03>();
-                            foreach( var song03 in song03s )
+                            // (1) データベースにカラム PreSound を追加する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Songs ADD COLUMN PreSound NVARCHAR" );
+                            this.DataContext.SubmitChanges();
+
+                            // (2) すべてのレコードについて、変更のあったカラムを更新する。
+                            var songs = this.DataContext.GetTable<Song04>();
+                            foreach( var song in songs )
                             {
-                                // Preimage を絶対パスから相対パスに変換。
-                                if( song03.PreImage.Nullでも空でもない() && Path.IsPathRooted( song03.PreImage ) )
-                                    song03.PreImage = FDK.Folder.絶対パスを相対パスに変換する( Path.GetDirectoryName( song03.Path ), song03.PreImage );
+                                // スコアを読み込む 
+                                var score = (SSTFormatCurrent.スコア) null;
+                                var vpath = new VariablePath( song.Path );
+                                score = SSTFormatCurrent.スコア.ファイルから生成する( vpath.変数なしパス, ヘッダだけ: true );
+
+                                // PreImage フィールドを更新
+                                song.PreImage = score.プレビュー画像ファイル名;
+                                if( song.PreImage.Nullでも空でもない() && Path.IsPathRooted( song.PreImage ) )
+                                    song.PreImage = FDK.Folder.絶対パスを相対パスに変換する( Path.GetDirectoryName( song.Path ), song.PreImage );
+
+                                // PreSound フィールドを更新。
+                                song.PreSound = score.プレビュー音声ファイル名;
+                                if( song.PreSound.Nullでも空でもない() && Path.IsPathRooted( song.PreSound ) )
+                                    song.PreSound = FDK.Folder.絶対パスを相対パスに変換する( Path.GetDirectoryName( song.Path ), song.PreSound );
                             }
                             this.DataContext.SubmitChanges();
 

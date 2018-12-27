@@ -61,6 +61,9 @@ namespace DTXMania.曲
                     var プレビュー画像ファイルの絶対パス = Path.Combine( Path.GetDirectoryName( song.Path ), song.PreImage );
                     this.子を追加する( this.ノード画像 = new テクスチャ( プレビュー画像ファイルの絶対パス ) );
                 }
+
+                if( song.PreSound.Nullでも空でもない() )
+                    this.プレビュー音声ファイルの絶対パス = Path.Combine( Path.GetDirectoryName( song.Path ), song.PreSound );
             }
         }
     }

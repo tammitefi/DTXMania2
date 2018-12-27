@@ -130,6 +130,14 @@ namespace DTXMania.データベース.曲
         [Column( DbType = "NVARCHAR" )]
         public string Artist { get; set; }
 
+        /// <summary>
+        ///		曲のプレビュー音声ファイルのパス。
+        ///		曲譜面ファイル（<see cref="Path"/>）からの相対パス。
+        /// </summary>
+        [Column( DbType = "NVARCHAR" )]
+        public string PreSound { get; set; }
+
+        
         ///////////////////////
 
         public Song04()
@@ -152,6 +160,7 @@ namespace DTXMania.データベース.曲
             this.TotalNotes_RightCymbal = 0;
             this.PreImage = "";
             this.Artist = "";
+            this.PreSound = "";
         }
 
         // ICloneable 実装
@@ -186,6 +195,7 @@ namespace DTXMania.データベース.曲
             @", TotalNotes_RightCymbal INTEGER NOT NULL" +
             @", PreImage NVARCHAR" +
             @", Artist NVARCHAR" +
+            @", PreSound NVARCHAR" +
             @")";
     }
 }

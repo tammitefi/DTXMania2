@@ -110,7 +110,7 @@ namespace DTXMania.データベース.ユーザ
                     {
                         try
                         {
-                            // テータベースをアップデートしてデータを移行する。
+                            // データベースにカラム PlayMode を追加する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN PlayMode INTEGER NOT NULL DEFAULT 1" );
                             this.DataContext.SubmitChanges();
 
@@ -141,7 +141,7 @@ namespace DTXMania.データベース.ユーザ
                     {
                         try
                         {
-                            // テータベースをアップデートしてデータを移行する。
+                            // データベースに新しいカラムを追加する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN RideLeft INTEGER NOT NULL DEFAULT 0" );  // 2018.2.11 現在、SQLite で複数カラムを一度に追加できる構文はない。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN ChinaLeft INTEGER NOT NULL DEFAULT 0" );
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN SplashLeft INTEGER NOT NULL DEFAULT 1" );
@@ -174,7 +174,7 @@ namespace DTXMania.データベース.ユーザ
                     {
                         try
                         {
-                            // テータベースをアップデートしてデータを移行する。
+                            // データベースにカラム DrumSound を追加する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN DrumSound INTEGER NOT NULL DEFAULT 1" );
                             this.DataContext.SubmitChanges();
 
@@ -205,7 +205,7 @@ namespace DTXMania.データベース.ユーザ
                     {
                         try
                         {
-                            // テータベースをアップデートしてデータを移行する。
+                            // データベースにカラム LaneType を追加する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN LaneType NVARCHAR NOT NULL DEFAULT 'TypeA'" );
                             this.DataContext.SubmitChanges();
 
@@ -230,14 +230,14 @@ namespace DTXMania.データベース.ユーザ
                     #region " 6 → 7 "
                     //----------------
                     // 変更点:
-                    // ・Users テーブルに BGATrans カラムを追加。
+                    // ・Users テーブルに LaneTrans カラムを追加。
                     this.DataContext.SubmitChanges();
                     using( var transaction = this.Connection.BeginTransaction() )
                     {
                         try
                         {
-                            // テータベースをアップデートしてデータを移行する。
-                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN BGATrans INTEGER NOT NULL DEFAULT 50" );
+                            // データベースにカラム LaneTrans を追加する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN LaneTrans INTEGER NOT NULL DEFAULT 50" );
                             this.DataContext.SubmitChanges();
 
                             // 成功。
