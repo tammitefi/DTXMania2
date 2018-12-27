@@ -40,7 +40,7 @@ namespace MakeArchive
             if( File.Exists( 出力ファイルパス ) )
                 File.Delete( 出力ファイルパス );
 
-            using( var archive = ZipFile.Open( 出力ファイルパス, ZipArchiveMode.Create ) )
+            using( var archive = ZipFile.Open( 出力ファイルパス, ZipArchiveMode.Create, Encoding.GetEncoding( "shift_jis" ) ) )
             {
                 var 出力対象ファイルリスト = new List<(string src, string dst)>();
 
