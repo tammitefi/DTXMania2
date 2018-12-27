@@ -134,11 +134,14 @@ namespace DTXMania.ステージ
             {
                 for( int i = 0; i < this.Sounds.Length; i++ )
                 {
+                    if( null == this.Sounds[ i ] )
+                        continue;
+
                     if( this.Sounds[ i ].再生中である )
                         this.Sounds[ i ].Stop();
 
-                    this.Sounds[i]?.Dispose();
-                    this.Sounds[i] = null;
+                    this.Sounds[ i ].Dispose();
+                    this.Sounds[ i ] = null;
                 }
 
                 this.SampleSource?.Dispose();
