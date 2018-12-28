@@ -258,18 +258,41 @@ namespace DTXMania.ステージ.演奏
             {
                 var ドラムチッププロパティ = options.ドラムチッププロパティ管理[ chip.チップ種別 ];
 
-                // AutoPlay ON のチップは、
-                if( options.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ] )
+                // AutoPlay ON のチップは、すべての AutoPlay が ON である場合を除いて、カウントしない。
+                //if( options.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ] &&
+                //    !( options.AutoPlayがすべてONである ) )
+                //        continue;
+                // AutoPlay OFF 時でもユーザヒットの対象にならないチップはカウントしない。
+                //if( !( ドラムチッププロパティ.AutoPlayOFF_ユーザヒット ) )
+                //    continue;
+
+                bool 判定対象である = true;
+
+
+                bool チップのAutoPlayはONである =
+                    options.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
+
+                if( チップのAutoPlayはONである )
                 {
-                    if( !( options.AutoPlayがすべてONである ) )
-                        continue;   // すべてがONである場合を除いて、カウントしない。
+                    if( options.AutoPlayがすべてONである )
+                    {
+                        判定対象である = ドラムチッププロパティ.AutoPlayON_自動ヒット_判定;
+                    }
+                    else
+                    {
+                        判定対象である = false;
+                    }
+                }
+                else
+                {
+                    判定対象である = ドラムチッププロパティ.AutoPlayOFF_ユーザヒット_判定;
                 }
 
-                // AutoPlay OFF 時でもユーザヒットの対象にならないチップはカウントしない。
-                if( !( ドラムチッププロパティ.AutoPlayOFF_ユーザヒット ) )
-                    continue;
 
-                総ノーツ数++;
+                if( 判定対象である )
+                {
+                    総ノーツ数++;
+                }
             }
 
             return 総ノーツ数;

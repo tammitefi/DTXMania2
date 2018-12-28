@@ -162,7 +162,7 @@ namespace DTXMania.曲
             this._プレビュー音声再生タイマ.Tick += ( sender, e ) => { // このタスクはGUIスレッドで処理される（非同期ではない）。
 
                 this._プレビュー音声を生成する();
-                this._プレビュー音声?.Play();
+                this._プレビュー音声?.Play( ループ再生する: true );
 
                 this._プレビュー音声再生タイマ.Stop();    // 実行停止。２回目以降の Tick はない。
             };
