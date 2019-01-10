@@ -600,11 +600,12 @@ namespace DTXMania
                         }
                         //----------------
                         #endregion
-                        #region " 再起動 → 起動ステージへ "
+                        #region " 再起動 "
                         //----------------
                         if( stage.現在のフェーズ == ステージ.オプション設定.オプション設定ステージ.フェーズ.再起動 )
                         {
-                            App.ステージ管理.ステージを遷移する( nameof( ステージ.起動.起動ステージ ) );
+                            Application.Restart();
+                            return;
                         }
                         //----------------
                         #endregion
