@@ -286,7 +286,8 @@
     <Compile Include="設定\データベース\ユーザ\old\User03.cs" />
     <Compile Include="設定\データベース\ユーザ\old\User04.cs" />
     <Compile Include="設定\データベース\ユーザ\old\User05.cs" />
-    <Compile Include="設定\データベース\ユーザ\User07.cs" />
+    <Compile Include="設定\データベース\ユーザ\User08.cs" />
+    <Compile Include="設定\データベース\ユーザ\old\User07.cs" />
     <Compile Include="設定\データベース\曲\old\Song01.cs" />
     <Compile Include="設定\データベース\曲\old\Song02.cs" />
     <Compile Include="入力\ドラム入力イベント.cs" />

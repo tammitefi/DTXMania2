@@ -13,8 +13,9 @@ namespace DTXMania.データベース.ユーザ
     using User04 = old.User04;
     using User05 = old.User05;
     using User06 = old.User06;
+    using User07 = old.User07;
 
-    using User = User07;        // 最新バージョンを指定（１／２）
+    using User = User08;        // 最新バージョンを指定（１／２）
     using Record = Record06;    //
 
     /// <summary>
@@ -22,7 +23,7 @@ namespace DTXMania.データベース.ユーザ
     /// </summary>
     class UserDB : SQLiteDBBase
     {
-        public const long VERSION = 7;  // 最新バージョンを指定（２／２）
+        public const long VERSION = 8;  // 最新バージョンを指定（２／２）
 
         public static readonly VariablePath ユーザDBファイルパス = @"$(AppData)UserDB.sqlite3";
 
@@ -238,6 +239,37 @@ namespace DTXMania.データベース.ユーザ
                         {
                             // データベースにカラム LaneTrans を追加する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN LaneTrans INTEGER NOT NULL DEFAULT 50" );
+                            this.DataContext.SubmitChanges();
+
+                            // 成功。
+                            transaction.Commit();
+                            this.DataContext.ExecuteCommand( "VACUUM" );    // Vacuum はトランザクションの外で。
+                            this.DataContext.SubmitChanges();
+                            Log.Info( $"Users テーブルをアップデートしました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                        catch
+                        {
+                            // 失敗。
+                            transaction.Rollback();
+                            throw new Exception( $"Users テーブルのアップデートに失敗しました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                    }
+                    //----------------
+                    #endregion
+                    break;
+
+                case 7:
+                    #region " 7 → 8 "
+                    //----------------
+                    // 変更点:
+                    // ・Users テーブルに BackgroundMovie カラムを追加。
+                    this.DataContext.SubmitChanges();
+                    using( var transaction = this.Connection.BeginTransaction() )
+                    {
+                        try
+                        {
+                            // データベースにカラム BackgroundMovie を追加する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN BackgroundMovie INTEGER NOT NULL DEFAULT 1" );
                             this.DataContext.SubmitChanges();
 
                             // 成功。

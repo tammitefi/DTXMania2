@@ -166,12 +166,17 @@ namespace DTXMania.ステージ.演奏
             // AVIを生成する。
 
             App.AVI管理?.Dispose();
-            App.AVI管理 = new 曲.AVI管理();
+            App.AVI管理 = null;
 
-            foreach( var kvp in App.演奏スコア.AVIリスト )
+            if( App.ユーザ管理.ログオン中のユーザ.演奏中に動画を表示する )
             {
-                var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value );
-                App.AVI管理.登録する( kvp.Key, path );
+                App.AVI管理 = new 曲.AVI管理();
+
+                foreach( var kvp in App.演奏スコア.AVIリスト )
+                {
+                    var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value );
+                    App.AVI管理.登録する( kvp.Key, path );
+                }
             }
 
             this._初めての進行描画 = true;
@@ -546,44 +551,46 @@ namespace DTXMania.ステージ.演奏
 
                         this._譜面スクロール速度.進行する( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );  // チップの表示より前に進行だけ行う
 
-                        #region " AVI（動画）の進行描画を行う。"
-                        //----------------
-                        foreach( var kvp in App.AVI管理.動画リスト )
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に動画を表示する )
                         {
-                            int zz = kvp.Key;
-                            var video = kvp.Value;
-
-                            if( video.再生中 )
+                            #region " AVI（動画）の進行描画を行う。"
+                            //----------------
+                            foreach( var kvp in App.AVI管理.動画リスト )
                             {
-                                // (A) 75%縮小表示
+                                int zz = kvp.Key;
+                                var video = kvp.Value;
+
+                                if( video.再生中 )
                                 {
-                                    float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
-                                    float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+                                    // (A) 75%縮小表示
+                                    {
+                                        float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
+                                        float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
 
-                                    // (1) 画面いっぱいに描画。
-                                    video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                        // (1) 画面いっぱいに描画。
+                                        video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
 
-                                    float 拡大縮小率 = 0.75f;
-                                    float 上移動 = 100.0f;
+                                        float 拡大縮小率 = 0.75f;
+                                        float 上移動 = 100.0f;
 
-                                    // (2) ちょっと縮小して描画。
-                                    video.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
-                                        w * ( 1f - 拡大縮小率 ) / 2f,
-                                        h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
-                                        w * 拡大縮小率,
-                                        h * 拡大縮小率 ) );
-                                }
-                                // (B) 100%全体表示のみ --> 今は未対応
-                                {
-                                    //float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
-                                    //float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
-                                    //video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                        // (2) ちょっと縮小して描画。
+                                        video.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
+                                            w * ( 1f - 拡大縮小率 ) / 2f,
+                                            h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
+                                            w * 拡大縮小率,
+                                            h * 拡大縮小率 ) );
+                                    }
+                                    // (B) 100%全体表示のみ --> 今は未対応
+                                    {
+                                        //float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
+                                        //float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+                                        //video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                    }
                                 }
                             }
+                            //----------------
+                            #endregion
                         }
-                        //----------------
-                        #endregion
-
                         this._左サイドクリアパネル.クリアする();
                         this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
                             this._プレイヤー名表示.進行描画する( dcp );
@@ -1049,20 +1056,23 @@ namespace DTXMania.ステージ.演奏
         {
             if( chip.チップ種別 == チップ種別.背景動画 )
             {
-                #region " (A) AVI動画を再生する。"
-                //----------------
-                int AVI番号 = chip.チップサブID;
-
-                if( App.AVI管理.動画リスト.TryGetValue( AVI番号, out Video video ) )
+                if( App.ユーザ管理.ログオン中のユーザ.演奏中に動画を表示する )
                 {
-                    App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
+                    #region " (A) AVI動画を再生する。"
+                    //----------------
+                    int AVI番号 = chip.チップサブID;
 
-                    video.再生を開始する();
+                    if( App.AVI管理.動画リスト.TryGetValue( AVI番号, out Video video ) )
+                    {
+                        App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
 
-                    App.サウンドタイマ.再開する();
+                        video.再生を開始する();
+
+                        App.サウンドタイマ.再開する();
+                    }
+                    //----------------
+                    #endregion
                 }
-                //----------------
-                #endregion
             }
             else if( 0 == chip.チップサブID )
             {
@@ -1180,18 +1190,23 @@ namespace DTXMania.ステージ.演奏
             double 演奏開始時刻sec = score.チップリスト[ this._描画開始チップ番号 ].発声時刻sec - 0.5;   // 描画開始チップより少し早めに。
             if( 0.0 > 演奏開始時刻sec ) 演奏開始時刻sec = 0.0;
 
-            var 動画チップリスト = score.チップリスト.Where( ( chip ) => (
-                this._チップの演奏状態[ chip ].ヒット済みである &&  // ヒット済みの
-                chip.チップ種別 == チップ種別.背景動画 ) );         // 動画チップ
-
-            foreach( var aviChip in 動画チップリスト )
+            // (1) AVI動画
+            if( App.ユーザ管理.ログオン中のユーザ.演奏中に動画を表示する )
             {
-                if( App.AVI管理.動画リスト.TryGetValue( aviChip.チップサブID, out Video video ) )
+                var 動画チップリスト = score.チップリスト.Where( ( chip ) => (
+                    this._チップの演奏状態[ chip ].ヒット済みである &&  // ヒット済みの
+                    chip.チップ種別 == チップ種別.背景動画 ) );         // 動画チップ
+
+                foreach( var aviChip in 動画チップリスト )
                 {
-                    video.再生を開始する( 演奏開始時刻sec - aviChip.発声時刻sec );
+                    if( App.AVI管理.動画リスト.TryGetValue( aviChip.チップサブID, out Video video ) )
+                    {
+                        video.再生を開始する( 演奏開始時刻sec - aviChip.発声時刻sec );
+                    }
                 }
             }
 
+            // (2) WAV音声
             var BGMチップリスト = score.チップリスト.Where( ( chip ) => (
                 this._チップの演奏状態[ chip ].ヒット済みである &&  // ヒット済みの
                 chip.チップ種別 == チップ種別.BGM ) );              // BGMチップ
