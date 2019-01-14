@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FDK")]
-[assembly: AssemblyCopyright( "Copyright © 2000 2018 ＦＲＯＭ／くまかみ工房" )]
+[assembly: AssemblyCopyright( "Copyright © 2000 2019 ＦＲＯＭ／くまかみ工房" )]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 以下のように '*' を使用します:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "30.0.0.0" )]
-[assembly: AssemblyFileVersion( "30.0.0.0" )]
+[assembly: AssemblyVersion( "30.1.0.0" )]
+[assembly: AssemblyFileVersion( "30.1.0.0" )]
 
 // 公開先のアセンブリを指定する
 // [assembly: InternalsVisibleTo("公開先のアセンブリ名")]
