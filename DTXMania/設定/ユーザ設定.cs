@@ -6,7 +6,7 @@ using FDK;
 using DTXMania.データベース.ユーザ;
 using DTXMania.ステージ.演奏;
 
-using User = DTXMania.データベース.ユーザ.User07;
+using User = DTXMania.データベース.ユーザ.User08;
 
 namespace DTXMania.設定
 {
@@ -106,6 +106,12 @@ namespace DTXMania.設定
         {
             get => this._User.LaneTrans;
             set => this._User.LaneTrans = value;
+        }
+
+        public bool 演奏中に動画を表示する
+        {
+            get => ( 0 != this._User.BackgroundMovie );
+            set => this._User.BackgroundMovie = value ? 1 : 0;
         }
 
 

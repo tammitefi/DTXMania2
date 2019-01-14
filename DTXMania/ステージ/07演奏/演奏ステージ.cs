@@ -172,15 +172,20 @@ namespace DTXMania.ステージ.演奏
             }
 
 
-            // AVIを生成する。
+            // AVIを生成する。（必要があれば）
 
             App.AVI管理?.Dispose();
-            App.AVI管理 = new 曲.AVI管理();
+            App.AVI管理 = null;
 
-            foreach( var kvp in App.演奏スコア.AVIリスト )
+            if( App.ユーザ管理.ログオン中のユーザ.演奏中に動画を表示する )
             {
-                var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value );
-                App.AVI管理.登録する( kvp.Key, path );
+                App.AVI管理 = new 曲.AVI管理();
+
+                foreach( var kvp in App.演奏スコア.AVIリスト )
+                {
+                    var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value );
+                    App.AVI管理.登録する( kvp.Key, path );
+                }
             }
 
             this._初めての進行描画 = true;
@@ -303,7 +308,7 @@ namespace DTXMania.ステージ.演奏
 
                                     if( !( this._チップの演奏状態[ chip ].発声済みである ) )
                                     {
-                                        this._チップの発声を行う( chip, ヒット判定バーと発声との時間sec );
+                                        this.チップの発声を行う( chip );
                                         this._チップの演奏状態[ chip ].発声済みである = true;
                                     }
 
@@ -370,6 +375,11 @@ namespace DTXMania.ステージ.演奏
                             #region " 描画範囲内のすべてのチップについて、対応する入力があればヒット処理を行う。"
                             //----------------
                             this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離 ) => {
+
+                                // ユーザ入力については、判定位置調整を適用する。（自動ヒットについては適用しない。）
+
+                                ヒット判定バーと描画との時間sec += ( App.システム設定.判定位置調整ms / 1000.0 );
+                                ヒット判定バーと発声との時間sec += ( App.システム設定.判定位置調整ms / 1000.0 );
 
                                 // チップにヒットしている入力を探す。
 
@@ -478,7 +488,7 @@ namespace DTXMania.ステージ.演奏
                             {
                                 foreach( var 入力 in App.入力管理.ポーリング結果 )
                                 {
-                                    if( ヒット処理済み入力.Contains( 入力 ) ||   // ヒット済みなら無視。
+                                    if( ヒット処理済み入力.Contains( 入力 ) ||  // ヒット済みなら無視。
                                         入力.InputEvent.離された )              // 押下じゃないなら無視。
                                         continue;
 
@@ -501,10 +511,13 @@ namespace DTXMania.ステージ.演奏
                                             // (B) 空打ちチップの指定がないなら、一番近いチップを検索し、それを発声する。
                                             else
                                             {
-                                                var chip = this._指定された時刻に一番近いチップを返す( 現在の演奏時刻sec, 入力.Type );
+                                                var chip = this.指定された時刻に一番近いチップを返す( 現在の演奏時刻sec, 入力.Type );
 
                                                 if( null != chip )
-                                                    this._チップの発声を行う( chip, 現在の演奏時刻sec );
+                                                {
+                                                    this.チップの発声を行う( chip );
+                                                    break;  // 複数のチップが該当する場合でも、最初のチップの発声のみ行う。
+                                                }
                                             }
                                             //----------------
                                             #endregion
@@ -628,43 +641,46 @@ namespace DTXMania.ステージ.演奏
 
                         this._譜面スクロール速度.進行する( App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );  // チップの表示より前に進行だけ行う
 
-                        #region " AVI（動画）の進行描画を行う。"
-                        //----------------
-                        foreach( var kvp in App.AVI管理.動画リスト )
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に動画を表示する )
                         {
-                            int zz = kvp.Key;
-                            var video = kvp.Value;
-
-                            if( video.再生中 )
+                            #region " AVI（動画）の進行描画を行う。"
+                            //----------------
+                            foreach( var kvp in App.AVI管理.動画リスト )
                             {
-                                // (A) 75%縮小表示
+                                int zz = kvp.Key;
+                                var video = kvp.Value;
+
+                                if( video.再生中 )
                                 {
-                                    float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
-                                    float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+                                    // (A) 75%縮小表示
+                                    {
+                                        float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
+                                        float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
 
-                                    // (1) 画面いっぱいに描画。
-                                    video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                        // (1) 画面いっぱいに描画。
+                                        video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
 
-                                    float 拡大縮小率 = 0.75f;
-                                    float 上移動 = 100.0f;
+                                        float 拡大縮小率 = 0.75f;
+                                        float 上移動 = 100.0f;
 
-                                    // (2) ちょっと縮小して描画。
-                                    video.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
-                                        w * ( 1f - 拡大縮小率 ) / 2f,
-                                        h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
-                                        w * 拡大縮小率,
-                                        h * 拡大縮小率 ) );
-                                }
-                                // (B) 100%全体表示のみ --> 今は未対応
-                                {
-                                    //float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
-                                    //float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
-                                    //video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                        // (2) ちょっと縮小して描画。
+                                        video.最後のフレームを再描画する( dc, new RectangleF(   // 直前に取得したフレームをそのまま描画。
+                                            w * ( 1f - 拡大縮小率 ) / 2f,
+                                            h * ( 1f - 拡大縮小率 ) / 2f - 上移動,
+                                            w * 拡大縮小率,
+                                            h * 拡大縮小率 ) );
+                                    }
+                                    // (B) 100%全体表示のみ --> 今は未対応
+                                    {
+                                        //float w = グラフィックデバイス.Instance.設計画面サイズ.Width;
+                                        //float h = グラフィックデバイス.Instance.設計画面サイズ.Height;
+                                        //video.描画する( dc, new RectangleF( 0f, 0f, w, h ), 0.2f );    // 不透明度は 0.2 で暗くする。
+                                    }
                                 }
                             }
+                            //----------------
+                            #endregion
                         }
-                        //----------------
-                        #endregion
 
                         this._左サイドクリアパネル.クリアする();
                         this._左サイドクリアパネル.クリアパネル.テクスチャへ描画する( ( dcp ) => {
@@ -1068,7 +1084,7 @@ namespace DTXMania.ステージ.演奏
                 // というか発声時刻が過去なのに未発声というならここが最後のチャンスなので、必ず発声しないといけない。
                 if( !( this._チップの演奏状態[ chip ].発声済みである ) )
                 {
-                    this._チップの発声を行う( chip, ヒット判定バーと発声との時間sec );
+                    this.チップの発声を行う( chip );
                     this._チップの演奏状態[ chip ].発声済みである = true;
                 }
                 //----------------
@@ -1109,82 +1125,6 @@ namespace DTXMania.ステージ.演奏
                 //----------------
                 #endregion
             }
-        }
-
-        private void _チップの発声を行う( チップ chip, double 再生開始位置sec )
-        {
-            if( chip.チップ種別 == チップ種別.背景動画 )
-            {
-                #region " (A) AVI動画を再生する。"
-                //----------------
-                int AVI番号 = chip.チップサブID;
-
-                if( App.AVI管理.動画リスト.TryGetValue( AVI番号, out Video video ) )
-                {
-                    App.サウンドタイマ.一時停止する();       // 止めても止めなくてもカクつくだろうが、止めておけば譜面は再開時にワープしない。
-
-                    video.再生を開始する();
-
-                    App.サウンドタイマ.再開する();
-                }
-                //----------------
-                #endregion
-            }
-            else if( 0 == chip.チップサブID )
-            {
-                #region " (B) SSTF準拠のドラムサウンドを再生する。"
-                //----------------
-                var prop = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ[ chip.チップ種別 ];
-
-                // ドラムサウンドを持つチップなら発声する。（持つかどうかはこのメソッド↓内で判定される。）
-                App.ドラムサウンド.発声する( chip.チップ種別, 0, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
-                //----------------
-                #endregion
-            }
-            else
-            {
-                #region " (C) WAVサウンドを再生する。"
-                //----------------
-                int WAV番号 = chip.チップサブID;
-                var prop = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ[ chip.チップ種別 ];
-
-                // WAVを持つチップなら発声する。（持つかどうかはこのメソッド↓内で判定される。）
-                App.WAV管理.発声する( chip.チップサブID, chip.チップ種別, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
-                //----------------
-                #endregion
-            }
-        }
-
-        private チップ _指定された時刻に一番近いチップを返す( double 時刻sec, ドラム入力種別 drumType )
-        {
-            var チップtoプロパティ = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ;
-
-            var 一番近いチップ = (チップ) null;
-            var 一番近いチップの時刻差の絶対値sec = (double) 0.0;
-
-            for( int i = 0; i < App.演奏スコア.チップリスト.Count; i++ )
-            {
-                var chip = App.演奏スコア.チップリスト[ i ];
-
-                if( チップtoプロパティ[ chip.チップ種別 ].ドラム入力種別 != drumType )
-                    continue;   // 指定されたドラム入力種別ではないチップは無視。
-
-                if( null != 一番近いチップ )
-                {
-                    var 今回の時刻差の絶対値sec = Math.Abs( chip.描画時刻sec - 時刻sec );
-
-                    if( 一番近いチップの時刻差の絶対値sec < 今回の時刻差の絶対値sec )
-                    {
-                        // 時刻差の絶対値が前回より増えた → 前回のチップが指定時刻への再接近だった
-                        break;
-                    }
-                }
-
-                一番近いチップ = chip;
-                一番近いチップの時刻差の絶対値sec = Math.Abs( 一番近いチップ.描画時刻sec - 時刻sec );
-            }
-
-            return 一番近いチップ;
         }
 
         private void _キャプチャ画面を描画する( DeviceContext1 dc, float 不透明度 = 1.0f )

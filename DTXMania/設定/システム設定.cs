@@ -46,6 +46,17 @@ namespace DTXMania.設定
 
         public Size ウィンドウサイズViewerモード用 { get; set; }
 
+        /// <summary>
+        ///     チップヒットの判定位置を、判定バーからさらに上下に調整する。
+        ///     -99～+99[ms] 。
+        /// </summary>
+        /// <remarks>
+        ///     判定バーの見かけの位置は変わらず、判定位置のみ移動する。
+        ///     入力機器の遅延対策であるが、入力機器とのヒモづけは行わないので、
+        ///     入力機器が変われば再調整が必要になる場合がある。
+        /// </remarks>
+        public int 判定位置調整ms { get; set; }
+
 
         public システム設定()
         {
@@ -54,6 +65,7 @@ namespace DTXMania.設定
             this.入力発声スレッドのスリープ量ms = 2;
             this.ウィンドウ表示位置Viewerモード用 = new Point( 100, 100 );
             this.ウィンドウサイズViewerモード用 = new Size( 640, 360 );
+            this.判定位置調整ms = -10;
         }
 
         public static システム設定 復元する()
@@ -113,6 +125,7 @@ namespace DTXMania.設定
                     .WithEmissionPhaseObjectGraphVisitor( args => new FDK.シリアライズ.YAML.CommentsObjectGraphVisitor( args.InnerVisitor ) )
                     .Build();
 
+                // ※ 値が既定値であるプロパティは出力されないので注意。
                 var yaml = serializer.Serialize( this );
                 File.WriteAllText( システム設定ファイルパス.変数なしパス, yaml );
 

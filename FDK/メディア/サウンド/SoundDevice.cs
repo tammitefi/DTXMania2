@@ -25,8 +25,7 @@ namespace FDK
         /// <summary>
         ///		デバイスのレンダリングフォーマット。
         /// </summary>
-        public WaveFormat WaveFormat
-            => this._WaveFormat;
+        public WaveFormat WaveFormat { get; } = null;
 
         /// <summary>
         ///		レンダリングボリューム。
@@ -87,9 +86,9 @@ namespace FDK
                     this._AudioClient = AudioClient.FromMMDevice( this._MMDevice );
 
                     // フォーマットを決定する。
-                    this._WaveFormat = this._適切なフォーマットを調べて返す( 希望フォーマット ) ??
+                    this.WaveFormat = this._適切なフォーマットを調べて返す( 希望フォーマット ) ??
                         throw new NotSupportedException( "サポート可能な WaveFormat が見つかりませんでした。" );
-                    Log.Info( $"WaveFormat: {this._WaveFormat}" );
+                    Log.Info( $"WaveFormat: {this.WaveFormat}" );
 
                     // AudioClient を初期化する。
                     try
@@ -107,7 +106,7 @@ namespace FDK
                         if( e.ErrorCode == AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED )
                         {
                             int サイズframe = this._AudioClient.GetBufferSize();   // アライメント済みサイズが取得できる。
-                            this.再生遅延sec = (double) サイズframe / this._WaveFormat.SampleRate;
+                            this.再生遅延sec = (double) サイズframe / this.WaveFormat.SampleRate;
                             long 期間100ns = FDKUtilities.変換_sec単位から100ns単位へ( this.再生遅延sec );
 
                             this._AudioClientを初期化する( 期間100ns );    // 再度初期化。
@@ -129,7 +128,7 @@ namespace FDK
                     Log.Info( $"サウンドデバイスを生成しました。" );
 
                     // ミキサーを生成する。
-                    this.Mixer = new Mixer( this._WaveFormat );
+                    this.Mixer = new Mixer( this.WaveFormat );
                 }
 
                 this.レンダリングを開始する();
@@ -289,7 +288,6 @@ namespace FDK
 
         private volatile PlaybackState _レンダリング状態 = PlaybackState.Stopped;
         private AudioClientShareMode _共有モード;
-        private WaveFormat _WaveFormat = null;
         private AudioClock _AudioClock = null;
         private AudioRenderClient _AudioRenderClient = null;
         private AudioClient _AudioClient = null;
@@ -306,7 +304,7 @@ namespace FDK
                 AudioClientStreamFlags.StreamFlagsEventCallback,    // イベント駆動で固定。
                 期間100ns,
                 期間100ns,      // イベント駆動の場合、Periodicity は BufferDuration と同じ値でなければならない。
-                this._WaveFormat,
+                this.WaveFormat,
                 Guid.Empty );
         }
 
@@ -318,8 +316,8 @@ namespace FDK
             this.Mixer?.Dispose();
             this.Mixer = null;
 
-            this._AudioClient?.Dispose();
-            this._AudioClient = null;
+            this._AudioClock?.Dispose();
+            this._AudioClock = null;
 
             this._AudioRenderClient?.Dispose();
             this._AudioRenderClient = null;
