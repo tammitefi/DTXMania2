@@ -38,105 +38,39 @@ namespace FDK
         /// </summary>
         public XAOnMemoryWaveSource( VariablePath ファイルパス, WaveFormat deviceFormat )
         {
-            var xaheader = new XAHEADER();
-            var srcBuf = (byte[]) null;
+            var bjxa = new bjxa.Decoder();
 
-            #region " XAHEADER と XAデータ を読み込みむ。"
-            //----------------
-            using( var br = new BinaryReader( new FileStream( ファイルパス.変数なしパス, FileMode.Open, FileAccess.Read ) ) )
+            using( var fs = new FileStream( ファイルパス.変数なしパス, FileMode.Open, FileAccess.Read ) )
             {
-                xaheader.id = br.ReadUInt32();
-                xaheader.nDataLen = br.ReadUInt32();
-                xaheader.nSamples = br.ReadUInt32();
-                xaheader.nSamplesPerSec = br.ReadUInt16();
-                xaheader.nBits = br.ReadByte();
-                xaheader.nChannels = br.ReadByte();
-                xaheader.nLoopPtr = br.ReadUInt32();
-                xaheader.befL = new short[ 2 ];
-                xaheader.befL[ 0 ] = br.ReadInt16();
-                xaheader.befL[ 1 ] = br.ReadInt16();
-                xaheader.befR = new short[ 2 ];
-                xaheader.befR[ 0 ] = br.ReadInt16();
-                xaheader.befR[ 1 ] = br.ReadInt16();
-                xaheader.pad = new byte[ 4 ];
-                xaheader.pad = br.ReadBytes( 4 );
+                // ヘッダを読み込んでフォーマットを得る。
+                var format = bjxa.ReadHeader( fs );
 
-                srcBuf = br.ReadBytes( (int) xaheader.nDataLen );
-            }
-            //----------------
-            #endregion
-
-            var waveformatex = new WAVEFORMATEX();
-            var handlePtr = IntPtr.Zero;
-
-            #region " XAファイルをオープンし、Waveフォーマットとハンドルを取得。"
-            //----------------
-            handlePtr = xaDecodeOpen( ref xaheader, out waveformatex );
-
-            if( null == handlePtr || IntPtr.Zero == handlePtr )
-                throw new Exception( "xaDecodeOpen に失敗しました。" );
-            //----------------
-            #endregion
-
-            #region " Waveフォーマットを WaveFormat プロパティに設定。"
-            //----------------
-            if( 0 == waveformatex.cbSize )
-            {
+                // WaveFormat プロパティを構築する。
                 this.WaveFormat = new WaveFormat(
-                    (int) waveformatex.nSamplesPerSec,
-                    (int) waveformatex.wBitsPerSample,
-                    (int) waveformatex.nChannels,
-                    (AudioEncoding) waveformatex.wFormatTag );
-            }
-            else
-            {
-                throw new Exception( "デコード後のフォーマットが WAVEFORMATEX 型になる XA には未対応です。" );
-            }
-            //----------------
-            #endregion
+                    (int) format.SamplesRate,
+                    (int) format.SampleBits,
+                    (int) format.Channels,
+                    AudioEncoding.Pcm );
 
-            #region " デコード後のPCMサイズ[byte]を取得し、バッファを確保する。"
-            //----------------
-            if( !( xaDecodeSize( handlePtr, xaheader.nDataLen, out uint decodedWaveDataLength ) ) )
-            {
-                throw new Exception( "xaDecodeSize に失敗しました。" );
-            }
-            this._DecodedWaveData = new byte[ decodedWaveDataLength ];
-            //----------------
-            #endregion
+                // デコードする。
+                var xabuf = new byte[ format.Blocks * format.BlockSizeXa ];
+                var pcmbuf = new short[ format.Blocks * format.BlockSizePcm ];
 
-            #region " デコードする。"
-            //----------------
-            unsafe
-            {
-                fixed ( byte* pXaBuf = srcBuf )
-                fixed ( byte* pPcmBuf = this._DecodedWaveData )
+                if( fs.Read( xabuf, 0, xabuf.Length ) != xabuf.Length )
+                    throw new Exception( "xaデータの読み込みに失敗しました。" );
+
+                int ret = bjxa.Decode( xabuf, pcmbuf );
+
+
+                // Waveバッファに転送する。
+                this._DecodedWaveData = new byte[ pcmbuf.Length * 2 ];
+
+                for( int i = 0; i < pcmbuf.Length; i++ )
                 {
-                    var xastreamheader = new XASTREAMHEADER() {
-                        pSrc = pXaBuf,
-                        nSrcLen = xaheader.nDataLen,
-                        nSrcUsed = 0,
-                        pDst = pPcmBuf,
-                        nDstLen = decodedWaveDataLength,
-                        nDstUsed = 0,
-                    };
-                    if( !( xaDecodeConvert( handlePtr, ref xastreamheader ) ) )
-                    {
-                        throw new Exception( "xaDecodeConvert に失敗しました。" );
-                    }
+                    this._DecodedWaveData[ i * 2 + 0 ] = (byte) ( pcmbuf[ i ] & 0xFF );
+                    this._DecodedWaveData[ i * 2 + 1 ] = (byte) ( pcmbuf[ i ] >> 8 );
                 }
             }
-            //----------------
-            #endregion
-
-            #region " XAファイルを閉じる。"
-            //----------------
-            if( !( xaDecodeClose( handlePtr ) ) )
-            {
-                throw new Exception( "xaDecodeClose に失敗しました。" );
-            }
-            //----------------
-            #endregion
         }
 
         /// <summary>
@@ -182,62 +116,5 @@ namespace FDK
 
         private byte[] _DecodedWaveData = null;
         private long _Position = 0;
-
-        #region " Win32(xsdec.dll) "
-        //----------------
-        [StructLayout( LayoutKind.Sequential )]
-        public struct WAVEFORMATEX
-        {
-            public ushort wFormatTag;
-            public ushort nChannels;
-            public uint nSamplesPerSec;
-            public uint nAvgBytesPerSec;
-            public ushort nBlockAlign;
-            public ushort wBitsPerSample;
-            public ushort cbSize;
-        }
-
-        [StructLayout( LayoutKind.Sequential )]
-        public struct XASTREAMHEADER
-        {
-            public byte* pSrc;
-            public uint nSrcLen;
-            public uint nSrcUsed;
-            public byte* pDst;
-            public uint nDstLen;
-            public uint nDstUsed;
-        }
-
-        [StructLayout( LayoutKind.Sequential )]
-        public struct XAHEADER
-        {
-            public uint id;
-            public uint nDataLen;
-            public uint nSamples;
-            public ushort nSamplesPerSec;
-            public byte nBits;
-            public byte nChannels;
-            public uint nLoopPtr;
-            [MarshalAs( UnmanagedType.ByValArray, SizeConst = 2 )]
-            public short[] befL;
-            [MarshalAs( UnmanagedType.ByValArray, SizeConst = 2 )]
-            public short[] befR;
-            [MarshalAs( UnmanagedType.ByValArray, SizeConst = 4 )]
-            public byte[] pad;
-        }
-
-        [DllImport( "xadec.dll", EntryPoint = "xaDecodeOpen", CallingConvention = CallingConvention.Cdecl )]
-        public extern static IntPtr xaDecodeOpen( ref XAHEADER pxah, out WAVEFORMATEX pwfx );
-
-        [DllImport( "xadec.dll", EntryPoint = "xaDecodeClose", CallingConvention = CallingConvention.Cdecl )]
-        public extern static bool xaDecodeClose( IntPtr hxas );
-
-        [DllImport( "xadec.dll", EntryPoint = "xaDecodeSize", CallingConvention = CallingConvention.Cdecl )]
-        public extern static bool xaDecodeSize( IntPtr hxas, uint slen, out uint pdlen );
-
-        [DllImport( "xadec.dll", EntryPoint = "xaDecodeConvert", CallingConvention = CallingConvention.Cdecl )]
-        public extern static bool xaDecodeConvert( IntPtr hxas, ref XASTREAMHEADER psh );
-        //----------------
-        #endregion
     }
 }
