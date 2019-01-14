@@ -59,11 +59,12 @@ namespace FDK
                 if( fs.Read( xabuf, 0, xabuf.Length ) != xabuf.Length )
                     throw new Exception( "xaデータの読み込みに失敗しました。" );
 
-                int ret = bjxa.Decode( xabuf, pcmbuf );
+                int ret = bjxa.Decode( xabuf, pcmbuf, out long pcm_data );
 
 
                 // Waveバッファに転送する。
                 this._DecodedWaveData = new byte[ pcmbuf.Length * 2 ];
+                //this._DecodedWaveData = new byte[ pcm_data * 2 ];   --> バッファが足りない
 
                 for( int i = 0; i < pcmbuf.Length; i++ )
                 {
