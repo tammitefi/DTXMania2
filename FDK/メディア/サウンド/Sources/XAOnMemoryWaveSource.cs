@@ -66,11 +66,7 @@ namespace FDK
                 this._DecodedWaveData = new byte[ pcmbuf.Length * 2 ];
                 //this._DecodedWaveData = new byte[ pcm_data * 2 ];   --> バッファが足りない
 
-                for( int i = 0; i < pcmbuf.Length; i++ )
-                {
-                    this._DecodedWaveData[ i * 2 + 0 ] = (byte) ( pcmbuf[ i ] & 0xFF );
-                    this._DecodedWaveData[ i * 2 + 1 ] = (byte) ( pcmbuf[ i ] >> 8 );
-                }
+                Buffer.BlockCopy( pcmbuf, 0, this._DecodedWaveData, 0, this._DecodedWaveData.Length );
             }
         }
 
