@@ -441,6 +441,8 @@ namespace DTXMania
 
             this._高速進行ステータス.現在の状態 = TriStateEvent.状態種別.ON;
 
+            var 元のMMCSS特性 = FDKUtilities.AvSetMmThreadCharacteristics( "Playback", out int taskIndex );
+
             while( true )
             {
                 lock( this._高速進行と描画の同期 )
@@ -458,6 +460,8 @@ namespace DTXMania
 			}
 
             this._高速進行ステータス.現在の状態 = TriStateEvent.状態種別.無効;
+
+            FDKUtilities.AvRevertMmThreadCharacteristics( 元のMMCSS特性 );
 
             Log.Header( "高速進行タスクを終了しました。" );
         }
@@ -681,8 +685,8 @@ namespace DTXMania
                 }
 
                 // コマンドフラッシュ。
-                if( vsync )
-                    gd.D3DDevice.ImmediateContext.Flush();
+                //if( vsync )
+                //    gd.D3DDevice.ImmediateContext.Flush();
             }
 
             // スワップチェーン表示。
