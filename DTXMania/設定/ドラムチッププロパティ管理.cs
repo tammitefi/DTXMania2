@@ -278,7 +278,7 @@ namespace DTXMania.設定
                         チップ種別 = チップ種別.HiHat_Foot,
                         レーン種別 = レーン種別.Foot,
                         表示レーン種別 = 表示レーン種別.Foot,
-                        //表示チップ種別 = ...
+                        表示チップ種別 = 表示チップ種別.Foot,
                         ドラム入力種別 = ドラム入力種別.HiHat_Foot,
                         AutoPlay種別 = AutoPlay種別.Foot,
                         //入力グループ種別 = ...
