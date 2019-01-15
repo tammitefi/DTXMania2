@@ -91,6 +91,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\cscore\ReleaseDll\CSCore.dll</HintPath>
     </Reference>
+    <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL" Condition="'$(Configuration)' == 'RemoteDebug'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\cscore\DebugDll\CSCore.dll</HintPath>
+    </Reference>
     <Reference Include="libbjxa">
       <HintPath>.\libbjxa.dll</HintPath>
     </Reference>
