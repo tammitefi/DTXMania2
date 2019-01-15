@@ -94,19 +94,14 @@ namespace DTXMania.ステージ.演奏
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
-            var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
-                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
-                0f );
-
             var 変換行列 =
                 Matrix.Scaling(
                     this._サムネイル画像表示サイズdpx.X / サムネイル画像.サイズ.Width,
                     this._サムネイル画像表示サイズdpx.Y / サムネイル画像.サイズ.Height,
                     0f ) *
                 Matrix.Translation(
-                    画面左上dpx.X + this._サムネイル画像表示位置dpx.X + this._サムネイル画像表示サイズdpx.X / 2f,
-                    画面左上dpx.Y - this._サムネイル画像表示位置dpx.Y - this._サムネイル画像表示サイズdpx.Y / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.X + this._サムネイル画像表示位置dpx.X + this._サムネイル画像表示サイズdpx.X / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.Y - this._サムネイル画像表示位置dpx.Y - this._サムネイル画像表示サイズdpx.Y / 2f,
                     0f );
 
             サムネイル画像.描画する( 変換行列 );

@@ -625,7 +625,7 @@ namespace DTXMania.ステージ.演奏
                         this._ヒットバー.描画する();
                         this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
                         this._チップ光.進行描画する( dc );
-                        this._判定文字列.進行描画する( dc );
+                        this._判定文字列.進行描画する();
 
                         this._FPS.VPSをカウントする();
                         this._FPS.描画する( dc, 0f, 0f );

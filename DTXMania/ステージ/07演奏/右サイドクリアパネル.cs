@@ -51,14 +51,12 @@ namespace DTXMania.ステージ.演奏
         {
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
-            var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
-                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
-                0f );
-
             var 変換行列 =
                 Matrix.RotationY( MathUtil.DegreesToRadians( +48f ) ) *
-                Matrix.Translation( 画面左上dpx.X + 1630f, 画面左上dpx.Y - 530f, 0f );
+                Matrix.Translation(
+                    グラフィックデバイス.Instance.画面左上dpx.X + 1630f, 
+                    グラフィックデバイス.Instance.画面左上dpx.Y - 530f,
+                    0f );
 
             this.クリアパネル.描画する( 変換行列 );
         }

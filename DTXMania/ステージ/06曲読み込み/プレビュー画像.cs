@@ -41,19 +41,14 @@ namespace DTXMania.ステージ.曲読み込み
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
-            var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
-                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
-                0f );
-
             var 変換行列 =
                 Matrix.Scaling(
                     this._プレビュー画像表示サイズdpx.X / preimage.サイズ.Width,
                     this._プレビュー画像表示サイズdpx.Y / preimage.サイズ.Height,
                     0f ) *
                 Matrix.Translation(
-                    画面左上dpx.X + this._プレビュー画像表示位置dpx.X + this._プレビュー画像表示サイズdpx.X / 2f,
-                    画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.X + this._プレビュー画像表示位置dpx.X + this._プレビュー画像表示サイズdpx.X / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,
                     0f );
 
             preimage.描画する( 変換行列 );

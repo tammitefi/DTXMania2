@@ -278,11 +278,6 @@ namespace DTXMania.ステージ.選曲
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
-            var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
-                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
-                0f );
-
             var 実数行番号 = 行番号 + ( this._曲リスト全体のY軸移動オフセット / 100f );
 
             var ノード左上dpx = new Vector3(
@@ -379,8 +374,8 @@ namespace DTXMania.ステージ.選曲
                 var ノード内サムネイルオフセットdpx = new Vector3( 58f, 4f, 0f );
 
                 var サムネイル表示中央dpx = new Vector3(
-                    画面左上dpx.X + ノード左上dpx.X + ( this._サムネイル表示サイズdpx.X / 2f ) + ノード内サムネイルオフセットdpx.X,
-                    画面左上dpx.Y - ノード左上dpx.Y - ( this._サムネイル表示サイズdpx.Y / 2f ) - ノード内サムネイルオフセットdpx.Y,
+                    グラフィックデバイス.Instance.画面左上dpx.X + ノード左上dpx.X + ( this._サムネイル表示サイズdpx.X / 2f ) + ノード内サムネイルオフセットdpx.X,
+                    グラフィックデバイス.Instance.画面左上dpx.Y - ノード左上dpx.Y - ( this._サムネイル表示サイズdpx.Y / 2f ) - ノード内サムネイルオフセットdpx.Y,
                     0f );
 
                 var 変換行列 =
@@ -406,8 +401,8 @@ namespace DTXMania.ステージ.選曲
                 var ノード内サムネイルオフセットdpx = new Vector3( 58f, 4f, 0f );
 
                 var サムネイル表示中央dpx = new Vector3(
-                    画面左上dpx.X + ノード左上dpx.X + ( this._サムネイル表示サイズdpx.X / 2f ) + ノード内サムネイルオフセットdpx.X,
-                    画面左上dpx.Y - ノード左上dpx.Y - ( this._サムネイル表示サイズdpx.Y / 2f ) - ノード内サムネイルオフセットdpx.Y,
+                    グラフィックデバイス.Instance.画面左上dpx.X + ノード左上dpx.X + ( this._サムネイル表示サイズdpx.X / 2f ) + ノード内サムネイルオフセットdpx.X,
+                    グラフィックデバイス.Instance.画面左上dpx.Y - ノード左上dpx.Y - ( this._サムネイル表示サイズdpx.Y / 2f ) - ノード内サムネイルオフセットdpx.Y,
                     0f );
 
                 var 変換行列 =
