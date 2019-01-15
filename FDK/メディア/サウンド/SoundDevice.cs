@@ -103,7 +103,7 @@ namespace FDK
                     {
                         // 排他モードかつイベント駆動 の場合、この例外が返されることがある。
                         // この場合、バッファサイズを調整して再度初期化する。
-                        if( e.ErrorCode == AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED )
+                        if( e.ErrorCode == FDKUtilities.AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED )
                         {
                             int サイズframe = this._AudioClient.GetBufferSize();   // アライメント済みサイズが取得できる。
                             this.再生遅延sec = (double) サイズframe / this.WaveFormat.SampleRate;
@@ -331,7 +331,7 @@ namespace FDK
                 }
                 catch( CoreAudioAPIException e )
                 {
-                    if( e.ErrorCode != AUDCLNT_E_NOT_INITIALIZED )
+                    if( e.ErrorCode != FDKUtilities.AUDCLNT_E_NOT_INITIALIZED )
                         throw;
                 }
             }
@@ -459,7 +459,7 @@ namespace FDK
                         mmcssType = "Audio";
                         break;
                 }
-                元のMMCSS特性 = SoundDevice.AvSetMmThreadCharacteristics( mmcssType, out int taskIndex );
+                元のMMCSS特性 = FDKUtilities.AvSetMmThreadCharacteristics( mmcssType, out int taskIndex );
 
                 // AudioClient を開始する。
                 this._AudioClient.Start();
@@ -636,7 +636,7 @@ namespace FDK
                 Thread.Sleep( (int) ( this.再生遅延sec * 1000 / 2 ) );
 
                 // このスレッドの MMCSS 特性を元に戻す。
-                SoundDevice.AvRevertMmThreadCharacteristics( 元のMMCSS特性 );
+                FDKUtilities.AvRevertMmThreadCharacteristics( 元のMMCSS特性 );
                 元のMMCSS特性 = IntPtr.Zero;
                 //----------------
                 #endregion
@@ -652,7 +652,7 @@ namespace FDK
                 #region " 完了。"
                 //----------------
                 if( 元のMMCSS特性 != IntPtr.Zero )
-                    SoundDevice.AvRevertMmThreadCharacteristics( 元のMMCSS特性 );
+                    FDKUtilities.AvRevertMmThreadCharacteristics( 元のMMCSS特性 );
 
                 // 失敗時を想定して。
                 ( 起動完了通知 as EventWaitHandle )?.Set();
@@ -700,19 +700,5 @@ namespace FDK
                 QPCPosition = qpcPos;
             }
         }
-
-        #region " Win32 "
-        //----------------
-        private const int AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED = unchecked((int) 0x88890019);
-        private const int AUDCLNT_E_INVALID_DEVICE_PERIOD = unchecked((int) 0x88890020);
-        private const int AUDCLNT_E_NOT_INITIALIZED = unchecked((int) 0x88890001);
-
-        [DllImport( "Avrt.dll", CharSet = CharSet.Unicode )]
-        private static extern IntPtr AvSetMmThreadCharacteristics( [MarshalAs( UnmanagedType.LPWStr )] string proAudio, out int taskIndex );
-
-        [DllImport( "Avrt.dll" )]
-        private static extern bool AvRevertMmThreadCharacteristics( IntPtr avrtHandle );
-        //----------------
-        #endregion
     }
 }
