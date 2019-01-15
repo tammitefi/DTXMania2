@@ -119,19 +119,40 @@ namespace FDK
         }
 
 
+        /// <summary>
+        ///		テクスチャを描画する。
+        ///	</summary>
+        public void 描画する( float 左位置, float 上位置, float 不透明度0to1 = 1.0f, float X方向拡大率 = 1.0f, float Y方向拡大率 = 1.0f, RectangleF? 転送元矩形 = null )
+        {
+            var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
+                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
+                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
+                0f );
+
+            var 変換行列 =
+                Matrix.Scaling( X方向拡大率, Y方向拡大率, 1f ) *
+                Matrix.Translation(
+                    画面左上dpx.X + 左位置 + this.サイズ.Width / 2f,
+                    画面左上dpx.Y - 上位置 - this.サイズ.Height / 2f,
+                    0f );
+
+            this.描画する( 変換行列, 不透明度0to1, 転送元矩形 );
+        }
 
         /// <summary>
         ///		テクスチャを描画する。
         ///	</summary>
         /// <param name="ワールド行列変換">テクスチャは <see cref="サイズ"/> にスケーリングされており、その後にこのワールド行列が適用される。</param>
         /// <param name="転送元矩形">テクスチャ座標(値域0～1)で指定する。</param>
-        public void 描画する( Matrix ワールド行列変換, RectangleF? 転送元矩形 = null )
+        public void 描画する( Matrix ワールド行列変換, float 不透明度0to1 = 1f, RectangleF? 転送元矩形 = null )
         {
             var d3dDevice = グラフィックデバイス.Instance.D3DDevice;
             Debug.Assert( null != d3dDevice, "D3DDevice が取得されていません。" );
 
             if( null == this.Texture )
                 return;
+
+            this.不透明度 = MathUtil.Clamp( 不透明度0to1, 0f, 1f );
 
             #region " 定数バッファを更新する。"
             //----------------
