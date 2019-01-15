@@ -722,12 +722,12 @@ namespace DTXMania.ステージ.演奏
                         this._カウントマップライン.カウント値を設定する( 現在位置, this.成績.判定toヒット数 );
                         this._カウントマップライン.進行描画する( dc );
                         this._フェーズパネル.現在位置 = 現在位置;
-                        this._フェーズパネル.進行描画する( dc );
+                        this._フェーズパネル.進行描画する( dc ); // 重くなる
                         this._曲名パネル.描画する( dc );
                         this._ヒットバー.描画する( dc );
                         this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
-                        this._チップ光.進行描画する( dc );
-                        this._判定文字列.進行描画する( dc );
+                        this._チップ光.進行描画する( dc );        // 重くなる
+                        this._判定文字列.進行描画する( dc );       // 重くなる
 
                         this._FPS.VPSをカウントする();
                         this._FPS.描画する( dc, 0f, 0f );
@@ -870,8 +870,8 @@ namespace DTXMania.ステージ.演奏
                     {
                         this.現在のフェーズ = フェーズ.クリア;
                         this._描画開始チップ番号 = -1;    // 演奏完了。
-                        return;
                     }
+                    return;
                 }
                 //----------------
                 #endregion
@@ -997,10 +997,6 @@ namespace DTXMania.ステージ.演奏
                                 Matrix3x2.Scaling( 0.6f + ( 0.4f * 大きさ0to1 ), 大きさ0to1, 矩形中央 ) *     // 大きさ: 0→1 のとき、幅 x0.6→x1.0
                                 Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
 
-                            // スネアとタムのみ不透明度を反映。
-                            float 不透明度 = ( chip.チップ種別 == チップ種別.Snare || chip.チップ種別 == チップ種別.Tom1 || chip.チップ種別 == チップ種別.Tom2 || chip.チップ種別 == チップ種別.Tom3 ) ?
-                                ( 0.4f + ( 0.6f * 大きさ0to1 ) ) : 1f;
-
                             // 描画。
                             this._ドラムチップ画像.描画する(
                                 dc,
@@ -1076,9 +1072,9 @@ namespace DTXMania.ステージ.演奏
 
         private double _指定された時間secに対応する符号付きピクセル数を返す( double speed, double 指定時間sec )
         {
-            const double _1ミリ秒あたりのピクセル数 = 0.14625 * 2.25 * 1000.0;    // これを変えると、speed あたりの速度が変わる。
+            const double _1秒あたりのピクセル数 = 0.14625 * 2.25 * 1000.0;    // これを変えると、speed あたりの速度が変わる。
 
-            return ( 指定時間sec * _1ミリ秒あたりのピクセル数 * speed );
+            return ( 指定時間sec * _1秒あたりのピクセル数 * speed );
         }
 
 
