@@ -70,7 +70,7 @@ namespace DTXMania.曲
             base.On非活性化(); // 忘れずに。
         }
 
-        public new void 描画する( Matrix ワールド行列変換, RectangleF? レイアウト矩形 = null )
+        public new void 描画する( Matrix ワールド行列変換, float 不透明度0to1 = 1f, RectangleF? レイアウト矩形 = null )
         {
             Debug.Assert( this.活性化している );
 
@@ -137,7 +137,7 @@ namespace DTXMania.曲
             }
 
             // テクスチャを描画する。
-            base.描画する( ワールド行列変換 );
+            base.描画する( ワールド行列変換, 不透明度0to1 );
         }
 
 

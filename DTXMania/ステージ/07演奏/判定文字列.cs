@@ -16,7 +16,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._判定文字列画像 = new 画像( @"$(System)images\演奏\判定文字列.png" ) );
+                this.子Activityを追加する( this._判定文字列画像 = new テクスチャ( @"$(System)images\演奏\判定文字列.png" ) );
             }
         }
 
@@ -51,6 +51,7 @@ namespace DTXMania.ステージ.演奏
                 };
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -70,7 +71,7 @@ namespace DTXMania.ステージ.演奏
             status.現在の状態 = 表示レーンステータス.状態.表示開始;  // 描画スレッドへ通知。
         }
 
-        public void 進行描画する( DeviceContext1 dc )
+        public void 進行描画する()
         {
             foreach( 表示レーン種別 レーン in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -260,21 +261,20 @@ namespace DTXMania.ステージ.演奏
                             if( null != status.光のストーリーボード )
                             {
                                 var 転送元矩形 = this._判定文字列の矩形リスト[ "PERFECT光" ];
-                                var 転送元矩形の中心dpx = new Vector2( 転送元矩形.Width / 2f, 転送元矩形.Height / 2f );
 
-                                var 変換行列2D =
-                                    Matrix3x2.Scaling(
-                                        x: (float) status.光のX方向拡大率.Value,
-                                        y: (float) status.光のY方向拡大率.Value,
-                                        center: 転送元矩形の中心dpx ) *
-                                    Matrix3x2.Rotation(
-                                        angle: MathUtil.DegreesToRadians( (float) status.光の回転角.Value ),
-                                        center: 転送元矩形の中心dpx ) *
-                                    Matrix3x2.Translation(
-                                        status.表示中央位置dpx.X - 転送元矩形.Width / 2f,
-                                        status.表示中央位置dpx.Y - 転送元矩形.Height / 2f );
+                                var sx = (float) status.光のX方向拡大率.Value;
+                                var sy = (float) status.光のY方向拡大率.Value;
 
-                                this._判定文字列画像.描画する( dc, 変換行列2D, 転送元矩形: 転送元矩形 );
+                                var 変換行列 =
+                                    Matrix.Scaling( sx, sy, 0f ) *
+                                    Matrix.RotationZ(
+                                        MathUtil.DegreesToRadians( (float) status.光の回転角.Value ) ) *
+                                    Matrix.Translation(
+                                        グラフィックデバイス.Instance.画面左上dpx.X + ( status.表示中央位置dpx.X ),
+                                        グラフィックデバイス.Instance.画面左上dpx.Y - ( status.表示中央位置dpx.Y ),
+                                        0f );
+
+                                this._判定文字列画像.描画する( 変換行列, 転送元矩形: 転送元矩形 );
                             }
                             //----------------
                             #endregion
@@ -285,16 +285,11 @@ namespace DTXMania.ステージ.演奏
                             {
                                 var 転送元矩形 = this._判定文字列の矩形リスト[ status.判定種別.ToString() ];
 
-                                var 変換行列2D =
-                                    Matrix3x2.Translation(
-                                        status.表示中央位置dpx.X - 転送元矩形.Width / 2f,
-                                        status.表示中央位置dpx.Y - 転送元矩形.Height / 2f + (float) status.文字列影の相対Y位置dpx.Value );
-
                                 this._判定文字列画像.描画する(
-                                    dc,
-                                    変換行列2D,
-                                    転送元矩形: 転送元矩形,
-                                    不透明度0to1: (float) status.文字列影の不透明度.Value );
+                                    status.表示中央位置dpx.X - 転送元矩形.Width / 2f,
+                                    status.表示中央位置dpx.Y - 転送元矩形.Height / 2f + (float) status.文字列影の相対Y位置dpx.Value,
+                                    (float) status.文字列影の不透明度.Value,
+                                    転送元矩形: 転送元矩形 );
                             }
                             //----------------
                             #endregion
@@ -308,17 +303,13 @@ namespace DTXMania.ステージ.演奏
                                 var sx = (float) status.文字列本体のX方向拡大率.Value;
                                 var sy = (float) status.文字列本体のY方向拡大率.Value;
 
-                                var 変換行列2D =
-                                    Matrix3x2.Scaling( sx, sy ) *
-                                    Matrix3x2.Translation(
-                                        status.表示中央位置dpx.X - sx * 転送元矩形.Width / 2f,
-                                        status.表示中央位置dpx.Y - sy * 転送元矩形.Height / 2f + (float) status.文字列本体の相対Y位置dpx.Value );
-
                                 this._判定文字列画像.描画する(
-                                    dc,
-                                    変換行列2D,
-                                    転送元矩形: 転送元矩形,
-                                    不透明度0to1: (float) status.文字列本体の不透明度.Value );
+                                    status.表示中央位置dpx.X - sx * 転送元矩形.Width / 2f,
+                                    status.表示中央位置dpx.Y - sy * 転送元矩形.Height / 2f + (float) status.文字列本体の相対Y位置dpx.Value,
+                                    X方向拡大率: sx,
+                                    Y方向拡大率: sy,
+                                    不透明度0to1: (float) status.文字列本体の不透明度.Value,
+                                    転送元矩形: 転送元矩形 );
                             }
                             //----------------
                             #endregion
@@ -342,7 +333,7 @@ namespace DTXMania.ステージ.演奏
         }
 
 
-        private 画像 _判定文字列画像 = null;
+        private テクスチャ _判定文字列画像 = null;
 
         private Dictionary<string, RectangleF> _判定文字列の矩形リスト = null;
 

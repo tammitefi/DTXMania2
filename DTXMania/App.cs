@@ -683,10 +683,6 @@ namespace DTXMania
                         #endregion
                         break;
                 }
-
-                // コマンドフラッシュ。
-                //if( vsync )
-                //    gd.D3DDevice.ImmediateContext.Flush();
             }
 
             // スワップチェーン表示。

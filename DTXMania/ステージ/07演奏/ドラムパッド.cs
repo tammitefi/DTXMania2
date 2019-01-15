@@ -15,7 +15,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
+                this.子Activityを追加する( this._パッド絵 = new テクスチャ( @"$(System)images\演奏\ドラムパッド.png" ) );
             }
         }
 
@@ -64,7 +64,7 @@ namespace DTXMania.ステージ.演奏
             this._レーンtoパッドContext[ lane ].アニメカウンタ.開始する( 0, 100, 1 );
         }
 
-        public void 進行描画する( DeviceContext1 dc )
+        public void 進行描画する()
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -84,7 +84,6 @@ namespace DTXMania.ステージ.演奏
                 if( 0 < drumContext.転送元矩形.Width && 0 < drumContext.転送元矩形.Height )
                 {
                     this._パッド絵.描画する(
-                        dc,
                         drumContext.左上位置dpx.X,
                         drumContext.左上位置dpx.Y + Yオフセットdpx,
                         不透明度0to1: 1.0f,
@@ -95,7 +94,6 @@ namespace DTXMania.ステージ.演奏
                 if( 0 < drumContext.転送元矩形Flush.Width && 0 < drumContext.転送元矩形Flush.Height && 0f < フラッシュ画像の不透明度 )
                 {
                     this._パッド絵.描画する(
-                        dc,
                         drumContext.左上位置dpx.X,
                         drumContext.左上位置dpx.Y + Yオフセットdpx,
                         フラッシュ画像の不透明度,
@@ -104,7 +102,7 @@ namespace DTXMania.ステージ.演奏
             }
         }
 
-        private 画像 _パッド絵 = null;
+        private テクスチャ _パッド絵 = null;
         private Dictionary<string, RectangleF> _パッド絵の矩形リスト = null;
 
         private struct パッドContext

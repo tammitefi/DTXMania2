@@ -125,6 +125,11 @@ namespace FDK
         public float 拡大率PXtoDPX縦 => ( this.設計画面サイズ.Height / this.物理画面サイズ.Height );
         public Matrix3x2 拡大行列DPXtoPX => Matrix3x2.Scaling( this.拡大率DPXtoPX横, this.拡大率DPXtoPX縦 );
         public Matrix3x2 拡大行列PXtoDPX => Matrix3x2.Scaling( this.拡大率PXtoDPX横, this.拡大率PXtoDPX縦 );
+
+        /// <summary>
+        ///     3D視点で見る画面左上の座標。
+        /// </summary>
+        public Vector3 画面左上dpx => new Vector3( -this.設計画面サイズ.Width / 2f, +this.設計画面サイズ.Height / 2f, 0f );
         //----------------
         #endregion
 

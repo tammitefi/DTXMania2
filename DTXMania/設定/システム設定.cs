@@ -65,7 +65,7 @@ namespace DTXMania.設定
             this.入力発声スレッドのスリープ量ms = 2;
             this.ウィンドウ表示位置Viewerモード用 = new Point( 100, 100 );
             this.ウィンドウサイズViewerモード用 = new Size( 640, 360 );
-            this.判定位置調整ms = -10;
+            this.判定位置調整ms = 0;
         }
 
         public static システム設定 復元する()

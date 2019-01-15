@@ -34,7 +34,7 @@ namespace DTXMania.ステージ.選曲
                 this.子Activityを追加する( this._曲リスト = new 曲リスト() );
                 this.子Activityを追加する( this._難易度と成績 = new 難易度と成績() );
                 this.子Activityを追加する( this._曲ステータスパネル = new 曲ステータスパネル() );
-                this.子Activityを追加する( this._ステージタイマー = new 画像( @"$(System)images\選曲\ステージタイマー.png" ) );
+                this.子Activityを追加する( this._ステージタイマー = new テクスチャ( @"$(System)images\選曲\ステージタイマー.png" ) );
                 this.子Activityを追加する( this._青い線 = new 青い線() );
                 this.子Activityを追加する( this._選択曲枠ランナー = new 選択曲枠ランナー() );
                 this.子Activityを追加する( this._BPMパネル = new BPMパネル() );
@@ -132,7 +132,7 @@ namespace DTXMania.ステージ.選曲
                 this._選択曲を囲む枠を描画する( dc );
                 this._選択曲枠ランナー.進行描画する( dc );
                 this._導線を描画する( dc );
-                this._ステージタイマー.描画する( dc, 1689f, 37f );
+                this._ステージタイマー.描画する( 1689f, 37f );
             }
             else
             {
@@ -140,7 +140,7 @@ namespace DTXMania.ステージ.選曲
 
                 this._舞台画像.進行描画する( dc );
                 this._表示方法選択パネル.進行描画する( dc );
-                this._ステージタイマー.描画する( dc, 1689f, 37f );
+                this._ステージタイマー.描画する( 1689f, 37f );
                 this._SongNotFound.描画する( dc, 1150f, 400f );
             }
 
@@ -312,7 +312,7 @@ namespace DTXMania.ステージ.選曲
         private SolidColorBrush _黒 = null;
         private SolidColorBrush _黒透過 = null;
         private SolidColorBrush _灰透過 = null;
-        private 画像 _ステージタイマー = null;
+        private テクスチャ _ステージタイマー = null;
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 471f, 61f, 0f );
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 444f, 444f, 0f );
 
@@ -348,16 +348,14 @@ namespace DTXMania.ステージ.選曲
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
-            var 画面左上dpx = new Vector3(
-                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
-                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
-                0f );
-
             var 変換行列 =
-                Matrix.Scaling( this._プレビュー画像表示サイズdpx ) *
+                Matrix.Scaling(
+                    this._プレビュー画像表示サイズdpx.X / 画像.サイズ.Width,
+                    this._プレビュー画像表示サイズdpx.Y / 画像.サイズ.Height, 
+                    0f ) *
                 Matrix.Translation(
-                    画面左上dpx.X + this._プレビュー画像表示位置dpx.X + this._プレビュー画像表示サイズdpx.X / 2f,
-                    画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.X + this._プレビュー画像表示位置dpx.X + this._プレビュー画像表示サイズdpx.X / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,
                     0f );
 
             画像.描画する( 変換行列 );
