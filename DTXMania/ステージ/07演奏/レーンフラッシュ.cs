@@ -15,7 +15,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._レーンフラッシュ画像 = new 画像( @"$(System)images\演奏\レーンフラッシュ.png" ) { 加算合成 = true } );
+                this.子Activityを追加する( this._レーンフラッシュ画像 = new テクスチャ( @"$(System)images\演奏\レーンフラッシュ.png" ) );
             }
         }
 
@@ -63,7 +63,7 @@ namespace DTXMania.ステージ.演奏
             this._レーンtoレーンContext[ lane ].アニメカウンタ.開始する( 0, 250, 1 );
         }
 
-        public void 進行描画する( DeviceContext1 dc )
+        public void 進行描画する()
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -71,7 +71,6 @@ namespace DTXMania.ステージ.演奏
                 if( laneContext.アニメカウンタ.動作中である && laneContext.アニメカウンタ.終了値に達していない )
                 {
                     this._レーンフラッシュ画像.描画する(
-                        dc,
                         laneContext.開始位置dpx.X,
                         laneContext.開始位置dpx.Y - laneContext.アニメカウンタ.現在値の割合 * レーンフレーム.領域.Height,
                         不透明度0to1: 1f - laneContext.アニメカウンタ.現在値の割合,
@@ -89,7 +88,7 @@ namespace DTXMania.ステージ.演奏
         };
         private Dictionary<表示レーン種別, レーンContext> _レーンtoレーンContext = null;
 
-        private 画像 _レーンフラッシュ画像 = null;
+        private テクスチャ _レーンフラッシュ画像 = null;
         private Dictionary<string, RectangleF> _レーンフラッシュの矩形リスト = null;
 
 

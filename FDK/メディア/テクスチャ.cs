@@ -129,11 +129,17 @@ namespace FDK
                 +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
                 0f );
 
+            RectangleF srcRect = 転送元矩形 ?? new RectangleF( 0, 0, this.サイズ.Width, this.サイズ.Height );
+
             var 変換行列 =
-                Matrix.Scaling( X方向拡大率, Y方向拡大率, 1f ) *
+                Matrix.Scaling(
+                    srcRect.Width / this.サイズ.Width,
+                    srcRect.Height / this.サイズ.Height,
+                    0f ) *
+                Matrix.Scaling( X方向拡大率, Y方向拡大率, 0f ) *
                 Matrix.Translation(
-                    画面左上dpx.X + 左位置 + this.サイズ.Width / 2f,
-                    画面左上dpx.Y - 上位置 - this.サイズ.Height / 2f,
+                    画面左上dpx.X + 左位置 + srcRect.Width / 2f,
+                    画面左上dpx.Y - 上位置 - srcRect.Height / 2f,
                     0f );
 
             this.描画する( 変換行列, 不透明度0to1, 転送元矩形 );
@@ -159,7 +165,7 @@ namespace FDK
             {
                 // 1x1のモデルサイズをテクスチャのサイズへスケーリングする行列を前方に乗じる。
                 ワールド行列変換 =
-                    Matrix.Scaling( this.サイズ.Width, this.サイズ.Height, 1f ) *
+                    Matrix.Scaling( this.サイズ.Width, this.サイズ.Height, 0f ) *
                     ワールド行列変換;
 
                 // ワールド変換行列
