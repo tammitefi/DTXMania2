@@ -43,6 +43,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
+                this.補間付き速度 = 1.0;
                 this._初めての進行描画 = true;
             }
         }
