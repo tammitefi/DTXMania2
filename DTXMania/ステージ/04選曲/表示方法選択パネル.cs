@@ -31,7 +31,7 @@ namespace DTXMania.ステージ.選曲
                 this._表示開始位置 = this._指定した表示方法が選択位置に来る場合の表示開始位置を返す( this.現在の表示方法 );
 
                 foreach( var p in this._パネルs )
-                    this.子Activityを追加する( p.画像 = new 画像( p.vpath ) );
+                    this.子Activityを追加する( p.画像 = new テクスチャ( p.vpath ) );
             }
         }
         protected override void On活性化()
@@ -72,9 +72,9 @@ namespace DTXMania.ステージ.選曲
             {
                 var 画像 = this._パネルs[ 表示元の位置 ].画像;
 
-                画像.描画する( dc,
-                    左位置: (float) ( ( 768f + this._横方向差分割合.Value * 144f ) + 144f * i ),
-                    上位置: ( 3 == i ) ? 100f : 54f ); // i==3 が現在の選択パネル
+                画像.描画する(
+                    (float) ( ( 768f + this._横方向差分割合.Value * 144f ) + 144f * i ),
+                    ( 3 == i ) ? 100f : 54f ); // i==3 が現在の選択パネル
 
                 表示元の位置 = ( 表示元の位置 + 1 ) % this._パネルs.Count;
             }
@@ -91,7 +91,7 @@ namespace DTXMania.ステージ.選曲
         {
             public 表示方法 表示方法;
             public VariablePath vpath;
-            public 画像 画像;
+            public テクスチャ 画像;
         };
         private List<Panel> _パネルs = new List<Panel>() {
             new Panel { 表示方法 = 表示方法.全曲, vpath = @"$(System)images\選曲\表示方法・全曲.png", 画像 = null },

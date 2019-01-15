@@ -18,7 +18,7 @@ namespace DTXMania.ステージ.選曲
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.子Activityを追加する( this._数字画像 = new 画像フォント( @"$(System)images\パラメータ文字_大太斜.png", @"$(System)images\パラメータ文字_大太斜.yaml", 文字幅補正dpx: 0f ) );
-                this.子Activityを追加する( this._ロゴ画像 = new 画像( @"$(System)images\曲別SKILLアイコン2.png" ) );
+                this.子Activityを追加する( this._ロゴ画像 = new テクスチャ( @"$(System)images\曲別SKILLアイコン2.png" ) );
             }
         }
 
@@ -72,20 +72,14 @@ namespace DTXMania.ステージ.選曲
 
             if( 表示可能ノードである )
             {
+                // 曲別SKILLアイコンを描画する。
+
+                this._ロゴ画像.描画する( 描画領域.X, 描画領域.Y + 10f, X方向拡大率: 0.5f, Y方向拡大率: 0.4f );
+
+
                 グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                     var pretrans = dc.Transform;
-
-
-                    // 曲別SKILLアイコンを描画する。
-
-                    dc.Transform =
-                        Matrix3x2.Scaling( 0.5f, 0.4f ) *
-                        Matrix3x2.Translation( 描画領域.X, 描画領域.Y + 10f ) *
-                        pretrans;
-
-                    this._ロゴ画像.描画する( dc, 0f, 0f );
-
 
                     // 小数部を描画する。
 
@@ -112,7 +106,7 @@ namespace DTXMania.ステージ.選曲
 
 
         private 画像フォント _数字画像 = null;
-        private 画像 _ロゴ画像 = null;
+        private テクスチャ _ロゴ画像 = null;
         private MusicNode _現在表示しているノード = null;
         private string _スキル値文字列 = null;
     }

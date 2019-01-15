@@ -17,7 +17,7 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._背景画像 = new 画像( @"$(System)images\選曲\曲ステータスパネル.png" ) );
+                this.子Activityを追加する( this._背景画像 = new テクスチャ( @"$(System)images\選曲\曲ステータスパネル.png" ) );
             }
         }
 
@@ -90,7 +90,7 @@ namespace DTXMania.ステージ.選曲
             }
 
 
-            this._背景画像.描画する( dc, 左位置: 領域dpx.X, 上位置: 領域dpx.Y );
+            this._背景画像.描画する( 領域dpx.X, 領域dpx.Y );
 
 
             bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
@@ -135,7 +135,7 @@ namespace DTXMania.ステージ.選曲
         }
 
 
-        private 画像 _背景画像 = null;
+        private テクスチャ _背景画像 = null;
         private MusicNode _現在表示しているノード = null;
         private Dictionary<表示レーン種別, int> _ノーツ数 = null;
         private Dictionary<表示レーン種別, SolidColorBrush> _色 = null;
