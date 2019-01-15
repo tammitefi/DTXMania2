@@ -206,6 +206,7 @@ namespace FDK
                 {
                     this._Draw中のレンダーターゲットリスト.Add( dc );     // Begin したらリストに追加。
                     dc.BeginDraw();
+                    BeginDrawの回数++;
                 }
 
                 var trans = dc.Transform;
@@ -230,6 +231,12 @@ namespace FDK
                 }
             }
         }
+
+
+
+        public static int BeginDrawの回数 = 0;
+
+
 
         /// <summary>
         ///		指定したレンダーターゲットに対して描画処理を実行する。

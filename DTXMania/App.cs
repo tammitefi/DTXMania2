@@ -687,6 +687,16 @@ namespace DTXMania
                 // コマンドフラッシュ。
                 //if( vsync )
                 //    gd.D3DDevice.ImmediateContext.Flush();
+
+
+
+
+                Log.定間隔Info( "BeginDraw", $"BeginDraw()～EndDraw() の数: {グラフィックデバイス.BeginDrawの回数}" );
+                グラフィックデバイス.BeginDrawの回数 = 0;
+
+
+
+
             }
 
             // スワップチェーン表示。

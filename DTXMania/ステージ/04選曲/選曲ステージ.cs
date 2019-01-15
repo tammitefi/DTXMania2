@@ -354,7 +354,10 @@ namespace DTXMania.ステージ.選曲
                 0f );
 
             var 変換行列 =
-                Matrix.Scaling( this._プレビュー画像表示サイズdpx ) *
+                Matrix.Scaling(
+                    this._プレビュー画像表示サイズdpx.X / 画像.サイズ.Width,
+                    this._プレビュー画像表示サイズdpx.Y / 画像.サイズ.Height, 
+                    0f ) *
                 Matrix.Translation(
                     画面左上dpx.X + this._プレビュー画像表示位置dpx.X + this._プレビュー画像表示サイズdpx.X / 2f,
                     画面左上dpx.Y - this._プレビュー画像表示位置dpx.Y - this._プレビュー画像表示サイズdpx.Y / 2f,

@@ -118,10 +118,12 @@ namespace FDK
             this._ConstantBuffer = null;
         }
 
+
+
         /// <summary>
         ///		テクスチャを描画する。
         ///	</summary>
-        /// <param name="ワールド行列変換">テクスチャは1×1のモデルサイズで表現されており、それにこのワールド行列を適用する。</param>
+        /// <param name="ワールド行列変換">テクスチャは <see cref="サイズ"/> にスケーリングされており、その後にこのワールド行列が適用される。</param>
         /// <param name="転送元矩形">テクスチャ座標(値域0～1)で指定する。</param>
         public void 描画する( Matrix ワールド行列変換, RectangleF? 転送元矩形 = null )
         {
@@ -134,6 +136,11 @@ namespace FDK
             #region " 定数バッファを更新する。"
             //----------------
             {
+                // 1x1のモデルサイズをテクスチャのサイズへスケーリングする行列を前方に乗じる。
+                ワールド行列変換 =
+                    Matrix.Scaling( this.サイズ.Width, this.サイズ.Height, 1f ) *
+                    ワールド行列変換;
+
                 // ワールド変換行列
                 ワールド行列変換.Transpose();    // 転置
                 this._定数バッファの転送元データ.World = ワールド行列変換;

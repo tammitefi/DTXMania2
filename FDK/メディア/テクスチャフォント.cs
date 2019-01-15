@@ -71,9 +71,10 @@ namespace FDK
                 var 文字矩形 = 有効文字矩形リスト.ElementAt( i );
 
                 float 中央X = 0f - ( 文字列全体のサイズ.Width / 2f ) + 左端 + ( 文字矩形.Width / 2f );
-                var world = Matrix.Scaling( 文字列全体のサイズ.Width, 文字列全体のサイズ.Height, 1f )
-                    * Matrix.Translation( 中央X, 0f, 0f )
-                    * 文字列全体のワールド変換行列;
+
+                var world =
+                    Matrix.Translation( 中央X, 0f, 0f ) *
+                    文字列全体のワールド変換行列;
 
                 this._文字盤.描画する( world, 転送元矩形: 文字矩形 );
 

@@ -57,7 +57,6 @@ namespace DTXMania.ステージ.演奏
                 0f );
 
             var 変換行列 =
-                Matrix.Scaling( this.クリアパネル.サイズ.Width, this.クリアパネル.サイズ.Height, 1f ) *
                 Matrix.RotationY( MathUtil.DegreesToRadians( +48f ) ) *
                 Matrix.Translation( 画面左上dpx.X + 1630f, 画面左上dpx.Y - 530f, 0f );
 

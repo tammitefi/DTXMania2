@@ -384,8 +384,12 @@ namespace DTXMania.ステージ.選曲
                     0f );
 
                 var 変換行列 =
-                    Matrix.Scaling( this._サムネイル表示サイズdpx * 0.9f ) *  // ちょっと小さく
-                    Matrix.Translation( サムネイル表示中央dpx - 4f );            // ちょっと下へ
+                    Matrix.Scaling(
+                        this._サムネイル表示サイズdpx.X / ノード画像.サイズ.Width,
+                        this._サムネイル表示サイズdpx.Y / ノード画像.サイズ.Height,
+                        0f ) *
+                    Matrix.Scaling( 0.9f ) *                            // ちょっと小さく
+                    Matrix.Translation( サムネイル表示中央dpx - 4f );   // ちょっと下へ
 
                 ノード.進行描画する( dc, 変換行列, キャプション表示: false );
                 //----------------
@@ -407,7 +411,10 @@ namespace DTXMania.ステージ.選曲
                     0f );
 
                 var 変換行列 =
-                    Matrix.Scaling( this._サムネイル表示サイズdpx ) *
+                    Matrix.Scaling(
+                        this._サムネイル表示サイズdpx.X / ノード画像.サイズ.Width,
+                        this._サムネイル表示サイズdpx.Y / ノード画像.サイズ.Height,
+                        0f ) *
                     Matrix.Translation( サムネイル表示中央dpx );
 
                 ノード.進行描画する( dc, 変換行列, キャプション表示: false );
