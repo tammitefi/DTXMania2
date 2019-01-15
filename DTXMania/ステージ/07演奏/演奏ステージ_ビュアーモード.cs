@@ -842,7 +842,6 @@ namespace DTXMania.ステージ.演奏
                                 case 表示チップ種別.HiHat_Open:
                                 case 表示チップ種別.HiHat_HalfOpen:
                                 case 表示チップ種別.Foot:
-                                case 表示チップ種別.LeftPedal:
                                 case 表示チップ種別.LeftBass:
                                 case 表示チップ種別.Tom3:
                                 case 表示チップ種別.Tom3_Rim:

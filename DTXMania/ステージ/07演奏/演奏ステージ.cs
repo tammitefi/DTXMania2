@@ -414,10 +414,21 @@ namespace DTXMania.ステージ.演奏
                                     // (B) 入力グループ種別が Unknown ではない場合　→　入力グループ種別で比較
                                     else
                                     {
-                                        var 入力の入力グループ = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
+                                        //var 入力の入力グループ = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
+                                        //return ( チップの入力グループ == 入力の入力グループ );
 
-                                        return ( チップの入力グループ == 入力の入力グループ );
+                                        var 入力の入力グループ種別リスト =
+                                            from kvp in ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ
+                                            where ( kvp.Value.ドラム入力種別 == 入力.Type )
+                                            select kvp.Value.入力グループ種別;
+
+                                        foreach( var 入力の入力グループ種別 in 入力の入力グループ種別リスト )
+                                        {
+                                            if( チップの入力グループ == 入力の入力グループ種別 )
+                                                return true;
+                                        }
                                     }
+                                    return false;
 
                                 } );
 
@@ -911,7 +922,6 @@ namespace DTXMania.ステージ.演奏
                                 case 表示チップ種別.HiHat_Open:
                                 case 表示チップ種別.HiHat_HalfOpen:
                                 case 表示チップ種別.Foot:
-                                case 表示チップ種別.LeftPedal:
                                 case 表示チップ種別.LeftBass:
                                 case 表示チップ種別.Tom3:
                                 case 表示チップ種別.Tom3_Rim:
