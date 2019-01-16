@@ -15,7 +15,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._パッド絵 = new 画像( @"$(System)images\演奏\ドラムパッド.png" ) );
+                this.子Activityを追加する( this._パッド絵 = new テクスチャ( @"$(System)images\演奏\ドラムパッド.png" ) );
             }
         }
 
@@ -64,7 +64,7 @@ namespace DTXMania.ステージ.演奏
             this._レーンtoパッドContext[ lane ].アニメカウンタ.開始する( 0, 100, 1 );
         }
 
-        public void 進行描画する( DeviceContext1 dc )
+        public void 進行描画する()
         {
             foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
             {
@@ -74,31 +74,35 @@ namespace DTXMania.ステージ.演奏
                 float Yオフセットdpx = 0f;
                 float フラッシュ画像の不透明度 = 0f;
 
-                if( drumContext.アニメカウンタ.動作中である )
+                if( drumContext.アニメカウンタ.終了値に達していない )
                 {
                     フラッシュ画像の不透明度 = (float) Math.Sin( Math.PI * drumContext.アニメカウンタ.現在値の割合 );    // 0 → 1 → 0
                     Yオフセットdpx = (float) Math.Sin( Math.PI * drumContext.アニメカウンタ.現在値の割合 ) * 18f;     // 0 → 18 → 0
                 }
 
                 // ドラムパッド本体表示
-                this._パッド絵.描画する( 
-                    dc, 
-                    drumContext.左上位置dpx.X, 
-                    drumContext.左上位置dpx.Y + Yオフセットdpx,
-                    不透明度0to1: 1.0f, 
-                    転送元矩形: drumContext.転送元矩形 );
+                if( 0 < drumContext.転送元矩形.Width && 0 < drumContext.転送元矩形.Height )
+                {
+                    this._パッド絵.描画する(
+                        drumContext.左上位置dpx.X,
+                        drumContext.左上位置dpx.Y + Yオフセットdpx,
+                        不透明度0to1: 1.0f,
+                        転送元矩形: drumContext.転送元矩形 );
+                }
 
                 // ドラムフラッシュ表示
-                this._パッド絵.描画する(
-                    dc,
-                    drumContext.左上位置dpx.X,
-                    drumContext.左上位置dpx.Y + Yオフセットdpx, 
-                    フラッシュ画像の不透明度,
-                    転送元矩形: drumContext.転送元矩形Flush );
+                if( 0 < drumContext.転送元矩形Flush.Width && 0 < drumContext.転送元矩形Flush.Height && 0f < フラッシュ画像の不透明度 )
+                {
+                    this._パッド絵.描画する(
+                        drumContext.左上位置dpx.X,
+                        drumContext.左上位置dpx.Y + Yオフセットdpx,
+                        フラッシュ画像の不透明度,
+                        転送元矩形: drumContext.転送元矩形Flush );
+                }
             }
         }
 
-        private 画像 _パッド絵 = null;
+        private テクスチャ _パッド絵 = null;
         private Dictionary<string, RectangleF> _パッド絵の矩形リスト = null;
 
         private struct パッドContext

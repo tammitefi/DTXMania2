@@ -15,8 +15,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._ゲージ枠通常 = new 画像( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
-                this.子Activityを追加する( this._ゲージ枠DANGER = new 画像( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
+                this.子Activityを追加する( this._ゲージ枠通常 = new テクスチャ( @"$(System)images\演奏\エキサイトゲージ通常.png" ) );
+                this.子Activityを追加する( this._ゲージ枠DANGER = new テクスチャ( @"$(System)images\演奏\エキサイトゲージDANGER.png" ) );
             }
         }
 
@@ -79,11 +79,11 @@ namespace DTXMania.ステージ.演奏
 
             if( 0.25 > this._ゲージ量.Value )
             {
-                this._ゲージ枠DANGER.描画する( dc, 540f, 955f );
+                this._ゲージ枠DANGER.描画する( 540f, 955f );
             }
             else
             {
-                this._ゲージ枠通常.描画する( dc, 540f, 955f );
+                this._ゲージ枠通常.描画する( 540f, 955f );
             }
 
 
@@ -127,8 +127,8 @@ namespace DTXMania.ステージ.演奏
 
 
         private bool _初めての進行描画 = true;
-        private 画像 _ゲージ枠通常 = null;
-        private 画像 _ゲージ枠DANGER = null;
+        private テクスチャ _ゲージ枠通常 = null;
+        private テクスチャ _ゲージ枠DANGER = null;
         private SolidColorBrush _通常ブラシ = null;  // 青
         private SolidColorBrush _DANGERブラシ = null;  // 赤
         private SolidColorBrush _MAXブラシ = null; // 橙

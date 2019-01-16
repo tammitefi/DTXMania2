@@ -118,12 +118,30 @@ namespace FDK
             this._ConstantBuffer = null;
         }
 
+
         /// <summary>
         ///		テクスチャを描画する。
         ///	</summary>
-        /// <param name="ワールド行列変換">テクスチャは1×1のモデルサイズで表現されており、それにこのワールド行列を適用する。</param>
+        public void 描画する( float 左位置, float 上位置, float 不透明度0to1 = 1.0f, float X方向拡大率 = 1.0f, float Y方向拡大率 = 1.0f, RectangleF? 転送元矩形 = null )
+        {
+            RectangleF srcRect = 転送元矩形 ?? new RectangleF( 0, 0, this.サイズ.Width, this.サイズ.Height );
+
+            var 変換行列 =
+                Matrix.Scaling( X方向拡大率, Y方向拡大率, 0f ) *
+                Matrix.Translation(
+                    グラフィックデバイス.Instance.画面左上dpx.X + ( 左位置 + X方向拡大率 * srcRect.Width / 2f ),
+                    グラフィックデバイス.Instance.画面左上dpx.Y - ( 上位置 + Y方向拡大率 * srcRect.Height / 2f ),
+                    0f );
+
+            this.描画する( 変換行列, 不透明度0to1, 転送元矩形 );
+        }
+
+        /// <summary>
+        ///		テクスチャを描画する。
+        ///	</summary>
+        /// <param name="ワールド行列変換">テクスチャは原寸（<see cref="サイズ"/>）にスケーリングされており、その後にこのワールド行列が適用される。</param>
         /// <param name="転送元矩形">テクスチャ座標(値域0～1)で指定する。</param>
-        public void 描画する( Matrix ワールド行列変換, RectangleF? 転送元矩形 = null )
+        public void 描画する( Matrix ワールド行列変換, float 不透明度0to1 = 1f, RectangleF? 転送元矩形 = null )
         {
             var d3dDevice = グラフィックデバイス.Instance.D3DDevice;
             Debug.Assert( null != d3dDevice, "D3DDevice が取得されていません。" );
@@ -131,9 +149,18 @@ namespace FDK
             if( null == this.Texture )
                 return;
 
+            this.不透明度 = MathUtil.Clamp( 不透明度0to1, 0f, 1f );
+
+            var srcRect = 転送元矩形 ?? new RectangleF( 0f, 0f, this.サイズ.Width, this.サイズ.Height );
+
             #region " 定数バッファを更新する。"
             //----------------
             {
+                // 1x1のモデルサイズをテクスチャの描画矩形サイズへスケーリングする行列を前方に乗じる。
+                ワールド行列変換 =
+                    Matrix.Scaling( srcRect.Width, srcRect.Height, 0f ) *
+                    ワールド行列変換;
+
                 // ワールド変換行列
                 ワールド行列変換.Transpose();    // 転置
                 this._定数バッファの転送元データ.World = ワールド行列変換;
@@ -145,12 +172,10 @@ namespace FDK
                 this._定数バッファの転送元データ.Projection = グラフィックデバイス.Instance.射影変換行列; // 転置済み
 
                 // 描画元矩形（x,y,zは0～1で指定する（UV座標））
-                if( null == 転送元矩形 )
-                    転送元矩形 = new RectangleF( 0f, 0f, this.サイズ.Width, this.サイズ.Height );
-                this._定数バッファの転送元データ.TexLeft = 転送元矩形.Value.Left / this.サイズ.Width;
-                this._定数バッファの転送元データ.TexTop = 転送元矩形.Value.Top / this.サイズ.Height;
-                this._定数バッファの転送元データ.TexRight = 転送元矩形.Value.Right / this.サイズ.Width;
-                this._定数バッファの転送元データ.TexBottom = 転送元矩形.Value.Bottom / this.サイズ.Height;
+                this._定数バッファの転送元データ.TexLeft = srcRect.Left / this.サイズ.Width;
+                this._定数バッファの転送元データ.TexTop = srcRect.Top / this.サイズ.Height;
+                this._定数バッファの転送元データ.TexRight = srcRect.Right / this.サイズ.Width;
+                this._定数バッファの転送元データ.TexBottom = srcRect.Bottom / this.サイズ.Height;
 
                 // アルファ
                 this._定数バッファの転送元データ.TexAlpha = this.不透明度;

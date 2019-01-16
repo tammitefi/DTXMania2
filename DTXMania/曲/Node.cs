@@ -266,7 +266,7 @@ namespace DTXMania.曲
                 ワールド変換行列 *= Matrix.Translation( 0f, 0f, 1f );    // ノード画像よりZ方向手前にほんのり移動
                 this._曲名テクスチャ.タイトル = this.タイトル;
                 this._曲名テクスチャ.サブタイトル = this.サブタイトル;
-                this._曲名テクスチャ.描画する( ワールド変換行列, new RectangleF( 0f, 138f, Node.全体サイズ.Width, Node.全体サイズ.Height - 138f + 27f ) );
+                this._曲名テクスチャ.描画する( ワールド変換行列, 不透明度0to1: 1f, new RectangleF( 0f, 138f, Node.全体サイズ.Width, Node.全体サイズ.Height - 138f + 27f ) );
             }
         }
 

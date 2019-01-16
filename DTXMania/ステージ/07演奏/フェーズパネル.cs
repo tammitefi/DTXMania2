@@ -27,7 +27,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._演奏位置カーソル画像 = new 画像( @"$(System)images\演奏\演奏位置カーソル.png" ) );
+                this.子Activityを追加する( this._演奏位置カーソル画像 = new テクスチャ( @"$(System)images\演奏\演奏位置カーソル.png" ) );
             }
         }
 
@@ -71,21 +71,18 @@ namespace DTXMania.ステージ.演奏
 
             var バー矩形 = this._演奏位置カーソルの矩形リスト[ "Bar" ];
             this._演奏位置カーソル画像.描画する(
-                dc,
                 中央位置dpx.X - バー矩形.Width / 2f,
                 中央位置dpx.Y - バー矩形.Height / 2f,
                 転送元矩形: バー矩形 );
 
             var 左三角矩形 = this._演奏位置カーソルの矩形リスト[ "Left" ];
             this._演奏位置カーソル画像.描画する(
-                dc,
                 中央位置dpx.X - 左三角矩形.Width / 2f - this._左右三角アニメ用カウンタ.現在値の割合 * 40f,
                 中央位置dpx.Y - 左三角矩形.Height / 2f,
                 転送元矩形: 左三角矩形 );
 
             var 右三角矩形 = this._演奏位置カーソルの矩形リスト[ "Right" ];
             this._演奏位置カーソル画像.描画する(
-                dc,
                 中央位置dpx.X - 右三角矩形.Width / 2f + this._左右三角アニメ用カウンタ.現在値の割合 * 40f,
                 中央位置dpx.Y - 右三角矩形.Height / 2f,
                 転送元矩形: 右三角矩形 );
@@ -93,7 +90,7 @@ namespace DTXMania.ステージ.演奏
 
         private bool _初めての進行描画 = true;
         private float _現在位置 = 0.0f;
-        private 画像 _演奏位置カーソル画像 = null;
+        private テクスチャ _演奏位置カーソル画像 = null;
         private Dictionary<string, RectangleF> _演奏位置カーソルの矩形リスト = null;
         private LoopCounter _左右三角アニメ用カウンタ = null;
 

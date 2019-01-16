@@ -17,7 +17,6 @@ namespace DTXMania.ステージ.演奏
         HiHat_Open,
         HiHat_HalfOpen,
         Foot,
-        LeftPedal,
         Snare,
         Snare_OpenRim,
         Snare_ClosedRim,

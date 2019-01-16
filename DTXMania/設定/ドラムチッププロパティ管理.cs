@@ -278,7 +278,7 @@ namespace DTXMania.設定
                         チップ種別 = チップ種別.HiHat_Foot,
                         レーン種別 = レーン種別.Foot,
                         表示レーン種別 = 表示レーン種別.Foot,
-                        //表示チップ種別 = ...
+                        表示チップ種別 = 表示チップ種別.Foot,
                         ドラム入力種別 = ドラム入力種別.HiHat_Foot,
                         AutoPlay種別 = AutoPlay種別.Foot,
                         //入力グループ種別 = ...
@@ -289,12 +289,12 @@ namespace DTXMania.設定
                         AutoPlayON_自動ヒット_判定 = true,
                         AutoPlayON_Miss判定 = false,
                         AutoPlayOFF_自動ヒット_再生 = false,
-                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        //AutoPlayOFF_自動ヒット_非表示 = true,
                         AutoPlayOFF_自動ヒット_判定 = false,
                         AutoPlayOFF_ユーザヒット_再生 = true,
                         AutoPlayOFF_ユーザヒット_非表示 = true,
-                        AutoPlayOFF_ユーザヒット_判定 = false,
-                        AutoPlayOFF_Miss判定 = false,
+                        //AutoPlayOFF_ユーザヒット_判定 = false,
+                        //AutoPlayOFF_Miss判定 = false,
                     },
                     //----------------
                     #endregion
@@ -435,9 +435,9 @@ namespace DTXMania.設定
                         レーン種別 = レーン種別.Bass,
                         //表示レーン種別 = ...
                         //表示チップ種別 = ...
-                        ドラム入力種別 = ドラム入力種別.Bass,
-                        AutoPlay種別 = AutoPlay種別.Bass,
-                        入力グループ種別 = 入力グループ種別.Bass,
+                        //ドラム入力種別 = ドラム入力種別.Bass,
+                        //AutoPlay種別 = AutoPlay種別.Bass,
+                        //入力グループ種別 = 入力グループ種別.Bass,
                         発声前消音 = false,
                         消音グループ種別 = 消音グループ種別.Unknown,
                         AutoPlayON_自動ヒット_再生 = true,
@@ -1105,7 +1105,9 @@ namespace DTXMania.設定
                         break;
 
                     case チップ種別.HiHat_Foot:
-                        kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Foot : 表示チップ種別.LeftPedal;
+                        kvp.Value.AutoPlayOFF_自動ヒット_非表示 = ( this._演奏モード == PlayMode.EXPERT ) ? true : false;
+                        kvp.Value.AutoPlayOFF_ユーザヒット_判定 = ( this._演奏モード == PlayMode.EXPERT ) ? false : true;
+                        kvp.Value.AutoPlayOFF_Miss判定 = ( this._演奏モード == PlayMode.EXPERT ) ? false : true;
                         break;
 
                     case チップ種別.Snare_OpenRim:
@@ -1123,6 +1125,8 @@ namespace DTXMania.設定
                     case チップ種別.LeftBass:
                         kvp.Value.表示チップ種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示チップ種別.Bass : 表示チップ種別.LeftBass;
                         kvp.Value.表示レーン種別 = ( this._演奏モード == PlayMode.EXPERT ) ? 表示レーン種別.Bass : 表示レーン種別.Foot;
+                        kvp.Value.ドラム入力種別 = ( this._演奏モード == PlayMode.EXPERT ) ? ドラム入力種別.Bass : ドラム入力種別.HiHat_Foot;
+                        kvp.Value.AutoPlay種別 = ( this._演奏モード == PlayMode.EXPERT ) ? AutoPlay種別.Bass : AutoPlay種別.Foot;
                         break;
 
                     case チップ種別.Tom1_Rim:
@@ -1229,6 +1233,10 @@ namespace DTXMania.設定
                             case チップ種別.RightCrash:
                                 kvp.Value.入力グループ種別 = 入力グループ種別.Cymbal;
                                 break;
+
+                            case チップ種別.LeftBass:
+                                kvp.Value.入力グループ種別 = ( this._演奏モード == PlayMode.BASIC ) ? 入力グループ種別.Cymbal : 入力グループ種別.Bass;
+                                break;
                         }
                         break;
 
@@ -1262,6 +1270,10 @@ namespace DTXMania.設定
 
                             case チップ種別.RightCrash:
                                 kvp.Value.入力グループ種別 = 入力グループ種別.RightCymbal;
+                                break;
+
+                            case チップ種別.LeftBass:
+                                kvp.Value.入力グループ種別 = ( this._演奏モード == PlayMode.BASIC ) ? 入力グループ種別.HiHat : 入力グループ種別.Bass;
                                 break;
                         }
                         break;

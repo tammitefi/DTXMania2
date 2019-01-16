@@ -16,7 +16,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._パネル = new 画像( @"$(System)images\演奏\曲名パネル.png" ) );
+                this.子Activityを追加する( this._パネル = new テクスチャ( @"$(System)images\演奏\曲名パネル.png" ) );
+
                 this.子Activityを追加する( this._曲名画像 = new 文字列画像() {
                     フォント名 = "HGMaruGothicMPRO",
                     フォントサイズpt = 26f,
@@ -27,6 +28,7 @@ namespace DTXMania.ステージ.演奏
                     前景色 = Color4.Black,
                     背景色 = Color4.White,
                 } );
+
                 this.子Activityを追加する( this._サブタイトル画像 = new 文字列画像() {
                     フォント名 = "HGMaruGothicMPRO",
                     フォントサイズpt = 18f,
@@ -53,6 +55,7 @@ namespace DTXMania.ステージ.演奏
                 this._サブタイトル画像.表示文字列 = 選択曲.サブタイトル;
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -62,14 +65,14 @@ namespace DTXMania.ステージ.演奏
 
         public void 描画する( DeviceContext1 dc )
         {
-            this._パネル.描画する( dc, 1458f, 3f );
-            this._サムネイルを描画する( dc );
+            this._パネル.描画する( 1458f, 3f );
+            this._サムネイルを描画する();
             this._曲名を描画する( dc );
             this._サブタイトルを描画する( dc );
         }
 
 
-        private 画像 _パネル = null;
+        private テクスチャ _パネル = null;
         private 文字列画像 _曲名画像 = null;
         private 文字列画像 _サブタイトル画像 = null;
 
@@ -78,7 +81,7 @@ namespace DTXMania.ステージ.演奏
         private readonly Vector2 _曲名表示位置dpx = new Vector2( 1576f + 4f, 43f + 10f );
         private readonly Vector2 _曲名表示サイズdpx = new Vector2( 331f - 8f - 4f, 70f - 10f );
 
-        private void _サムネイルを描画する( DeviceContext1 dc )
+        private void _サムネイルを描画する()
         {
             var 選択曲 = App.演奏曲ノード;
 
@@ -91,16 +94,14 @@ namespace DTXMania.ステージ.演奏
 
             // テクスチャは画面中央が (0,0,0) で、Xは右がプラス方向, Yは上がプラス方向, Zは奥がプラス方向+。
 
-            var 画面左上dpx = new Vector3(  // 3D視点で見る画面左上の座標。
-                -グラフィックデバイス.Instance.設計画面サイズ.Width / 2f,
-                +グラフィックデバイス.Instance.設計画面サイズ.Height / 2f,
-                0f );
-
             var 変換行列 =
-                Matrix.Scaling( this._サムネイル画像表示サイズdpx ) *
+                Matrix.Scaling(
+                    this._サムネイル画像表示サイズdpx.X / サムネイル画像.サイズ.Width,
+                    this._サムネイル画像表示サイズdpx.Y / サムネイル画像.サイズ.Height,
+                    0f ) *
                 Matrix.Translation(
-                    画面左上dpx.X + this._サムネイル画像表示位置dpx.X + this._サムネイル画像表示サイズdpx.X / 2f,
-                    画面左上dpx.Y - this._サムネイル画像表示位置dpx.Y - this._サムネイル画像表示サイズdpx.Y / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.X + this._サムネイル画像表示位置dpx.X + this._サムネイル画像表示サイズdpx.X / 2f,
+                    グラフィックデバイス.Instance.画面左上dpx.Y - this._サムネイル画像表示位置dpx.Y - this._サムネイル画像表示サイズdpx.Y / 2f,
                     0f );
 
             サムネイル画像.描画する( 変換行列 );

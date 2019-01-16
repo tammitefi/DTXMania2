@@ -16,7 +16,7 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._ランナー画像 = new 画像( @"$(System)images\選曲\枠ランナー.png" ) );
+                this.子Activityを追加する( this._ランナー画像 = new テクスチャ( @"$(System)images\選曲\枠ランナー.png" ) );
             }
         }
 
@@ -48,19 +48,17 @@ namespace DTXMania.ステージ.選曲
 
                 // 上
                 this._ランナー画像.描画する(
-                    dc,
-                    左位置: 1920f - 割合 * ( 1920f - 1044f ),
-                    上位置: 485f - this._ランナー画像.サイズ.Height / 2f );
+                    1920f - 割合 * ( 1920f - 1044f ),
+                    485f - this._ランナー画像.サイズ.Height / 2f );
 
                 // 下
                 this._ランナー画像.描画する(
-                    dc,
-                    左位置: 1920f - 割合 * ( 1920f - 1044f ),
-                    上位置: 598f - this._ランナー画像.サイズ.Height / 2f );
+                    1920f - 割合 * ( 1920f - 1044f ),
+                    598f - this._ランナー画像.サイズ.Height / 2f );
             }
         }
 
-        private 画像 _ランナー画像 = null;
+        private テクスチャ _ランナー画像 = null;
         private LoopCounter _カウンタ = null;
     }
 }

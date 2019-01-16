@@ -19,7 +19,12 @@ EntityFramework
     Apache Licence, Version 2.0
     https://github.com/aspnet/EntityFramework6/blob/master/License.txt
 
-bjxa - BandJAM XA audio codec
+NVois
+    Copyright (c) 2015 Andrew Ward
+    Microsoft Public Licence (Ms-PL)
+    https://github.com/ioctlLR/NVorbis/blob/master/LICENSE
+
+bjxa (BandJAM XA audio codec)
     Copyright (C) 2018  Dridi Boukelmoune
     GNU Lesser General Public License Version 2.1 (LGPLv2.1)
     https://github.com/Dridi/bjxa/blob/master/lgpl-2.1.txt

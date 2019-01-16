@@ -608,9 +608,9 @@ namespace DTXMania.ステージ.演奏
                         this._右サイドクリアパネル.描画する( dc );
 
                         this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
-                        this._レーンフラッシュ.進行描画する( dc );
+                        this._レーンフラッシュ.進行描画する();
                         this._小節線拍線を描画する( dc, 演奏時刻sec );
-                        this._ドラムパッド.進行描画する( dc );
+                        this._ドラムパッド.進行描画する();
                         this._背景画像.描画する( dc, 0f, 0f );
                         this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
@@ -622,10 +622,10 @@ namespace DTXMania.ステージ.演奏
                         this._フェーズパネル.現在位置 = 現在位置;
                         this._フェーズパネル.進行描画する( dc );
                         this._曲名パネル.描画する( dc );
-                        this._ヒットバー.描画する( dc );
+                        this._ヒットバー.描画する();
                         this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
                         this._チップ光.進行描画する( dc );
-                        this._判定文字列.進行描画する( dc );
+                        this._判定文字列.進行描画する();
 
                         this._FPS.VPSをカウントする();
                         this._FPS.描画する( dc, 0f, 0f );
@@ -842,7 +842,6 @@ namespace DTXMania.ステージ.演奏
                                 case 表示チップ種別.HiHat_Open:
                                 case 表示チップ種別.HiHat_HalfOpen:
                                 case 表示チップ種別.Foot:
-                                case 表示チップ種別.LeftPedal:
                                 case 表示チップ種別.LeftBass:
                                 case 表示チップ種別.Tom3:
                                 case 表示チップ種別.Tom3_Rim:

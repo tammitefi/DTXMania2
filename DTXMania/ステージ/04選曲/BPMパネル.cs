@@ -17,7 +17,7 @@ namespace DTXMania.ステージ.選曲
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._BPMパネル = new 画像( @"$(System)images\選曲\BPMパネル.png" ) );
+                this.子Activityを追加する( this._BPMパネル = new テクスチャ( @"$(System)images\選曲\BPMパネル.png" ) );
                 this.子Activityを追加する( this._パラメータ文字 = new 画像フォント( @"$(System)images\パラメータ文字_小.png", @"$(System)images\パラメータ文字_小.yaml", 文字幅補正dpx: 0f ) );
             }
         }
@@ -67,7 +67,7 @@ namespace DTXMania.ステージ.選曲
             }
 
 
-            this._BPMパネル.描画する( dc, 領域.X - 5f, 領域.Y - 4f );
+            this._BPMパネル.描画する( 領域.X - 5f, 領域.Y - 4f );
 
 
             bool 表示可能ノードである = ( this._現在表示しているノード is MusicNode );
@@ -88,7 +88,7 @@ namespace DTXMania.ステージ.選曲
         }
 
 
-        private 画像 _BPMパネル = null;
+        private テクスチャ _BPMパネル = null;
         private 画像フォント _パラメータ文字 = null;
         private MusicNode _現在表示しているノード = null;
         private double _最小BPM;

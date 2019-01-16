@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -270,5 +271,18 @@ namespace FDK
 
             return dataContract;
         }
+
+
+        // Win32
+
+        public const int AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED = unchecked((int) 0x88890019);
+        public const int AUDCLNT_E_INVALID_DEVICE_PERIOD = unchecked((int) 0x88890020);
+        public const int AUDCLNT_E_NOT_INITIALIZED = unchecked((int) 0x88890001);
+
+        [DllImport( "Avrt.dll", CharSet = CharSet.Unicode )]
+        public static extern IntPtr AvSetMmThreadCharacteristics( [MarshalAs( UnmanagedType.LPWStr )] string proAudio, out int taskIndex );
+
+        [DllImport( "Avrt.dll" )]
+        public static extern bool AvRevertMmThreadCharacteristics( IntPtr avrtHandle );
     }
 }

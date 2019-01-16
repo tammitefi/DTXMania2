@@ -49,7 +49,7 @@ namespace DTXMania.ステージ.演奏
                 this.子Activityを追加する( this._ドラムパッド = new ドラムパッド() );
                 this.子Activityを追加する( this._ヒットバー = new ヒットバー() );
                 this.子Activityを追加する( this._レーンフラッシュ = new レーンフラッシュ() );
-                this.子Activityを追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
+                this.子Activityを追加する( this._ドラムチップ画像 = new テクスチャ( @"$(System)images\演奏\ドラムチップ.png" ) );
                 this.子Activityを追加する( this._判定文字列 = new 判定文字列() );
                 this.子Activityを追加する( this._チップ光 = new チップ光() );
                 this.子Activityを追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
@@ -414,10 +414,21 @@ namespace DTXMania.ステージ.演奏
                                     // (B) 入力グループ種別が Unknown ではない場合　→　入力グループ種別で比較
                                     else
                                     {
-                                        var 入力の入力グループ = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
+                                        //var 入力の入力グループ = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
+                                        //return ( チップの入力グループ == 入力の入力グループ );
 
-                                        return ( チップの入力グループ == 入力の入力グループ );
+                                        var 入力の入力グループ種別リスト =
+                                            from kvp in ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ
+                                            where ( kvp.Value.ドラム入力種別 == 入力.Type )
+                                            select kvp.Value.入力グループ種別;
+
+                                        foreach( var 入力の入力グループ種別 in 入力の入力グループ種別リスト )
+                                        {
+                                            if( チップの入力グループ == 入力の入力グループ種別 )
+                                                return true;
+                                        }
                                     }
+                                    return false;
 
                                 } );
 
@@ -617,7 +628,7 @@ namespace DTXMania.ステージ.演奏
                         this._右サイドクリアパネル.描画する( dc );
 
                         this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
-                        this._ドラムパッド.進行描画する( dc );
+                        this._ドラムパッド.進行描画する();
                         this._背景画像.描画する( dc, 0f, 0f );
                         this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
@@ -625,7 +636,7 @@ namespace DTXMania.ステージ.演奏
                         this._カウントマップライン.進行描画する( dc );
                         this._フェーズパネル.進行描画する( dc );
                         this._曲名パネル.描画する( dc );
-                        this._ヒットバー.描画する( dc );
+                        this._ヒットバー.描画する();
                         this._キャプチャ画面を描画する( dc, ( 1.0f - this._フェードインカウンタ.現在値の割合 ) );
                     }
                     break;
@@ -699,9 +710,9 @@ namespace DTXMania.ステージ.演奏
                         this._右サイドクリアパネル.描画する( dc );
 
                         this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
-                        this._レーンフラッシュ.進行描画する( dc );
+                        this._レーンフラッシュ.進行描画する();
                         this._小節線拍線を描画する( dc, 演奏時刻sec );
-                        this._ドラムパッド.進行描画する( dc );
+                        this._ドラムパッド.進行描画する();
                         this._背景画像.描画する( dc, 0f, 0f );
                         this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
@@ -713,10 +724,10 @@ namespace DTXMania.ステージ.演奏
                         this._フェーズパネル.現在位置 = 現在位置;
                         this._フェーズパネル.進行描画する( dc );
                         this._曲名パネル.描画する( dc );
-                        this._ヒットバー.描画する( dc );
+                        this._ヒットバー.描画する();
                         this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
                         this._チップ光.進行描画する( dc );
-                        this._判定文字列.進行描画する( dc );
+                        this._判定文字列.進行描画する();
 
                         this._FPS.VPSをカウントする();
                         this._FPS.描画する( dc, 0f, 0f );
@@ -821,7 +832,7 @@ namespace DTXMania.ステージ.演奏
             } );
         }
 
-        private 画像 _ドラムチップ画像 = null;
+        private テクスチャ _ドラムチップ画像 = null;
         private Dictionary<string, RectangleF> _ドラムチップの矩形リスト = null;
         private float _ドラムチップの縦方向中央位置 = 0f;
         private LoopCounter _ドラムチップアニメ = null;
@@ -859,8 +870,8 @@ namespace DTXMania.ステージ.演奏
                     {
                         this.現在のフェーズ = フェーズ.クリア;
                         this._描画開始チップ番号 = -1;    // 演奏完了。
-                        return;
                     }
+                    return;
                 }
                 //----------------
                 #endregion
@@ -899,7 +910,7 @@ namespace DTXMania.ステージ.演奏
                             var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
                             var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
 
-                            var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
+                            var 変換行列 = ( 0 >= 消滅割合 ) ? Matrix.Identity : Matrix.Scaling( 1f - 消滅割合, 1f, 0f );
 
                             // 変換(1) 拡大縮小、回転
                             // → 現在は、どの表示チップ種別の背景がどのアニメーションを行うかは、コード内で名指しする（固定）。
@@ -911,7 +922,6 @@ namespace DTXMania.ステージ.演奏
                                 case 表示チップ種別.HiHat_Open:
                                 case 表示チップ種別.HiHat_HalfOpen:
                                 case 表示チップ種別.Foot:
-                                case 表示チップ種別.LeftPedal:
                                 case 表示チップ種別.LeftBass:
                                 case 表示チップ種別.Tom3:
                                 case 表示チップ種別.Tom3_Rim:
@@ -928,8 +938,7 @@ namespace DTXMania.ステージ.演奏
                                     {
                                         float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
 
-                                        //変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 大きさ0to1, 矩形中央 );
-                                        変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 1.0f, 矩形中央 );       // チップ背景は大きさを変えない
+                                        変換行列 = 変換行列 * Matrix.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 1.0f, 0f );       // チップ背景は大きさを変えない
                                     }
                                     //----------------
                                     #endregion
@@ -940,10 +949,9 @@ namespace DTXMania.ステージ.演奏
                                     //----------------
                                     {
                                         float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-                                        変換行列2D = 変換行列2D *
-                                            //Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
-                                            Matrix3x2.Scaling( 1f, 1f, 矩形中央 ) * // チップ背景は大きさを変えない
-                                            Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
+                                        変換行列 = 変換行列 *
+                                            Matrix.Scaling( 1f, 1f, 0f ) * // チップ背景は大きさを変えない
+                                            Matrix.RotationZ( (float) ( r * Math.PI ) );
                                     }
                                     //----------------
                                     #endregion
@@ -951,9 +959,11 @@ namespace DTXMania.ステージ.演奏
                             }
 
                             // 変換(2) 移動
-                            変換行列2D = 変換行列2D *
-                                //Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 大きさ0to1 ) );
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 1.0f ) );       // チップ背景は大きさを変えない
+                            変換行列 = 変換行列 *
+                                Matrix.Translation(
+                                    グラフィックデバイス.Instance.画面左上dpx.X + 中央位置Xdpx,
+                                    グラフィックデバイス.Instance.画面左上dpx.Y - たて中央位置dpx,
+                                    0f );
 
                             // 描画。
                             if( 表示チップ種別 != 表示チップ種別.HiHat &&         // 暫定処置：これらでは背景画像を表示しない 
@@ -963,8 +973,7 @@ namespace DTXMania.ステージ.演奏
                                 表示チップ種別 != 表示チップ種別.RightRide_Cup )
                             {
                                 this._ドラムチップ画像.描画する(
-                                    dc,
-                                    変換行列2D,
+                                    変換行列,
                                     転送元矩形: 矩形 );
                             }
                         }
@@ -979,22 +988,18 @@ namespace DTXMania.ステージ.演奏
 
                         if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
                         {
-                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
+                            var sx = ( 0.6f + ( 0.4f * 大きさ0to1 ) ) * ( ( 0 >= 消滅割合 ) ? 1f : 1f - 消滅割合 );
+                            var sy = 大きさ0to1;
 
-                            // 変換。
-                            var 変換行列2D =
-                                ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
-                                Matrix3x2.Scaling( 0.6f + ( 0.4f * 大きさ0to1 ), 大きさ0to1, 矩形中央 ) *     // 大きさ: 0→1 のとき、幅 x0.6→x1.0
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
+                            var 変換行列 =
+                                Matrix.Scaling( sx, sy, 0f ) *
+                                Matrix.Translation(
+                                    グラフィックデバイス.Instance.画面左上dpx.X + 中央位置Xdpx,
+                                    グラフィックデバイス.Instance.画面左上dpx.Y - たて中央位置dpx,
+                                    0f );
 
-                            // スネアとタムのみ不透明度を反映。
-                            float 不透明度 = ( chip.チップ種別 == チップ種別.Snare || chip.チップ種別 == チップ種別.Tom1 || chip.チップ種別 == チップ種別.Tom2 || chip.チップ種別 == チップ種別.Tom3 ) ?
-                                ( 0.4f + ( 0.6f * 大きさ0to1 ) ) : 1f;
-
-                            // 描画。
                             this._ドラムチップ画像.描画する(
-                                dc,
-                                変換行列2D,
+                                変換行列,
                                 転送元矩形: 矩形 );
                         }
                     }
@@ -1066,9 +1071,9 @@ namespace DTXMania.ステージ.演奏
 
         private double _指定された時間secに対応する符号付きピクセル数を返す( double speed, double 指定時間sec )
         {
-            const double _1ミリ秒あたりのピクセル数 = 0.14625 * 2.25 * 1000.0;    // これを変えると、speed あたりの速度が変わる。
+            const double _1秒あたりのピクセル数 = 0.14625 * 2.25 * 1000.0;    // これを変えると、speed あたりの速度が変わる。
 
-            return ( 指定時間sec * _1ミリ秒あたりのピクセル数 * speed );
+            return ( 指定時間sec * _1秒あたりのピクセル数 * speed );
         }
 
 
