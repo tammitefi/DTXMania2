@@ -6,7 +6,7 @@ using FDK;
 using DTXMania.データベース.ユーザ;
 using DTXMania.ステージ.演奏;
 
-using User = DTXMania.データベース.ユーザ.User08;
+using User = DTXMania.データベース.ユーザ.User09;
 
 namespace DTXMania.設定
 {
@@ -112,6 +112,24 @@ namespace DTXMania.設定
         {
             get => ( 0 != this._User.BackgroundMovie );
             set => this._User.BackgroundMovie = value ? 1 : 0;
+        }
+
+        public double 再生速度
+        {
+            get => this._User.PlaySpeed;
+            set => this._User.PlaySpeed = value;
+        }
+
+        public bool 演奏中に小節線と拍線を表示する
+        {
+            get => ( 0 != this._User.ShowPartLine );
+            set => this._User.ShowPartLine = value ? 1 : 0;
+        }
+
+        public bool 演奏中に小節番号を表示する
+        {
+            get => ( 0 != this._User.ShowPartNumber );
+            set => this._User.ShowPartNumber = value ? 1 : 0;
         }
 
 

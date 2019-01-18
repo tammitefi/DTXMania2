@@ -811,20 +811,29 @@ namespace DTXMania.ステージ.演奏
 
                     if( chip.チップ種別 == チップ種別.小節線 )
                     {
-                        // 小節線
                         float 上位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx - 1f );   // -1f は小節線の厚みの半分。
-                        dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._小節線色, strokeWidth: 3f );
+
+                        // 小節線
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節線と拍線を表示する )
+                        {
+                            dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._小節線色, strokeWidth: 3f );
+                        }
 
                         // 小節番号
-                        float 右位置dpx = 441f + 780f - 24f;   // -24f は適当なマージン。
-                        this._数字フォント中グレー48x64.描画する( dc, 右位置dpx, 上位置dpx - 84f, chip.小節番号.ToString(), 右揃え: true );	// -84f は適当なマージン。
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節番号を表示する )
+                        {
+                            float 右位置dpx = 441f + 780f - 24f;   // -24f は適当なマージン。
+                            this._数字フォント中グレー48x64.描画する( dc, 右位置dpx, 上位置dpx - 84f, chip.小節番号.ToString(), 右揃え: true );    // -84f は適当なマージン。
+                        }
                     }
-
-                    // 拍線
                     else if( chip.チップ種別 == チップ種別.拍線 )
                     {
-                        float 上位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx - 1f );   // -1f は拍線の厚みの半分。
-                        dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._拍線色, strokeWidth: 1f );
+                        // 拍線
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節線と拍線を表示する )
+                        {
+                            float 上位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx - 1f );   // -1f は拍線の厚みの半分。
+                            dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._拍線色, strokeWidth: 1f );
+                        }
                     }
 
                 } );
