@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using CSCore;
 using CSCore.DSP;
@@ -8,10 +9,10 @@ using CSCore.DSP;
 namespace FDK
 {
     /// <summary>
-    ///		指定されたメディアファイルを PCM WAVE としてデコードして、<see cref="CSCore.IWaveSource"/> オブジェクトを生成する。
-    ///		リサンプラーあり版。
+    ///		指定されたメディアファイルをデコードし、リサンプルして、
+    ///		<see cref="CSCore.IWaveSource"/> オブジェクトを生成する。
     /// </summary>
-    public class WavResampledOnMemoryWaveSource : IWaveSource
+    public class ResampledOnMemoryWaveSource : IWaveSource
     {
         public bool CanSeek => true;    // オンメモリなので常にサポートできる。
 
@@ -21,25 +22,27 @@ namespace FDK
         public WaveFormat WaveFormat { get; protected set; } = null;
 
         /// <summary>
-        ///		デコード後のオーディオデータのすべての長さ[byte]。
-        /// </summary>
-        public long Length => this._DecodedWaveData.Length;
-
-        /// <summary>
         ///		現在の再生位置[byte]。
         /// </summary>
         public long Position
         {
-            get => this._Position;
-            set => this._Position = FDKUtilities.位置をブロック境界単位にそろえて返す( value, this.WaveFormat.BlockAlign );
+            get
+                => this._Position;
+            set
+                => this._Position = FDKUtilities.位置をブロック境界単位にそろえて返す( value, this.WaveFormat.BlockAlign );
         }
+
+        /// <summary>
+        ///		デコード後のオーディオデータのすべての長さ[byte]。
+        /// </summary>
+        public long Length => this._DecodedWaveData.Length;
 
 
         /// <summary>
-        ///		コンストラクタ。
-        ///		指定されたWAVファイルを指定されたフォーマットでデコードし、内部にオンメモリで保管する。
+        ///     コンストラクタ。
+        ///     指定された <see cref="IWaveSource"/> をリサンプルする。
         /// </summary>
-        public WavResampledOnMemoryWaveSource( VariablePath ファイルパス, WaveFormat deviceFormat )
+        public ResampledOnMemoryWaveSource( IWaveSource waveSource, WaveFormat deviceFormat )
         {
             this.WaveFormat = new WaveFormat(
                 deviceFormat.SampleRate,
@@ -47,9 +50,7 @@ namespace FDK
                 deviceFormat.Channels,
                 AudioEncoding.IeeeFloat );
 
-            // リサンプルなし版で生成して、それを this.WaveFormat に合わせてリサンプルしたデータ(byte[])を保管する。
-            using( var wavSource = new WavOnMemoryWaveSource( ファイルパス, deviceFormat ) )
-            using( var resampler = new DmoResampler( wavSource, this.WaveFormat ) )
+            using( var resampler = new DmoResampler( waveSource, this.WaveFormat ) )
             {
                 // resampler.Length はサンプル単位ではなくフレーム単位。
                 var サイズbyte = resampler.Length * resampler.WaveFormat.Channels; // 実際のサイズはチャンネル倍ある。
@@ -57,6 +58,14 @@ namespace FDK
                 this._DecodedWaveData = new byte[ サイズbyte ];
                 resampler.Read( this._DecodedWaveData, 0, (int) サイズbyte );  // でもこっちはバイト単位。
             }
+        }
+
+        /// <summary>
+        ///		解放する。
+        /// </summary>
+        public void Dispose()
+        {
+            this._DecodedWaveData = null;
         }
 
         /// <summary>
@@ -92,14 +101,9 @@ namespace FDK
             return count;
         }
 
-        public void Dispose()
-        {
-            this._DecodedWaveData = null;
-        }
-
-
-        private byte[] _DecodedWaveData = null;
 
         private long _Position = 0;
+
+        private byte[] _DecodedWaveData = null;
     }
 }

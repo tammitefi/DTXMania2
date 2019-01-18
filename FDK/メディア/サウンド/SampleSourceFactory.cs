@@ -34,8 +34,11 @@ namespace FDK
                 {
                     using( var audioStream = new FileStream( ファイルパス.変数なしパス, FileMode.Open, FileAccess.Read ) )
                     {
-                        return new NVorbisResampledOnMemoryWaveSource( audioStream, device.WaveFormat )
-                            .ToSampleSource();
+                        // ファイルを読み込んで IWaveSource を生成。
+                        var waveSource = new NVorbisOnStreamingSampleSource( audioStream, device.WaveFormat ).ToWaveSource();
+
+                        // IWaveSource をリサンプルして ISampleSource を生成。
+                        return new ResampledOnMemoryWaveSource( waveSource, device.WaveFormat ).ToSampleSource();
                     }
                 }
                 catch
@@ -51,8 +54,11 @@ namespace FDK
                 //----------------
                 try
                 {
-                    return new WavResampledOnMemoryWaveSource( ファイルパス, device.WaveFormat )
-                        .ToSampleSource();
+                    // ファイルを読み込んで IWaveSource を生成。
+                    var waveSource = new WavOnMemoryWaveSource( ファイルパス, device.WaveFormat );
+
+                    // IWaveSource をリサンプルして ISampleSource を生成。
+                    return new ResampledOnMemoryWaveSource( waveSource, device.WaveFormat ).ToSampleSource();
                 }
                 catch
                 {
@@ -67,8 +73,11 @@ namespace FDK
                 //----------------
                 try
                 {
-                    return new XaResampledOnMemoryWaveSource( ファイルパス, device.WaveFormat )
-                        .ToSampleSource();
+                    // ファイルを読み込んで IWaveSource を生成。
+                    var waveSource = new XAOnMemoryWaveSource( ファイルパス, device.WaveFormat );
+
+                    // IWaveSource をリサンプルして ISampleSource を生成。
+                    return new ResampledOnMemoryWaveSource( waveSource, device.WaveFormat ).ToSampleSource();
                 }
                 catch
                 {
@@ -83,25 +92,11 @@ namespace FDK
                 //----------------
                 try
                 {
-                    var fi = new FileInfo( ファイルパス.変数なしパス );
+                    // ファイルを読み込んで IWaveSource を生成。
+                    var waveSource = new MediaFoundationOnMemoryWaveSource( ファイルパス, device.WaveFormat );
 
-                    /*
-                    if( 1 * 1024 * 1024 < fi.Length )   // 1MB 以上ならストリーミング再生
-                    {
-                        return new MediaFoundationOnStreamingWaveSource( ファイルパス, device.WaveFormat )
-                            .ToSampleSource();
-                    }
-                    else
-                    {
-                        return new MediaFoundationOnMemoryWaveSource( ファイルパス, device.WaveFormat )
-                            .ToSampleSource();
-                    }
-                    */
-
-                    // すべてオンメモリ
-                    return new MediaFoundationOnMemoryWaveSource( ファイルパス, device.WaveFormat )
-                        .ToSampleSource();
-
+                    // IWaveSource をリサンプルして ISampleSource を生成。
+                    return new ResampledOnMemoryWaveSource( waveSource, device.WaveFormat ).ToSampleSource();
                 }
                 catch
                 {
