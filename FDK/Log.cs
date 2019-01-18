@@ -101,11 +101,14 @@ namespace FDK
 
                         switch( _Win10Version )
                         {
+                            // https://ja.wikipedia.org/wiki/Microsoft_Windows_10#%E5%8D%8A%E6%9C%9F%E3%83%81%E3%83%A3%E3%83%8D%E3%83%AB%EF%BC%88%E3%82%BF%E3%83%BC%E3%82%B2%E3%83%83%E3%83%88%E6%8C%87%E5%AE%9A%EF%BC%89%EF%BC%8F_Current_Branch(CB)
                             case "1507": _Win10Version += "(Released in July 2015)"; break;
                             case "1511": _Win10Version += "(November Update)"; break;
                             case "1607": _Win10Version += "(Anniversary Update)"; break;
                             case "1703": _Win10Version += "(Creators Update)"; break;
                             case "1709": _Win10Version += "(Fall Creators Update)"; break;
+                            case "1803": _Win10Version += "(April 2018 Update)"; break;
+                            case "1809": _Win10Version += "(October 2018 Update)"; break;
                         }
                     }
                 }
@@ -130,7 +133,8 @@ namespace FDK
                                 ( r < 394802 ) ? "4.6.1" :
                                 ( r < 460798 ) ? "4.6.2" :
                                 ( r < 461308 ) ? "4.7" :
-                                "4.7.1以降"
+                                ( r < 461808 ) ? "4.7.1" :
+                                "4.7.2以降"
                                 + $" ({r})";
                         }
                     }
