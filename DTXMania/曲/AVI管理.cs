@@ -40,7 +40,7 @@ namespace DTXMania.曲
         /// <summary>
         ///		指定したAVI番号に動画ファイルを登録する。
         /// </summary>
-        public void 登録する( int AVI番号, VariablePath 動画ファイルの絶対パス )
+        public void 登録する( int AVI番号, VariablePath 動画ファイルの絶対パス, double 再生速度 = 1.0 )
         {
             #region " パラメータチェック "
             //----------------
@@ -60,7 +60,7 @@ namespace DTXMania.曲
                 this._動画リスト[ AVI番号 ].Dispose();
 
             // 新しいVideoを生成して登録する。
-            this._動画リスト[ AVI番号 ] = new Video( 動画ファイルの絶対パス );
+            this._動画リスト[ AVI番号 ] = new Video( 動画ファイルの絶対パス, 再生速度 );
         }
 
 

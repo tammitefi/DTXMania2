@@ -21,9 +21,13 @@ namespace FDK
 
         public bool ループ再生する { get; set; } = false;
 
+        public double 再生速度 { get; protected set; } = 1.0;
 
-        public MediaFoundationFileVideoSource( VariablePath ファイルパス )
+
+        public MediaFoundationFileVideoSource( VariablePath ファイルパス, double 再生速度 = 1.0 )
         {
+            this.再生速度 = Math.Max( 0.01, Math.Min( 10.0, 再生速度 ) );
+
             #region " フレームキューを生成。"
             //----------------
             // キューサイズは3フレームとする。
@@ -57,8 +61,10 @@ namespace FDK
 
             #region " ビデオの長さを取得する。"
             //----------------
-            this.総演奏時間sec = FDKUtilities.変換_100ns単位からsec単位へ(
-                this._SourceReaderEx.GetPresentationAttribute( SourceReaderIndex.MediaSource, PresentationDescriptionAttributeKeys.Duration ) );
+            this.総演奏時間sec = 
+                FDKUtilities.変換_100ns単位からsec単位へ(
+                    this._SourceReaderEx.GetPresentationAttribute( SourceReaderIndex.MediaSource, PresentationDescriptionAttributeKeys.Duration ) ) /
+                    this.再生速度;
             //----------------
             #endregion
 
@@ -118,7 +124,7 @@ namespace FDK
             this._デコード起動完了通知 = new ManualResetEvent( false );
 
             // (1) デコードタスク起動、デコード開始。
-            this._デコードタスク = Task.Factory.StartNew( this._デコードタスクエントリ, 再生開始時刻sec, this._デコードキャンセル.Token );
+            this._デコードタスク = Task.Factory.StartNew( this._デコードタスクエントリ, (再生開始時刻sec, this.再生速度), this._デコードキャンセル.Token );
 
             // (2) デコードから完了通知がくるまでブロック。
             this._デコード起動完了通知.WaitOne();
@@ -213,12 +219,18 @@ namespace FDK
         private ManualResetEvent _デコード起動完了通知 = null;
 
 
-        private void _デコードタスクエントリ( object obj再生開始時刻sec )
+        private void _デコードタスクエントリ( object obj引数 )
         {
             Log.現在のスレッドに名前をつける( "ビデオデコード" );
 
-            double 再生開始時刻sec = Math.Max( 0.0, (double) obj再生開始時刻sec );
+
+            var 引数 = ((double 再生開始時刻sec, double 再生速度)) obj引数;
+
+            double 再生速度 = Math.Max( 0.01, Math.Min( 10.0, 引数.再生速度 ) );
+            double 再生開始時刻sec = Math.Max( 0.0, 引数.再生開始時刻sec ) / 再生速度;
+
             long 再生開始時刻100ns = FDKUtilities.変換_sec単位から100ns単位へ( 再生開始時刻sec );
+
 
             #region " 再生開始時刻までシーク(1)。"
             //----------------
@@ -257,7 +269,7 @@ namespace FDK
                 }
 
 
-                if( !this._サンプルをひとつデコードしてフレームをキューへ格納する() )
+                if( !this._サンプルをひとつデコードしてフレームをキューへ格納する( 再生速度 ) )
                     break;  // エラーまたは再生終了
 
 
@@ -293,7 +305,7 @@ namespace FDK
         /// <returns>
         ///		格納できた場合は true、エラーあるいは再生終了なら false。
         ///	</returns>
-        private bool _サンプルをひとつデコードしてフレームをキューへ格納する()
+        private bool _サンプルをひとつデコードしてフレームをキューへ格納する( double 再生速度 )
         {
             // SourceReaderEx から次のサンプルをひとつデコードする。
 
@@ -308,15 +320,15 @@ namespace FDK
             {
                 Log.Info( $"ストリームが終了しました。" );
 
-                if( this.ループ再生する )
+                if( this.ループ再生する )                                                       // ループするなら、
                 {
                     Log.Info( $"ループ再生します。" );
-                    this._SourceReaderEx.SetCurrentPosition( 0 );                       // 先頭に戻って
-                    return _サンプルをひとつデコードしてフレームをキューへ格納する();   // もう一回。
+                    this._SourceReaderEx.SetCurrentPosition( 0 );                               // 先頭に戻って
+                    return _サンプルをひとつデコードしてフレームをキューへ格納する( 再生速度 ); // もう一回。
                 }
                 else
                 {
-                    return false;  // 再生終了
+                    return false;  // ループしないなら再生終了
                 }
             }
             if( ストリームフラグ.HasFlag( SourceReaderFlags.Error ) ||
@@ -336,7 +348,7 @@ namespace FDK
                 new VideoFrame() {
                     Sample = サンプル,
                     Bitmap = this.サンプルからビットマップを取得する( サンプル ),
-                    表示時刻100ns = サンプルの表示時刻100ns,
+                    表示時刻100ns = (long)(サンプルの表示時刻100ns / 再生速度 ),
                 } );
 
             return true;    // 格納した

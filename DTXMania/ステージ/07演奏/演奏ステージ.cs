@@ -184,7 +184,7 @@ namespace DTXMania.ステージ.演奏
                 foreach( var kvp in App.演奏スコア.AVIリスト )
                 {
                     var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value );
-                    App.AVI管理.登録する( kvp.Key, path );
+                    App.AVI管理.登録する( kvp.Key, path, App.ユーザ管理.ログオン中のユーザ.再生速度 );
                 }
             }
 

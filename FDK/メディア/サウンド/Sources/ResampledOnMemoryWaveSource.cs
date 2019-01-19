@@ -42,21 +42,29 @@ namespace FDK
         ///     コンストラクタ。
         ///     指定された <see cref="IWaveSource"/> をリサンプルする。
         /// </summary>
-        public ResampledOnMemoryWaveSource( IWaveSource waveSource, WaveFormat deviceFormat )
+        public ResampledOnMemoryWaveSource( IWaveSource waveSource, WaveFormat deviceFormat, double 再生速度 = 1.0 )
         {
+            // サウンドデバイスには、それに合わせたサンプルレートで報告する。
             this.WaveFormat = new WaveFormat(
                 deviceFormat.SampleRate,
                 32,
                 deviceFormat.Channels,
                 AudioEncoding.IeeeFloat );
 
-            using( var resampler = new DmoResampler( waveSource, this.WaveFormat ) )
+            // しかしサウンドデータは、指定された再生速度を乗したサンプルレートで生成する。
+            var waveFormtForResampling = new WaveFormat(
+                (int) ( this.WaveFormat.SampleRate / 再生速度 ),
+                this.WaveFormat.BitsPerSample,
+                this.WaveFormat.Channels,
+                AudioEncoding.IeeeFloat );
+
+            using( var resampler = new DmoResampler( waveSource, waveFormtForResampling ) )
             {
                 // resampler.Length はサンプル単位ではなくフレーム単位。
                 var サイズbyte = resampler.Length * resampler.WaveFormat.Channels; // 実際のサイズはチャンネル倍ある。
 
                 this._DecodedWaveData = new byte[ サイズbyte ];
-                resampler.Read( this._DecodedWaveData, 0, (int) サイズbyte );  // でもこっちはバイト単位。
+                resampler.Read( this._DecodedWaveData, 0, (int) サイズbyte );      // でもこっちはバイト単位。
             }
         }
 

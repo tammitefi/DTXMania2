@@ -173,6 +173,9 @@ namespace DTXMania.ステージ.曲読み込み
 
                 foreach( var chip in App.演奏スコア.チップリスト )
                 {
+                    chip.発声時刻sec /= App.ユーザ管理.ログオン中のユーザ.再生速度;
+                    chip.描画時刻sec /= App.ユーザ管理.ログオン中のユーザ.再生速度;
+
                     chip.発声時刻sec -= App.サウンドデバイス.再生遅延sec;
                 }
 

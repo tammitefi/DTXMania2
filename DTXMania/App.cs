@@ -167,7 +167,7 @@ namespace DTXMania
                 App.曲ツリー = new 曲ツリー();
 
                 App.WAVキャッシュレンタル = new キャッシュデータレンタル<CSCore.ISampleSource>() {
-                    ファイルからデータを生成する = ( path ) => SampleSourceFactory.Create( App.サウンドデバイス, path ),
+                    ファイルからデータを生成する = ( path ) => SampleSourceFactory.Create( App.サウンドデバイス, path, App.ユーザ管理.ログオン中のユーザ.再生速度 ),
                 };
 
                 // 以下は選曲されるまで null
