@@ -175,7 +175,7 @@ namespace DTXMania.ステージ.演奏
                 foreach( var kvp in App.演奏スコア.AVIリスト )
                 {
                     var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value );
-                    App.AVI管理.登録する( kvp.Key, path );
+                    App.AVI管理.登録する( kvp.Key, path, App.ユーザ管理.ログオン中のユーザ.再生速度 );
                 }
             }
 
@@ -1029,7 +1029,11 @@ namespace DTXMania.ステージ.演奏
                 }
 
                 this._判定文字列.表示を開始する( 対応表.表示レーン種別, judge );
-                this.成績.ヒット数を加算する( judge );
+
+                var ドラムチッププロパティ = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ];
+                var AutoPlay = App.ユーザ管理.ログオン中のユーザ.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
+
+                this.成績.ヒット数を加算する( judge, AutoPlay );
                 //----------------
                 #endregion
             }

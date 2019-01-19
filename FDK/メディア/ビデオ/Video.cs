@@ -14,12 +14,15 @@ namespace FDK
 
         public bool 再生中 { get; protected set; } = false;
 
+        public double 再生速度 { get; protected set; } = 1.0;
 
-        public Video( VariablePath ファイルパス )
+
+        public Video( VariablePath ファイルパス, double 再生速度 = 1.0 )
         {
+            this.再生速度 = 再生速度;
             try
             {
-                this._VideoSource = new MediaFoundationFileVideoSource( ファイルパス );
+                this._VideoSource = new MediaFoundationFileVideoSource( ファイルパス, 再生速度 );
             }
             catch
             {
@@ -31,8 +34,10 @@ namespace FDK
             this._ファイルから生成した = true;
         }
 
-        public Video( IVideoSource videoSource )
+        public Video( IVideoSource videoSource, double 再生速度 = 1.0 )
         {
+            this.再生速度 = 再生速度;
+
             this._VideoSource = videoSource;
             this._ファイルから生成した = false;
         }

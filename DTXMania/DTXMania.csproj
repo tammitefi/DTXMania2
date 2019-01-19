@@ -211,6 +211,7 @@
     <Compile Include="アイキャッチ\シャッター.cs" />
     <Compile Include="アイキャッチ\半回転黒フェード.cs" />
     <Compile Include="ステージ\05オプション設定\パネル_整数.cs" />
+    <Compile Include="ステージ\05オプション設定\パネル_倍率.cs" />
     <Compile Include="ステージ\05オプション設定\曲読み込みフォルダ割り当てダイアログ.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -225,6 +226,8 @@
     </Compile>
     <Compile Include="ステージ\07演奏\ヒットバー.cs" />
     <Compile Include="ステージ\07演奏\演奏ステージ_ビュアーモード.cs" />
+    <Compile Include="ステージ\08結果\ランク.cs" />
+    <Compile Include="ステージ\08結果\ランク種別.cs" />
     <Compile Include="ステージ\ステージ.cs" />
     <Compile Include="ステージ\ステージ管理.cs" />
     <Compile Include="ステージ\02タイトル\タイトルステージ.cs" />
@@ -268,7 +271,6 @@
     <Compile Include="ステージ\05オプション設定\パネル_フォルダ.cs" />
     <Compile Include="ステージ\05オプション設定\パネル_ONOFFトグル.cs" />
     <Compile Include="ステージ\05オプション設定\パネル_文字列リスト.cs" />
-    <Compile Include="ステージ\05オプション設定\パネル_譜面スピード.cs" />
     <Compile Include="ステージ\05オプション設定\パネルリスト.cs" />
     <Compile Include="ステージ\05オプション設定\オプション設定ステージ.cs" />
     <Compile Include="ステージ\03認証\ユーザリスト.cs" />
@@ -295,7 +297,8 @@
     <Compile Include="設定\データベース\ユーザ\old\User03.cs" />
     <Compile Include="設定\データベース\ユーザ\old\User04.cs" />
     <Compile Include="設定\データベース\ユーザ\old\User05.cs" />
-    <Compile Include="設定\データベース\ユーザ\User08.cs" />
+    <Compile Include="設定\データベース\ユーザ\old\User08.cs" />
+    <Compile Include="設定\データベース\ユーザ\User09.cs" />
     <Compile Include="設定\データベース\ユーザ\old\User07.cs" />
     <Compile Include="設定\データベース\曲\old\Song01.cs" />
     <Compile Include="設定\データベース\曲\old\Song02.cs" />
@@ -860,7 +863,29 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="System\Images\結果\リザルトA.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\結果\リザルトB.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\結果\リザルトC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\結果\リザルトD.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\結果\リザルトE.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\結果\リザルトS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\結果\リザルトSS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

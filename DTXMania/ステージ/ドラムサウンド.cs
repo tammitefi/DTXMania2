@@ -193,7 +193,7 @@ namespace DTXMania.ステージ
 
                 // サウンドファイルを読み込んでデコードする。
 
-                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス );
+                context.SampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルパス, 1.0 ); // ドラムサウンドは常に 1.0
 
                 if( null == context.SampleSource )
                 {

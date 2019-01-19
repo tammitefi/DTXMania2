@@ -83,7 +83,8 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     このファイルをソースとして、<see cref="チップ種別.背景動画"/> のチップで動画が再生される。
-        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画はAVIリスト、音声はWAVリストを使用する。
+        ///     SSTFから変換された場合には、このフィールドに格納されたファイルは、#AVI01（固定）として <see cref="AVIリスト"/> にも登録される。
+        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画は<see cref="AVIリスト"/>、音声は<see cref="WAVリスト"/>を使用する。
         /// </remarks>
         public string BGVファイル名 { get; set; }
 
@@ -93,7 +94,8 @@ namespace SSTFormat.v4
         /// </summary>
         /// <remarks>
         ///     このファイルをソースとして、<see cref="チップ種別.BGM"/> のチップで音声が再生される。
-        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画はAVIリスト、音声はWAVリストを使用する。
+        ///     SSTFから変換された場合には、このフィールドに格納されたファイルは、#WAV01（固定）として <see cref="WAVリスト"/> にも登録される。
+        ///     DTX他から変換された場合には、このフィールドは未使用（nullまたは空文字列）→ 動画は<see cref="AVIリスト"/>、音声は<see cref="WAVリスト"/>を使用する。
         /// </remarks>
         public string BGMファイル名 { get; set; }
 

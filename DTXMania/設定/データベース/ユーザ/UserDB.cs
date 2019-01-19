@@ -7,15 +7,7 @@ using FDK;
 
 namespace DTXMania.データベース.ユーザ
 {
-    using User01 = old.User01;
-    using User02 = old.User02;
-    using User03 = old.User03;
-    using User04 = old.User04;
-    using User05 = old.User05;
-    using User06 = old.User06;
-    using User07 = old.User07;
-
-    using User = User08;        // 最新バージョンを指定（１／２）
+    using User = User09;        // 最新バージョンを指定（１／２）
     using Record = Record06;    //
 
     /// <summary>
@@ -23,7 +15,7 @@ namespace DTXMania.データベース.ユーザ
     /// </summary>
     class UserDB : SQLiteDBBase
     {
-        public const long VERSION = 8;  // 最新バージョンを指定（２／２）
+        public const long VERSION = 9;  // 最新バージョンを指定（２／２）
 
         public static readonly VariablePath ユーザDBファイルパス = @"$(AppData)UserDB.sqlite3";
 
@@ -79,7 +71,7 @@ namespace DTXMania.データベース.ユーザ
                         try
                         {
                             // テータベースをアップデートしてデータを移行する。
-                            this.DataContext.ExecuteCommand( $"CREATE TABLE new_Users {User02.ColumnsList}" );
+                            this.DataContext.ExecuteCommand( $"CREATE TABLE new_Users {old.User02.ColumnsList}" );
                             this.DataContext.ExecuteCommand( "INSERT INTO new_Users SELECT Id,Name,ScrollSpeed,Fullscreen,AutoPlay_LeftCymbal,AutoPlay_HiHat,AutoPlay_LeftPedal,AutoPlay_Snare,AutoPlay_Bass,AutoPlay_HighTom,AutoPlay_LowTom,AutoPlay_FloorTom,AutoPlay_RightCymbal,MaxRange_Perfect,MaxRange_Great,MaxRange_Good,MaxRange_Ok,CymbalFree FROM Users" );
                             this.DataContext.ExecuteCommand( "DROP TABLE Users" );
                             this.DataContext.ExecuteCommand( "ALTER TABLE new_Users RENAME TO Users" );
@@ -270,6 +262,39 @@ namespace DTXMania.データベース.ユーザ
                         {
                             // データベースにカラム BackgroundMovie を追加する。
                             this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN BackgroundMovie INTEGER NOT NULL DEFAULT 1" );
+                            this.DataContext.SubmitChanges();
+
+                            // 成功。
+                            transaction.Commit();
+                            this.DataContext.ExecuteCommand( "VACUUM" );    // Vacuum はトランザクションの外で。
+                            this.DataContext.SubmitChanges();
+                            Log.Info( $"Users テーブルをアップデートしました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                        catch
+                        {
+                            // 失敗。
+                            transaction.Rollback();
+                            throw new Exception( $"Users テーブルのアップデートに失敗しました。[{移行元DBバージョン}→{移行元DBバージョン + 1}]" );
+                        }
+                    }
+                    //----------------
+                    #endregion
+                    break;
+
+                case 8:
+                    #region " 8 → 9 "
+                    //----------------
+                    // 変更点:
+                    // ・Users テーブルに PlaySpeed, ShowPartLine, ShorPartNumber を追加。
+                    this.DataContext.SubmitChanges();
+                    using( var transaction = this.Connection.BeginTransaction() )
+                    {
+                        try
+                        {
+                            // データベースにカラムを追加する。
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN PlaySpeed READ NOT NULL DEFAULT 1.0" );
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN ShowPartLine INTEGER NOT NULL DEFAULT 1" );
+                            this.DataContext.ExecuteCommand( "ALTER TABLE Users ADD COLUMN ShowPartNumber INTEGER NOT NULL DEFAULT 1" );
                             this.DataContext.SubmitChanges();
 
                             // 成功。

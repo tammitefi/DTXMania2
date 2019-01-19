@@ -71,7 +71,7 @@ namespace DTXMania.設定
                         continue;
                     }
 
-                    var sampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルの絶対パス );
+                    var sampleSource = SampleSourceFactory.Create( App.サウンドデバイス, サウンドファイルの絶対パス, 1.0 );  // システムサウンドは常に再生速度 = 1.0
                     if( null == sampleSource )
                         throw new Exception( $"システムサウンドの読み込みに失敗しました。[{サウンドファイルの絶対パス.変数付きパス}]" );
 

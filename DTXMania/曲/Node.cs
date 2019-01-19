@@ -197,7 +197,7 @@ namespace DTXMania.曲
                 return; // 指定なし
 
             if( null == this._プレビュー音声ソース )  // 未生成の場合
-                this._プレビュー音声ソース = SampleSourceFactory.Create( App.サウンドデバイス, new VariablePath( this.プレビュー音声ファイルの絶対パス ).変数なしパス );
+                this._プレビュー音声ソース = SampleSourceFactory.Create( App.サウンドデバイス, new VariablePath( this.プレビュー音声ファイルの絶対パス ).変数なしパス, 1.0 );   // プレビューは常に再生速度 = 1.0
 
             if( null != this._プレビュー音声ソース )
                 this._プレビュー音声 = new Sound( App.サウンドデバイス, this._プレビュー音声ソース );

@@ -13,15 +13,17 @@ namespace DTXMania.ステージ.演奏.Tests
         [TestMethod()]
         public void 判定toヒット数割合Test()
         {
+            // このテストがすべて合格するような計算式を確立する。
+
             #region " 実サンプル1 "
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 48 );
-                result.ヒット数を加算する( 判定種別.GREAT, 1 );
-                result.ヒット数を加算する( 判定種別.GOOD, 0 );
-                result.ヒット数を加算する( 判定種別.OK, 0 );
-                result.ヒット数を加算する( 判定種別.MISS, 0 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 48 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 1 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 0 );
+                result.ヒット数を加算する( 判定種別.OK, false, 0 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 0 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 97, dic[ 判定種別.PERFECT ] );
@@ -36,11 +38,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 49 );
-                result.ヒット数を加算する( 判定種別.GREAT, 1 );
-                result.ヒット数を加算する( 判定種別.GOOD, 0 );
-                result.ヒット数を加算する( 判定種別.OK, 0 );
-                result.ヒット数を加算する( 判定種別.MISS, 0 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 49 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 1 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 0 );
+                result.ヒット数を加算する( 判定種別.OK, false, 0 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 0 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 98, dic[ 判定種別.PERFECT ] );
@@ -55,11 +57,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 90 );
-                result.ヒット数を加算する( 判定種別.GREAT, 1 );
-                result.ヒット数を加算する( 判定種別.GOOD, 0 );
-                result.ヒット数を加算する( 判定種別.OK, 0 );
-                result.ヒット数を加算する( 判定種別.MISS, 0 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 90 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 1 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 0 );
+                result.ヒット数を加算する( 判定種別.OK, false, 0 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 0 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 98, dic[ 判定種別.PERFECT ] );
@@ -74,11 +76,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 90 );
-                result.ヒット数を加算する( 判定種別.GREAT, 2 );
-                result.ヒット数を加算する( 判定種別.GOOD, 0 );
-                result.ヒット数を加算する( 判定種別.OK, 0 );
-                result.ヒット数を加算する( 判定種別.MISS, 0 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 90 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 2 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 0 );
+                result.ヒット数を加算する( 判定種別.OK, false, 0 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 0 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 97, dic[ 判定種別.PERFECT ] );
@@ -93,11 +95,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 148 );
-                result.ヒット数を加算する( 判定種別.GREAT, 2 );
-                result.ヒット数を加算する( 判定種別.GOOD, 0 );
-                result.ヒット数を加算する( 判定種別.OK, 0 );
-                result.ヒット数を加算する( 判定種別.MISS, 1 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 148 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 2 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 0 );
+                result.ヒット数を加算する( 判定種別.OK, false, 0 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 1 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 98, dic[ 判定種別.PERFECT ] );
@@ -112,11 +114,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 883 );
-                result.ヒット数を加算する( 判定種別.GREAT, 19 );
-                result.ヒット数を加算する( 判定種別.GOOD, 2 );
-                result.ヒット数を加算する( 判定種別.OK, 2 );
-                result.ヒット数を加算する( 判定種別.MISS, 1 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 883 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 19 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 2 );
+                result.ヒット数を加算する( 判定種別.OK, false, 2 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 1 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 97, dic[ 判定種別.PERFECT ] );
@@ -131,11 +133,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 1397 );
-                result.ヒット数を加算する( 判定種別.GREAT, 36 );
-                result.ヒット数を加算する( 判定種別.GOOD, 1 );
-                result.ヒット数を加算する( 判定種別.OK, 1 );
-                result.ヒット数を加算する( 判定種別.MISS, 2 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 1397 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 36 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 1 );
+                result.ヒット数を加算する( 判定種別.OK, false, 1 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 2 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 97, dic[ 判定種別.PERFECT ] );
@@ -150,11 +152,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 1397 );
-                result.ヒット数を加算する( 判定種別.GREAT, 36 );
-                result.ヒット数を加算する( 判定種別.GOOD, 1 );
-                result.ヒット数を加算する( 判定種別.OK, 1 );
-                result.ヒット数を加算する( 判定種別.MISS, 2 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 1397 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 36 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 1 );
+                result.ヒット数を加算する( 判定種別.OK, false, 1 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 2 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 97, dic[ 判定種別.PERFECT ] );
@@ -169,11 +171,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 1055 );
-                result.ヒット数を加算する( 判定種別.GREAT, 41 );
-                result.ヒット数を加算する( 判定種別.GOOD, 3 );
-                result.ヒット数を加算する( 判定種別.OK, 0 );
-                result.ヒット数を加算する( 判定種別.MISS, 3 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 1055 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 41 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 3 );
+                result.ヒット数を加算する( 判定種別.OK, false, 0 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 3 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 95, dic[ 判定種別.PERFECT ] );
@@ -188,11 +190,11 @@ namespace DTXMania.ステージ.演奏.Tests
             //----------------
             {
                 var result = new 成績();
-                result.ヒット数を加算する( 判定種別.PERFECT, 403 );
-                result.ヒット数を加算する( 判定種別.GREAT, 10 );
-                result.ヒット数を加算する( 判定種別.GOOD, 1 );
-                result.ヒット数を加算する( 判定種別.OK, 3 );
-                result.ヒット数を加算する( 判定種別.MISS, 5 );
+                result.ヒット数を加算する( 判定種別.PERFECT, false, 403 );
+                result.ヒット数を加算する( 判定種別.GREAT, false, 10 );
+                result.ヒット数を加算する( 判定種別.GOOD, false, 1 );
+                result.ヒット数を加算する( 判定種別.OK, false, 3 );
+                result.ヒット数を加算する( 判定種別.MISS, false, 5 );
 
                 var dic = result.判定toヒット割合;
                 Assert.AreEqual( 95, dic[ 判定種別.PERFECT ] );

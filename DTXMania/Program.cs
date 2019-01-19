@@ -80,24 +80,28 @@ namespace DTXMania
 
                 if( ビュアーモードである )
                 {
+                    // (A) ビュアーモードの場合、DTXManiaのWCFサービスがすでに存在しているか否かで処理分岐。
+
                     if( _WCFサービスを取得する( 1, out var factory, out var service, out var serviceChannel ) )
                     {
-                        // (A) 取得できた　→　すでに起動しているアプリへ処理を委託。
+                        // (A-a) 取得できた　→　すでに起動しているアプリへ処理を委託し、自分は終了。
                         _起動済みのアプリケーションに処理を委託する( service, options );
                         _WCFサービスを解放する( factory, service, serviceChannel );
                     }
                     else
                     {
-                        // (B) 取得失敗　→　自分がビュアーとして起動し、処理を自分へ委託。
+                        // (A-b) 取得失敗　→　自分がビュアーとして起動し、処理を自分へ委託。
                         _アプリケーションをビュアーモードで起動する( options );
                     }
                 }
                 else
                 {
-                    // (C) 通常起動する。
+                    // (B) 通常起動する。
                     _アプリケーションを通常起動する();
                 }
             }
+
+            // Release 時には、未処理の例外をキャッチしたらダイアログを表示する。
 #if !DEBUG
             catch( Exception e )
             {
@@ -114,7 +118,7 @@ namespace DTXMania
 #else
             finally
             {
-                // DEBUG 時には、未処理の例外が発出されてもcatchしない。（デバッガでキャッチすることを想定。）
+                // DEBUG 時には、未処理の例外が発出されても無視。（デバッガでキャッチすることを想定。）
             }
 #endif
         }

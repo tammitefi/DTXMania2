@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using FDK;
 
-namespace DTXMania.データベース.ユーザ
+namespace DTXMania.データベース.ユーザ.old
 {
     /// <summary>
     ///		ユーザテーブルのエンティティクラス。
