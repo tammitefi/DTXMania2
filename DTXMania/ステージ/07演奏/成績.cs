@@ -5,6 +5,7 @@ using System.Linq;
 using FDK;
 using SSTFormatCurrent = SSTFormat.v4;
 using DTXMania.設定;
+using DTXMania.ステージ.結果;
 
 using Record = DTXMania.データベース.ユーザ.Record06;
 
@@ -41,6 +42,8 @@ namespace DTXMania.ステージ.演奏
         /// </summary>
         public IReadOnlyDictionary<判定種別, int> 判定toヒット割合 => this._ヒット割合を算出して返す();
 
+        public ランク種別 ランク { get; protected set; } = ランク種別.E;
+
 
         public 成績()
         {
@@ -53,10 +56,12 @@ namespace DTXMania.ステージ.演奏
                 this.総ノーツ数 = 0;
 
                 this._判定toヒット数 = new Dictionary<判定種別, int>();
+                this._判定toヒット数Auto含まない = new Dictionary<判定種別, int>();
                 this._最後にスコアを更新したときの判定toヒット数 = new Dictionary<判定種別, int>();
                 foreach( 判定種別 judge in Enum.GetValues( typeof( 判定種別 ) ) )
                 {
                     this._判定toヒット数.Add( judge, 0 );
+                    this._判定toヒット数Auto含まない.Add( judge, 0 );
                     this._最後にスコアを更新したときの判定toヒット数.Add( judge, 0 );
                 }
 
@@ -76,10 +81,15 @@ namespace DTXMania.ステージ.演奏
         /// <summary>
         ///		ヒット数を加算し、各プロパティを更新する。
         /// </summary>
-        public void ヒット数を加算する( 判定種別 judge, int 加算値 = 1 )
+        public void ヒット数を加算する( 判定種別 judge, bool auto, int 加算値 = 1 )
         {
             // (1) ヒット数を加算する。
-            this._判定toヒット数[ judge ] += 加算値;
+            {
+                this._判定toヒット数[ judge ] += 加算値;
+
+                if( !auto )
+                    this._判定toヒット数Auto含まない[ judge ] += 加算値;
+            }
 
             // (2) コンボを加算する。
             {
@@ -117,6 +127,33 @@ namespace DTXMania.ステージ.演奏
             this.Skill = (float) ( Math.Floor( 100.0 * ( ( this.Achievement * this._譜面レベル * 20.0 ) / 100.0 ) ) / 100.0 );       // 小数第3位以下切り捨て
 
             // (6) エキサイトゲージ → ここからは呼び出さない。（AutoPlayと区別がつかないため）
+
+            // (7) ランクを更新する。
+            {
+                int Perfect = this._判定toヒット数Auto含まない[ 判定種別.PERFECT ];
+                int Great = this._判定toヒット数Auto含まない[ 判定種別.GREAT ];
+                int Good = this._判定toヒット数Auto含まない[ 判定種別.GOOD ];
+                int Ok = this._判定toヒット数Auto含まない[ 判定種別.OK ];
+                int Miss = this._判定toヒット数Auto含まない[ 判定種別.MISS ];
+                int Total = Perfect + Great + Good + Ok + Miss;
+
+                if( 0 == Total )
+                {
+                    this.ランク = ランク種別.SS;    // 全AUTOならSS
+                }
+                else
+                {
+                    var rate = ( (double) ( Perfect + Great ) ) / ( (double) Total );
+
+                    this.ランク =
+                        ( 1.00 == rate ) ? ランク種別.SS :
+                        ( 0.95 <= rate ) ? ランク種別.S :
+                        ( 0.90 <= rate ) ? ランク種別.A :
+                        ( 0.85 <= rate ) ? ランク種別.B :
+                        ( 0.80 <= rate ) ? ランク種別.C :
+                        ( 0.70 <= rate ) ? ランク種別.D : ランク種別.E;
+                }
+            }
         }
 
         /// <summary>
@@ -138,6 +175,7 @@ namespace DTXMania.ステージ.演奏
 
 
         private Dictionary<判定種別, int> _判定toヒット数 = null;
+        private Dictionary<判定種別, int> _判定toヒット数Auto含まない = null;
         private Dictionary<判定種別, int> _最後にスコアを更新したときの判定toヒット数 = null;
         private readonly Dictionary<判定種別, double> _判定値表 = new Dictionary<判定種別, double>() {
             { 判定種別.PERFECT, 1.0 },

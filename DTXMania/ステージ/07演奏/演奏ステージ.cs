@@ -1119,7 +1119,11 @@ namespace DTXMania.ステージ.演奏
                 }
 
                 this._判定文字列.表示を開始する( 対応表.表示レーン種別, judge );
-                this.成績.ヒット数を加算する( judge );
+
+                var ドラムチッププロパティ = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ];
+                var AutoPlay = App.ユーザ管理.ログオン中のユーザ.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
+
+                this.成績.ヒット数を加算する( judge, AutoPlay );
                 //----------------
                 #endregion
             }

@@ -60,6 +60,7 @@ namespace DTXMania.ステージ.結果
                     背景色 = Color4.White,
                 } );
                 this.子Activityを追加する( this._演奏パラメータ結果 = new 演奏パラメータ結果() );
+                this.子Activityを追加する( this._ランク = new ランク() );
             }
         }
 
@@ -75,7 +76,8 @@ namespace DTXMania.ステージ.結果
                 App.システムサウンド.再生する( システムサウンド種別.ステージクリア );
 
                 // 成績をDBに記録。
-                曲DB.成績を追加または更新する( this._結果, App.ユーザ管理.ログオン中のユーザ.ユーザID, 選択曲.曲ファイルハッシュ );
+                if( !( App.ユーザ管理.ログオン中のユーザ.AutoPlayがすべてONである ) )    // ただし全AUTOなら記録しない。
+                    曲DB.成績を追加または更新する( this._結果, App.ユーザ管理.ログオン中のユーザ.ユーザID, 選択曲.曲ファイルハッシュ );
 
                 this._曲名画像.表示文字列 = 選択曲.タイトル;
                 this._サブタイトル画像.表示文字列 = 選択曲.サブタイトル;
@@ -128,6 +130,7 @@ namespace DTXMania.ステージ.結果
             this._曲名を描画する( dc );
             this._サブタイトルを描画する( dc );
             this._演奏パラメータ結果.描画する( dc, 1317f, 716f, this._結果 );
+            this._ランク.進行描画する( this._結果.ランク );
 
 
             // 入力
@@ -225,6 +228,7 @@ namespace DTXMania.ステージ.結果
         private 文字列画像 _曲名画像 = null;
         private 文字列画像 _サブタイトル画像 = null;
         private 演奏パラメータ結果 _演奏パラメータ結果 = null;
+        private ランク _ランク = null;
         private SolidColorBrush _黒マスクブラシ = null;
         private SolidColorBrush _プレビュー枠ブラシ = null;
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 668f, 194f, 0f );
