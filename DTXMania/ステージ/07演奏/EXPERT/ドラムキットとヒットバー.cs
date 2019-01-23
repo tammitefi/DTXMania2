@@ -8,13 +8,13 @@ using FDK;
 
 namespace DTXMania.ステージ.演奏
 {
-    class ドラムキット : Activity
+    class ドラムキットとヒットバー : Activity
     {
-        public ドラムキット()
+        public ドラムキットとヒットバー()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._ドラムキット画像 = new テクスチャ( @"$(System)images\演奏\ドラムキット.png" ) );
+                this.子Activityを追加する( this._ドラムキット画像 = new テクスチャ( @"$(System)images\演奏\ドラムキットとヒットバー.png" ) );
             }
         }
 
@@ -22,7 +22,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\ドラムキット.yaml" );
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\ドラムキットとヒットバー.yaml" );
 
                 var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
                 var deserializer = new YamlDotNet.Serialization.Deserializer();
@@ -51,7 +51,7 @@ namespace DTXMania.ステージ.演奏
             }
         }
 
-        public void 進行描画する()
+        public void ドラムキットを進行描画する()
         {
             this._パーツを描画する( "Bass" );
             this._パーツを描画する( "LowTom" );
@@ -66,6 +66,11 @@ namespace DTXMania.ステージ.演奏
             this._パーツを描画する( "LeftCymbalStand" );
             this._パーツを描画する( "LeftCymbal" );
             this._パーツを描画する( "LeftCymbalTop" );
+        }
+
+        public void ヒットバーを進行描画する()
+        {
+            this._パーツを描画する( "Bar" );
         }
 
 

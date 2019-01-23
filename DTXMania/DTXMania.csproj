@@ -224,8 +224,8 @@
     <Compile Include="ステージ\05オプション設定\入力割り当てダイアログ.Designer.cs">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </Compile>
-    <Compile Include="ステージ\07演奏\ドラムキット.cs" />
-    <Compile Include="ステージ\07演奏\ヒットバー.cs" />
+    <Compile Include="ステージ\07演奏\EXPERT\ドラムキットとヒットバー.cs" />
+    <Compile Include="ステージ\07演奏\BASIC\ヒットバー.cs" />
     <Compile Include="ステージ\07演奏\演奏ステージ_ビュアーモード.cs" />
     <Compile Include="ステージ\08結果\ランク.cs" />
     <Compile Include="ステージ\08結果\ランク種別.cs" />
@@ -245,7 +245,7 @@
     <Compile Include="ステージ\07演奏\スコア表示.cs" />
     <Compile Include="ステージ\07演奏\チップの演奏状態.cs" />
     <Compile Include="ステージ\07演奏\チップ光.cs" />
-    <Compile Include="ステージ\07演奏\ドラムパッド.cs" />
+    <Compile Include="ステージ\07演奏\BASIC\ドラムパッド.cs" />
     <Compile Include="ステージ\07演奏\プレイヤー名表示.cs" />
     <Compile Include="ステージ\07演奏\レーンフラッシュ.cs" />
     <Compile Include="ステージ\07演奏\レーンフレーム.cs" />
@@ -380,7 +380,7 @@
     <None Include="System\Images\コンソールフォント20x32.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="System\Images\演奏\ドラムキット.yaml">
+    <None Include="System\Images\演奏\ドラムキットとヒットバー.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\演奏\レーン配置\TypeB.yaml">
@@ -891,7 +891,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\ドラムキット.png">
+    <None Include="System\Images\演奏\ドラムキットとヒットバー.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
