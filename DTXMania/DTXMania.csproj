@@ -224,6 +224,7 @@
     <Compile Include="ステージ\05オプション設定\入力割り当てダイアログ.Designer.cs">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </Compile>
+    <Compile Include="ステージ\07演奏\ドラムキット.cs" />
     <Compile Include="ステージ\07演奏\ヒットバー.cs" />
     <Compile Include="ステージ\07演奏\演奏ステージ_ビュアーモード.cs" />
     <Compile Include="ステージ\08結果\ランク.cs" />
@@ -377,6 +378,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="System\Images\コンソールフォント20x32.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\演奏\ドラムキット.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\演奏\レーン配置\TypeB.yaml">
@@ -883,6 +887,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\結果\リザルトSS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\ドラムキット.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

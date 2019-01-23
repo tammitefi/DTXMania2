@@ -47,6 +47,7 @@ namespace DTXMania.ステージ.演奏
                 this.子Activityを追加する( this._レーンフレーム = new レーンフレーム() );
                 this.子Activityを追加する( this._曲名パネル = new 曲名パネル() );
                 this.子Activityを追加する( this._ドラムパッド = new ドラムパッド() );
+                this.子Activityを追加する( this._ドラムキット = new ドラムキット() );
                 this.子Activityを追加する( this._ヒットバー = new ヒットバー() );
                 this.子Activityを追加する( this._レーンフラッシュ = new レーンフラッシュ() );
                 this.子Activityを追加する( this._ドラムチップ画像 = new テクスチャ( @"$(System)images\演奏\ドラムチップ.png" ) );
@@ -712,7 +713,8 @@ namespace DTXMania.ステージ.演奏
                         this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
                         this._レーンフラッシュ.進行描画する();
                         this._小節線拍線を描画する( dc, 演奏時刻sec );
-                        this._ドラムパッド.進行描画する();
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
+                            this._ドラムパッド.進行描画する();
                         this._背景画像.描画する( dc, 0f, 0f );
                         this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
@@ -725,6 +727,8 @@ namespace DTXMania.ステージ.演奏
                         this._フェーズパネル.進行描画する( dc );
                         this._曲名パネル.描画する( dc );
                         this._ヒットバー.描画する();
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                            this._ドラムキット.進行描画する();
                         this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
                         this._チップ光.進行描画する( dc );
                         this._判定文字列.進行描画する();
@@ -773,6 +777,7 @@ namespace DTXMania.ステージ.演奏
         private レーンフレーム _レーンフレーム = null;
         private ヒットバー _ヒットバー = null;
         private ドラムパッド _ドラムパッド = null;
+        private ドラムキット _ドラムキット = null;
         private 譜面スクロール速度 _譜面スクロール速度 = null;
         private エキサイトゲージ _エキサイトゲージ = null;
         private フェーズパネル _フェーズパネル = null;
