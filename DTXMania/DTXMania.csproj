@@ -227,6 +227,8 @@
     <Compile Include="ステージ\07演奏\BASIC\ドラムチップ.cs" />
     <Compile Include="ステージ\07演奏\EXPERT\ドラムキットとヒットバー.cs" />
     <Compile Include="ステージ\07演奏\BASIC\ヒットバー.cs" />
+    <Compile Include="ステージ\07演奏\EXPERT\ドラムチップ.cs" />
+    <Compile Include="ステージ\07演奏\EXPERT\レーンフラッシュ.cs" />
     <Compile Include="ステージ\07演奏\EXPERT\レーンフレーム.cs" />
     <Compile Include="ステージ\07演奏\演奏ステージ_ビュアーモード.cs" />
     <Compile Include="ステージ\08結果\ランク.cs" />
@@ -249,7 +251,7 @@
     <Compile Include="ステージ\07演奏\チップ光.cs" />
     <Compile Include="ステージ\07演奏\BASIC\ドラムパッド.cs" />
     <Compile Include="ステージ\07演奏\プレイヤー名表示.cs" />
-    <Compile Include="ステージ\07演奏\レーンフラッシュ.cs" />
+    <Compile Include="ステージ\07演奏\BASIC\レーンフラッシュ.cs" />
     <Compile Include="ステージ\07演奏\BASIC\レーンフレーム.cs" />
     <Compile Include="ステージ\07演奏\判定文字列.cs" />
     <Compile Include="ステージ\07演奏\判定種別.cs" />
@@ -386,6 +388,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\演奏\ドラムチップEXPERT.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Images\演奏\レーンフラッシュEXPERT.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="System\Images\演奏\レーン配置\Expert.yaml">
@@ -647,7 +652,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\レーンフラッシュ.png">
+    <None Include="System\Images\演奏\レーンフラッシュBASIC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -835,7 +840,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\レーンフラッシュ.yaml">
+    <None Include="System\Images\演奏\レーンフラッシュBASIC.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -905,6 +910,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="System\Images\演奏\ドラムチップEXPERT.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\レーンフラッシュEXPERT.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

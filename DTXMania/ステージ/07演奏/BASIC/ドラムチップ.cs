@@ -49,7 +49,7 @@ namespace DTXMania.ステージ.演奏.BASIC
         }
 
         /// <returns>クリアしたらtrueを返す。</returns>
-        public bool 進行描画する( double 現在の演奏時刻sec, ref int 描画開始チップ番号, チップ chip, int index, double ヒット判定バーと描画との時間sec, double ヒット判定バーと発声との時間sec, double ヒット判定バーとの距離dpx )
+        public bool 進行描画する( double 現在の演奏時刻sec, ref int 描画開始チップ番号, チップの演奏状態 state, チップ chip, int index, double ヒット判定バーと描画との時間sec, double ヒット判定バーと発声との時間sec, double ヒット判定バーとの距離dpx )
         {
             float たて中央位置dpx = (float) ( 演奏ステージ.ヒット判定位置Ydpx + ヒット判定バーとの距離dpx );
             float 消滅割合 = 0f;
@@ -86,16 +86,12 @@ namespace DTXMania.ステージ.演奏.BASIC
             //----------------
             #endregion
 
-            // チップの大きさを計算する。
-            float 大きさ0to1 = 1.0f;
-            if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
-            {
-                // 音量により大きさ可変。
-                大きさ0to1 = Math.Max( 0.3f, Math.Min( 1.0f, chip.音量 / (float) チップ.既定音量 ) );   // 既定音量未満は大きさを小さくするが、既定音量以上は大きさ1.0のままとする。最小は 0.3。
-                if( chip.チップ種別 == チップ種別.Snare_Ghost )   // Ghost は対象外
-                    大きさ0to1 = 1.0f;
-            }
+            if( state.不可視 )
+                return false;
 
+            // BASICモードでは、チップの大きさは変化しない。
+            float 大きさ0to1 = 1.0f;
+        
             // チップ種別 から、表示レーン種別 と 表示チップ種別 を取得。
             var 表示レーン種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
             var 表示チップ種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示チップ種別;
@@ -216,11 +212,13 @@ namespace DTXMania.ステージ.演奏.BASIC
             return false;
         }
 
+
         private テクスチャ _ドラムチップ画像 = null;
 
         private Dictionary<string, RectangleF> _ドラムチップの矩形リスト = null;
 
         private LoopCounter _ドラムチップアニメ = null;
+
 
         private class YAMLマップ_ドラムチップ
         {

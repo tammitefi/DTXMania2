@@ -4,10 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using SharpDX;
-using SharpDX.Direct2D1;
 using FDK;
 
-namespace DTXMania.ステージ.演奏
+namespace DTXMania.ステージ.演奏.BASIC
 {
     class レーンフラッシュ : Activity
     {
@@ -15,7 +14,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._レーンフラッシュ画像 = new テクスチャ( @"$(System)images\演奏\レーンフラッシュ.png" ) );
+                this.子Activityを追加する( this._レーンフラッシュ画像 = new テクスチャ( @"$(System)images\演奏\レーンフラッシュBASIC.png" ) );
             }
         }
 
@@ -23,7 +22,7 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\レーンフラッシュ.yaml" );
+                var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\レーンフラッシュBASIC.yaml" );
 
                 var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
                 var deserializer = new YamlDotNet.Serialization.Deserializer();
@@ -42,8 +41,8 @@ namespace DTXMania.ステージ.演奏
                 {
                     this._レーンtoレーンContext.Add( lane, new レーンContext() {
                         開始位置dpx = new Vector2(
-                            x: BASIC.レーンフレーム.領域.X + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
-                            y: BASIC.レーンフレーム.領域.Bottom ),
+                            x: レーンフレーム.領域.X + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
+                            y: レーンフレーム.領域.Bottom ),
                         転送元矩形 = this._レーンフラッシュの矩形リスト[ lane.ToString() ],
                         アニメカウンタ = new Counter(),
                     } );

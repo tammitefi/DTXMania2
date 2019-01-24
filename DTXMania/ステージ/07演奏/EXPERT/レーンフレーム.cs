@@ -19,6 +19,10 @@ namespace DTXMania.ステージ.演奏.EXPERT
         /// </summary>
         public static RectangleF 領域 => new RectangleF( 445f, 0f, 778f, 938f );
 
+        internal static Dictionary<表示レーン種別, float> レーン中央位置X;
+
+        internal static Dictionary<表示レーン種別, Color4> レーン色;
+
 
         public レーンフレーム()
         {
@@ -37,12 +41,12 @@ namespace DTXMania.ステージ.演奏.EXPERT
                 var deserializer = new YamlDotNet.Serialization.Deserializer();
                 var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
 
-                this._レーン中央位置X = new Dictionary<表示レーン種別, float>();
-                this._レーン色 = new Dictionary<表示レーン種別, Color4>();
+                レーン中央位置X = new Dictionary<表示レーン種別, float>();
+                レーン色 = new Dictionary<表示レーン種別, Color4>();
                 foreach( 表示レーン種別 displayLaneType in Enum.GetValues( typeof( 表示レーン種別 ) ) )
                 {
-                    this._レーン中央位置X[ displayLaneType ] = yamlMap.中央位置[ displayLaneType ];
-                    this._レーン色[ displayLaneType ] = new Color4( Convert.ToUInt32( yamlMap.色[ displayLaneType ], 16 ) );
+                    レーン中央位置X[ displayLaneType ] = yamlMap.中央位置[ displayLaneType ];
+                    レーン色[ displayLaneType ] = new Color4( Convert.ToUInt32( yamlMap.色[ displayLaneType ], 16 ) );
                 }
             }
         }
@@ -59,14 +63,14 @@ namespace DTXMania.ステージ.演奏.EXPERT
             グラフィックデバイス.Instance.D2DBatchDraw( dc, () => {
 
                 // レーンエリアを描画する。
-
-                var レーン色 = Color4.Black;
-                レーン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
-                using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, レーン色 ) )
                 {
-                    dc.FillRectangle( レーンフレーム.領域, laneBrush );
+                    var color = Color4.Black;
+                    color.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
+                    using( var laneBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, color ) )
+                    {
+                        dc.FillRectangle( レーンフレーム.領域, laneBrush );
+                    }
                 }
-
 
                 // レーンラインを描画する。
 
@@ -75,22 +79,18 @@ namespace DTXMania.ステージ.演奏.EXPERT
                     if( displayLaneType == 表示レーン種別.Unknown )
                         continue;
 
-                    var レーンライン色 = this._レーン色[ displayLaneType ];
+                    var レーンライン色 = レーン色[ displayLaneType ];
                     レーンライン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
 
                     using( var laneLineBrush = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, レーンライン色 ) )
                     {
-                        var rc = new RectangleF( this._レーン中央位置X[ displayLaneType ] - 1, 0f, 3f, 領域.Height );
+                        var rc = new RectangleF( レーン中央位置X[ displayLaneType ] - 1, 0f, 3f, 領域.Height );
                         dc.FillRectangle( rc, laneLineBrush );
                     }
                 }
 
             } );
         }
-
-
-        private Dictionary<表示レーン種別, float> _レーン中央位置X;
-        private Dictionary<表示レーン種別, Color4> _レーン色;
 
 
         private class YAMLマップ

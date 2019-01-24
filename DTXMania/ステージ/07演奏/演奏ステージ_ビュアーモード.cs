@@ -43,8 +43,10 @@ namespace DTXMania.ステージ.演奏
                 this.子Activityを追加する( this._ドラムパッドBASIC = new BASIC.ドラムパッド() );
                 this.子Activityを追加する( this._ヒットバーBASIC = new BASIC.ヒットバー() );
                 this.子Activityを追加する( this._ドラムキットとヒットバーEXPERT = new EXPERT.ドラムキットとヒットバー() );
-                this.子Activityを追加する( this._レーンフラッシュ = new レーンフラッシュ() );
+                this.子Activityを追加する( this._レーンフラッシュBASIC = new BASIC.レーンフラッシュ() );
+                this.子Activityを追加する( this._レーンフラッシュEXPERT = new EXPERT.レーンフラッシュ() );
                 this.子Activityを追加する( this._ドラムチップBASIC = new BASIC.ドラムチップ() );
+                this.子Activityを追加する( this._ドラムチップEXPERT = new EXPERT.ドラムチップ() );
                 this.子Activityを追加する( this._判定文字列 = new 判定文字列() );
                 this.子Activityを追加する( this._チップ光 = new チップ光() );
                 this.子Activityを追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
@@ -597,7 +599,10 @@ namespace DTXMania.ステージ.演奏
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
                             this._レーンフレームEXPERT.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
 
-                        this._レーンフラッシュ.進行描画する();
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
+                            this._レーンフラッシュBASIC.進行描画する();
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                            this._レーンフラッシュEXPERT.進行描画する();
 
                         this._小節線拍線を描画する( dc, 演奏時刻sec );
 
@@ -632,15 +637,26 @@ namespace DTXMania.ステージ.演奏
 
                         this._描画範囲内のすべてのチップに対して( 演奏時刻sec, ( チップ chip, int index, double ヒット判定バーと描画との時間sec, double ヒット判定バーと発声との時間sec, double ヒット判定バーとの距離dpx ) => {
 
-                            if( this._チップの演奏状態[ chip ].不可視 )
-                                return;
-
-                            // クリア判定はこの中。
-                            if( this._ドラムチップBASIC.進行描画する(
-                                    演奏時刻sec, ref this._描画開始チップ番号,
-                                    chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) )
+                            if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
                             {
-                                this.現在のフェーズ = フェーズ.クリア;
+                                // クリア判定はこの中。
+                                if( this._ドラムチップBASIC.進行描画する(
+                                        演奏時刻sec, ref this._描画開始チップ番号, this._チップの演奏状態[ chip ],
+                                        chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) )
+                                {
+                                    this.現在のフェーズ = フェーズ.クリア;
+                                }
+                            }
+                            if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                            {
+                                // クリア判定はこの中。
+                                if( this._ドラムチップEXPERT.進行描画する(
+                                        this._レーンフレームEXPERT,
+                                        演奏時刻sec, ref this._描画開始チップ番号, this._チップの演奏状態[ chip ],
+                                        chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) )
+                                {
+                                    this.現在のフェーズ = フェーズ.クリア;
+                                }
                             }
 
                         } );
@@ -720,6 +736,7 @@ namespace DTXMania.ステージ.演奏
         private BASIC.ドラムパッド _ドラムパッドBASIC = null;
         private EXPERT.ドラムキットとヒットバー _ドラムキットとヒットバーEXPERT = null;
         private BASIC.ドラムチップ _ドラムチップBASIC = null;
+        private EXPERT.ドラムチップ _ドラムチップEXPERT = null;
         private 譜面スクロール速度 _譜面スクロール速度 = null;
         private エキサイトゲージ _エキサイトゲージ = null;
         private フェーズパネル _フェーズパネル = null;
@@ -741,7 +758,8 @@ namespace DTXMania.ステージ.演奏
 
         // 譜面上に表示されるもの
 
-        private レーンフラッシュ _レーンフラッシュ = null;
+        private BASIC.レーンフラッシュ _レーンフラッシュBASIC = null;
+        private EXPERT.レーンフラッシュ _レーンフラッシュEXPERT = null;
         private 判定文字列 _判定文字列 = null;
         private チップ光 _チップ光 = null;
         private 画像フォント _数字フォント中グレー48x64 = null;
@@ -867,7 +885,8 @@ namespace DTXMania.ステージ.演奏
                     // MISS以外（PERFECT～OK）
                     this._チップ光.表示を開始する( 対応表.表示レーン種別 );
                     this._ドラムパッドBASIC.ヒットする( 対応表.表示レーン種別 );
-                    this._レーンフラッシュ.開始する( 対応表.表示レーン種別 );
+                    this._レーンフラッシュBASIC.開始する( 対応表.表示レーン種別 );
+                    this._レーンフラッシュEXPERT.開始する( 対応表.表示レーン種別 );
                 }
 
                 this._判定文字列.表示を開始する( 対応表.表示レーン種別, judge );

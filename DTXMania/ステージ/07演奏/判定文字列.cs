@@ -406,7 +406,13 @@ namespace DTXMania.ステージ.演奏
                 this.現在の状態 = 状態.非表示;
 
                 // 表示中央位置は、レーンごとに固定。
-                float x = BASIC.レーンフレーム.領域.Left + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ] + BASIC.レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ lane ] / 2f;
+                float x = 0f;
+
+                if( App.ユーザ管理.ログオン中のユーザ.演奏モード == 設定.PlayMode.BASIC )
+                    x = BASIC.レーンフレーム.領域.Left + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ] + BASIC.レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ lane ] / 2f;
+                if( App.ユーザ管理.ログオン中のユーザ.演奏モード == 設定.PlayMode.EXPERT )
+                    x = EXPERT.レーンフレーム.レーン中央位置X[ lane ];
+
                 switch( lane )
                 {
                     case 表示レーン種別.LeftCymbal: this.表示中央位置dpx = new Vector2( x, 530f ); break;
