@@ -16,8 +16,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                this.子Activityを追加する( this._放射光 = new 画像( @"$(System)images\演奏\チップ光.png" ) { 加算合成 = true } );
-                this.子Activityを追加する( this._光輪 = new 画像( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成 = true } );
+                this.子Activityを追加する( this._放射光 = new テクスチャ( @"$(System)images\演奏\チップ光.png" ) { 加算合成する = true } );
+                this.子Activityを追加する( this._光輪 = new テクスチャ( @"$(System)images\演奏\チップ光輪.png" ) { 加算合成する = true } );
             }
         }
 
@@ -31,7 +31,7 @@ namespace DTXMania.ステージ.演奏
                 var deserializer = new YamlDotNet.Serialization.Deserializer();
                 var yamlMap = deserializer.Deserialize<YAMLマップ>( yaml );
 
-                this._放射光の矩形リスト = new Dictionary<string, RectangleF>();
+                this._放射光の矩形リスト = new Dictionary<表示レーン種別, RectangleF>();
                 foreach( var kvp in yamlMap.矩形リスト )
                 {
                     if( 4 == kvp.Value.Length )
@@ -52,6 +52,7 @@ namespace DTXMania.ステージ.演奏
                 };
             }
         }
+
         protected override void On非活性化()
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
@@ -156,28 +157,33 @@ namespace DTXMania.ステージ.演奏
 
                         // (1) 放射光 の進行描画。
                         {
-                            var 転送元矩形dpx = this._放射光の矩形リスト[ レーン.ToString() ];
-                            var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
+                            var 転送元矩形dpx = this._放射光の矩形リスト[ レーン ];
 
-                            var 変換行列2D =
-                                Matrix3x2.Scaling( (float) status.放射光の拡大率.Value, (float) status.放射光の拡大率.Value, center: 転送元矩形の中心dpx ) *
-                                Matrix3x2.Rotation( MathUtil.DegreesToRadians( (float) status.放射光の回転角.Value ), center: 転送元矩形の中心dpx ) *
-                                Matrix3x2.Translation( status.表示中央位置dpx.X - 転送元矩形の中心dpx.X, status.表示中央位置dpx.Y - 転送元矩形の中心dpx.Y );
+                            var 変換行列 =
+                                Matrix.Scaling( (float) status.放射光の拡大率.Value, (float) status.放射光の拡大率.Value, 0f ) *
+                                Matrix.RotationZ( MathUtil.DegreesToRadians( (float) status.放射光の回転角.Value ) ) *
+                                Matrix.Translation(
+                                    グラフィックデバイス.Instance.画面左上dpx.X + ( status.表示中央位置dpx.X ),
+                                    グラフィックデバイス.Instance.画面左上dpx.Y - ( status.表示中央位置dpx.Y ),
+                                    0f );
 
-                            const float 不透明度 = 0.3f;    // 眩しいので減光
-                            this._放射光.描画する( dc, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: 不透明度 );
+                            const float 不透明度 = 0.5f;    // 眩しいので減光
+
+                            this._放射光.描画する( 変換行列, 転送元矩形: 転送元矩形dpx, 不透明度0to1: 不透明度 );
                         }
 
                         // (2) 光輪 の進行描画。
                         {
-                            var 転送元矩形dpx = this._放射光の矩形リスト[ レーン.ToString() ];
-                            var 転送元矩形の中心dpx = new Vector2( 転送元矩形dpx.Width / 2f, 転送元矩形dpx.Height / 2f );
+                            var 転送元矩形dpx = this._放射光の矩形リスト[ レーン ];
 
-                            var 変換行列2D =
-                                Matrix3x2.Scaling( (float) status.光輪の拡大率.Value, (float) status.光輪の拡大率.Value, center: 転送元矩形の中心dpx ) *
-                                Matrix3x2.Translation( status.表示中央位置dpx.X - 転送元矩形の中心dpx.X, status.表示中央位置dpx.Y - 転送元矩形の中心dpx.Y );
+                            var 変換行列 =
+                                Matrix.Scaling( (float) status.光輪の拡大率.Value, (float) status.光輪の拡大率.Value, 0f ) *
+                                Matrix.Translation(
+                                    グラフィックデバイス.Instance.画面左上dpx.X + ( status.表示中央位置dpx.X ),
+                                    グラフィックデバイス.Instance.画面左上dpx.Y - ( status.表示中央位置dpx.Y ),
+                                    0f );
 
-                            this._光輪.描画する( dc, 変換行列2D, 転送元矩形: 転送元矩形dpx, 不透明度0to1: (float) status.光輪の不透明度.Value );
+                            this._光輪.描画する( 変換行列, 転送元矩形: 転送元矩形dpx, 不透明度0to1: (float) status.光輪の不透明度.Value );
                         }
 
                         // 全部終わったら非表示へ。
@@ -196,9 +202,12 @@ namespace DTXMania.ステージ.演奏
         }
 
 
-        private 画像 _放射光 = null;
-        private 画像 _光輪 = null;
-        private Dictionary<string, RectangleF> _放射光の矩形リスト = null;
+        private テクスチャ _放射光 = null;
+
+        private テクスチャ _光輪 = null;
+
+        private Dictionary<表示レーン種別, RectangleF> _放射光の矩形リスト = null;
+
 
         /// <summary>
         ///		以下の画像のアニメ＆表示管理を行うクラス。
@@ -271,7 +280,7 @@ namespace DTXMania.ステージ.演奏
 
         private class YAMLマップ
         {
-            public Dictionary<string, float[]> 矩形リスト { get; set; }
+            public Dictionary<表示レーン種別, float[]> 矩形リスト { get; set; }
         }
     }
 }
