@@ -1,0 +1,26 @@
+﻿# レーン配置: EXPERT
+# 各 Name は 表示レーン種別 列挙子の名前であること。
+中央位置:
+    Unknown: 0
+    LeftCymbal: 489
+    HiHat: 570
+    Foot: 617
+    Snare: 699
+    Tom1: 812
+    Bass: 896
+    Tom2: 976
+    Tom3: 1088
+    RightCymbal: 1193
+
+# レーンの色。A8R8G8B8。
+色:
+    Unknown: 00000000
+    LeftCymbal: ff5a5a5a
+    HiHat: ff35527d
+    Foot: ff1f2d49
+    Snare: ff836240
+    Tom1: ff30572e
+    Bass: ff414142
+    Tom2: ff673232
+    Tom3: ff5c5670
+    RightCymbal: ff606060

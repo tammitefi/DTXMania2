@@ -406,7 +406,7 @@ namespace DTXMania.ステージ.演奏
                 this.現在の状態 = 状態.非表示;
 
                 // 表示中央位置は、レーンごとに固定。
-                float x = レーンフレーム.領域.Left + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ] + レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ lane ] / 2f;
+                float x = BASIC.レーンフレーム.領域.Left + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ] + BASIC.レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ lane ] / 2f;
                 switch( lane )
                 {
                     case 表示レーン種別.LeftCymbal: this.表示中央位置dpx = new Vector2( x, 530f ); break;

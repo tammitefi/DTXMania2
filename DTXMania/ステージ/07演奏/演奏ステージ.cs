@@ -44,11 +44,12 @@ namespace DTXMania.ステージ.演奏
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.子Activityを追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
-                this.子Activityを追加する( this._レーンフレーム = new レーンフレーム() );
+                this.子Activityを追加する( this._レーンフレームBASIC = new BASIC.レーンフレーム() );
+                this.子Activityを追加する( this._レーンフレームEXPERT = new EXPERT.レーンフレーム() );
                 this.子Activityを追加する( this._曲名パネル = new 曲名パネル() );
-                this.子Activityを追加する( this._ドラムパッド = new ドラムパッド() );
-                this.子Activityを追加する( this._ドラムキット = new ドラムキットとヒットバー() );
-                this.子Activityを追加する( this._ヒットバー = new ヒットバー() );
+                this.子Activityを追加する( this._ドラムパッドBASIC = new BASIC.ドラムパッド() );
+                this.子Activityを追加する( this._ドラムキットEXPERT = new EXPERT.ドラムキットとヒットバー() );
+                this.子Activityを追加する( this._ヒットバーBASIC = new BASIC.ヒットバー() );
                 this.子Activityを追加する( this._レーンフラッシュ = new レーンフラッシュ() );
                 this.子Activityを追加する( this._ドラムチップ画像 = new テクスチャ( @"$(System)images\演奏\ドラムチップ.png" ) );
                 this.子Activityを追加する( this._判定文字列 = new 判定文字列() );
@@ -98,7 +99,7 @@ namespace DTXMania.ステージ.演奏
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
                 this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
-                レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
+                BASIC.レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
                 this._フェードインカウンタ = new Counter( 0, 100, 10 );
 
                 this._演奏状態を初期化する();
@@ -485,7 +486,7 @@ namespace DTXMania.ステージ.演奏
                                         //for( int i = 0; i < プロパティs.Count(); i++ )
                                         int i = 0;  // １つの入力で処理するのは、１つの表示レーン種別のみ。
                                         {
-                                            this._ドラムパッド.ヒットする( プロパティs.ElementAt( i ).Value.表示レーン種別 );
+                                            this._ドラムパッドBASIC.ヒットする( プロパティs.ElementAt( i ).Value.表示レーン種別 );
                                             this._レーンフラッシュ.開始する( プロパティs.ElementAt( i ).Value.表示レーン種別 );
                                         }
                                     }
@@ -628,9 +629,10 @@ namespace DTXMania.ステージ.演奏
                         this._右サイドクリアパネル.クリアする();
                         this._右サイドクリアパネル.描画する( dc );
 
-                        this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
-                            this._ドラムパッド.進行描画する();
+                            this._レーンフレームBASIC.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
+                            this._ドラムパッドBASIC.進行描画する();
                         this._背景画像.描画する( dc, 0f, 0f );
                         this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
@@ -639,11 +641,11 @@ namespace DTXMania.ステージ.演奏
                         this._フェーズパネル.進行描画する( dc );
                         this._曲名パネル.描画する( dc );
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
-                            this._ヒットバー.描画する();
+                            this._ヒットバーBASIC.描画する();
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
                         {
-                            this._ドラムキット.ヒットバーを進行描画する();
-                            this._ドラムキット.ドラムキットを進行描画する();
+                            this._ドラムキットEXPERT.ヒットバーを進行描画する();
+                            this._ドラムキットEXPERT.ドラムキットを進行描画する();
                         }
                         this._キャプチャ画面を描画する( dc, ( 1.0f - this._フェードインカウンタ.現在値の割合 ) );
                     }
@@ -717,13 +719,17 @@ namespace DTXMania.ステージ.演奏
                         } );
                         this._右サイドクリアパネル.描画する( dc );
 
-                        this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
+                            this._レーンフレームBASIC.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                            this._レーンフレームEXPERT.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
+
                         this._レーンフラッシュ.進行描画する();
 
                         this._小節線拍線を描画する( dc, 演奏時刻sec );
 
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
-                            this._ドラムパッド.進行描画する();
+                            this._ドラムパッドBASIC.進行描画する();
 
                         this._背景画像.描画する( dc, 0f, 0f );
 
@@ -743,12 +749,12 @@ namespace DTXMania.ステージ.演奏
                         this._曲名パネル.描画する( dc );
 
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
-                            this._ヒットバー.描画する();
+                            this._ヒットバーBASIC.描画する();
 
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
                         {
-                            this._ドラムキット.ヒットバーを進行描画する();
-                            this._ドラムキット.ドラムキットを進行描画する();
+                            this._ドラムキットEXPERT.ヒットバーを進行描画する();
+                            this._ドラムキットEXPERT.ドラムキットを進行描画する();
                         }
 
                         this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
@@ -798,10 +804,11 @@ namespace DTXMania.ステージ.演奏
         private 画像 _背景画像 = null;
         private 曲名パネル _曲名パネル = null;
         private FPS _FPS = null;
-        private レーンフレーム _レーンフレーム = null;
-        private ヒットバー _ヒットバー = null;
-        private ドラムパッド _ドラムパッド = null;
-        private ドラムキットとヒットバー _ドラムキット = null;
+        private BASIC.レーンフレーム _レーンフレームBASIC = null;
+        private EXPERT.レーンフレーム _レーンフレームEXPERT = null;
+        private BASIC.ヒットバー _ヒットバーBASIC = null;
+        private BASIC.ドラムパッド _ドラムパッドBASIC = null;
+        private EXPERT.ドラムキットとヒットバー _ドラムキットEXPERT = null;
         private 譜面スクロール速度 _譜面スクロール速度 = null;
         private エキサイトゲージ _エキサイトゲージ = null;
         private フェーズパネル _フェーズパネル = null;
@@ -935,8 +942,8 @@ namespace DTXMania.ステージ.演奏
                     ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
                 {
                     var たて方向中央位置dpx = this._ドラムチップの縦方向中央位置;
-                    var 左端位置dpx = レーンフレーム.領域.Left + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ 表示レーン種別 ];
-                    var 中央位置Xdpx = 左端位置dpx + レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ 表示レーン種別 ] / 2f;
+                    var 左端位置dpx = BASIC.レーンフレーム.領域.Left + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ 表示レーン種別 ];
+                    var 中央位置Xdpx = 左端位置dpx + BASIC.レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ 表示レーン種別 ] / 2f;
 
                     #region " チップ背景（あれば）を描画する。"
                     //----------------
@@ -1143,7 +1150,7 @@ namespace DTXMania.ステージ.演奏
                 {
                     // MISS以外（PERFECT～OK）
                     this._チップ光.表示を開始する( 対応表.表示レーン種別 );
-                    this._ドラムパッド.ヒットする( 対応表.表示レーン種別 );
+                    this._ドラムパッドBASIC.ヒットする( 対応表.表示レーン種別 );
                     this._レーンフラッシュ.開始する( 対応表.表示レーン種別 );
                 }
 

@@ -42,8 +42,8 @@ namespace DTXMania.ステージ.演奏
                 {
                     this._レーンtoレーンContext.Add( lane, new レーンContext() {
                         開始位置dpx = new Vector2(
-                            x: レーンフレーム.領域.X + レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
-                            y: レーンフレーム.領域.Bottom ),
+                            x: BASIC.レーンフレーム.領域.X + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ lane ],
+                            y: BASIC.レーンフレーム.領域.Bottom ),
                         転送元矩形 = this._レーンフラッシュの矩形リスト[ lane.ToString() ],
                         アニメカウンタ = new Counter(),
                     } );
@@ -72,7 +72,7 @@ namespace DTXMania.ステージ.演奏
                 {
                     this._レーンフラッシュ画像.描画する(
                         laneContext.開始位置dpx.X,
-                        laneContext.開始位置dpx.Y - laneContext.アニメカウンタ.現在値の割合 * レーンフレーム.領域.Height,
+                        laneContext.開始位置dpx.Y - laneContext.アニメカウンタ.現在値の割合 * BASIC.レーンフレーム.領域.Height,
                         不透明度0to1: 1f - laneContext.アニメカウンタ.現在値の割合,
                         転送元矩形: laneContext.転送元矩形 );
                 }
