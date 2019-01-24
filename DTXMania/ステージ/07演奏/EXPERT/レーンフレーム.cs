@@ -72,6 +72,9 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
                 foreach( 表示レーン種別 displayLaneType in Enum.GetValues( typeof( 表示レーン種別 ) ) )
                 {
+                    if( displayLaneType == 表示レーン種別.Unknown )
+                        continue;
+
                     var レーンライン色 = this._レーン色[ displayLaneType ];
                     レーンライン色.Alpha *= ( 100 - BGAの透明度 ) / 100.0f;   // BGAの透明度0→100 のとき Alpha×1→×0
 

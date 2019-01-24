@@ -37,13 +37,14 @@ namespace DTXMania.ステージ.演奏
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this.子Activityを追加する( this._背景画像 = new 画像( @"$(System)images\演奏\演奏画面.png" ) );
-                this.子Activityを追加する( this._レーンフレーム = new BASIC.レーンフレーム() );
+                this.子Activityを追加する( this._レーンフレームBASIC = new BASIC.レーンフレーム() );
+                this.子Activityを追加する( this._レーンフレームEXPERT = new EXPERT.レーンフレーム() );
                 this.子Activityを追加する( this._曲名パネル = new 曲名パネル() );
-                this.子Activityを追加する( this._ドラムパッド = new BASIC.ドラムパッド() );
-                this.子Activityを追加する( this._ドラムキット = new EXPERT.ドラムキットとヒットバー() );
-                this.子Activityを追加する( this._ヒットバー = new BASIC.ヒットバー() );
+                this.子Activityを追加する( this._ドラムパッドBASIC = new BASIC.ドラムパッド() );
+                this.子Activityを追加する( this._ヒットバーBASIC = new BASIC.ヒットバー() );
+                this.子Activityを追加する( this._ドラムキットとヒットバーEXPERT = new EXPERT.ドラムキットとヒットバー() );
                 this.子Activityを追加する( this._レーンフラッシュ = new レーンフラッシュ() );
-                this.子Activityを追加する( this._ドラムチップ画像 = new 画像( @"$(System)images\演奏\ドラムチップ.png" ) );
+                this.子Activityを追加する( this._ドラムチップBASIC = new BASIC.ドラムチップ() );
                 this.子Activityを追加する( this._判定文字列 = new 判定文字列() );
                 this.子Activityを追加する( this._チップ光 = new チップ光() );
                 this.子Activityを追加する( this._左サイドクリアパネル = new 左サイドクリアパネル() );
@@ -71,25 +72,8 @@ namespace DTXMania.ステージ.演奏
         {
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
-                {
-                    var 設定ファイルパス = new VariablePath( @"$(System)images\演奏\ドラムチップ.yaml" );
-
-                    var yaml = File.ReadAllText( 設定ファイルパス.変数なしパス );
-                    var deserializer = new YamlDotNet.Serialization.Deserializer();
-                    var yamlMap = deserializer.Deserialize<YAMLマップ_ドラムチップ>( yaml );
-
-                    this._ドラムチップの縦方向中央位置 = yamlMap.縦方向中央位置;
-                    this._ドラムチップの矩形リスト = new Dictionary<string, RectangleF>();
-                    foreach( var kvp in yamlMap.矩形リスト )
-                    {
-                        if( 4 == kvp.Value.Length )
-                            this._ドラムチップの矩形リスト[ kvp.Key ] = new RectangleF( kvp.Value[ 0 ], kvp.Value[ 1 ], kvp.Value[ 2 ], kvp.Value[ 3 ] );
-                    }
-                }
-
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
-                this._ドラムチップアニメ = new LoopCounter( 0, 200, 3 );
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
                 BASIC.レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
                 //this._フェードインカウンタ = new Counter( 0, 100, 10 );
@@ -608,31 +592,61 @@ namespace DTXMania.ステージ.演奏
                         } );
                         this._右サイドクリアパネル.描画する( dc );
 
-                        this._レーンフレーム.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
-                        this._レーンフラッシュ.進行描画する();
-                        this._小節線拍線を描画する( dc, 演奏時刻sec );
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
-                            this._ドラムパッド.進行描画する();
+                            this._レーンフレームBASIC.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                            this._レーンフレームEXPERT.描画する( dc, App.ユーザ管理.ログオン中のユーザ.レーンの透明度 );
+
+                        this._レーンフラッシュ.進行描画する();
+
+                        this._小節線拍線を描画する( dc, 演奏時刻sec );
+
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
+                            this._ドラムパッドBASIC.進行描画する();
+
                         this._背景画像.描画する( dc, 0f, 0f );
+
                         this._譜面スクロール速度.描画する( dc, App.ユーザ管理.ログオン中のユーザ.譜面スクロール速度 );
+
                         this._エキサイトゲージ.進行描画する( dc, this.成績.エキサイトゲージ量 );
 
                         double 曲の長さsec = App.演奏スコア.チップリスト[ App.演奏スコア.チップリスト.Count - 1 ].描画時刻sec;
                         float 現在位置 = (float) ( 1.0 - ( 曲の長さsec - 演奏時刻sec ) / 曲の長さsec );
+
                         this._カウントマップライン.カウント値を設定する( 現在位置, this.成績.判定toヒット数 );
                         this._カウントマップライン.進行描画する( dc );
+
                         this._フェーズパネル.現在位置 = 現在位置;
                         this._フェーズパネル.進行描画する( dc );
+
                         this._曲名パネル.描画する( dc );
+
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
-                            this._ヒットバー.描画する();
+                            this._ヒットバーBASIC.描画する();
+
                         if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
                         {
-                            this._ドラムキット.ヒットバーを進行描画する();
-                            this._ドラムキット.ドラムキットを進行描画する();
+                            this._ドラムキットとヒットバーEXPERT.ヒットバーを進行描画する();
+                            this._ドラムキットとヒットバーEXPERT.ドラムキットを進行描画する();
                         }
-                        this._チップを描画する( dc, 演奏時刻sec );  // クリア判定はこの中。
+
+                        this._描画範囲内のすべてのチップに対して( 演奏時刻sec, ( チップ chip, int index, double ヒット判定バーと描画との時間sec, double ヒット判定バーと発声との時間sec, double ヒット判定バーとの距離dpx ) => {
+
+                            if( this._チップの演奏状態[ chip ].不可視 )
+                                return;
+
+                            // クリア判定はこの中。
+                            if( this._ドラムチップBASIC.進行描画する(
+                                    演奏時刻sec, ref this._描画開始チップ番号,
+                                    chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) )
+                            {
+                                this.現在のフェーズ = フェーズ.クリア;
+                            }
+
+                        } );
+
                         this._チップ光.進行描画する( dc );
+
                         this._判定文字列.進行描画する();
 
                         this._FPS.VPSをカウントする();
@@ -700,10 +714,12 @@ namespace DTXMania.ステージ.演奏
         private 画像 _背景画像 = null;
         private 曲名パネル _曲名パネル = null;
         private FPS _FPS = null;
-        private BASIC.レーンフレーム _レーンフレーム = null;
-        private BASIC.ヒットバー _ヒットバー = null;
-        private BASIC.ドラムパッド _ドラムパッド = null;
-        private EXPERT.ドラムキットとヒットバー _ドラムキット = null;
+        private BASIC.レーンフレーム _レーンフレームBASIC = null;
+        private EXPERT.レーンフレーム _レーンフレームEXPERT = null;
+        private BASIC.ヒットバー _ヒットバーBASIC = null;
+        private BASIC.ドラムパッド _ドラムパッドBASIC = null;
+        private EXPERT.ドラムキットとヒットバー _ドラムキットとヒットバーEXPERT = null;
+        private BASIC.ドラムチップ _ドラムチップBASIC = null;
         private 譜面スクロール速度 _譜面スクロール速度 = null;
         private エキサイトゲージ _エキサイトゲージ = null;
         private フェーズパネル _フェーズパネル = null;
@@ -759,189 +775,6 @@ namespace DTXMania.ステージ.演奏
                     }
 
                 } );
-
-            } );
-        }
-
-        private 画像 _ドラムチップ画像 = null;
-        private Dictionary<string, RectangleF> _ドラムチップの矩形リスト = null;
-        private float _ドラムチップの縦方向中央位置 = 0f;
-        private LoopCounter _ドラムチップアニメ = null;
-        private void _チップを描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
-        {
-            this._描画範囲内のすべてのチップに対して( 現在の演奏時刻sec, ( chip, index, ヒット判定バーと描画との時間sec, ヒット判定バーと発声との時間sec, ヒット判定バーとの距離dpx ) => {
-
-                float たて中央位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx );
-                float 消滅割合 = 0f;
-
-                #region " 消滅割合を算出; チップがヒット判定バーを通過したら徐々に消滅する。"
-                //----------------
-                const float 消滅を開始するヒット判定バーからの距離dpx = 20f;
-                const float 消滅開始から完全消滅するまでの距離dpx = 70f;
-
-                if( 消滅を開始するヒット判定バーからの距離dpx < ヒット判定バーとの距離dpx )   // 通過した
-                {
-                    // 通過距離に応じて 0→1の消滅割合を付与する。0で完全表示、1で完全消滅、通過してなければ 0。
-                    消滅割合 = Math.Min( 1f, (float) ( ( ヒット判定バーとの距離dpx - 消滅を開始するヒット判定バーからの距離dpx ) / 消滅開始から完全消滅するまでの距離dpx ) );
-                }
-                //----------------
-                #endregion
-
-                #region " チップが描画開始チップであり、かつ、そのY座標が画面下端を超えたなら、描画開始チップ番号を更新する。"
-                //----------------
-                if( ( index == this._描画開始チップ番号 ) &&
-                    ( グラフィックデバイス.Instance.設計画面サイズ.Height + 40.0 < たて中央位置dpx ) )   // +40 はチップが隠れるであろう適当なマージン。
-                {
-                    this._描画開始チップ番号++;
-
-                    // 描画開始チップがチップリストの末尾に到達したら、演奏を終了する。
-                    if( App.演奏スコア.チップリスト.Count <= this._描画開始チップ番号 )
-                    {
-                        this.現在のフェーズ = フェーズ.クリア;
-                        this._描画開始チップ番号 = -1;    // 演奏完了。
-                        return;
-                    }
-                }
-                //----------------
-                #endregion
-
-                if( this._チップの演奏状態[ chip ].不可視 )
-                    return;
-
-                // チップの大きさを計算する。
-                float 大きさ0to1 = 1.0f;
-                if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
-                {
-                    // 音量により大きさ可変。
-                    大きさ0to1 = Math.Max( 0.3f, Math.Min( 1.0f, chip.音量 / (float) チップ.既定音量 ) );   // 既定音量未満は大きさを小さくするが、既定音量以上は大きさ1.0のままとする。最小は 0.3。
-                    if( chip.チップ種別 == チップ種別.Snare_Ghost )   // Ghost は対象外
-                        大きさ0to1 = 1.0f;
-                }
-
-                // チップ種別 から、表示レーン種別 と 表示チップ種別 を取得。
-                var 表示レーン種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示レーン種別;
-                var 表示チップ種別 = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理[ chip.チップ種別 ].表示チップ種別;
-
-                if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
-                    ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
-                {
-                    var たて方向中央位置dpx = this._ドラムチップの縦方向中央位置;
-                    var 左端位置dpx = BASIC.レーンフレーム.領域.Left + BASIC.レーンフレーム.現在のレーン配置.表示レーンの左端位置dpx[ 表示レーン種別 ];
-                    var 中央位置Xdpx = 左端位置dpx + BASIC.レーンフレーム.現在のレーン配置.表示レーンの幅dpx[ 表示レーン種別 ] / 2f;
-
-                    #region " チップ背景（あれば）を描画する。"
-                    //----------------
-                    {
-                        var 矩形 = this._ドラムチップの矩形リスト[ 表示チップ種別.ToString() + "_back" ];
-
-                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
-                        {
-                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
-                            var アニメ割合 = this._ドラムチップアニメ.現在値の割合;   // 0→1のループ
-
-                            var 変換行列2D = ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 );
-
-                            // 変換(1) 拡大縮小、回転
-                            // → 現在は、どの表示チップ種別の背景がどのアニメーションを行うかは、コード内で名指しする（固定）。
-                            switch( 表示チップ種別 )
-                            {
-                                case 表示チップ種別.LeftCymbal:
-                                case 表示チップ種別.RightCymbal:
-                                case 表示チップ種別.HiHat:
-                                case 表示チップ種別.HiHat_Open:
-                                case 表示チップ種別.HiHat_HalfOpen:
-                                case 表示チップ種別.Foot:
-                                case 表示チップ種別.LeftBass:
-                                case 表示チップ種別.Tom3:
-                                case 表示チップ種別.Tom3_Rim:
-                                case 表示チップ種別.LeftRide:
-                                case 表示チップ種別.RightRide:
-                                case 表示チップ種別.LeftRide_Cup:
-                                case 表示チップ種別.RightRide_Cup:
-                                case 表示チップ種別.LeftChina:
-                                case 表示チップ種別.RightChina:
-                                case 表示チップ種別.LeftSplash:
-                                case 表示チップ種別.RightSplash:
-                                    #region " 縦横に伸び縮み "
-                                    //----------------
-                                    {
-                                        float v = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-
-                                        //変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 大きさ0to1, 矩形中央 );
-                                        変換行列2D = 変換行列2D * Matrix3x2.Scaling( (float) ( 1 + v ), (float) ( 1 - v ) * 1.0f, 矩形中央 );       // チップ背景は大きさを変えない
-                                    }
-                                    //----------------
-                                    #endregion
-                                    break;
-
-                                case 表示チップ種別.Bass:
-                                    #region " 左右にゆらゆら回転 "
-                                    //----------------
-                                    {
-                                        float r = (float) ( Math.Sin( 2 * Math.PI * アニメ割合 ) * 0.2 );    // -0.2～0.2 の振動
-                                        変換行列2D = 変換行列2D *
-                                            //Matrix3x2.Scaling( 1f, 大きさ0to1, 矩形中央 ) *
-                                            Matrix3x2.Scaling( 1f, 1f, 矩形中央 ) * // チップ背景は大きさを変えない
-                                            Matrix3x2.Rotation( (float) ( r * Math.PI ), 矩形中央 );
-                                    }
-                                    //----------------
-                                    #endregion
-                                    break;
-                            }
-
-                            // 変換(2) 移動
-                            変換行列2D = 変換行列2D *
-                                //Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 大きさ0to1 ) );
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx * 1.0f ) );       // チップ背景は大きさを変えない
-
-                            // 描画。
-                            if( 表示チップ種別 != 表示チップ種別.HiHat &&         // 暫定処置：これらでは背景画像を表示しない 
-                                表示チップ種別 != 表示チップ種別.LeftRide &&      //
-                                表示チップ種別 != 表示チップ種別.RightRide &&     //
-                                表示チップ種別 != 表示チップ種別.LeftRide_Cup &&  // 
-                                表示チップ種別 != 表示チップ種別.RightRide_Cup )
-                            {
-                                this._ドラムチップ画像.描画する(
-                                    dc,
-                                    変換行列2D,
-                                    転送元矩形: 矩形,
-                                    不透明度0to1: ( 1f - 消滅割合 ) );
-                            }
-                        }
-                    }
-                    //----------------
-                    #endregion
-
-                    #region " チップ本体を描画する。"
-                    //----------------
-                    {
-                        var 矩形 = this._ドラムチップの矩形リスト[ 表示チップ種別.ToString() ];
-
-                        if( ( null != 矩形 ) && ( ( 0 < 矩形.Width && 0 < 矩形.Height ) ) )
-                        {
-                            var 矩形中央 = new Vector2( 矩形.Width / 2f, 矩形.Height / 2f );
-
-                            // 変換。
-                            var 変換行列2D =
-                                ( ( 0 >= 消滅割合 ) ? Matrix3x2.Identity : Matrix3x2.Scaling( 1f - 消滅割合, 1f, 矩形中央 ) ) *
-                                Matrix3x2.Scaling( 0.6f + ( 0.4f * 大きさ0to1 ), 大きさ0to1, 矩形中央 ) *     // 大きさ: 0→1 のとき、幅 x0.6→x1.0
-                                Matrix3x2.Translation( 左端位置dpx, ( たて中央位置dpx - たて方向中央位置dpx ) );
-
-                            // スネアとタムのみ不透明度を反映。
-                            float 不透明度 = ( chip.チップ種別 == チップ種別.Snare || chip.チップ種別 == チップ種別.Tom1 || chip.チップ種別 == チップ種別.Tom2 || chip.チップ種別 == チップ種別.Tom3 ) ?
-                                ( 0.4f + ( 0.6f * 大きさ0to1 ) ) : 1f;
-
-                            // 描画。
-                            this._ドラムチップ画像.描画する(
-                                dc,
-                                変換行列2D,
-                                転送元矩形: 矩形,
-                                不透明度0to1: Math.Max( 0f, 不透明度 - 消滅割合 ) );
-                        }
-                    }
-                    //----------------
-                    #endregion
-                }
 
             } );
         }
@@ -1033,7 +866,7 @@ namespace DTXMania.ステージ.演奏
                 {
                     // MISS以外（PERFECT～OK）
                     this._チップ光.表示を開始する( 対応表.表示レーン種別 );
-                    this._ドラムパッド.ヒットする( 対応表.表示レーン種別 );
+                    this._ドラムパッドBASIC.ヒットする( 対応表.表示レーン種別 );
                     this._レーンフラッシュ.開始する( 対応表.表示レーン種別 );
                 }
 

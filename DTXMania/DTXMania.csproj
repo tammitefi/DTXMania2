@@ -224,6 +224,7 @@
     <Compile Include="ステージ\05オプション設定\入力割り当てダイアログ.Designer.cs">
       <DependentUpon>入力割り当てダイアログ.cs</DependentUpon>
     </Compile>
+    <Compile Include="ステージ\07演奏\BASIC\ドラムチップ.cs" />
     <Compile Include="ステージ\07演奏\EXPERT\ドラムキットとヒットバー.cs" />
     <Compile Include="ステージ\07演奏\BASIC\ヒットバー.cs" />
     <Compile Include="ステージ\07演奏\EXPERT\レーンフレーム.cs" />
@@ -384,6 +385,9 @@
     <None Include="System\Images\演奏\ドラムキットとヒットバー.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="System\Images\演奏\ドラムチップEXPERT.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="System\Images\演奏\レーン配置\Expert.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -522,7 +526,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\ドラムチップ.png">
+    <None Include="System\Images\演奏\ドラムチップBASIC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -796,7 +800,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="System\Images\演奏\ドラムチップ.yaml">
+    <None Include="System\Images\演奏\ドラムチップBASIC.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -896,6 +900,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="System\Images\演奏\ドラムキットとヒットバー.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="System\Images\演奏\ドラムチップEXPERT.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
