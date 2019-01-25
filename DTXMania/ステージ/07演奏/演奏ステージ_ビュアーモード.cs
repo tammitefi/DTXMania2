@@ -75,6 +75,7 @@ namespace DTXMania.ステージ.演奏
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
+                this._小節線影色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.Blue );
                 this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
                 BASIC.レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
@@ -110,6 +111,9 @@ namespace DTXMania.ステージ.演奏
 
                 this._拍線色?.Dispose();
                 this._拍線色 = null;
+
+                this._小節線影色?.Dispose();
+                this._小節線影色 = null;
 
                 this._小節線色?.Dispose();
                 this._小節線色 = null;
@@ -765,6 +769,7 @@ namespace DTXMania.ステージ.演奏
         private 画像フォント _数字フォント中グレー48x64 = null;
 
         private SolidColorBrush _小節線色 = null;
+        private SolidColorBrush _小節線影色 = null;
         private SolidColorBrush _拍線色 = null;
         private void _小節線拍線を描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
@@ -776,20 +781,32 @@ namespace DTXMania.ステージ.演奏
 
                     if( chip.チップ種別 == チップ種別.小節線 )
                     {
-                        // 小節線
                         float 上位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx - 1f );   // -1f は小節線の厚みの半分。
-                        dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._小節線色, strokeWidth: 3f );
+
+                        // 小節線
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節線と拍線を表示する )
+                        {
+                            float x = 441f;
+                            float w = 780f;
+                            dc.DrawLine( new Vector2( x, 上位置dpx + 0f ), new Vector2( x + w, 上位置dpx + 0f ), this._小節線色 );
+                            dc.DrawLine( new Vector2( x, 上位置dpx + 1f ), new Vector2( x + w, 上位置dpx + 1f ), this._小節線影色 );
+                        }
 
                         // 小節番号
-                        float 右位置dpx = 441f + 780f - 24f;   // -24f は適当なマージン。
-                        this._数字フォント中グレー48x64.描画する( dc, 右位置dpx, 上位置dpx - 84f, chip.小節番号.ToString(), 右揃え: true );	// -84f は適当なマージン。
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節番号を表示する )
+                        {
+                            float 右位置dpx = 441f + 780f - 24f;   // -24f は適当なマージン。
+                            this._数字フォント中グレー48x64.描画する( dc, 右位置dpx, 上位置dpx - 84f, chip.小節番号.ToString(), 右揃え: true );    // -84f は適当なマージン。
+                        }
                     }
-
-                    // 拍線
                     else if( chip.チップ種別 == チップ種別.拍線 )
                     {
-                        float 上位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx - 1f );   // -1f は拍線の厚みの半分。
-                        dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._拍線色, strokeWidth: 1f );
+                        // 拍線
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節線と拍線を表示する )
+                        {
+                            float 上位置dpx = (float) ( ヒット判定位置Ydpx + ヒット判定バーとの距離dpx - 1f );   // -1f は拍線の厚みの半分。
+                            dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._拍線色, strokeWidth: 1f );
+                        }
                     }
 
                 } );

@@ -82,7 +82,8 @@ namespace DTXMania.ステージ.演奏
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 this._小節線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.White );
-                this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.LightGray );
+                this._小節線影色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.Blue );
+                this._拍線色 = new SolidColorBrush( グラフィックデバイス.Instance.D2DDeviceContext, Color.Gray );
                 this._プレイヤー名表示.名前 = App.ユーザ管理.ログオン中のユーザ.ユーザ名;
                 BASIC.レーンフレーム.レーン配置を設定する( App.ユーザ管理.ログオン中のユーザ.レーン配置 );
                 this._フェードインカウンタ = new Counter( 0, 100, 10 );
@@ -116,6 +117,9 @@ namespace DTXMania.ステージ.演奏
 
                 this._拍線色?.Dispose();
                 this._拍線色 = null;
+
+                this._小節線影色?.Dispose();
+                this._小節線影色 = null;
 
                 this._小節線色?.Dispose();
                 this._小節線色 = null;
@@ -857,6 +861,7 @@ namespace DTXMania.ステージ.演奏
         private 画像フォント _数字フォント中グレー48x64 = null;
 
         private SolidColorBrush _小節線色 = null;
+        private SolidColorBrush _小節線影色 = null;
         private SolidColorBrush _拍線色 = null;
         private void _小節線拍線を描画する( DeviceContext1 dc, double 現在の演奏時刻sec )
         {
@@ -873,7 +878,10 @@ namespace DTXMania.ステージ.演奏
                         // 小節線
                         if( App.ユーザ管理.ログオン中のユーザ.演奏中に小節線と拍線を表示する )
                         {
-                            dc.DrawLine( new Vector2( 441f, 上位置dpx ), new Vector2( 441f + 780f, 上位置dpx ), this._小節線色, strokeWidth: 3f );
+                            float x = 441f;
+                            float w = 780f;
+                            dc.DrawLine( new Vector2( x, 上位置dpx + 0f ), new Vector2( x + w, 上位置dpx + 0f ), this._小節線色 );
+                            dc.DrawLine( new Vector2( x, 上位置dpx + 1f ), new Vector2( x + w, 上位置dpx + 1f ), this._小節線影色 );
                         }
 
                         // 小節番号
