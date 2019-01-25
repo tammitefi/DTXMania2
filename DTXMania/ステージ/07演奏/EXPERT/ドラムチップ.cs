@@ -106,27 +106,25 @@ namespace DTXMania.ステージ.演奏.EXPERT
             if( ( 表示レーン種別 != 表示レーン種別.Unknown ) &&   // Unknwon ならチップを表示しない。
                 ( 表示チップ種別 != 表示チップ種別.Unknown ) )    //
             {
-                float 音量0to1 = chip.音量 / (float) チップ.最大音量;
-
                 #region " チップを描画する。"
                 //----------------
                 switch( chip.チップ種別 )
                 {
                     case チップ種別.LeftCrash:
-                        this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftCymbal ], たて中央位置dpx, 音量0to1 );
+                        this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftCymbal ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.HiHat_Close:
-                        this._アニメチップを１つ描画する( 表示レーン種別.HiHat, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.HiHat, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.HiHat_HalfOpen:
-                        this._アニメチップを１つ描画する( 表示レーン種別.HiHat, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.HiHat, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat ], たて中央位置dpx, 大きさ0to1 );
                         this._単画チップを１つ描画する( 表示レーン種別.Foot, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat_HalfOpen ], たて中央位置dpx, 1.0f );
                         break;
 
                     case チップ種別.HiHat_Open:
-                        this._アニメチップを１つ描画する( 表示レーン種別.HiHat, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.HiHat, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat ], たて中央位置dpx, 大きさ0to1 );
                         this._単画チップを１つ描画する( 表示レーン種別.Foot, this._ドラムチップの矩形リスト[ 表示チップ種別.HiHat_Open ], たて中央位置dpx, 1.0f );
                         break;
 
@@ -135,7 +133,7 @@ namespace DTXMania.ステージ.演奏.EXPERT
                         break;
 
                     case チップ種別.Snare:
-                        this._アニメチップを１つ描画する( 表示レーン種別.Snare, this._ドラムチップの矩形リスト[ 表示チップ種別.Snare ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.Snare, this._ドラムチップの矩形リスト[ 表示チップ種別.Snare ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.Snare_ClosedRim:
@@ -143,8 +141,8 @@ namespace DTXMania.ステージ.演奏.EXPERT
                         break;
 
                     case チップ種別.Snare_OpenRim:
-                        this._単画チップを１つ描画する( 表示レーン種別.Snare, this._ドラムチップの矩形リスト[ 表示チップ種別.Snare_OpenRim ], たて中央位置dpx, 音量0to1 );
-                        //this._単画チップを１つ描画する( 表示レーン種別.Snare, this._ドラムチップの矩形リスト[ 表示チップ種別.Snare ], たて中央位置dpx, 音量0to1 );
+                        this._単画チップを１つ描画する( 表示レーン種別.Snare, this._ドラムチップの矩形リスト[ 表示チップ種別.Snare_OpenRim ], たて中央位置dpx, 大きさ0to1 );
+                        //this._単画チップを１つ描画する( 表示レーン種別.Snare, this._ドラムチップの矩形リスト[ 表示チップ種別.Snare ], たて中央位置dpx, 大きさ0to1 );
                         // → ないほうがいいかも。
                         break;
 
@@ -153,11 +151,11 @@ namespace DTXMania.ステージ.演奏.EXPERT
                         break;
 
                     case チップ種別.Bass:
-                        this._アニメチップを１つ描画する( 表示レーン種別.Bass, this._ドラムチップの矩形リスト[ 表示チップ種別.Bass ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.Bass, this._ドラムチップの矩形リスト[ 表示チップ種別.Bass ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.Tom1:
-                        this._アニメチップを１つ描画する( 表示レーン種別.Tom1, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom1 ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.Tom1, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom1 ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.Tom1_Rim:
@@ -165,7 +163,7 @@ namespace DTXMania.ステージ.演奏.EXPERT
                         break;
 
                     case チップ種別.Tom2:
-                        this._アニメチップを１つ描画する( 表示レーン種別.Tom2, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom2 ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.Tom2, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom2 ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.Tom2_Rim:
@@ -173,7 +171,7 @@ namespace DTXMania.ステージ.演奏.EXPERT
                         break;
 
                     case チップ種別.Tom3:
-                        this._アニメチップを１つ描画する( 表示レーン種別.Tom3, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom3 ], たて中央位置dpx, 音量0to1 );
+                        this._アニメチップを１つ描画する( 表示レーン種別.Tom3, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom3 ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
                     case チップ種別.Tom3_Rim:
@@ -182,50 +180,50 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
                     case チップ種別.RightCrash:
                         this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightCymbal ], たて中央位置dpx
-                            , 音量0to1 );
+                            , 大きさ0to1 );
                         break;
 
                     case チップ種別.China:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Chinaは左 )
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftChina ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftChina ], たて中央位置dpx, 大きさ0to1 );
                         }
                         else
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightChina ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightChina ], たて中央位置dpx, 大きさ0to1 );
                         }
                         break;
 
                     case チップ種別.Ride:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Rideは左 )
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftRide ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftRide ], たて中央位置dpx, 大きさ0to1 );
                         }
                         else
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightRide ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightRide ], たて中央位置dpx, 大きさ0to1 );
                         }
                         break;
 
                     case チップ種別.Ride_Cup:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Rideは左 )
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftRide_Cup ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftRide_Cup ], たて中央位置dpx, 大きさ0to1 );
                         }
                         else
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightRide_Cup ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightRide_Cup ], たて中央位置dpx, 大きさ0to1 );
                         }
                         break;
 
                     case チップ種別.Splash:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Splashは左 )
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftSplash ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftSplash ], たて中央位置dpx, 大きさ0to1 );
                         }
                         else
                         {
-                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightSplash ], たて中央位置dpx, 音量0to1 );
+                            this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightSplash ], たて中央位置dpx, 大きさ0to1 );
                         }
                         break;
 
