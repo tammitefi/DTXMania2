@@ -249,28 +249,37 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
         private LoopCounter _ドラムチップアニメ = null;
 
+        private const float _チップの最終調整倍率 = 1.2f;
 
-        private void _単画チップを１つ描画する( 表示レーン種別 lane, RectangleF 転送元矩形, float 上位置, float 音量0to1 )
+        private void _単画チップを１つ描画する( 表示レーン種別 lane, RectangleF 転送元矩形, float 上位置, float 大きさ0to1 )
         {
+            float X倍率 = 1f * _チップの最終調整倍率;
+            float Y倍率 = 大きさ0to1 * _チップの最終調整倍率;
+
             this._ドラムチップ画像.描画する(
-                左位置: レーンフレーム.レーン中央位置X[ lane ] - ( 転送元矩形.Width / 2f ),
-                上位置: 上位置 - ( ( 転送元矩形.Height / 2f ) * 音量0to1 ),
+                左位置: レーンフレーム.レーン中央位置X[ lane ] - ( 転送元矩形.Width * X倍率 / 2f ),
+                上位置: 上位置 - ( 転送元矩形.Height * Y倍率 / 2f ),
                 転送元矩形: 転送元矩形,
-                Y方向拡大率: 音量0to1 );
+                X方向拡大率: X倍率,
+                Y方向拡大率: Y倍率 );
         }
 
-        private void _アニメチップを１つ描画する( 表示レーン種別 lane, RectangleF 転送元矩形, float Y, float 音量0to1 )
+        private void _アニメチップを１つ描画する( 表示レーン種別 lane, RectangleF 転送元矩形, float Y, float 大きさ0to1 )
         {
+            float X倍率 = 1f * _チップの最終調整倍率;
+            float Y倍率 = 大きさ0to1 * _チップの最終調整倍率;
+
             const float チップ1枚の高さ = 18f;
 
             転送元矩形.Offset( 0f, this._ドラムチップアニメ.現在値 * 15f );   // 下端3pxは下のチップと共有する前提のデザインなので、18f-3f = 15f。
             転送元矩形.Height = チップ1枚の高さ;
 
             this._ドラムチップ画像.描画する(
-                左位置: レーンフレーム.レーン中央位置X[lane] - ( 転送元矩形.Width/2f),
-                上位置: Y - ( チップ1枚の高さ / 2f)*音量0to1,
+                左位置: レーンフレーム.レーン中央位置X[ lane ] - ( 転送元矩形.Width * X倍率 / 2f ),
+                上位置: Y - ( チップ1枚の高さ * Y倍率 / 2f ),
                 転送元矩形: 転送元矩形,
-                Y方向拡大率: 音量0to1 );
+                X方向拡大率: X倍率,
+                Y方向拡大率: Y倍率 );
         }
 
 
