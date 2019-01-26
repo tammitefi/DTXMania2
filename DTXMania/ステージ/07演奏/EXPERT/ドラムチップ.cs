@@ -253,8 +253,18 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
         private void _単画チップを１つ描画する( 表示レーン種別 lane, RectangleF 転送元矩形, float 上位置, float 大きさ0to1 )
         {
-            float X倍率 = 1f * _チップの最終調整倍率;
-            float Y倍率 = 大きさ0to1 * _チップの最終調整倍率;
+            float X倍率 = 1f;
+            float Y倍率 = 大きさ0to1;
+
+            if( lane == 表示レーン種別.LeftCymbal || lane == 表示レーン種別.RightCymbal )
+            {
+                // シンバルレーンは大きさの変化をより少なく、さらにX倍率もY倍率と同じにする。
+                X倍率 = MathUtil.Clamp( 大きさ0to1 * 2f, 0f, 1f );
+                Y倍率 = MathUtil.Clamp( 大きさ0to1 * 2f, 0f, 1f );
+            }
+
+            X倍率 *= _チップの最終調整倍率;
+            Y倍率 *= _チップの最終調整倍率;
 
             this._ドラムチップ画像.描画する(
                 左位置: レーンフレーム.レーン中央位置X[ lane ] - ( 転送元矩形.Width * X倍率 / 2f ),
