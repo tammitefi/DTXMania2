@@ -279,6 +279,9 @@ namespace DTXMania.ステージ.演奏.EXPERT
             float X倍率 = 1f * _チップの最終調整倍率;
             float Y倍率 = 大きさ0to1 * _チップの最終調整倍率;
 
+            if( lane == 表示レーン種別.Bass )
+                Y倍率 *= 1.2f;    // Bass は縦方向に少し大きめに。
+
             const float チップ1枚の高さ = 18f;
 
             転送元矩形.Offset( 0f, this._ドラムチップアニメ.現在値 * 15f );   // 下端3pxは下のチップと共有する前提のデザインなので、18f-3f = 15f。
