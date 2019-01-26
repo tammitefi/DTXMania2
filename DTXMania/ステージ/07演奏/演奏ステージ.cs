@@ -581,6 +581,17 @@ namespace DTXMania.ステージ.演奏
                             //----------------
                             #endregion
                         }
+                        if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                        {
+                            #region " ハイハットの開閉 "
+                            //----------------
+                            foreach( var ev in App.入力管理.MidiIn.入力イベントリスト.Where( ( ie ) => ( 255 == ie.Key ) ) )
+                            {
+                                this._ドラムキットとヒットバーEXPERT.ハイハットの開度を設定する( ev.Velocity );
+                            }
+                            //----------------
+                            #endregion
+                        }
                         break;
 
                     case フェーズ.キャンセル完了:
