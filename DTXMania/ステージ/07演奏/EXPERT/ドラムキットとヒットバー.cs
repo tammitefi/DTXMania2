@@ -47,6 +47,10 @@ namespace DTXMania.ステージ.演奏.EXPERT
                     if( 2 == kvp.Value.Length )
                         this._パーツ画像の中心位置[ kvp.Key ] = (kvp.Value[ 0 ], kvp.Value[ 1 ]);
                 }
+
+                this._振動パラメータ = new Dictionary<表示レーン種別, 振動パラメータ>();
+                foreach( 表示レーン種別 lane in Enum.GetValues( typeof( 表示レーン種別 ) ) )
+                    this._振動パラメータ[ lane ] = new 振動パラメータ();
             }
         }
 
@@ -67,22 +71,151 @@ namespace DTXMania.ステージ.演奏.EXPERT
             this.ハイハットの開度 = 1f - ( Math.Min( ベロシティ値, 80 ) / 80f );
         }
 
+        public void ヒットアニメ開始( 表示レーン種別 lane )
+        {
+            this._振動パラメータ[ lane ] = new 振動パラメータ {
+                カウンタ = new Counter( 0, 100, 3 ),
+                振動幅 = 0f,
+            };
+        }
 
         public void ドラムキットを進行描画する()
         {
-            this._パーツを描画する( パーツ.Bass );
-            this._パーツを描画する( パーツ.LowTom );
-            this._パーツを描画する( パーツ.HiTom );
-            this._パーツを描画する( パーツ.FloorTom );
-            this._パーツを描画する( パーツ.Snare );
-            this._パーツを描画する( パーツ.HiHatBottom );
-            this._パーツを描画する( パーツ.HiHatTop, Y方向移動量: -20f * this.ハイハットの開度 );
-            this._パーツを描画する( パーツ.RightCymbalStand );
-            this._パーツを描画する( パーツ.RightCymbal );
-            this._パーツを描画する( パーツ.RightCymbalTop );
-            this._パーツを描画する( パーツ.LeftCymbalStand );
-            this._パーツを描画する( パーツ.LeftCymbal );
-            this._パーツを描画する( パーツ.LeftCymbalTop );
+            float Bassの振動幅 = 0;
+
+            #region " Bass "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.Bass ].カウンタ;
+                Bassの振動幅 = 0f;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 2 → 0
+                    Bassの振動幅 = (float) ( 最大振幅 * Math.Sin( 10.0 * Math.PI * counter.現在値の割合 ) );     // 10周
+                }
+
+                this._パーツを描画する( パーツ.Bass, Y方向移動量: Bassの振動幅 );
+            }
+            //----------------
+            #endregion
+            #region " LowTom "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.Tom2 ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 2 → 0
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 15.0 * Math.PI * counter.現在値の割合 ) );           // 15周
+                }
+
+                this._パーツを描画する( パーツ.LowTom, Y方向移動量: 振動幅 + Bassの振動幅 );   // Bassと連動
+            }
+            //----------------
+            #endregion
+            #region " HiTom "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.Tom1 ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 2 → 0
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 15.0 * Math.PI * counter.現在値の割合 ) );           // 15周
+                }
+
+                this._パーツを描画する( パーツ.HiTom, Y方向移動量: 振動幅 + Bassの振動幅 );   // Bassと連動
+            }
+            //----------------
+            #endregion
+            #region " FloorTom "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.Tom3 ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 2 → 0
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 10.0 * Math.PI * counter.現在値の割合 ) );           // 10周
+                }
+
+                this._パーツを描画する( パーツ.FloorTom, Y方向移動量: 振動幅 );
+            }
+            //----------------
+            #endregion
+            #region " Snare "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.Snare ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 2 → 0
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 17.0 * Math.PI * counter.現在値の割合 ) );           // 17周
+                }
+
+                this._パーツを描画する( パーツ.Snare, Y方向移動量: 振動幅 );
+            }
+            //----------------
+            #endregion
+            #region " HiHat "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.HiHat ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = ( this.ハイハットの開度 < 0.2f ) ? 1f : (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) ); // 2 → 0, 開度が小さい場合は 1。
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 20.0 * Math.PI * counter.現在値の割合 ) );                                               // 20周
+                }
+
+                this._パーツを描画する( パーツ.HiHatBottom );  // Bottom は動かない。
+                this._パーツを描画する( パーツ.HiHatTop, Y方向移動量: 振動幅 -20f * this.ハイハットの開度 );
+            }
+            //----------------
+            #endregion
+            #region " RightCymbal "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.RightCymbal ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 1.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );   // 1 → 0
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 20.0 * Math.PI * counter.現在値の割合 ) );         // 20周
+                }
+
+                this._パーツを描画する( パーツ.RightCymbalStand ); // Standは動かない。
+                this._パーツを描画する( パーツ.RightCymbal, Y方向移動量: 振動幅 );
+                this._パーツを描画する( パーツ.RightCymbalTop, Y方向移動量: 振動幅 );
+            }
+            //----------------
+            #endregion
+            #region " LeftCymbal "
+            //----------------
+            {
+                var counter = this._振動パラメータ[ 表示レーン種別.LeftCymbal ].カウンタ;
+                float 振動幅 = 0;
+
+                if( ( null != counter ) && counter.終了値に達していない )
+                {
+                    float 最大振幅 = (float) ( 1.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) ); // 1 → 0
+                    振動幅 = (float) ( 最大振幅 * Math.Sin( 20.0 * Math.PI * counter.現在値の割合 ) );       // 20周
+                }
+
+                this._パーツを描画する( パーツ.LeftCymbalStand );  // Standは動かない。
+                this._パーツを描画する( パーツ.LeftCymbal, Y方向移動量: 振動幅 );
+                this._パーツを描画する( パーツ.LeftCymbalTop, Y方向移動量: 振動幅 );
+            }
+            //----------------
+            #endregion
         }
 
         public void ヒットバーを進行描画する()
@@ -108,6 +241,14 @@ namespace DTXMania.ステージ.演奏.EXPERT
                 中心位置.Y - srcRect.Height / 2 + Y方向移動量,
                 転送元矩形: srcRect );
         }
+
+
+        private class 振動パラメータ
+        {
+            public Counter カウンタ = null;
+            public float 振動幅 = 0f;
+        }
+        private Dictionary<表示レーン種別, 振動パラメータ> _振動パラメータ = null;
 
 
         protected enum パーツ

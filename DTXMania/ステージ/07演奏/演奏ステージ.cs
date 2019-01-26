@@ -324,6 +324,9 @@ namespace DTXMania.ステージ.演奏
                                         ヒット判定バーと発声との時間sec );
 
                                     //this.成績.エキサイトゲージを加算する( 判定種別.PERFECT ); -> エキサイトゲージには反映しない。
+
+                                    this._ドラムキットとヒットバーEXPERT.ヒットアニメ開始( ドラムチッププロパティ.表示レーン種別 );
+
                                     return;
                                 }
                                 else if( !AutoPlay && ドラムチッププロパティ.AutoPlayOFF_自動ヒット )
@@ -337,6 +340,9 @@ namespace DTXMania.ステージ.演奏
                                         ヒット判定バーと発声との時間sec );
 
                                     //this.成績.エキサイトゲージを加算する( 判定種別.PERFECT ); -> エキサイトゲージには反映しない。
+
+                                    this._ドラムキットとヒットバーEXPERT.ヒットアニメ開始( ドラムチッププロパティ.表示レーン種別 );
+
                                     return;
                                 }
                                 else
@@ -477,9 +483,16 @@ namespace DTXMania.ステージ.演奏
                                         {
                                             var laneType = プロパティs.ElementAt( i ).Value.表示レーン種別;
 
-                                            this._ドラムパッドBASIC.ヒットする( laneType );
-                                            this._レーンフラッシュBASIC.開始する( laneType );
-                                            this._レーンフラッシュEXPERT.開始する( laneType );
+                                            if( ユーザ設定.演奏モード == PlayMode.BASIC )
+                                            {
+                                                this._ドラムパッドBASIC.ヒットする( laneType );
+                                                this._レーンフラッシュBASIC.開始する( laneType );
+                                            }
+                                            if( ユーザ設定.演奏モード == PlayMode.EXPERT )
+                                            {
+                                                this._ドラムキットとヒットバーEXPERT.ヒットアニメ開始( laneType );
+                                                this._レーンフラッシュEXPERT.開始する( laneType );
+                                            }
                                         }
                                     }
                                 }
@@ -1012,9 +1025,16 @@ namespace DTXMania.ステージ.演奏
                 {
                     // MISS以外（PERFECT～OK）
                     this._チップ光.表示を開始する( 対応表.表示レーン種別 );
-                    this._ドラムパッドBASIC.ヒットする( 対応表.表示レーン種別 );
-                    this._レーンフラッシュBASIC.開始する( 対応表.表示レーン種別 );
-                    this._レーンフラッシュEXPERT.開始する( 対応表.表示レーン種別 );
+
+                    if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.BASIC )
+                    {
+                        this._ドラムパッドBASIC.ヒットする( 対応表.表示レーン種別 );
+                        this._レーンフラッシュBASIC.開始する( 対応表.表示レーン種別 );
+                    }
+                    if( App.ユーザ管理.ログオン中のユーザ.演奏モード == PlayMode.EXPERT )
+                    {
+                        this._レーンフラッシュEXPERT.開始する( 対応表.表示レーン種別 );
+                    }
                 }
 
                 this._判定文字列.表示を開始する( 対応表.表示レーン種別, judge );
