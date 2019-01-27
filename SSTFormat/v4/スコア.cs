@@ -13,7 +13,7 @@ namespace SSTFormat.v4
         /// <summary>
         ///     このソースが実装するSSTFバージョン。
         /// </summary>
-        public static readonly Version SSTFVERSION = new Version( 4, 0, 0, 0 );
+        public static readonly Version SSTFVERSION = new Version( 4, 1, 0, 0 );
         public const double 初期BPM = 120.0;
         public const double 初期小節解像度 = 480.0;
 
