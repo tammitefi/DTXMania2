@@ -158,8 +158,10 @@ namespace DTXMania.ステージ.演奏
 
             foreach( var kvp in App.演奏スコア.WAVリスト )
             {
-                var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value.ファイルパス );
-                App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, kvp.Value.多重再生する );
+                var wavInfo = kvp.Value;
+
+                var path = Path.Combine( App.演奏スコア.PATH_WAV, wavInfo.ファイルパス );
+                App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, wavInfo.多重再生する, wavInfo.BGMである );
             }
 
 
@@ -299,7 +301,7 @@ namespace DTXMania.ステージ.演奏
 
                                     if( !( this._チップの演奏状態[ chip ].発声済みである ) )
                                     {
-                                        this.チップの発声を行う( chip );
+                                        this.チップの発声を行う( chip, ユーザ設定.ドラムの音を発声する );
                                         this._チップの演奏状態[ chip ].発声済みである = true;
                                     }
 
@@ -378,8 +380,8 @@ namespace DTXMania.ステージ.演奏
                                 ヒット判定バーと描画との時間sec += ( App.システム設定.判定位置調整ms / 1000.0 );
                                 ヒット判定バーと発声との時間sec += ( App.システム設定.判定位置調整ms / 1000.0 );
 
-                                // チップにヒットしている入力を探す。
-
+                                #region " チップにヒットしている入力を探す。"
+                                //----------------
                                 var ドラムチッププロパティ = ユーザ設定.ドラムチッププロパティ管理[ chip.チップ種別 ];
                                 var AutoPlayである = ユーザ設定.AutoPlay[ ドラムチッププロパティ.AutoPlay種別 ];
 
@@ -428,11 +430,14 @@ namespace DTXMania.ステージ.演奏
                                     return false;
 
                                 } );
+                                //----------------
+                                #endregion
 
-                                // チップにヒットした入力があった。
-
-                                if( null != チップにヒットしている入力 )
+                                if( null != チップにヒットしている入力 ) // チップにヒットした入力があった
                                 {
+                                    #region " チップの手動ヒット処理。"
+                                    //----------------
+
                                     ヒット処理済み入力.Add( チップにヒットしている入力 );    // この入力はこのチップでヒット処理した。
 
                                     // 判定を算出。
@@ -457,6 +462,9 @@ namespace DTXMania.ステージ.演奏
 
                                     // エキサイトゲージに反映する。
                                     this.成績.エキサイトゲージを加算する( 判定 );
+
+                                    //----------------
+                                    #endregion
                                 }
 
                             } );
@@ -524,7 +532,7 @@ namespace DTXMania.ステージ.演奏
 
                                             // (A) 空打ちチップの指定があるなら、それを発声する。
                                             if( 0 != zz )
-                                                App.WAV管理.発声する( zz, prop.チップ種別, prop.発声前消音, prop.消音グループ種別 );
+                                                App.WAV管理.発声する( zz, prop.チップ種別, prop.発声前消音, prop.消音グループ種別, true );
 
                                             // (B) 空打ちチップの指定がないなら、一番近いチップを検索し、それを発声する。
                                             else
@@ -533,7 +541,7 @@ namespace DTXMania.ステージ.演奏
 
                                                 if( null != chip )
                                                 {
-                                                    this.チップの発声を行う( chip );
+                                                    this.チップの発声を行う( chip, true );
                                                     break;  // 複数のチップが該当する場合でも、最初のチップの発声のみ行う。
                                                 }
                                             }
@@ -1009,7 +1017,7 @@ namespace DTXMania.ステージ.演奏
                 // というか発声時刻が過去なのに未発声というならここが最後のチャンスなので、必ず発声しないといけない。
                 if( !( this._チップの演奏状態[ chip ].発声済みである ) )
                 {
-                    this.チップの発声を行う( chip );
+                    this.チップの発声を行う( chip, 再生 );
                     this._チップの演奏状態[ chip ].発声済みである = true;
                 }
                 //----------------

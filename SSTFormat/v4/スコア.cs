@@ -206,7 +206,14 @@ namespace SSTFormat.v4
         ///		パスの基点は、#PATH_WAV があればそこ、なければ曲譜面ファイルと同じ場所。
         ///		[key: zz番号]
         /// </summary>
-        public Dictionary<int, (string ファイルパス, bool 多重再生する)> WAVリスト { get; protected set; }
+        public Dictionary<int, WAV情報> WAVリスト { get; protected set; }
+        public class WAV情報
+        {
+            public string ファイルパス { get; set; }
+            public bool 多重再生する { get; set; }
+            public bool BGMである { get; set; }
+        }
+
 
 
         // AVIリスト
@@ -280,7 +287,7 @@ namespace SSTFormat.v4
             this.チップリスト = new List<チップ>();
             this.小節長倍率リスト = new List<double>();
             this.小節メモリスト = new Dictionary<int, string>();
-            this.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+            this.WAVリスト = new Dictionary<int, WAV情報>();
             this.AVIリスト = new Dictionary<int, string>();
             this.空打ちチップマップ = new Dictionary<レーン種別, int>();
             foreach( レーン種別 lane in Enum.GetValues( typeof( レーン種別 ) ) )

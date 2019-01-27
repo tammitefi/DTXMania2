@@ -149,8 +149,10 @@ namespace DTXMania.ステージ.演奏
 
             foreach( var kvp in App.演奏スコア.WAVリスト )
             {
-                var path = Path.Combine( App.演奏スコア.PATH_WAV, kvp.Value.ファイルパス );
-                App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, kvp.Value.多重再生する );
+                var wavInfo = kvp.Value;
+
+                var path = Path.Combine( App.演奏スコア.PATH_WAV, wavInfo.ファイルパス );
+                App.WAV管理.登録する( App.サウンドデバイス, kvp.Key, path, wavInfo.多重再生する, wavInfo.BGMである );
             }
 
 
@@ -270,7 +272,7 @@ namespace DTXMania.ステージ.演奏
 
                                 if( !( this._チップの演奏状態[ chip ].発声済みである ) )
                                 {
-                                    this.チップの発声を行う( chip );
+                                    this.チップの発声を行う( chip, ( ユーザ設定.ドラムの音を発声する && this._ビュアーモード時にドラムサウンドを発声する ) );
                                     this._チップの演奏状態[ chip ].発声済みである = true;
                                 }
 
@@ -891,7 +893,7 @@ namespace DTXMania.ステージ.演奏
                 // というか発声時刻が過去なのに未発声というならここが最後のチャンスなので、必ず発声しないといけない。
                 if( !( this._チップの演奏状態[ chip ].発声済みである ) )
                 {
-                    this.チップの発声を行う( chip );
+                    this.チップの発声を行う( chip, 再生 );
                     this._チップの演奏状態[ chip ].発声済みである = true;
                 }
                 //----------------
@@ -1023,7 +1025,13 @@ namespace DTXMania.ステージ.演奏
             {
                 var prop = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ[ wavChip.チップ種別 ];
 
-                App.WAV管理.発声する( wavChip.チップサブID, wavChip.チップ種別, prop.発声前消音, prop.消音グループ種別, wavChip.音量 / (float) チップ.最大音量, 演奏開始時刻sec - wavChip.発声時刻sec );
+                App.WAV管理.発声する( 
+                    wavChip.チップサブID,
+                    wavChip.チップ種別, 
+                    prop.発声前消音, 
+                    prop.消音グループ種別, 
+                    BGM以外も再生する: App.ユーザ管理.ログオン中のユーザ.ドラムの音を発声する && this._ビュアーモード時にドラムサウンドを発声する,
+                    音量: wavChip.音量 / (float) チップ.最大音量, 演奏開始時刻sec - wavChip.発声時刻sec );
             }
 
             

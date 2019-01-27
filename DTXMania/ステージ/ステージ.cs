@@ -83,7 +83,7 @@ namespace DTXMania.ステージ
             return null;    // 見つからなかった
         }
 
-        public void チップの発声を行う( チップ chip )
+        public void チップの発声を行う( チップ chip, bool ドラムサウンドを再生する )
         {
             if( chip.チップ種別 == チップ種別.背景動画 )
             {
@@ -103,9 +103,11 @@ namespace DTXMania.ステージ
                     }
                     //----------------
                     #endregion
+                    return;
                 }
             }
-            else if( 0 == chip.チップサブID )
+
+            if( 0 == chip.チップサブID && ドラムサウンドを再生する )
             {
                 #region " (B) SSTF準拠のドラムサウンドを再生する。"
                 //----------------
@@ -124,7 +126,7 @@ namespace DTXMania.ステージ
                 var prop = App.ユーザ管理.ログオン中のユーザ.ドラムチッププロパティ管理.チップtoプロパティ[ chip.チップ種別 ];
 
                 // WAVを持つチップなら発声する。（持つかどうかはこのメソッド↓内で判定される。）
-                App.WAV管理.発声する( chip.チップサブID, chip.チップ種別, prop.発声前消音, prop.消音グループ種別, ( chip.音量 / (float) チップ.最大音量 ) );
+                App.WAV管理.発声する( chip.チップサブID, chip.チップ種別, prop.発声前消音, prop.消音グループ種別, BGM以外も再生する: ドラムサウンドを再生する, 音量: ( chip.音量 / (float) チップ.最大音量 ) );
                 //----------------
                 #endregion
             }
