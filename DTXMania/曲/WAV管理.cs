@@ -51,7 +51,7 @@ namespace DTXMania.曲
         /// <remarks>
         ///     サウンドの生成に失敗した場合には登録を行わない。
         /// </remarks>
-        public void 登録する( SoundDevice device, int wav番号, VariablePath サウンドファイル, bool 多重再生する )
+        public void 登録する( SoundDevice device, int wav番号, VariablePath サウンドファイル, bool 多重再生する, bool BGMである )
         {
             #region " パラメータチェック。"
             //----------------
@@ -84,7 +84,7 @@ namespace DTXMania.曲
             if( this._WAV情報リスト.ContainsKey( wav番号 ) )
                 this._WAV情報リスト[ wav番号 ].Dispose();  // すでに登録済みなら解放する。
 
-            this._WAV情報リスト[ wav番号 ] = new WAV情報( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1 );
+            this._WAV情報リスト[ wav番号 ] = new WAV情報( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1, BGMである );
             this._WAV情報リスト[ wav番号 ].サウンドを生成する( device, サンプルソース );
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
@@ -94,11 +94,10 @@ namespace DTXMania.曲
         ///		指定した番号のWAVを、指定したチップ種別として発声する。
         /// </summary>
         /// <param name="音量">0:無音～1:原音</param>
-        public void 発声する( int WAV番号, チップ種別 chipType, bool 発声前に消音する, 消音グループ種別 muteGroupType, float 音量 = 1f, double 再生開始時刻sec = 0.0 )
+        public void 発声する( int WAV番号, チップ種別 chipType, bool 発声前に消音する, 消音グループ種別 muteGroupType, bool BGM以外も再生する, float 音量 = 1f, double 再生開始時刻sec = 0.0 )
         {
-            // 未登録の WAV番号 は無視。
-
-            if( !( this._WAV情報リスト.ContainsKey( WAV番号 ) ) )
+            if( !( this._WAV情報リスト.ContainsKey( WAV番号 ) ) ||
+                ( !( BGM以外も再生する ) && !( this._WAV情報リスト[ WAV番号 ].BGMである ) ) )
                 return;
 
 
@@ -153,14 +152,17 @@ namespace DTXMania.曲
 
             public 消音グループ種別 最後に発声したときの消音グループ種別 { get; protected set; } = 消音グループ種別.Unknown;
 
+            public bool BGMである = false;
 
-            public WAV情報( int wav番号, int 多重度 )
+
+            public WAV情報( int wav番号, int 多重度, bool BGMである )
             {
                 if( ( 0 > wav番号 ) || ( 36 * 36 <= wav番号 ) )
                     throw new ArgumentOutOfRangeException( "WAV番号が不正です。" );
 
                 this.WAV番号 = wav番号;
                 this.Sounds = new Sound[ 多重度 ];
+                this.BGMである = BGMである;
             }
 
             public void Dispose()

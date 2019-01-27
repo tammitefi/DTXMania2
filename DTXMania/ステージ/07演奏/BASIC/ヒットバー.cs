@@ -5,7 +5,7 @@ using System.Linq;
 using SharpDX.Direct2D1;
 using FDK;
 
-namespace DTXMania.ステージ.演奏
+namespace DTXMania.ステージ.演奏.BASIC
 {
     /// <summary>
     ///     ヒットバー ... チップがこの位置に来たら叩け！という線。

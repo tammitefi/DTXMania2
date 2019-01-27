@@ -90,6 +90,9 @@ namespace SSTFormat.v4
                     スコア._スコア読み込み時の後処理を行う( score );
                 }
 
+                // SSTFの場合、空うちマップは空とする。
+                score.空打ちチップマップ.Clear();
+
                 return score;
             }
 
@@ -155,6 +158,9 @@ namespace SSTFormat.v4
                 {
                     スコア._スコア読み込み時の後処理を行う( score );
                 }
+
+                // SSTFの場合、空うちマップは空とする。
+                score.空打ちチップマップ.Clear();
 
                 return score;
             }
@@ -460,7 +466,12 @@ namespace SSTFormat.v4
                     }
 
                     現在の.スコア.BGMファイル名 = items[ 1 ].Trim();
-                    現在の.スコア.WAVリスト[ 1 ] = (現在の.スコア.BGMファイル名, false);   // #WAV01 固定。あれば上書き、なければ追加
+
+                    現在の.スコア.WAVリスト[ 1 ] = new WAV情報 {      // #WAV01 固定。あれば上書き、なければ追加
+                        ファイルパス = 現在の.スコア.BGMファイル名,
+                        多重再生する = false,
+                        BGMである = true,
+                    };
 
                     return true;
                 }
@@ -1568,9 +1579,15 @@ namespace SSTFormat.v4
                 foreach( var v3kara in v3score.空打ちチップマップ )
                     score.空打ちチップマップ.Add( (レーン種別) ( (int) v3kara.Key ), v3kara.Value );
 
-                score.WAVリスト = new Dictionary<int, (string ファイルパス, bool 多重再生する)>();
+                score.WAVリスト = new Dictionary<int, WAV情報>();
                 foreach( var v3wav in v3score.WAVリスト )
-                    score.WAVリスト.Add( v3wav.Key, v3wav.Value );
+                {
+                    score.WAVリスト.Add( v3wav.Key, new WAV情報 {
+                        ファイルパス = v3wav.Value.ファイルパス,
+                        多重再生する = v3wav.Value.多重再生する,
+                        BGMである = false,
+                    } );
+                }
 
                 score.AVIリスト = new Dictionary<int, string>();
                 foreach( var v3avi in v3score.AVIリスト )
@@ -1585,7 +1602,11 @@ namespace SSTFormat.v4
                     score.AVIリスト[ 1 ] = score.BGVファイル名;
 
                     // wav01 にも登録。
-                    score.WAVリスト[ 1 ] = (score.BGVファイル名, false);
+                    if( !( score.WAVリスト.ContainsKey( 1 ) ) )
+                        score.WAVリスト.Add( 1, new WAV情報() );
+                    score.WAVリスト[ 1 ].ファイルパス = score.BGVファイル名;
+                    score.WAVリスト[ 1 ].多重再生する = false;
+                    score.WAVリスト[ 1 ].BGMである = true;
 
                     // 背景動画チップと同じ場所にBGMチップを追加する。
                     var 作業前リスト = score.チップリスト;

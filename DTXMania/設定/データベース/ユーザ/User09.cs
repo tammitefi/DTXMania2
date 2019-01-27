@@ -248,7 +248,7 @@ namespace DTXMania.データベース.ユーザ
             this.SplashLeft = 1;
             this.DrumSound = 1;
             this.LaneType = "TypeA";
-            this.LaneTrans = 50;
+            this.LaneTrans = 40;
             this.BackgroundMovie = 1;
             this.PlaySpeed = 1.0;
             this.ShowPartLine = 1;

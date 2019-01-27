@@ -8,7 +8,7 @@ using SharpDX.Direct2D1;
 using YamlDotNet.Serialization;
 using FDK;
 
-namespace DTXMania.ステージ.演奏
+namespace DTXMania.ステージ.演奏.BASIC
 {
     /// <summary>
     ///		チップの背景であり、レーン全体を示すフレーム画像。
@@ -63,7 +63,7 @@ namespace DTXMania.ステージ.演奏
                 var root = new VariablePath( @"$(System)images\演奏\レーン配置" );
 
                 レーン配置リスト = new Dictionary<string, レーン配置>();
-                foreach( var fileInfo in new DirectoryInfo( root.変数なしパス ).GetFiles( "*.yaml", SearchOption.TopDirectoryOnly ) )
+                foreach( var fileInfo in new DirectoryInfo( root.変数なしパス ).GetFiles( "Type*.yaml", SearchOption.TopDirectoryOnly ) )
                 {
                     var 拡張子なしのファイル名 = Path.GetFileNameWithoutExtension( fileInfo.Name );
                     レーン配置リスト[ 拡張子なしのファイル名] = new レーン配置 { 配置名 = 拡張子なしのファイル名 };
