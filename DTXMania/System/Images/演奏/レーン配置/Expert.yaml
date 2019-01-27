@@ -4,7 +4,8 @@
     Unknown: 0
     LeftCymbal: 489
     HiHat: 570
-    Foot: 617
+    #Foot: 617
+    Foot: 570
     Snare: 699
     Tom1: 812
     Bass: 896

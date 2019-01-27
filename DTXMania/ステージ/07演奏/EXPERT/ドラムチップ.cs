@@ -154,6 +154,10 @@ namespace DTXMania.ステージ.演奏.EXPERT
                         this._アニメチップを１つ描画する( 表示レーン種別.Bass, this._ドラムチップの矩形リスト[ 表示チップ種別.Bass ], たて中央位置dpx, 大きさ0to1 );
                         break;
 
+                    case チップ種別.LeftBass:
+                        this._アニメチップを１つ描画する( 表示レーン種別.Bass, this._ドラムチップの矩形リスト[ 表示チップ種別.Bass ], たて中央位置dpx, 大きさ0to1 );
+                        break;
+
                     case チップ種別.Tom1:
                         this._アニメチップを１つ描画する( 表示レーン種別.Tom1, this._ドラムチップの矩形リスト[ 表示チップ種別.Tom1 ], たて中央位置dpx, 大きさ0to1 );
                         break;
@@ -185,46 +189,30 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
                     case チップ種別.China:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Chinaは左 )
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftChina ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         else
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightChina ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         break;
 
                     case チップ種別.Ride:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Rideは左 )
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftRide ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         else
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightRide ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         break;
 
                     case チップ種別.Ride_Cup:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Rideは左 )
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftRide_Cup ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         else
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightRide_Cup ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         break;
 
                     case チップ種別.Splash:
                         if( App.ユーザ管理.ログオン中のユーザ.表示レーンの左右.Splashは左 )
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.LeftCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.LeftSplash ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         else
-                        {
                             this._単画チップを１つ描画する( 表示レーン種別.RightCymbal, this._ドラムチップの矩形リスト[ 表示チップ種別.RightSplash ], たて中央位置dpx, 大きさ0to1 );
-                        }
                         break;
 
                     case チップ種別.LeftCymbal_Mute:
