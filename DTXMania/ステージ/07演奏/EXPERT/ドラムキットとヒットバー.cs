@@ -155,7 +155,7 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
                 if( ( null != counter ) && counter.終了値に達していない )
                 {
-                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 2 → 0
+                    float 最大振幅 = (float) ( 4.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );     // 4 → 0
                     振動幅 = (float) ( 最大振幅 * Math.Sin( 17.0 * Math.PI * counter.現在値の割合 ) );           // 17周
                 }
 
@@ -188,7 +188,7 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
                 if( ( null != counter ) && counter.終了値に達していない )
                 {
-                    float 最大振幅 = (float) ( 1.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );   // 1 → 0
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) );   // 2 → 0
                     振動幅 = (float) ( 最大振幅 * Math.Sin( 20.0 * Math.PI * counter.現在値の割合 ) );         // 20周
                 }
 
@@ -206,7 +206,7 @@ namespace DTXMania.ステージ.演奏.EXPERT
 
                 if( ( null != counter ) && counter.終了値に達していない )
                 {
-                    float 最大振幅 = (float) ( 1.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) ); // 1 → 0
+                    float 最大振幅 = (float) ( 2.0 * Math.Cos( ( Math.PI / 2.0 ) * counter.現在値の割合 ) ); // 2 → 0
                     振動幅 = (float) ( 最大振幅 * Math.Sin( 20.0 * Math.PI * counter.現在値の割合 ) );       // 20周
                 }
 
