@@ -290,7 +290,7 @@ namespace DTXMania.設定
                         AutoPlayON_Miss判定 = false,
                         AutoPlayOFF_自動ヒット_再生 = false,
                         //AutoPlayOFF_自動ヒット_非表示 = true,
-                        AutoPlayOFF_自動ヒット_判定 = false,
+                        //AutoPlayOFF_自動ヒット_判定 = false,
                         AutoPlayOFF_ユーザヒット_再生 = true,
                         AutoPlayOFF_ユーザヒット_非表示 = true,
                         //AutoPlayOFF_ユーザヒット_判定 = false,
@@ -1108,6 +1108,7 @@ namespace DTXMania.設定
                         kvp.Value.AutoPlayOFF_自動ヒット_非表示 = ( this._演奏モード == PlayMode.EXPERT ) ? true : false;
                         kvp.Value.AutoPlayOFF_ユーザヒット_判定 = ( this._演奏モード == PlayMode.EXPERT ) ? false : true;
                         kvp.Value.AutoPlayOFF_Miss判定 = ( this._演奏モード == PlayMode.EXPERT ) ? false : true;
+                        kvp.Value.AutoPlayON_自動ヒット_判定 = ( this._演奏モード == PlayMode.EXPERT ) ? false : true;
                         break;
 
                     case チップ種別.Snare_OpenRim:
