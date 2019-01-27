@@ -11,7 +11,8 @@ cbuffer cbCBuffer : register(b0)
     float TexAlpha;    // テクスチャ全体に乗じるアルファ値(0～1)
 };
 
-Texture2D myTex2D; // テクスチャ
+// テクスチャ
+Texture2D myTex2D : register(t0);
 
 // サンプラ
 SamplerState smpWrap : register(s0);

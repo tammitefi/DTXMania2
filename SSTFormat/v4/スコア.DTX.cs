@@ -265,6 +265,16 @@ namespace SSTFormat.v4
                     //----------------
                     #endregion
 
+                    #region " BGMWAV を WAVリストに反映する。"
+                    //----------------
+                    foreach( int WAV番号 in 現在の.BGMWAVリスト )
+                    {
+                        if( 現在の.スコア.WAVリスト.ContainsKey( WAV番号 ) )
+                            現在の.スコア.WAVリスト[ WAV番号 ].BGMである = true;  // BGMである
+                    }
+                    //----------------
+                    #endregion
+
                     スコア._スコア読み込み時の後処理を行う( 現在の.スコア );
                 }
 
@@ -310,6 +320,11 @@ namespace SSTFormat.v4
                 ///		[key: zz番号, key: VOLUME値(0:無音 ～ 100:原音)]
                 /// </summary>
                 public static Dictionary<int, int> VOLUME定義マップ;
+
+                /// <summary>
+                ///     BGMとして扱うWAV番号（#WAVzzのzz値）のリスト。
+                /// </summary>
+                public static List<int> BGMWAVリスト;
 
 
                 /* #BPM, #BPMzz の処理方法：
@@ -372,6 +387,7 @@ namespace SSTFormat.v4
 
                     PAN定義マップ = new Dictionary<int, int>();
                     VOLUME定義マップ = new Dictionary<int, int>();
+                    BGMWAVリスト = new List<int>();
 
                     BASEBPM = 0.0;
                     BPM定義マップ = new Dictionary<int, double>();
@@ -487,8 +503,11 @@ namespace SSTFormat.v4
                 }
 
                 // ここでは、PATH_WAV はまだ反映しない。
-                現在の.スコア.WAVリスト[ 現在の.zz36進数 ] =  // あれば上書き、なければ追加
-                    (現在の.パラメータ, true);                // 既定では多重再生 ON
+                現在の.スコア.WAVリスト[ 現在の.zz36進数 ] = new WAV情報 {  // あれば上書き、なければ追加
+                    ファイルパス = 現在の.パラメータ,
+                    多重再生する = true,   // 既定では多重再生 ON
+                    BGMである = false,     // 既定ではBGMではない
+                };
             }
             internal static void _コマンド_PANzz_WAVPANzz()
             {
@@ -582,6 +601,17 @@ namespace SSTFormat.v4
 
                 // ここでは、PATH_WAV はまだ反映しない。
                 現在の.スコア.AVIリスト[ 現在の.zz36進数 ] = 現在の.パラメータ;   // あれば上書き、なければ追加
+            }
+            internal static void _コマンド_BGMWAV()
+            {
+                if( !int.TryParse( 現在の.パラメータ, out int WAV番号 ) )
+                {
+                    Trace.TraceError( $"#BGMWAV の値の取得に失敗しました。[{現在の.行番号}行]" );
+                    return;
+                }
+
+                if( !( 現在の.BGMWAVリスト.Contains( WAV番号 ) ) )
+                    現在の.BGMWAVリスト.Add( WAV番号 );
             }
             internal static void _コマンド_オブジェクト記述()
             {
@@ -701,8 +731,8 @@ namespace SSTFormat.v4
 
                                     if( wavList.ContainsKey( WAV番号 ) )
                                     {
-                                        // WAVの多重再生を OFF にする。
-                                        wavList[ WAV番号 ] = (wavList[ WAV番号 ].ファイルパス, 多重再生する: false);
+                                        wavList[ WAV番号 ].多重再生する = false;
+                                        wavList[ WAV番号 ].BGMである = true; // すべて BGM 扱い
 
                                         // 初めてのBGMなら、BGMファイルとしてサウンドを登録する。
                                         if( 0x01 == 現在の.チャンネル番号 && string.IsNullOrEmpty( 現在の.スコア.BGMファイル名 ) )
@@ -902,6 +932,7 @@ namespace SSTFormat.v4
             private static readonly string _16進数変換表 = "0123456789abcdef";  // めんどいので大文字は考慮しない。利用先で小文字に変換のこと。
             private static readonly string _36進数変換表 = "0123456789abcdefghijklmnopqrstuvwxyz";  // 同上。
 
+            // コマンドが増えたらここに記述する。
             private static readonly Dictionary<string, (bool ヘッダである, Action 解析アクション)> _コマンドtoアクションマップ = new Dictionary<string, (bool, Action)> {
                 #region " *** "
                 //----------------
@@ -923,6 +954,7 @@ namespace SSTFormat.v4
                 { "preimage",   ( true,   _コマンド_PREIMAGE ) },
                 { "premovie",   ( true,   _コマンド_PREMOVIE ) },
                 { "avi",        ( true,   _コマンド_AVIzz ) },
+                { "bgmwav",     ( true,   _コマンド_BGMWAV ) },
                 //----------------
                 #endregion
             };

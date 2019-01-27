@@ -23,7 +23,7 @@ namespace DTXMania.ステージ
                 結果ステージ.BGMを停止する = () => 演奏ステージ.BGMを停止する();
 
                 // static なメンバの初期化。
-                演奏.レーンフレーム.初期化する();
+                演奏.BASIC.レーンフレーム.初期化する();
             }
         }
         public void Dispose()

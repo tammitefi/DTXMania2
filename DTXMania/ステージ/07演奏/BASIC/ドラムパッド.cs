@@ -7,7 +7,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
 
-namespace DTXMania.ステージ.演奏
+namespace DTXMania.ステージ.演奏.BASIC
 {
     class ドラムパッド : Activity
     {
