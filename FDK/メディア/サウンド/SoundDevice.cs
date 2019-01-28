@@ -262,14 +262,40 @@ namespace FDK
         {
             lock( this._スレッド間同期 )
             {
+                // AudioClock から現在のデバイス位置を取得する。
                 this.GetClock( out long position, out long qpcPosition, out long frequency );
 
+                // position ...... 現在のデバイス位置（デバイスからの報告）
+                // frequency ..... 現在のデバイス周波数（デバイスからの報告）
+                // qpcPosition ... デバイス位置を取得した時刻[100ns単位] → パフォーマンスカウンタの生値ではないので注意。
+
+                // デバイス位置÷デバイス周波数 で、秒単位に換算できる。
+                double デバイス位置sec = (double) position / frequency;
+
+                // デバイス位置の精度が荒い（階段状のとびとびの値になる）場合には、パフォーマンスカウンタで補間する。
+                if( position == this._最後のデバイス位置.position )
+                {
+                    // (A) デバイス位置が前回と同じである場合：
+                    // → 最後のデバイス位置における qpcPosition と今回の qpcPosition の差をデバイス位置secに加算する。
+                    デバイス位置sec += FDKUtilities.変換_100ns単位からsec単位へ( qpcPosition - this._最後のデバイス位置.qpcPosition );
+                }
+                else
+                {
+                    // (B) デバイス位置が前回と異なる場合：
+                    // → 最後のデバイス位置を現在の値に更新する。今回のデバイス位置secは補間しない。
+                    this._最後のデバイス位置 = (position, qpcPosition);
+                }
+
+                return デバイス位置sec;
+
+                // 没１：
                 // ↓サウンドデバイス固有のpositionを使う場合。なんかの拍子で、音飛びと同時に不連続になる？
                 //return ( (double) position / frequency );
 
+                // 没２：
                 // ↓パフォーマンスカウンタを使う場合。こちらで、音飛び＆不連続現象が消えるか否かを検証中。
                 // なお、qpcPosition には、生カウンタではなく、100ns単位に修正された値が格納されているので注意。（GetClockの仕様）
-                return FDKUtilities.変換_100ns単位からsec単位へ( qpcPosition );
+                //return FDKUtilities.変換_100ns単位からsec単位へ( qpcPosition );
             }
         }
 
@@ -292,6 +318,7 @@ namespace FDK
         private AudioRenderClient _AudioRenderClient = null;
         private AudioClient _AudioClient = null;
         private MMDevice _MMDevice = null;
+        private (long position, long qpcPosition) _最後のデバイス位置 = (0, 0);
 
         private Thread _レンダリングスレッド = null;
         private EventWaitHandle _レンダリングイベント = null;
