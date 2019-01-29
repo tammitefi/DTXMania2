@@ -110,8 +110,9 @@ namespace SSTFormat.v4
 
                         // コマンド別に解析する。
 
-                        if( _コマンドtoアクションマップ.TryGetValue( 現在の.コマンドzzなし.ToLower(), out var アクション ) ||    // zz付きコマンドとzzなしコマンドが重複する場合は、zzなしのほうが優先
-                            _コマンドtoアクションマップ.TryGetValue( 現在の.コマンド.ToLower(), out アクション ) )
+                        // zzを含めたコマンドがzzを含まないコマンドと一致する場合は、前者のほうが優先。
+                        if( _コマンドtoアクションマップ.TryGetValue( 現在の.コマンド.ToLower(), out var アクション ) ||
+                            _コマンドtoアクションマップ.TryGetValue( 現在の.コマンドzzなし.ToLower(), out アクション ) )
                         {
                             if( !ヘッダだけ || アクション.ヘッダである )
                                 アクション.解析アクション();
@@ -508,6 +509,10 @@ namespace SSTFormat.v4
                     多重再生する = true,   // 既定では多重再生 ON
                     BGMである = false,     // 既定ではBGMではない
                 };
+            }
+            internal static void _コマンド_PANEL()
+            {
+                // 現状、未対応。
             }
             internal static void _コマンド_PANzz_WAVPANzz()
             {
@@ -942,6 +947,7 @@ namespace SSTFormat.v4
                 { "comment",    ( true,   _コマンド_COMMENT ) },
                 { "path_wav",   ( true,   _コマンド_PATH_WAV ) },
                 { "wav",        ( false,  _コマンド_WAVzz ) },
+                { "panel",      ( false,  _コマンド_PANEL ) },
                 { "pan",        ( false,  _コマンド_PANzz_WAVPANzz ) },
                 { "wavpan",     ( false,  _コマンド_PANzz_WAVPANzz ) },
                 { "volume",     ( false,  _コマンド_VOLUMEzz_WAVVOLzz ) },
