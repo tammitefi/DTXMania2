@@ -615,7 +615,7 @@ namespace SSTFormat.v4
             }
             internal static void _コマンド_BGMWAV()
             {
-                if( !int.TryParse( 現在の.パラメータ, out int WAV番号 ) )
+                if( !_36進数2桁の文字列を数値に変換して返す( 現在の.パラメータ, out int WAV番号 ) )
                 {
                     Trace.TraceError( $"#BGMWAV の値の取得に失敗しました。[{現在の.行番号}行]" );
                     return;
