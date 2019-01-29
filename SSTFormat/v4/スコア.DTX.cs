@@ -583,9 +583,15 @@ namespace SSTFormat.v4
                     return;
                 }
 
-                if( !_DTX仕様の実数を取得する( 現在の.パラメータ, out double BPM値 ) || ( 0.0 >= BPM値 ) || ( 1000.0 <= BPM値 ) ) // 値域制限(<1000)はDTX仕様
+                if( !_DTX仕様の実数を取得する( 現在の.パラメータ, out double BPM値 ) || ( 0.0 > BPM値 ) || ( 1000.0 <= BPM値 ) ) // 値域制限(<1000)はDTX仕様
                 {
                     Trace.TraceError( $"#BPM のBPM値が不正です。[{現在の.行番号}行]" );
+                    return;
+                }
+
+                if( 0.0 == BPM値 )
+                {
+                    Trace.TraceWarning( $"#BPM のBPM値が 0 です。[{現在の.行番号}行]" );
                     return;
                 }
 
