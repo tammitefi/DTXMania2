@@ -549,7 +549,7 @@ namespace SSTFormat.v4
                     return;
                 }
 
-                現在の.VOLUME定義マップ[ 現在の.zz16進数 ] = Math.Min( Math.Max( VOLUME値, 0 ), 100 );  // あれば上書き、なければ追加
+                現在の.VOLUME定義マップ[ 現在の.zz36進数 ] = Math.Min( Math.Max( VOLUME値, 0 ), 100 );  // あれば上書き、なければ追加
             }
             internal static void _コマンド_BASEBPM()
             {
