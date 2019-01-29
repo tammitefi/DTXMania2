@@ -620,9 +620,16 @@ namespace SSTFormat.v4
                     Trace.TraceError( $"#BGMWAV の値の取得に失敗しました。[{現在の.行番号}行]" );
                     return;
                 }
+                if( 1 > WAV番号 || 36 * 36 <= WAV番号 )
+                {
+                    Trace.TraceError( $"#BGMWAV のWAV番号に 01～ZZ 以外の値が指定されています。[{現在の.行番号}行]" );
+                    return;
+                }
 
                 if( !( 現在の.BGMWAVリスト.Contains( WAV番号 ) ) )
+                {
                     現在の.BGMWAVリスト.Add( WAV番号 );
+                }
             }
             internal static void _コマンド_オブジェクト記述()
             {
