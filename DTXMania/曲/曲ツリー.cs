@@ -222,7 +222,7 @@ namespace DTXMania.曲
             foreach( var subDirInfo in dirInfo.GetDirectories() )
             {
                 var DTXFILES = "dtxfiles.";
-                var boxDefPath = Path.Combine( subDirInfo.FullName, @"box.def" );
+                var boxDefPath = new VariablePath( Path.Combine( subDirInfo.FullName, @"box.def" ) );
 
                 if( subDirInfo.Name.ToLower().StartsWith( DTXFILES ) )
                 {
@@ -239,7 +239,7 @@ namespace DTXMania.曲
                     //----------------
                     #endregion
                 }
-                else if( File.Exists( boxDefPath ) )
+                else if( File.Exists( boxDefPath.変数なしパス ) )
                 {
                     #region " (B) box.def を含むフォルダの場合 → BOXノードとして扱う。 "
                     //----------------
