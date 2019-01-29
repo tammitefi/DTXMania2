@@ -100,8 +100,9 @@ namespace FDK
                     throw new Exception( $"このサンプルソースの再生位置を変更することができません。既定の位置から再生を開始します。" );
                 }
 
-                // ミキサーに追加（＝再生開始）。
                 this.IsLoop = ループ再生する;
+
+                // ミキサーに追加（＝再生開始）。
                 device.Mixer.AddSound( this );
             }
         }

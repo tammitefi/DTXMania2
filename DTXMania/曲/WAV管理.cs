@@ -194,7 +194,7 @@ namespace DTXMania.曲
                 this.最後に発声したときの消音グループ種別 = muteGroupType;
 
                 // 発声。
-                音量 = 
+                音量 =
                     ( 0f > 音量 ) ? 0f : 
                     ( 1f < 音量 ) ? 1f : 音量;
                 this.Sounds[ this._次に再生するSound番号 ].Volume = 音量;
