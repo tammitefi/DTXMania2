@@ -60,11 +60,10 @@ namespace FDK
 
             using( var resampler = new DmoResampler( waveSource, waveFormtForResampling ) )
             {
-                // resampler.Length はサンプル単位ではなくフレーム単位。
-                var サイズbyte = resampler.Length * resampler.WaveFormat.Channels; // 実際のサイズはチャンネル倍ある。
+                var サイズbyte = resampler.Length;
 
                 this._DecodedWaveData = new byte[ サイズbyte ];
-                resampler.Read( this._DecodedWaveData, 0, (int) サイズbyte );      // でもこっちはバイト単位。
+                resampler.Read( this._DecodedWaveData, 0, (int) サイズbyte );
             }
         }
 

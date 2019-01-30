@@ -115,25 +115,30 @@ namespace FDK
             if( null == this._BaseSampleSource )
                 return 0;   // 再生終了
 
-            if( this._BaseSampleSource.Length <= this._Position )   // 最後まで再生済み、または次のストリームデータが届いていない
+            if( this._BaseSampleSource.Length <= this._Position )
             {
+                // (A) 最後まで再生済み、または次のストリームデータが届いていない場合
+
                 if( this.IsLoop )
                 {
+                    // (A-a) ループする場合
+                    this._Position = 0;                     // 再生位置を先頭に戻す。
                     Array.Clear( buffer, offset, count );   // 全部ゼロで埋めて返す。
-                    this._Position = 0; // 再生をループ。
                     return count;
                 }
                 else
                 {
-                    return 0;   // 再生終了
+                    // (A-b) ループしない場合
+                    return 0;   // 再生終了。
                 }
             }
             else
             {
+                // (B) 読み込みできるストリームデータがある場合
+                
                 // １つの BaseSampleSource を複数の Sound で共有するために、Position は Sound ごとに管理している。
                 this._BaseSampleSource.Position = this._Position;
                 var readCount = this._BaseSampleSource.Read( buffer, offset, count );   // 読み込み。
-
                 this._Position = this._BaseSampleSource.Position;
 
                 if( 0 == readCount && this.IsLoop )
