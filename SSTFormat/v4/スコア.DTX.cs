@@ -592,7 +592,7 @@ namespace SSTFormat.v4
             }
             internal static void _コマンド_BPM_BPMzz()
             {
-                if( "bpm" == 現在の.コマンド.ToLower() )
+                if( "bpm" == 現在の.コマンド.ToLower() )   // zz の指定がない
                 {
                     現在の.zz36進数 = 0;
                 }
@@ -667,7 +667,7 @@ namespace SSTFormat.v4
 
                 if( 0x02 == 現在の.チャンネル番号 )
                 {
-                    #region " ch02 小節長倍率 はオブジェクト記述ではないので別途処理する。"
+                    #region " ch02 小節長倍率 はオブジェクト記述ではないので、ここで別途処理する。"
                     //----------------
                     if( !_DTX仕様の実数を取得する( 現在の.パラメータ, out double 小節長倍率 ) )
                     {
@@ -771,8 +771,8 @@ namespace SSTFormat.v4
 
                                     if( wavList.ContainsKey( WAV番号 ) )
                                     {
-                                        wavList[ WAV番号 ].多重再生する = false;
-                                        wavList[ WAV番号 ].BGMである = true; // すべて BGM 扱い
+                                        wavList[ WAV番号 ].多重再生する = ( 現在の.チャンネル番号 == 0x01 );  // ch01 だけは多重再生する
+                                        wavList[ WAV番号 ].BGMである = true; // Viewer に対しては、すべて BGM と同じ扱い。
 
                                         // 初めてのBGMなら、BGMファイルとしてサウンドを登録する。
                                         if( 0x01 == 現在の.チャンネル番号 && string.IsNullOrEmpty( 現在の.スコア.BGMファイル名 ) )
@@ -920,17 +920,17 @@ namespace SSTFormat.v4
                 {
                     var 小節番号文字列 = コマンド.Substring( 0, 3 ).ToLower();   // 先頭 3 文字
 
-                    int 百の位 = _36進数変換表.IndexOf( 小節番号文字列[ 0 ] );   // 0～Z（36進数1桁）
-                    int 十の位 = _16進数変換表.IndexOf( 小節番号文字列[ 1 ] );   // 0～9（10進数1桁）
-                    int 一の位 = _16進数変換表.IndexOf( 小節番号文字列[ 2 ] );   // 0～9（10進数1桁）
+                    int _100の位 = _36進数変換表.IndexOf( 小節番号文字列[ 0 ] );  // 0～Z（36進数1桁）
+                    int _10の位 = _16進数変換表.IndexOf( 小節番号文字列[ 1 ] );   // 0～9（10進数1桁）
+                    int _1の位 = _16進数変換表.IndexOf( 小節番号文字列[ 2 ] );    // 0～9（10進数1桁）
 
-                    if( -1 == 百の位 || -1 == 十の位 || -1 == 一の位 )
+                    if( -1 == _100の位 || -1 == _10の位 || -1 == _1の位 )
                     {
                         //Trace.TraceWarning( $"小節番号が不正です。[{現在の.行番号}行]" );
                         return false;
                     }
 
-                    小節番号 = ( 百の位 * 100 ) + ( 十の位 * 10 ) + 一の位;
+                    小節番号 = ( _100の位 * 100 ) + ( _10の位 * 10 ) + _1の位;
                 }
                 //----------------
                 #endregion
@@ -944,6 +944,7 @@ namespace SSTFormat.v4
                     {
                         case データ種別.GDA:
                         case データ種別.G2D:
+                
                             // 英数字2桁
                             if( !_GDAtoDTXチャンネルマップ.TryGetValue( チャンネル文字列.ToUpper(), out チャンネル番号 ) )
                             {

@@ -235,6 +235,8 @@ namespace SSTFormat.v4
                     {
                         現在の.行番号++;
 
+                        // 行の前処理
+
                         #region " 改行とTABを空白文字に変換し、先頭末尾の空白を削除する。"
                         //----------------
                         行 = 行.Replace( Environment.NewLine, " " );
@@ -259,23 +261,19 @@ namespace SSTFormat.v4
                         if( string.IsNullOrEmpty( 行 ) )
                             continue;   // 空行
 
-
-                        // ヘッダの解析
+                        // 行の解析
 
                         if( _行をヘッダ行と想定して解析する( ref 行 ) )
                             continue;
 
-                        if( ヘッダだけ )
-                            continue;   // ヘッダだけならここまで。
+                        if( !( ヘッダだけ ) )
+                        {
+                            if( _行を小節メモ行として解析する( ref 行 ) )
+                                continue;
 
-
-                        // ヘッダ以外の解析
-
-                        if( _行を小節メモ行として解析する( ref 行 ) )
-                            continue;
-
-                        if( _行をチップ記述行として解析する( ref 行 ) )
-                            continue;
+                            if( _行をチップ記述行として解析する( ref 行 ) )
+                                continue;
+                        }
                     }
                 }
 
@@ -375,7 +373,7 @@ namespace SSTFormat.v4
                 {
                     string[] items = 行.Split( '=' );
 
-                    if( items.Length != 2 )
+                    if( 2 != items.Length )
                     {
                         Trace.TraceError( $"Description の書式が不正です。スキップします。[{現在の.行番号}行目]" );
                         return false;
@@ -599,11 +597,12 @@ namespace SSTFormat.v4
 
                         //現在の.スコア.チップリスト.Add(
                         //    new チップ() {
-                        //        チップ種別 = チップ種別.小節メモ,       --> チップは廃止。（不要）
+                        //        チップ種別 = チップ種別.小節メモ,
                         //        小節番号 = 小節番号,
                         //        小節内位置 = 0,
                         //        小節解像度 = 1,
                         //    } );
+                        // --> チップは廃止。（不要）
                     }
                     //-----------------
                     #endregion
@@ -1232,8 +1231,11 @@ namespace SSTFormat.v4
                 #region " Description "
                 //----------------
                 if( !string.IsNullOrEmpty( score.説明文 ) )    // Description は任意
-                    sw.WriteLine( $"Description=" + score.説明文.Replace( Environment.NewLine, @"\n" ) );   // 改行コードは、２文字のリテラル "\n" に置換。
-                                                                                                         //----------------
+                {
+                    // 改行コードは、２文字のリテラル "\n" に置換。
+                    sw.WriteLine( $"Description=" + score.説明文.Replace( Environment.NewLine, @"\n" ) );
+                }
+                //----------------
                 #endregion
                 #region " SoundDevice.Delay "
                 //----------------
@@ -1283,13 +1285,13 @@ namespace SSTFormat.v4
             {
                 int 最大小節番号 = score.最大小節番号を返す();
 
-                // 小節番号について昇順に出力。
+                // 小節番号昇順に出力。
+
                 for( int i = 0; i <= 最大小節番号; i++ )
                 {
                     if( score.小節メモリスト.TryGetValue( i, out string メモ ) )
                     {
                         メモ = メモ.Replace( Environment.NewLine, @"\n" );  // 改行コードは、２文字のリテラル "\n" に置換。
-
                         sw.WriteLine( $"PartMemo = {i},{メモ}" );
                     }
                 }
@@ -1504,21 +1506,21 @@ namespace SSTFormat.v4
             private static Dictionary<string, (チップ種別 チップ種別, bool 可視)> _レーンプロパティ = new Dictionary<string, (チップ種別 チップ種別, bool 可視)> {
                 #region " *** "
                 //----------------
-                { "leftcrash",  ( チップ種別.LeftCrash,   true  ) },
-                { "ride",       ( チップ種別.Ride,        true  ) },
-                { "china",      ( チップ種別.China,       true  ) },
-                { "splash",     ( チップ種別.Splash,      true  ) },
-                { "hihat",      ( チップ種別.HiHat_Close, true  ) },
-                { "foot",       ( チップ種別.HiHat_Foot,  true  ) },
-                { "snare",      ( チップ種別.Snare,       true  ) },
-                { "bass",       ( チップ種別.Bass,        true  ) },
-                { "tom1",       ( チップ種別.Tom1,        true  ) },
-                { "tom2",       ( チップ種別.Tom2,        true  ) },
-                { "tom3",       ( チップ種別.Tom3,        true  ) },
-                { "rightcrash", ( チップ種別.RightCrash,  true  ) },
-                { "bpm",        ( チップ種別.BPM,         false ) },
-                { "bgv",        ( チップ種別.背景動画,    false ) },
-                { "bgm",        ( チップ種別.BGM,         false ) },
+                [ "leftcrash" ] = (チップ種別.LeftCrash, true),
+                [ "ride" ] = (チップ種別.Ride, true),
+                [ "china" ] = (チップ種別.China, true),
+                [ "splash" ] = (チップ種別.Splash, true),
+                [ "hihat" ] = (チップ種別.HiHat_Close, true),
+                [ "foot" ] = (チップ種別.HiHat_Foot, true),
+                [ "snare" ] = (チップ種別.Snare, true),
+                [ "bass" ] = (チップ種別.Bass, true),
+                [ "tom1" ] = (チップ種別.Tom1, true),
+                [ "tom2" ] = (チップ種別.Tom2, true),
+                [ "tom3" ] = (チップ種別.Tom3, true),
+                [ "rightcrash" ] = (チップ種別.RightCrash, true),
+                [ "bpm" ] = (チップ種別.BPM, false),
+                [ "bgv" ] = (チップ種別.背景動画, false),
+                [ "bgm" ] = (チップ種別.BGM, false),
                 //----------------
                 #endregion
             };
@@ -1537,7 +1539,6 @@ namespace SSTFormat.v4
                 score.アーティスト名 = v3score.アーティスト名;
                 score.説明文 = v3score.説明文;
                 score.難易度 = v3score.難易度;
-
                 score.プレビュー画像ファイル名 = v3score.プレビュー画像ファイル名;
                 score.プレビュー音声ファイル名 = v3score.プレビュー音声ファイル名;
                 score.プレビュー動画ファイル名 = v3score.プレビュー動画ファイル名;
