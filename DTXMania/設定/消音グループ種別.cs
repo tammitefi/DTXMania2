@@ -14,5 +14,7 @@ namespace DTXMania.設定
         LeftCymbal,
         RightCymbal,
         HiHat,
+        Guitar,
+        Bass,
     }
 }

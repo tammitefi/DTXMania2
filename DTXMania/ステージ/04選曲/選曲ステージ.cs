@@ -118,7 +118,7 @@ namespace DTXMania.ステージ.選曲
 
             if( null != App.曲ツリー.フォーカスノード )
             {
-                // (A) 曲がある場合
+                // (A) 曲がある場合　→　通常画面
 
                 this._舞台画像.進行描画する( dc );
                 this._曲リスト.進行描画する( dc );
@@ -136,7 +136,7 @@ namespace DTXMania.ステージ.選曲
             }
             else
             {
-                // (B) 曲が１つもない場合
+                // (B) 曲が１つもない場合　→　Song Not Found 画面
 
                 this._舞台画像.進行描画する( dc );
                 this._表示方法選択パネル.進行描画する( dc );
@@ -152,6 +152,7 @@ namespace DTXMania.ステージ.選曲
             switch( this.現在のフェーズ )
             {
                 case フェーズ.フェードイン:
+
                     App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.アイキャッチ.フェーズ.オープン完了 )
@@ -161,6 +162,7 @@ namespace DTXMania.ステージ.選曲
                     break;
 
                 case フェーズ.表示:
+
                     if( App.入力管理.確定キーが入力された() )
                     {
                         #region " 確定 "
@@ -282,6 +284,7 @@ namespace DTXMania.ステージ.選曲
                     break;
 
                 case フェーズ.フェードアウト:
+
                     App.ステージ管理.現在のアイキャッチ.進行描画する( dc );
 
                     if( App.ステージ管理.現在のアイキャッチ.現在のフェーズ == アイキャッチ.アイキャッチ.フェーズ.クローズ完了 )
@@ -298,23 +301,41 @@ namespace DTXMania.ステージ.選曲
 
 
         private bool _初めての進行描画 = true;
+
         private 舞台画像 _舞台画像 = null;
+
         private 曲リスト _曲リスト = null;
+
         private 難易度と成績 _難易度と成績 = null;
+
         private 曲ステータスパネル _曲ステータスパネル = null;
+
         private 青い線 _青い線 = null;
+
         private 選択曲枠ランナー _選択曲枠ランナー = null;
+
         private BPMパネル _BPMパネル = null;
+
         private 曲別SKILL _曲別SKILL = null;
+
         private 表示方法選択パネル _表示方法選択パネル = null;
+
         private 文字列画像 _SongNotFound = null;
+
         private SolidColorBrush _白 = null;
+
         private SolidColorBrush _黒 = null;
+
         private SolidColorBrush _黒透過 = null;
+
         private SolidColorBrush _灰透過 = null;
+
         private テクスチャ _ステージタイマー = null;
+
         private readonly Vector3 _プレビュー画像表示位置dpx = new Vector3( 471f, 61f, 0f );
+
         private readonly Vector3 _プレビュー画像表示サイズdpx = new Vector3( 444f, 444f, 0f );
+
 
         private void _その他パネルを描画する( DeviceContext1 dc )
         {
@@ -342,6 +363,7 @@ namespace DTXMania.ステージ.選曲
 
             } );
         }
+
         private void _プレビュー画像を描画する( DeviceContext1 dc, Node ノード )
         {
             var 画像 = ノード.ノード画像 ?? Node.既定のノード画像;
@@ -360,6 +382,7 @@ namespace DTXMania.ステージ.選曲
 
             画像.描画する( 変換行列 );
         }
+
         private void _選択曲を囲む枠を描画する( DeviceContext1 dc )
         {
             var 矩形 = new RectangleF( 1015f, 485f, 905f, 113f );
@@ -369,11 +392,17 @@ namespace DTXMania.ステージ.選曲
             this._青い線.描画する( dc, new Vector2( 矩形.Left, 矩形.Top - this._青枠のマージンdpx ), 高さdpx: 矩形.Height + this._青枠のマージンdpx * 2f );
         }
 
+
         private Variable _上に伸びる導線の長さdpx = null;
+
         private Variable _左に伸びる導線の長さdpx = null;
+
         private Variable _プレビュー枠の長さdpx = null;
+
         private Storyboard _導線のストーリーボード = null;
+
         private readonly float _青枠のマージンdpx = 8f;
+
 
         private void _導線アニメをリセットする()
         {
@@ -437,6 +466,7 @@ namespace DTXMania.ステージ.選曲
 
             this._導線のストーリーボード.Schedule( animation.Timer.Time );
         }
+
         private void _導線を描画する( DeviceContext1 dc )
         {
             var h = (float) this._上に伸びる導線の長さdpx.Value;

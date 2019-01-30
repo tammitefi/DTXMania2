@@ -235,6 +235,7 @@ namespace DTXMania.ステージ.演奏
                         // ※注:クリアや失敗の判定は、ここではなく、進行描画側で行っている。
 
                         double 現在の演奏時刻sec = this._演奏開始からの経過時間secを返す();
+                        long 現在の演奏時刻qpc = QPCTimer.生カウント;
 
 
                         // AutoPlay 判定
@@ -398,7 +399,7 @@ namespace DTXMania.ステージ.演奏
 
                                 var チップにヒットしている入力 = App.入力管理.ポーリング結果.FirstOrDefault( ( 入力 ) => {
 
-                                    if( 入力.InputEvent.離された ||                   // 押下入力じゃないなら無視。
+                                    if( 入力.InputEvent.離された ||                    // 押下入力じゃないなら無視。
                                         ヒット処理済み入力.Contains( 入力 ) ||         // すでに今回のターンで処理済み（＝処理済み入力リストに追加済み）なら無視。
                                         入力.Type == ドラム入力種別.HiHat_Control )    // HiHat_Control 入力はここでは無視。
                                         return false;
@@ -413,9 +414,6 @@ namespace DTXMania.ステージ.演奏
                                     // (B) 入力グループ種別が Unknown ではない場合　→　入力グループ種別で比較
                                     else
                                     {
-                                        //var 入力の入力グループ = ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ.First( ( kvp ) => ( kvp.Value.ドラム入力種別 == 入力.Type ) ).Value.入力グループ種別;
-                                        //return ( チップの入力グループ == 入力の入力グループ );
-
                                         var 入力の入力グループ種別リスト =
                                             from kvp in ユーザ設定.ドラムチッププロパティ管理.チップtoプロパティ
                                             where ( kvp.Value.ドラム入力種別 == 入力.Type )
@@ -440,16 +438,15 @@ namespace DTXMania.ステージ.演奏
 
                                     ヒット処理済み入力.Add( チップにヒットしている入力 );    // この入力はこのチップでヒット処理した。
 
-                                    // 判定を算出。
-                                    var 判定 = 判定種別.OK;
-                                    double ヒット判定バーとの時間の絶対値sec = Math.Abs( ヒット判定バーと描画との時間sec );
-                                    switch( ヒット判定バーとの時間の絶対値sec )
-                                    {
-                                        case double span when( span <= ユーザ設定.最大ヒット距離sec[ 判定種別.PERFECT ] ): 判定 = 判定種別.PERFECT; break;
-                                        case double span when( span <= ユーザ設定.最大ヒット距離sec[ 判定種別.GREAT ] ): 判定 = 判定種別.GREAT; break;
-                                        case double span when( span <= ユーザ設定.最大ヒット距離sec[ 判定種別.GOOD ] ): 判定 = 判定種別.GOOD; break;
-                                        default: 判定 = 判定種別.OK; break;
-                                    }
+                                    // 入力とチップとの時間差を算出。
+                                    double ヒット判定バーと入力との時間sec = QPCTimer.生カウント相対値を秒へ変換して返す( 現在の演奏時刻qpc - チップにヒットしている入力.InputEvent.TimeStamp );   // 常に正
+                                    double 入力とチップの間隔sec = Math.Abs( ヒット判定バーと入力との時間sec - ヒット判定バーと描画との時間sec );
+
+                                    // 時間差から判定を算出。
+                                    var 判定 =
+                                        ( 入力とチップの間隔sec <= ユーザ設定.最大ヒット距離sec[ 判定種別.PERFECT ] ) ? 判定種別.PERFECT :
+                                        ( 入力とチップの間隔sec <= ユーザ設定.最大ヒット距離sec[ 判定種別.GREAT ] ) ? 判定種別.GREAT :
+                                        ( 入力とチップの間隔sec <= ユーザ設定.最大ヒット距離sec[ 判定種別.GOOD ] ) ? 判定種別.GOOD : 判定種別.OK;
 
                                     // ヒット処理。
                                     this._チップのヒット処理を行う(

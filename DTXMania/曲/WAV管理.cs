@@ -84,7 +84,9 @@ namespace DTXMania.曲
             if( this._WAV情報リスト.ContainsKey( wav番号 ) )
                 this._WAV情報リスト[ wav番号 ].Dispose();  // すでに登録済みなら解放する。
 
-            this._WAV情報リスト[ wav番号 ] = new WAV情報( wav番号, ( 多重再生する ) ? this._既定の多重度 : 1, BGMである );
+            int 多重度 = ( 多重再生する ) ? this._既定の多重度 : 1;
+
+            this._WAV情報リスト[ wav番号 ] = new WAV情報( wav番号, 多重度, BGMである );
             this._WAV情報リスト[ wav番号 ].サウンドを生成する( device, サンプルソース );
 
             Log.Info( $"サウンドを読み込みました。[{サウンドファイル.変数付きパス}]" );
@@ -194,7 +196,7 @@ namespace DTXMania.曲
                 this.最後に発声したときの消音グループ種別 = muteGroupType;
 
                 // 発声。
-                音量 = 
+                音量 =
                     ( 0f > 音量 ) ? 0f : 
                     ( 1f < 音量 ) ? 1f : 音量;
                 this.Sounds[ this._次に再生するSound番号 ].Volume = 音量;

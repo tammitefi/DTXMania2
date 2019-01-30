@@ -68,18 +68,27 @@ namespace DTXMania.曲
 
                     if( block.File[ i ].Nullでも空でもない() )
                     {
-                        try
-                        {
-                            this.MusicNodes[ i ] = new MusicNode( Path.Combine( 基点フォルダパス.変数なしパス, block.File[ i ] ), this );
-                            this.難易度[ i ].label = block.Label[ i ];
-                            this.子ノードリスト.Add( this.MusicNodes[ i ] );
+                        VariablePath 曲のパス = Path.Combine( 基点フォルダパス.変数なしパス, block.File[ i ] );
 
-                            var song = songdb.Songs.Where( ( r ) => ( r.Path == this.MusicNodes[ i ].曲ファイルの絶対パス.変数なしパス ) ).SingleOrDefault();
-                            this.難易度[ i ].level = ( null != song ) ? (float) song.Level : 0.00f;
-                        }
-                        catch
+                        if( File.Exists( 曲のパス.変数なしパス ) )
                         {
-                            Log.ERROR( "SetNode 内での MusicNode の生成に失敗しました。" );
+                            try
+                            {
+                                this.MusicNodes[ i ] = new MusicNode( Path.Combine( 基点フォルダパス.変数なしパス, block.File[ i ] ), this );
+                                this.難易度[ i ].label = block.Label[ i ];
+                                this.子ノードリスト.Add( this.MusicNodes[ i ] );
+
+                                var song = songdb.Songs.Where( ( r ) => ( r.Path == this.MusicNodes[ i ].曲ファイルの絶対パス.変数なしパス ) ).SingleOrDefault();
+                                this.難易度[ i ].level = ( null != song ) ? (float) song.Level : 0.00f;
+                            }
+                            catch
+                            {
+                                Log.ERROR( "SetNode 内での MusicNode の生成に失敗しました。" );
+                            }
+                        }
+                        else
+                        {
+                            Log.ERROR( $"set.def 内に指定されたファイルが存在しません。無視します。[{曲のパス.変数付きパス}] " );
                         }
                     }
                 }

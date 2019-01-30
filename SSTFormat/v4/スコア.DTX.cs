@@ -110,8 +110,9 @@ namespace SSTFormat.v4
 
                         // コマンド別に解析する。
 
-                        if( _コマンドtoアクションマップ.TryGetValue( 現在の.コマンドzzなし.ToLower(), out var アクション ) ||    // zz付きコマンドとzzなしコマンドが重複する場合は、zzなしのほうが優先
-                            _コマンドtoアクションマップ.TryGetValue( 現在の.コマンド.ToLower(), out アクション ) )
+                        // zzを含めたコマンドがzzを含まないコマンドと一致する場合は、前者のほうが優先。
+                        if( _コマンドtoアクションマップ.TryGetValue( 現在の.コマンド.ToLower(), out var アクション ) ||
+                            _コマンドtoアクションマップ.TryGetValue( 現在の.コマンドzzなし.ToLower(), out アクション ) )
                         {
                             if( !ヘッダだけ || アクション.ヘッダである )
                                 アクション.解析アクション();
@@ -220,7 +221,26 @@ namespace SSTFormat.v4
                     {
                         // BPMチャンネルから作成された BPMチップには、BASEBPM を加算する。
                         // #BASEBPM が複数宣言されていた場合は、最後の値が使用される。
-                        kvp.Key.BPM = 現在の.BASEBPM + 現在の.BPM定義マップ[ kvp.Value ];
+                        if( 現在の.BPM定義マップ.TryGetValue( kvp.Value, out double bpm ) )
+                        {
+                            // (A) 参照している #BGMzz が定義されている場合
+                            kvp.Key.BPM = 現在の.BASEBPM + bpm;
+                        }
+                        else
+                        {
+                            Trace.TraceWarning( $"定義されていない #BPM が参照されています。" );
+
+                            if( 0.0 < 現在の.BASEBPM )
+                            {
+                                // (B) 参照している #BPMzz が未宣言、かつ、BASEBPM が有効である場合 
+                                kvp.Key.BPM = 現在の.BASEBPM;  // BASEBPM のみ適用
+                            }
+                            else
+                            {
+                                // (C) 参照している #BPMzz が未宣言、かつ、BASEBPM が無効である場合 
+                                kvp.Key.チップ種別 = チップ種別.Unknown;  // このチップは無効
+                            }
+                        }
                     }
 
                     // 引き当てが終わったら、マップが持つチップへの参照を解放する。
@@ -509,6 +529,10 @@ namespace SSTFormat.v4
                     BGMである = false,     // 既定ではBGMではない
                 };
             }
+            internal static void _コマンド_PANEL()
+            {
+                // 現状、未対応。
+            }
             internal static void _コマンド_PANzz_WAVPANzz()
             {
                 if( -1 == 現在の.zz36進数 )
@@ -549,7 +573,7 @@ namespace SSTFormat.v4
                     return;
                 }
 
-                現在の.VOLUME定義マップ[ 現在の.zz16進数 ] = Math.Min( Math.Max( VOLUME値, 0 ), 100 );  // あれば上書き、なければ追加
+                現在の.VOLUME定義マップ[ 現在の.zz36進数 ] = Math.Min( Math.Max( VOLUME値, 0 ), 100 );  // あれば上書き、なければ追加
             }
             internal static void _コマンド_BASEBPM()
             {
@@ -568,7 +592,7 @@ namespace SSTFormat.v4
             }
             internal static void _コマンド_BPM_BPMzz()
             {
-                if( "bpm" == 現在の.コマンド.ToLower() )
+                if( "bpm" == 現在の.コマンド.ToLower() )   // zz の指定がない
                 {
                     現在の.zz36進数 = 0;
                 }
@@ -578,9 +602,15 @@ namespace SSTFormat.v4
                     return;
                 }
 
-                if( !_DTX仕様の実数を取得する( 現在の.パラメータ, out double BPM値 ) || ( 0.0 >= BPM値 ) || ( 1000.0 <= BPM値 ) ) // 値域制限(<1000)はDTX仕様
+                if( !_DTX仕様の実数を取得する( 現在の.パラメータ, out double BPM値 ) || ( 0.0 > BPM値 ) || ( 1000.0 <= BPM値 ) ) // 値域制限(<1000)はDTX仕様
                 {
                     Trace.TraceError( $"#BPM のBPM値が不正です。[{現在の.行番号}行]" );
+                    return;
+                }
+
+                if( 0.0 == BPM値 )
+                {
+                    Trace.TraceWarning( $"#BPM のBPM値が 0 です。[{現在の.行番号}行]" );
                     return;
                 }
 
@@ -604,14 +634,21 @@ namespace SSTFormat.v4
             }
             internal static void _コマンド_BGMWAV()
             {
-                if( !int.TryParse( 現在の.パラメータ, out int WAV番号 ) )
+                if( !_36進数2桁の文字列を数値に変換して返す( 現在の.パラメータ, out int WAV番号 ) )
                 {
                     Trace.TraceError( $"#BGMWAV の値の取得に失敗しました。[{現在の.行番号}行]" );
                     return;
                 }
+                if( 1 > WAV番号 || 36 * 36 <= WAV番号 )
+                {
+                    Trace.TraceError( $"#BGMWAV のWAV番号に 01～ZZ 以外の値が指定されています。[{現在の.行番号}行]" );
+                    return;
+                }
 
                 if( !( 現在の.BGMWAVリスト.Contains( WAV番号 ) ) )
+                {
                     現在の.BGMWAVリスト.Add( WAV番号 );
+                }
             }
             internal static void _コマンド_オブジェクト記述()
             {
@@ -630,7 +667,7 @@ namespace SSTFormat.v4
 
                 if( 0x02 == 現在の.チャンネル番号 )
                 {
-                    #region " ch02 小節長倍率 はオブジェクト記述ではないので別途処理する。"
+                    #region " ch02 小節長倍率 はオブジェクト記述ではないので、ここで別途処理する。"
                     //----------------
                     if( !_DTX仕様の実数を取得する( 現在の.パラメータ, out double 小節長倍率 ) )
                     {
@@ -639,7 +676,7 @@ namespace SSTFormat.v4
                     }
                     if( 0.0 >= 小節長倍率 )
                     {
-                        Debug.WriteLine( $"ch02 のパラメータ（小数長倍率）に 0 または負数を指定することはできません。[{現在の.行番号}行目]" );
+                        Trace.TraceError( $"ch02 のパラメータ（小数長倍率）に 0 または負数を指定することはできません。[{現在の.行番号}行目]" );
                         return;
                     }
 
@@ -675,7 +712,7 @@ namespace SSTFormat.v4
                         // (A) ch03 (BPM) のみ 16進数2桁表記
                         if( !_16進数2桁の文字列を数値に変換して返す( オブジェクト記述, out オブジェクト値 ) )
                         {
-                            Debug.WriteLine( $"オブジェクトの記述に不正があります。[{現在の.行番号}行目]" );
+                            Trace.TraceError( $"オブジェクトの記述に不正があります。[{現在の.行番号}行目]" );
                             return;
                         }
                     }
@@ -684,7 +721,7 @@ namespace SSTFormat.v4
                         // (B) その他は 36進数2桁表記
                         if( !_36進数2桁の文字列を数値に変換して返す( オブジェクト記述, out オブジェクト値 ) )
                         {
-                            Debug.WriteLine( $"オブジェクトの記述に不正があります。[{現在の.行番号}行目]" );
+                            Trace.TraceError( $"オブジェクトの記述に不正があります。[{現在の.行番号}行目]" );
                             return;
                         }
                     }
@@ -722,17 +759,20 @@ namespace SSTFormat.v4
                         {
                             // 多重再生禁止サウンド
                             case 0x01:                                                                               // BGM
-                            case 0x61: case 0x62: case 0x63: case 0x64: case 0x65:                                   // SE
                             case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27:  // チップ配置（ギター）
                             case 0xA0: case 0xA1: case 0xA2: case 0xA3: case 0xA4: case 0xA5: case 0xA6: case 0xA7:  // チップ配置（ベース）
+                            case 0x61: case 0x62: case 0x63: case 0x64: case 0x65: case 0x66: case 0x67: case 0x68: case 0x69:              // SE  1～9
+                            case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78: case 0x79:   // SE 10～19
+                            case 0x80: case 0x81: case 0x82: case 0x83: case 0x84: case 0x85: case 0x86: case 0x87: case 0x88: case 0x89:   // SE 20～29
+                            case 0x90: case 0x91: case 0x92:                                                                                // SE 30～32
                                 {
                                     int WAV番号 = オブジェクト値;
                                     var wavList = 現在の.スコア.WAVリスト;
 
                                     if( wavList.ContainsKey( WAV番号 ) )
                                     {
-                                        wavList[ WAV番号 ].多重再生する = false;
-                                        wavList[ WAV番号 ].BGMである = true; // すべて BGM 扱い
+                                        wavList[ WAV番号 ].多重再生する = ( 現在の.チャンネル番号 == 0x01 );  // ch01 だけは多重再生する
+                                        wavList[ WAV番号 ].BGMである = true; // Viewer に対しては、すべて BGM と同じ扱い。
 
                                         // 初めてのBGMなら、BGMファイルとしてサウンドを登録する。
                                         if( 0x01 == 現在の.チャンネル番号 && string.IsNullOrEmpty( 現在の.スコア.BGMファイル名 ) )
@@ -880,17 +920,17 @@ namespace SSTFormat.v4
                 {
                     var 小節番号文字列 = コマンド.Substring( 0, 3 ).ToLower();   // 先頭 3 文字
 
-                    int 百の位 = _36進数変換表.IndexOf( 小節番号文字列[ 0 ] );   // 0～Z（36進数1桁）
-                    int 十の位 = _16進数変換表.IndexOf( 小節番号文字列[ 1 ] );   // 0～9（10進数1桁）
-                    int 一の位 = _16進数変換表.IndexOf( 小節番号文字列[ 2 ] );   // 0～9（10進数1桁）
+                    int _100の位 = _36進数変換表.IndexOf( 小節番号文字列[ 0 ] );  // 0～Z（36進数1桁）
+                    int _10の位 = _16進数変換表.IndexOf( 小節番号文字列[ 1 ] );   // 0～9（10進数1桁）
+                    int _1の位 = _16進数変換表.IndexOf( 小節番号文字列[ 2 ] );    // 0～9（10進数1桁）
 
-                    if( -1 == 百の位 || -1 == 十の位 || -1 == 一の位 )
+                    if( -1 == _100の位 || -1 == _10の位 || -1 == _1の位 )
                     {
                         //Trace.TraceWarning( $"小節番号が不正です。[{現在の.行番号}行]" );
                         return false;
                     }
 
-                    小節番号 = ( 百の位 * 100 ) + ( 十の位 * 10 ) + 一の位;
+                    小節番号 = ( _100の位 * 100 ) + ( _10の位 * 10 ) + _1の位;
                 }
                 //----------------
                 #endregion
@@ -904,6 +944,7 @@ namespace SSTFormat.v4
                     {
                         case データ種別.GDA:
                         case データ種別.G2D:
+                
                             // 英数字2桁
                             if( !_GDAtoDTXチャンネルマップ.TryGetValue( チャンネル文字列.ToUpper(), out チャンネル番号 ) )
                             {
@@ -936,25 +977,26 @@ namespace SSTFormat.v4
             private static readonly Dictionary<string, (bool ヘッダである, Action 解析アクション)> _コマンドtoアクションマップ = new Dictionary<string, (bool, Action)> {
                 #region " *** "
                 //----------------
-                // コマンド名,   ヘッダである,  解析アクション
-                { "title",      ( true,   _コマンド_TITLE ) },
-                { "artist",     ( true,   _コマンド_ARTIST ) },
-                { "comment",    ( true,   _コマンド_COMMENT ) },
-                { "path_wav",   ( true,   _コマンド_PATH_WAV ) },
-                { "wav",        ( false,  _コマンド_WAVzz ) },
-                { "pan",        ( false,  _コマンド_PANzz_WAVPANzz ) },
-                { "wavpan",     ( false,  _コマンド_PANzz_WAVPANzz ) },
-                { "volume",     ( false,  _コマンド_VOLUMEzz_WAVVOLzz ) },
-                { "wavvol",     ( false,  _コマンド_VOLUMEzz_WAVVOLzz ) },
-                { "basebpm",    ( true,   _コマンド_BASEBPM ) },
-                { "bpm",        ( true,   _コマンド_BPM_BPMzz ) },
-                { "dlevel",     ( true,   _コマンド_DLEVEL_PLAYLEVEL ) },
-                { "playlevel",  ( true,   _コマンド_DLEVEL_PLAYLEVEL ) },
-                { "preview",    ( true,   _コマンド_PREVIEW ) },
-                { "preimage",   ( true,   _コマンド_PREIMAGE ) },
-                { "premovie",   ( true,   _コマンド_PREMOVIE ) },
-                { "avi",        ( true,   _コマンド_AVIzz ) },
-                { "bgmwav",     ( true,   _コマンド_BGMWAV ) },
+                // コマンド名,    ヘッダである,  解析アクション
+                [ "title" ] =    ( true,   _コマンド_TITLE ),
+                [ "artist" ] =   ( true,   _コマンド_ARTIST ),
+                [ "comment" ] =  ( true,   _コマンド_COMMENT ),
+                [ "path_wav" ] = ( true,   _コマンド_PATH_WAV ),
+                [ "wav" ] =      ( false,  _コマンド_WAVzz ),
+                [ "panel" ] =    ( false,  _コマンド_PANEL ),
+                [ "pan" ] =      ( false,  _コマンド_PANzz_WAVPANzz ),
+                [ "wavpan" ] =   ( false,  _コマンド_PANzz_WAVPANzz ),
+                [ "volume" ] =   ( false,  _コマンド_VOLUMEzz_WAVVOLzz ),
+                [ "wavvol" ] =   ( false,  _コマンド_VOLUMEzz_WAVVOLzz ),
+                [ "basebpm" ] =  ( true,   _コマンド_BASEBPM ),
+                [ "bpm" ] =      ( true,   _コマンド_BPM_BPMzz ),
+                [ "dlevel" ] =   ( true,   _コマンド_DLEVEL_PLAYLEVEL ),
+                [ "playlevel" ] =( true,   _コマンド_DLEVEL_PLAYLEVEL ),
+                [ "preview" ] =  ( true,   _コマンド_PREVIEW ),
+                [ "preimage" ] = ( true,   _コマンド_PREIMAGE ),
+                [ "premovie" ] = ( true,   _コマンド_PREMOVIE ),
+                [ "avi" ] =      ( true,   _コマンド_AVIzz ),
+                [ "bgmwav" ] =   ( true,   _コマンド_BGMWAV ),
                 //----------------
                 #endregion
             };
@@ -1033,48 +1075,76 @@ namespace SSTFormat.v4
             private static readonly Dictionary<int, (チップ種別 チップ種別, bool 可視, bool WAVを使う)> _DTXチャンネルプロパティマップ = new Dictionary<int, (チップ種別 チップ種別, bool 可視, bool WAVを使う)> {
                 #region " *** "
                 //----------------
-                { 0x01, ( チップ種別.BGM,        false,  true  ) },  // バックコーラス(BGM)
-                { 0x02, ( チップ種別.Unknown,    false,  false ) },	 // 小節長倍率 ... SSTFではチップじゃない。
-                { 0x03, ( チップ種別.BPM,        false,  false ) },  // BPM
-                { 0x08, ( チップ種別.BPM,        false,  false ) },  // 拡張BPM
-                { 0x11, ( チップ種別.HiHat_Close,true,   true  ) },  // チップ配置（ドラム）・ハイハットクローズ
-                { 0x12, ( チップ種別.Snare,      true,   true  ) },  // チップ配置（ドラム）・スネア
-                { 0x13, ( チップ種別.Bass,       true,   true  ) },  // チップ配置（ドラム）・バス
-                { 0x14, ( チップ種別.Tom1,       true,   true  ) },  // チップ配置（ドラム）・ハイタム
-                { 0x15, ( チップ種別.Tom2,       true,   true  ) },  // チップ配置（ドラム）・ロータム
-                { 0x16, ( チップ種別.RightCrash, true,   true  ) },  // チップ配置（ドラム）・右シンバル
-                { 0x17, ( チップ種別.Tom3,       true,   true  ) },  // チップ配置（ドラム）・フロアタム
-                { 0x18, ( チップ種別.HiHat_Open, true,   true  ) },  // チップ配置（ドラム）・ハイハットオープン
-                { 0x19, ( チップ種別.Ride,       true,   true  ) },  // チップ配置（ドラム）・ライドシンバル
-                { 0x1A, ( チップ種別.LeftCrash,  true,   true  ) },  // チップ配置（ドラム）・左シンバル
-                { 0x1B, ( チップ種別.HiHat_Foot, true,   true  ) },  // チップ配置（ドラム）・左ペダル
-                { 0x1C, ( チップ種別.LeftBass,   true,   true  ) },  // チップ配置（ドラム）・左バス
-                { 0x20, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・OPEN
-                { 0x21, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・xxB
-                { 0x22, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・xGx
-                { 0x23, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・xGB
-                { 0x24, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・Rxx
-                { 0x25, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・RxB
-                { 0x26, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・RGx
-                { 0x27, ( チップ種別.GuitarAuto, false,  true  ) },  // チップ配置（ギター）・RGB
-                { 0x50, ( チップ種別.小節線,     true,   false ) },  // 小節線
-                { 0x51, ( チップ種別.拍線,       true,   false ) },  // 拍線
-                { 0x54, ( チップ種別.背景動画,   false,  false ) },  // 動画
-                { 0x5A, ( チップ種別.背景動画,   false,  false ) },  // 動画（全画面）
-                { 0x61, ( チップ種別.SE1,        false,  true  ) },  // SE1
-                { 0x62, ( チップ種別.SE2,        false,  true  ) },  // SE2
-                { 0x63, ( チップ種別.SE3,        false,  true  ) },  // SE3
-                { 0x64, ( チップ種別.SE4,        false,  true  ) },  // SE4
-                { 0x65, ( チップ種別.SE5,        false,  true  ) },  // SE5
-                { 0xA0, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・OPEN
-                { 0xA1, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・xxB
-                { 0xA2, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・xGx
-                { 0xA3, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・xGB
-                { 0xA4, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・Rxx
-                { 0xA5, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・RxB
-                { 0xA6, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・RGx
-                { 0xA7, ( チップ種別.BassAuto,   false,  true  ) },  // チップ配置（ベース）・RGB
-                { 0xC2, ( チップ種別.Unknown,    false,  false ) },	 // 拍線・小節線表示指定 ... SSTFではチップじゃないが、後処理で使用する。
+                // Ch番号,   チップ種別,            可視, WAVを使う
+                [ 0x01 ] = ( チップ種別.BGM,        false,  true  ),  // バックコーラス(BGM)
+                [ 0x02 ] = ( チップ種別.Unknown,    false,  false ),  // 小節長倍率 ... SSTFではチップじゃない。
+                [ 0x03 ] = ( チップ種別.BPM,        false,  false ),  // BPM
+                [ 0x08 ] = ( チップ種別.BPM,        false,  false ),  // 拡張BPM
+                [ 0x11 ] = ( チップ種別.HiHat_Close,true,   true  ),  // チップ配置（ドラム）・ハイハットクローズ
+                [ 0x12 ] = ( チップ種別.Snare,      true,   true  ),  // チップ配置（ドラム）・スネア
+                [ 0x13 ] = ( チップ種別.Bass,       true,   true  ),  // チップ配置（ドラム）・バス
+                [ 0x14 ] = ( チップ種別.Tom1,       true,   true  ),  // チップ配置（ドラム）・ハイタム
+                [ 0x15 ] = ( チップ種別.Tom2,       true,   true  ),  // チップ配置（ドラム）・ロータム
+                [ 0x16 ] = ( チップ種別.RightCrash, true,   true  ),  // チップ配置（ドラム）・右シンバル
+                [ 0x17 ] = ( チップ種別.Tom3,       true,   true  ),  // チップ配置（ドラム）・フロアタム
+                [ 0x18 ] = ( チップ種別.HiHat_Open, true,   true  ),  // チップ配置（ドラム）・ハイハットオープン
+                [ 0x19 ] = ( チップ種別.Ride,       true,   true  ),  // チップ配置（ドラム）・ライドシンバル
+                [ 0x1A ] = ( チップ種別.LeftCrash,  true,   true  ),  // チップ配置（ドラム）・左シンバル
+                [ 0x1B ] = ( チップ種別.HiHat_Foot, true,   true  ),  // チップ配置（ドラム）・左ペダル
+                [ 0x1C ] = ( チップ種別.LeftBass,   true,   true  ),  // チップ配置（ドラム）・左バス
+                [ 0x20 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・OPEN
+                [ 0x21 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・xxB
+                [ 0x22 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・xGx
+                [ 0x23 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・xGB
+                [ 0x24 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・Rxx
+                [ 0x25 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・RxB
+                [ 0x26 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・RGx
+                [ 0x27 ] = ( チップ種別.GuitarAuto, false,  true  ),  // チップ配置（ギター）・RGB
+                [ 0x50 ] = ( チップ種別.小節線,     true,   false ),  // 小節線
+                [ 0x51 ] = ( チップ種別.拍線,       true,   false ),  // 拍線
+                [ 0x54 ] = ( チップ種別.背景動画,   false,  false ),  // 動画
+                [ 0x5A ] = ( チップ種別.背景動画,   false,  false ),  // 動画（全画面）
+                [ 0x61 ] = ( チップ種別.SE1,        false,  true  ),  // SE1
+                [ 0x62 ] = ( チップ種別.SE2,        false,  true  ),  // SE2
+                [ 0x63 ] = ( チップ種別.SE3,        false,  true  ),  // SE3
+                [ 0x64 ] = ( チップ種別.SE4,        false,  true  ),  // SE4
+                [ 0x65 ] = ( チップ種別.SE5,        false,  true  ),  // SE5
+                [ 0x66 ] = ( チップ種別.SE6,        false,  true  ),  // SE6
+                [ 0x67 ] = ( チップ種別.SE7,        false,  true  ),  // SE7
+                [ 0x68 ] = ( チップ種別.SE8,        false,  true  ),  // SE8
+                [ 0x69 ] = ( チップ種別.SE9,        false,  true  ),  // SE9
+                [ 0x70 ] = ( チップ種別.SE10,       false,  true  ),  // SE10
+                [ 0x71 ] = ( チップ種別.SE11,       false,  true  ),  // SE11
+                [ 0x72 ] = ( チップ種別.SE12,       false,  true  ),  // SE12
+                [ 0x73 ] = ( チップ種別.SE13,       false,  true  ),  // SE13
+                [ 0x74 ] = ( チップ種別.SE14,       false,  true  ),  // SE14
+                [ 0x75 ] = ( チップ種別.SE15,       false,  true  ),  // SE15
+                [ 0x76 ] = ( チップ種別.SE16,       false,  true  ),  // SE16
+                [ 0x77 ] = ( チップ種別.SE17,       false,  true  ),  // SE17
+                [ 0x78 ] = ( チップ種別.SE18,       false,  true  ),  // SE18
+                [ 0x79 ] = ( チップ種別.SE19,       false,  true  ),  // SE19
+                [ 0x80 ] = ( チップ種別.SE20,       false,  true  ),  // SE20
+                [ 0x81 ] = ( チップ種別.SE21,       false,  true  ),  // SE21
+                [ 0x82 ] = ( チップ種別.SE22,       false,  true  ),  // SE22
+                [ 0x83 ] = ( チップ種別.SE23,       false,  true  ),  // SE23
+                [ 0x84 ] = ( チップ種別.SE24,       false,  true  ),  // SE24
+                [ 0x85 ] = ( チップ種別.SE25,       false,  true  ),  // SE25
+                [ 0x86 ] = ( チップ種別.SE26,       false,  true  ),  // SE26
+                [ 0x87 ] = ( チップ種別.SE27,       false,  true  ),  // SE27
+                [ 0x88 ] = ( チップ種別.SE28,       false,  true  ),  // SE28
+                [ 0x89 ] = ( チップ種別.SE29,       false,  true  ),  // SE29
+                [ 0x90 ] = ( チップ種別.SE30,       false,  true  ),  // SE30
+                [ 0x91 ] = ( チップ種別.SE31,       false,  true  ),  // SE31
+                [ 0x92 ] = ( チップ種別.SE32,       false,  true  ),  // SE32
+                [ 0xA0 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・OPEN
+                [ 0xA1 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・xxB
+                [ 0xA2 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・xGx
+                [ 0xA3 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・xGB
+                [ 0xA4 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・Rxx
+                [ 0xA5 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・RxB
+                [ 0xA6 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・RGx
+                [ 0xA7 ] = ( チップ種別.BassAuto,   false,  true  ),  // チップ配置（ベース）・RGB
+                [ 0xC2 ] = ( チップ種別.Unknown,    false,  false ),  // 拍線・小節線表示指定 ... SSTFではチップじゃないが、後処理で使用する。
                 //----------------
                 #endregion
             };

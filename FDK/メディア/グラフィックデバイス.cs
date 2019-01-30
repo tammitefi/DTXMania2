@@ -534,9 +534,9 @@ namespace FDK
                     DepthWriteMask = SharpDX.Direct3D11.DepthWriteMask.All,     // 書き込む
                     DepthComparison = SharpDX.Direct3D11.Comparison.Less,       // 手前の物体を描画
                     IsStencilEnabled = false,                                   // ステンシルテストなし。
-                    StencilReadMask = 0,                                        // ステンシル読み込みマスク。
-                    StencilWriteMask = 0,                                       // ステンシル書き込みマスク。
-                                                                                // 面が表を向いている場合のステンシル・テストの設定
+                    StencilReadMask = 0,
+                    StencilWriteMask = 0,
+                    // 面が表を向いている場合のステンシル・テストの設定
                     FrontFace = new SharpDX.Direct3D11.DepthStencilOperationDescription() {
                         FailOperation = SharpDX.Direct3D11.StencilOperation.Keep,       // 維持
                         DepthFailOperation = SharpDX.Direct3D11.StencilOperation.Keep,  // 維持

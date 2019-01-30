@@ -215,7 +215,6 @@ namespace SSTFormat.v4
         }
 
 
-
         // AVIリスト
 
         /// <summary>
@@ -234,7 +233,6 @@ namespace SSTFormat.v4
         ///		[value: zz番号]
         /// </summary>
         public Dictionary<レーン種別, int> 空打ちチップマップ { get; protected set; }
-
 
 
         // メソッド
