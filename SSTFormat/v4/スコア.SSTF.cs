@@ -1316,15 +1316,21 @@ namespace SSTFormat.v4
                         if( laneType == レーン種別.Unknown ) // チップ記述対象外レーン
                             continue;
 
-                        var chips = score.チップリスト.Where( ( chip ) => ( 
+                        var chips = score.チップリスト.Where( ( chip ) => (
                             chip.小節番号 == 小節番号 &&
                             SSTFプロパティ.チップtoレーンマップ[ chip.チップ種別 ] == laneType &&
                             // チップ記述対象外チップ
-                            chip.チップ種別 != チップ種別.SE1 &&
-                            chip.チップ種別 != チップ種別.SE2 &&
-                            chip.チップ種別 != チップ種別.SE3 &&
-                            chip.チップ種別 != チップ種別.SE4 &&
-                            chip.チップ種別 != チップ種別.SE5 &&
+                            chip.チップ種別 != チップ種別.SE1 && chip.チップ種別 != チップ種別.SE2 && chip.チップ種別 != チップ種別.SE3 &&
+                            chip.チップ種別 != チップ種別.SE4 && chip.チップ種別 != チップ種別.SE5 && chip.チップ種別 != チップ種別.SE6 &&
+                            chip.チップ種別 != チップ種別.SE7 && chip.チップ種別 != チップ種別.SE8 && chip.チップ種別 != チップ種別.SE9 &&
+                            chip.チップ種別 != チップ種別.SE10 && chip.チップ種別 != チップ種別.SE11 && chip.チップ種別 != チップ種別.SE12 &&
+                            chip.チップ種別 != チップ種別.SE13 && chip.チップ種別 != チップ種別.SE14 && chip.チップ種別 != チップ種別.SE15 &&
+                            chip.チップ種別 != チップ種別.SE16 && chip.チップ種別 != チップ種別.SE17 && chip.チップ種別 != チップ種別.SE18 &&
+                            chip.チップ種別 != チップ種別.SE19 && chip.チップ種別 != チップ種別.SE20 && chip.チップ種別 != チップ種別.SE21 &&
+                            chip.チップ種別 != チップ種別.SE22 && chip.チップ種別 != チップ種別.SE23 && chip.チップ種別 != チップ種別.SE24 &&
+                            chip.チップ種別 != チップ種別.SE25 && chip.チップ種別 != チップ種別.SE26 && chip.チップ種別 != チップ種別.SE27 &&
+                            chip.チップ種別 != チップ種別.SE28 && chip.チップ種別 != チップ種別.SE29 && chip.チップ種別 != チップ種別.SE30 &&
+                            chip.チップ種別 != チップ種別.SE31 && chip.チップ種別 != チップ種別.SE32 &&
                             chip.チップ種別 != チップ種別.GuitarAuto &&
                             chip.チップ種別 != チップ種別.BassAuto ) );
 

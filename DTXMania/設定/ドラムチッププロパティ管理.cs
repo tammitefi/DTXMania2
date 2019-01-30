@@ -1052,6 +1052,708 @@ namespace DTXMania.設定
                     },
                     //----------------
                     #endregion
+                    #region " チップ種別.SE6 "
+                    //----------------
+                    [ チップ種別.SE6 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE6,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE7 "
+                    //----------------
+                    [ チップ種別.SE7 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE7,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE8 "
+                    //----------------
+                    [ チップ種別.SE8 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE8,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE9 "
+                    //----------------
+                    [ チップ種別.SE9 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE9,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE10 "
+                    //----------------
+                    [ チップ種別.SE10 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE10,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE11 "
+                    //----------------
+                    [ チップ種別.SE11 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE11,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE12 "
+                    //----------------
+                    [ チップ種別.SE12 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE12,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE13 "
+                    //----------------
+                    [ チップ種別.SE13 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE13,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE14 "
+                    //----------------
+                    [ チップ種別.SE14 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE14,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE15 "
+                    //----------------
+                    [ チップ種別.SE15 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE15,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE16 "
+                    //----------------
+                    [ チップ種別.SE16 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE16,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE17 "
+                    //----------------
+                    [ チップ種別.SE17 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE17,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE18 "
+                    //----------------
+                    [ チップ種別.SE18 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE18,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE19 "
+                    //----------------
+                    [ チップ種別.SE19 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE19,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE20 "
+                    //----------------
+                    [ チップ種別.SE20 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE20,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE21 "
+                    //----------------
+                    [ チップ種別.SE21 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE21,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE22 "
+                    //----------------
+                    [ チップ種別.SE22 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE22,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE23 "
+                    //----------------
+                    [ チップ種別.SE23 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE23,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE24 "
+                    //----------------
+                    [ チップ種別.SE24 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE24,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE25 "
+                    //----------------
+                    [ チップ種別.SE25 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE25,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE26 "
+                    //----------------
+                    [ チップ種別.SE26 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE26,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE27 "
+                    //----------------
+                    [ チップ種別.SE27 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE27,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE28 "
+                    //----------------
+                    [ チップ種別.SE28 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE28,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE29 "
+                    //----------------
+                    [ チップ種別.SE29 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE29,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE30 "
+                    //----------------
+                    [ チップ種別.SE30 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE30,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE31 "
+                    //----------------
+                    [ チップ種別.SE31 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE31,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
+                    #region " チップ種別.SE32 "
+                    //----------------
+                    [ チップ種別.SE32 ] = new ドラムチッププロパティ() {
+                        チップ種別 = チップ種別.SE32,
+                        レーン種別 = レーン種別.Unknown,
+                        表示レーン種別 = 表示レーン種別.Unknown,
+                        表示チップ種別 = 表示チップ種別.Unknown,
+                        ドラム入力種別 = ドラム入力種別.Unknown,
+                        AutoPlay種別 = AutoPlay種別.Unknown,
+                        入力グループ種別 = 入力グループ種別.Unknown,
+                        発声前消音 = false,
+                        消音グループ種別 = 消音グループ種別.Unknown,
+                        AutoPlayON_自動ヒット_再生 = true,
+                        AutoPlayON_自動ヒット_非表示 = true,
+                        AutoPlayON_自動ヒット_判定 = false,
+                        AutoPlayON_Miss判定 = false,
+                        AutoPlayOFF_自動ヒット_再生 = true,
+                        AutoPlayOFF_自動ヒット_非表示 = true,
+                        AutoPlayOFF_自動ヒット_判定 = false,
+                        AutoPlayOFF_ユーザヒット_再生 = false,
+                        AutoPlayOFF_ユーザヒット_非表示 = false,
+                        AutoPlayOFF_ユーザヒット_判定 = false,
+                        AutoPlayOFF_Miss判定 = false,
+                    },
+                    //----------------
+                    #endregion
                 };
 
                 this.反映する( 演奏モード );
