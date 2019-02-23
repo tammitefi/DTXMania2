@@ -1,10 +1,10 @@
 # DTXMania2
-実験バージョンのDTXManiaです。<br/>
+English version<br/>
 
-## 動作要件 (Requirements)
-* Windows 10 (latest)  ※ Windows 7/Vistaでは動作しません。
+## Requirements
+* Windows 10 (latest)  ※ Windows 7/Vista
 * DirectX 11.0+
 * MIDI Input, Keyboard
 
-## ライセンス
+## License
 * MIT Licence
