@@ -6,6 +6,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
 using DTXMania.アイキャッチ;
+using DTXMania2.Language;
 
 namespace DTXMania.ステージ.認証
 {
@@ -31,7 +32,7 @@ namespace DTXMania.ステージ.認証
             {
                 this.子Activityを追加する( this._舞台画像 = new 舞台画像() );
                 this.子Activityを追加する( this._ウィンドウ画像 = new 画像( @"$(System)images\認証\ユーザ選択ウィンドウ.png" ) );
-                this.子Activityを追加する( this._プレイヤーを選択してください = new 文字列画像() { 表示文字列 = "プレイヤーを選択してください。", フォントサイズpt = 30f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
+                this.子Activityを追加する( this._プレイヤーを選択してください = new 文字列画像() { 表示文字列 = Resources.SelectPlayer /*"プレイヤーを選択してください。"*/, フォントサイズpt = 30f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
                 this.子Activityを追加する( this._ユーザリスト = new ユーザリスト() );
             }
         }

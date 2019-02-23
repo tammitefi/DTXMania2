@@ -6,6 +6,7 @@ using SharpDX;
 using SharpDX.Direct2D1;
 using FDK;
 using DTXMania.アイキャッチ;
+using DTXMania2.Language;
 
 namespace DTXMania.ステージ.認証
 {
@@ -33,7 +34,7 @@ namespace DTXMania.ステージ.認証
             {
                 this.子Activityを追加する( this._舞台画像 = new 舞台画像() );
                 this.子Activityを追加する( this._タッチアイコン = new 画像( @"$(System)images\認証\タッチアイコン.png" ) );
-                this.子Activityを追加する( this._確認できませんでした = new 文字列画像() { 表示文字列 = "確認できませんでした。", フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
+                this.子Activityを追加する( this._確認できませんでした = new 文字列画像() { 表示文字列 = Resources.NotConfirm /*"確認できませんでした。"*/, フォントサイズpt = 40f, 描画効果 = 文字列画像.効果.ドロップシャドウ } );
             }
         }
         protected override void On活性化()

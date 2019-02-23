@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using FDK;
 using DTXMania.入力;
+using DTXMania2.Language;
 
 namespace DTXMania.ステージ.オプション設定
 {
@@ -101,9 +102,10 @@ namespace DTXMania.ステージ.オプション設定
         {
             if( this.DialogResult == DialogResult.Cancel && this._変更あり )    // ウィンドウを閉じようとした時も Cancel になる。
             {
-                var dr = MessageBoxEx.Show( "変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
+                var dr = MessageBoxEx.Show( Resources.DiscardChanges, Resources.Confirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
+//                var dr = MessageBoxEx.Show("変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
 
-                if( dr == DialogResult.No )
+                if ( dr == DialogResult.No )
                     e.Cancel = true;
             }
         }

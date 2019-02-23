@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,239 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AllONOFF" xml:space="preserve">
+    <value>All On/Off</value>
+  </data>
+  <data name="AllreadyRunning" xml:space="preserve">
+    <value>is allready running</value>
+  </data>
+  <data name="AssignedInputList" xml:space="preserve">
+    <value>Assigned input list</value>
+  </data>
+  <data name="AutoPlay" xml:space="preserve">
+    <value>Automatic play</value>
+  </data>
+  <data name="ChinaDispPos" xml:space="preserve">
+    <value>Display pos of China</value>
+  </data>
+  <data name="Choice" xml:space="preserve">
+    <value>Choice...</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="CurrentAllocation" xml:space="preserve">
+    <value>Current allocation</value>
+  </data>
+  <data name="CymbalFree" xml:space="preserve">
+    <value>Cymbal Free</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DiscardChanges" xml:space="preserve">
+    <value>Discard changes?</value>
+  </data>
+  <data name="DrumSound" xml:space="preserve">
+    <value>Drum Sound</value>
+  </data>
+  <data name="EnterKeyboardOrMidi" xml:space="preserve">
+    <value>Please enter keyboard or midi signal</value>
+  </data>
+  <data name="FolderName" xml:space="preserve">
+    <value>Folder name</value>
+  </data>
+  <data name="FootPedalOpening" xml:space="preserve">
+    <value>Foot pedal opening</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="HitPad" xml:space="preserve">
+    <value>Please hit the pad</value>
+  </data>
+  <data name="IgnoreActive" xml:space="preserve">
+    <value>Ignore active signal</value>
+  </data>
+  <data name="Initialize" xml:space="preserve">
+    <value>Initialize</value>
+  </data>
+  <data name="InitSettings" xml:space="preserve">
+    <value>Initialize Settings</value>
+  </data>
+  <data name="InitSongDb" xml:space="preserve">
+    <value>Initialize Song DB</value>
+  </data>
+  <data name="InputAlloc" xml:space="preserve">
+    <value>Input allocation</value>
+  </data>
+  <data name="InputAssigned" xml:space="preserve">
+    <value>Input assigned to pad</value>
+  </data>
+  <data name="InputList" xml:space="preserve">
+    <value>Input list</value>
+  </data>
+  <data name="InputSleep" xml:space="preserve">
+    <value>Sleep of input thread</value>
+  </data>
+  <data name="InputValue" xml:space="preserve">
+    <value>Input value</value>
+  </data>
+  <data name="KeyboardInfo" xml:space="preserve">
+    <value>When you hit the keyboard or MIDI drum, the input value is displayed below. \ nIf you select the input value and press the "Add" button, the input value is assigned to the pad. \ n "</value>
+  </data>
+  <data name="LaneArr" xml:space="preserve">
+    <value>Lane arrangement</value>
+  </data>
+  <data name="LaneTrans" xml:space="preserve">
+    <value>Lane transparency</value>
+  </data>
+  <data name="Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="MaxValue" xml:space="preserve">
+    <value>Maximum value</value>
+  </data>
+  <data name="MeasureMaxMin" xml:space="preserve">
+    <value>Measure the maximum value and minimum value by stepping on or releasing the foot pedal.
+Measure
+Käännökset tekstille measure
+SubstantiiviYleisyys
+計測
+measurement, measure
+手段
+means, way, measure
+施策
+measure, policy
+措置
+measure, step
+尺
+scale, length, measure, rule
+物指
+ruler, measure
+升
+measure
+加減
+adjustment, degree, addition and subtraction, allowance, moderation, extent
+一節
+passage, verse, paragraph, stanza, strain, measure
+丈
+length, stature, measure
+約数
+measure
+Verbi
+測る
+measure, weigh, time, survey
+計る
+measure, weigh, time, survey
+量る
+measure, weigh, time, survey
+指す
+insert, designate, indicate, put into, point at, name
+Määritelmät kohteelle measure
+Substantiivi
+1
+a plan or course of action taken to achieve a particular purpose.
+cost-cutting measures
+Synonyymit:
+actionactcourse (of action)deedproceedingprocedurestepmeansexpedientmaneuverinitiativeprogramoperation
+2
+a standard unit used to express the size, amount, or degree of something.
+a furlong is an obsolete measure of length
+Synonyymit:
+systemstandardunitsscale
+Verbi
+1
+ascertain the size, amount, or degree of (something) by using an instrument or device marked in standard units or by comparing it with an object of known size.
+the amount of water collected is measured in pints
+Synonyymit:
+calculatecomputecountmeterquantifyweighsizeevaluateassessgaugeplumbdetermine
+5 muuta määritelmää
+Synonyymit kohteelle measure
+Substantiivi
+actionstatutesystemquantitya certain amountyardstickbarbillcadencecriterionstepmeasurementmeasuring stick
+Verbi
+calculatecompare withassessquantifymeasure out
+Measure max and min value by stepping on or relasing the foot pedal</value>
+  </data>
+  <data name="MinValue" xml:space="preserve">
+    <value>Minimum value</value>
+  </data>
+  <data name="MusicSpeed" xml:space="preserve">
+    <value>Music Speed</value>
+  </data>
+  <data name="NoMultipleRuns" xml:space="preserve">
+    <value>Multiple launch is not possible</value>
+  </data>
+  <data name="NotConfirm" xml:space="preserve">
+    <value>I could not confirm it</value>
+  </data>
+  <data name="Pad" xml:space="preserve">
+    <value>pad</value>
+  </data>
+  <data name="PadInfo" xml:space="preserve">
+    <value>You can select the pad to set. \ nIf you select the assigned input value and press the "Delete" button, that input value will be deleted from the pad. \ n</value>
+  </data>
+  <data name="PerformanceMode" xml:space="preserve">
+    <value>Performance mode</value>
+  </data>
+  <data name="PresentValue" xml:space="preserve">
+    <value>Present value</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <data name="RideDispPos" xml:space="preserve">
+    <value>Display pos of Ride</value>
+  </data>
+  <data name="Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="ScreenMode" xml:space="preserve">
+    <value>Screen mode</value>
+  </data>
+  <data name="SelectPlayer" xml:space="preserve">
+    <value>Please select a player</value>
+  </data>
+  <data name="SettingsDone" xml:space="preserve">
+    <value>Settings done (return)</value>
+  </data>
+  <data name="Setup" xml:space="preserve">
+    <value>Setup</value>
+  </data>
+  <data name="SongFolder" xml:space="preserve">
+    <value>Song folder</value>
+  </data>
+  <data name="SongReadingFolder" xml:space="preserve">
+    <value>Song reading folder</value>
+  </data>
+  <data name="SongReadingFolderList" xml:space="preserve">
+    <value>Song reading folder list</value>
+  </data>
+  <data name="SplashDispPos" xml:space="preserve">
+    <value>Display pos of Splash</value>
+  </data>
+  <data name="StartedAccepting" xml:space="preserve">
+    <value>We started accepting</value>
+  </data>
+  <data name="TimingClock" xml:space="preserve">
+    <value>Timing clock signal</value>
+  </data>
+  <data name="UnsupportedDevice" xml:space="preserve">
+    <value>Unsipported device</value>
+  </data>
+  <data name="Window" xml:space="preserve">
+    <value>Window</value>
+  </data>
 </root>

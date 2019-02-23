@@ -1,4 +1,6 @@
-﻿namespace DTXMania.ステージ.オプション設定
+﻿using DTXMania2.Language;
+
+namespace DTXMania.ステージ.オプション設定
 {
     partial class 曲読み込みフォルダ割り当てダイアログ
     {
@@ -79,7 +81,7 @@
             // 
             // columnHeaderフォルダ名
             // 
-            this.columnHeaderフォルダ名.Text = "フォルダ名";
+            this.columnHeaderフォルダ名.Text = Resources.FolderName;//"フォルダ名";
             this.columnHeaderフォルダ名.Width = 662;
             // 
             // label1
@@ -90,7 +92,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(163, 16);
             this.label1.TabIndex = 8;
-            this.label1.Text = "曲読み込みフォルダ一覧";
+            this.label1.Text = Resources.SongReadingFolderList;//"曲読み込みフォルダ一覧";
             // 
             // button選択
             // 
@@ -99,7 +101,7 @@
             this.button選択.Name = "button選択";
             this.button選択.Size = new System.Drawing.Size(129, 38);
             this.button選択.TabIndex = 9;
-            this.button選択.Text = "選択...";
+            this.button選択.Text = Resources.Choice;//"選択...";
             this.button選択.UseVisualStyleBackColor = true;
             this.button選択.Click += new System.EventHandler(this.button選択_Click);
             // 
@@ -111,7 +113,7 @@
             this.button削除.Name = "button削除";
             this.button削除.Size = new System.Drawing.Size(129, 38);
             this.button削除.TabIndex = 10;
-            this.button削除.Text = "削除";
+            this.button削除.Text = Resources.Delete; //"削除";
             this.button削除.UseVisualStyleBackColor = true;
             this.button削除.Click += new System.EventHandler(this.button削除_Click);
             // 
@@ -134,7 +136,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "曲読み込みフォルダ";
+            this.Text = Resources.SongReadingFolder;//"曲読み込みフォルダ";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this._FormClosing);
             this.ResumeLayout(false);

@@ -1,4 +1,6 @@
-﻿namespace DTXMania.ステージ.オプション設定
+﻿using DTXMania2.Language;
+
+namespace DTXMania.ステージ.オプション設定
 {
     partial class 入力割り当てダイアログ
     {
@@ -108,7 +110,7 @@
             this.buttonFootPedalリセット.Name = "buttonFootPedalリセット";
             this.buttonFootPedalリセット.Size = new System.Drawing.Size(80, 23);
             this.buttonFootPedalリセット.TabIndex = 47;
-            this.buttonFootPedalリセット.Text = "リセット";
+            this.buttonFootPedalリセット.Text = Resources.Reset; // "リセット";
             this.buttonFootPedalリセット.UseVisualStyleBackColor = true;
             // 
             // labelFootPedal現在値
@@ -118,7 +120,7 @@
             this.labelFootPedal現在値.Name = "labelFootPedal現在値";
             this.labelFootPedal現在値.Size = new System.Drawing.Size(41, 12);
             this.labelFootPedal現在値.TabIndex = 46;
-            this.labelFootPedal現在値.Text = "現在値";
+            this.labelFootPedal現在値.Text = Resources.PresentValue;//"現在値";
             // 
             // textBoxFootPedal現在値
             // 
@@ -136,7 +138,7 @@
             this.labelFootPedal最大値.Name = "labelFootPedal最大値";
             this.labelFootPedal最大値.Size = new System.Drawing.Size(41, 12);
             this.labelFootPedal最大値.TabIndex = 44;
-            this.labelFootPedal最大値.Text = "最大値";
+            this.labelFootPedal最大値.Text = Resources.MaxValue;// "最大値";
             // 
             // labelFootPedal最小値
             // 
@@ -145,7 +147,7 @@
             this.labelFootPedal最小値.Name = "labelFootPedal最小値";
             this.labelFootPedal最小値.Size = new System.Drawing.Size(41, 12);
             this.labelFootPedal最小値.TabIndex = 43;
-            this.labelFootPedal最小値.Text = "最小値";
+            this.labelFootPedal最小値.Text = Resources.MinValue;//"最小値";
             // 
             // pictureBoxFootPedal
             // 
@@ -191,7 +193,7 @@
             this.groupBox2.Size = new System.Drawing.Size(121, 498);
             this.groupBox2.TabIndex = 49;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "フットペダル開度";
+            this.groupBox2.Text = Resources.FootPedalOpening;// "フットペダル開度";
             // 
             // richTextBox3
             // 
@@ -207,7 +209,7 @@
             this.richTextBox3.Size = new System.Drawing.Size(109, 56);
             this.richTextBox3.TabIndex = 6;
             this.richTextBox3.TabStop = false;
-            this.richTextBox3.Text = "フットペダルを踏んだり離したりして、最大値・最小値を計測します。";
+            this.richTextBox3.Text = Resources.MeasureMaxMin;// "フットペダルを踏んだり離したりして、最大値・最小値を計測します。";
             // 
             // richTextBox1
             // 
@@ -223,7 +225,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(441, 70);
             this.richTextBox1.TabIndex = 4;
             this.richTextBox1.TabStop = false;
-            this.richTextBox1.Text = "キーボードまたはMIDIドラムを叩くと、以下に入力値が表示されます。\n入力値を選択して「追加する」ボタンを押すと、パッドに入力値が割り当てられます。\n";
+            this.richTextBox1.Text = Resources.KeyboardInfo;//"キーボードまたはMIDIドラムを叩くと、以下に入力値が表示されます。\n入力値を選択して「追加する」ボタンを押すと、パッドに入力値が割り当てられます。\n";
             // 
             // comboBoxパッドリスト
             // 
@@ -263,7 +265,7 @@
             this.button割り当て解除.Name = "button割り当て解除";
             this.button割り当て解除.Size = new System.Drawing.Size(97, 59);
             this.button割り当て解除.TabIndex = 10;
-            this.button割り当て解除.Text = "×←\r\n削除する";
+            this.button割り当て解除.Text = "×←\r\n" + Resources.Delete; // 削除する";
             this.button割り当て解除.UseVisualStyleBackColor = true;
             this.button割り当て解除.Click += new System.EventHandler(this.button割り当て解除_Click);
             // 
@@ -274,7 +276,7 @@
             this.button追加.Name = "button追加";
             this.button追加.Size = new System.Drawing.Size(97, 59);
             this.button追加.TabIndex = 8;
-            this.button追加.Text = "→\r\n追加する";
+            this.button追加.Text = "→\r\n"+Resources.Add;// 追加する";
             this.button追加.UseVisualStyleBackColor = true;
             this.button追加.Click += new System.EventHandler(this.button追加_Click);
             // 
@@ -285,7 +287,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 0;
-            this.label1.Text = "入力値";
+            this.label1.Text = Resources.InputValue;//"入力値";
             // 
             // label2
             // 
@@ -294,7 +296,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 12);
             this.label2.TabIndex = 1;
-            this.label2.Text = "パッド";
+            this.label2.Text = Resources.Pad;//"パッド";
             // 
             // label3
             // 
@@ -303,7 +305,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(152, 12);
             this.label3.TabIndex = 2;
-            this.label3.Text = "パッドに割り当てられている入力";
+            this.label3.Text = Resources.InputAssigned; //"パッドに割り当てられている入力";
             // 
             // richTextBox2
             // 
@@ -319,7 +321,7 @@
             this.richTextBox2.Size = new System.Drawing.Size(246, 66);
             this.richTextBox2.TabIndex = 5;
             this.richTextBox2.TabStop = false;
-            this.richTextBox2.Text = "設定するパッドを選択することができます。\n割り当てられている入力値を選択して「削除する」ボタンを押すと、パッドからその入力値が削除されます。\n";
+            this.richTextBox2.Text = Resources.PadInfo;//"設定するパッドを選択することができます。\n割り当てられている入力値を選択して「削除する」ボタンを押すと、パッドからその入力値が削除されます。\n";
             // 
             // groupBox1
             // 
@@ -331,7 +333,7 @@
             this.groupBox1.Size = new System.Drawing.Size(524, 499);
             this.groupBox1.TabIndex = 50;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "入力リスト";
+            this.groupBox1.Text = Resources.InputList; //"入力リスト";
             // 
             // groupBox3
             // 
@@ -345,7 +347,7 @@
             this.groupBox3.Size = new System.Drawing.Size(303, 498);
             this.groupBox3.TabIndex = 51;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "割り当て済み入力リスト";
+            this.groupBox3.Text = Resources.AssignedInputList;//"割り当て済み入力リスト";
             // 
             // 入力割り当てダイアログ
             // 
@@ -366,7 +368,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "入力割り当て";
+            this.Text = Resources.InputAlloc; ///"入力割り当て";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.入力割り当てダイアログ_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFootPedal)).EndInit();
