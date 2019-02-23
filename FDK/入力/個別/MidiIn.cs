@@ -81,7 +81,8 @@ namespace FDK
 
                     // MIDI入力デバイスを開く。コールバックは全デバイスで共通。
                     MIDIINHANDLE hMidiIn = 0;
-                    if( ( (uint) CSCore.MmResult.NoError == midiInOpen( ref hMidiIn, id, this._midiInProc, 0, CALLBACK_FUNCTION ) ) && ( 0 != hMidiIn ) )
+                    UInt32 hResult = 0;
+                    if( ( (uint) CSCore.MmResult.NoError == (hResult = midiInOpen( ref hMidiIn, id, this._midiInProc, 0, CALLBACK_FUNCTION ) ) ) && ( 0 != hMidiIn ) )
                     {
                         this._MIDI入力デバイスハンドルリスト.Add( hMidiIn );
                         midiInStart( hMidiIn );
@@ -91,7 +92,7 @@ namespace FDK
         }
 
         public void Dispose()
-        {
+        { 
             using( Log.Block( FDKUtilities.現在のメソッド名 ) )
             {
                 // すべてのMIDI入力デバイスの受信を停止し、デバイスを閉じる。

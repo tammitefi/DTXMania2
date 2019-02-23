@@ -6,6 +6,7 @@ using System.Linq;
 using SharpDX.Direct2D1;
 using FDK;
 using DTXMania.設定;
+using DTXMania2.Language;
 
 namespace DTXMania.ステージ.オプション設定
 {
@@ -55,8 +56,9 @@ namespace DTXMania.ステージ.オプション設定
                 {
                     var 自動演奏フォルダ = new パネル_フォルダ(
 
-                        パネル名:
-                            "自動演奏",
+                        パネル名:                            
+                            Resources.AutoPlay,
+                            //"自動演奏",
 
                         親パネル:
                             this._ルートパネルフォルダ,
@@ -78,7 +80,8 @@ namespace DTXMania.ステージ.オプション設定
                         new パネル(
 
                             パネル名:
-                                "すべてON/OFF",
+                                Resources.AllONOFF,
+                                //"すべてON/OFF",
 
                             値の変更処理:
                                 ( panel ) => {
@@ -128,7 +131,8 @@ namespace DTXMania.ステージ.オプション設定
                         new パネル_システムボタン(
 
                             パネル名:
-                                "設定完了（戻る）",
+                                Resources.SettingsDone,
+                                //"設定完了（戻る）",
 
                             値の変更処理:
                                 ( panel ) => {
@@ -151,10 +155,12 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_文字列リスト(
 
                         パネル名:
-                            "画面モード",
+                            Resources.ScreenMode,
+                            //"画面モード",
 
                         選択肢初期値リスト:
-                            new[] { "ウィンドウ", "全画面" },
+                            new[] { Resources.Window, Resources.FullScreen },
+                            //new[] { "ウィンドウ", "全画面" },
 
                         初期選択肢番号:
                             ( user.全画面モードである ) ? 1 : 0,
@@ -174,7 +180,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_文字列リスト(
 
                         パネル名:
-                            "演奏モード",
+                            Resources.PerformanceMode,
+                            //"演奏モード",
 
                         選択肢初期値リスト:
                             new[] { "BASIC", "EXPERT" },
@@ -244,7 +251,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_ONOFFトグル(
 
                         パネル名:
-                            "シンバルフリー",
+                            Resources.CymbalFree,
+                            //"シンバルフリー",
 
                         初期状態はON:
                             user.シンバルフリーモードである,
@@ -264,10 +272,12 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_文字列リスト(
 
                         パネル名:
-                            "Rideの表示位置",
+                            Resources.RideDispPos,
+                            //"Rideの表示位置",
 
                         選択肢初期値リスト:
-                            new[] { "左", "右" },
+                            new[] { Resources.Left, Resources.Right },
+//                            new[] { "左", "右" },
 
                         初期選択肢番号:
                             ( user.表示レーンの左右.Rideは左 ) ? 0 : 1,
@@ -290,10 +300,12 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_文字列リスト(
 
                         パネル名:
-                            "Chinaの表示位置",
+                            Resources.ChinaDispPos,
+//                            "Chinaの表示位置",
 
                         選択肢初期値リスト:
-                            new[] { "左", "右" },
+                            new[] { Resources.Left, Resources.Right },
+//                            new[] { "左", "右" },
 
                         初期選択肢番号:
                             ( user.表示レーンの左右.Chinaは左 ) ? 0 : 1,
@@ -316,10 +328,12 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_文字列リスト(
 
                         パネル名:
-                            "Splashの表示位置",
+                            Resources.SplashDispPos,
+//                            "Splashの表示位置",
 
                         選択肢初期値リスト:
-                            new[] { "左", "右" },
+                            new[] { Resources.Left, Resources.Right },
+//                            new[] { "左", "右" },
 
                         初期選択肢番号:
                             ( user.表示レーンの左右.Splashは左 ) ? 0 : 1,
@@ -342,7 +356,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_ONOFFトグル(
 
                         パネル名:
-                            "ドラムサウンド",
+                            Resources.DrumSound,
+//                            "ドラムサウンド",
 
                         初期状態はON:
                             user.ドラムの音を発声する,
@@ -364,7 +379,8 @@ namespace DTXMania.ステージ.オプション設定
                         new パネル_文字列リスト(
 
                             パネル名:
-                                "レーン配置",
+                                Resources.LaneArr,
+//                                "レーン配置",
 
                             選択肢初期値リスト:
                                 選択肢リスト,
@@ -387,7 +403,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_整数(
 
                         パネル名:
-                            "レーンの透明度",
+                            Resources.LaneTrans,
+//                            "レーンの透明度",
 
                         最小値:
                             0,
@@ -492,7 +509,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_文字列リスト(
 
                         パネル名:
-                            "入力発声スレッドのスリープ量",
+                            Resources.InputSleep,
+//                            "入力発声スレッドのスリープ量",
 
                         選択肢初期値リスト:
                             new[] { "1 ms", "2 ms", "3 ms", "4 ms", "5 ms", "6 ms", "7 ms", "8 ms", "9 ms", "10 ms" },
@@ -545,7 +563,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル(
 
                         パネル名:
-                            "入力割り当て",
+                            Resources.InputAlloc,
+//                            "入力割り当て",
 
                         値の変更処理:
                             ( panel ) => {
@@ -564,7 +583,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル(
 
                         パネル名:
-                            "曲読み込みフォルダ",
+                            Resources.SongFolder,
+                            //"曲読み込みフォルダ",
 
                         値の変更処理:
                             ( panel ) => {
@@ -583,7 +603,8 @@ namespace DTXMania.ステージ.オプション設定
                     var 初期化フォルダ = new パネル_フォルダ(
 
                         パネル名:
-                            "初期化",
+                            Resources.Initialize,
+                            //"初期化",
 
                         親パネル:
                             this._ルートパネルフォルダ,
@@ -605,7 +626,8 @@ namespace DTXMania.ステージ.オプション設定
                         new パネル_システムボタン(
 
                             パネル名:
-                                "戻る",
+                                Resources.Return,
+                                //"戻る",
 
                             値の変更処理:
                                 ( panel ) => {
@@ -623,7 +645,8 @@ namespace DTXMania.ステージ.オプション設定
                         new パネル(
 
                             パネル名:
-                                "設定を初期化",
+                                Resources.InitSettings,
+                                //"設定を初期化",
 
                             値の変更処理:
                                 new Action<パネル>( ( panel ) => {
@@ -640,7 +663,8 @@ namespace DTXMania.ステージ.オプション設定
                         new パネル(
 
                             パネル名:
-                                "曲DBを初期化",
+                                Resources.InitSongDb,
+                                //"曲DBを初期化",
 
                             値の変更処理:
                                 new Action<パネル>( ( panel ) => {
@@ -680,7 +704,8 @@ namespace DTXMania.ステージ.オプション設定
                     new パネル_システムボタン(
 
                         パネル名:
-                            "設定完了",
+                            Resources.Setup,
+                            //"設定完了",
 
                         値の変更処理:
                             ( panel ) => {

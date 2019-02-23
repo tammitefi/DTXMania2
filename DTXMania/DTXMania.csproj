@@ -349,10 +349,13 @@
     <Compile Include="設定\曲DB.cs" />
     <Compile Include="設定\消音グループ種別.cs" />
     <Compile Include="設定\表示レーンの左右.cs" />
+    <EmbeddedResource Include="Properties\Resources.en.resx" />
+    <EmbeddedResource Include="Properties\Resources.jp.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <CustomToolNamespace>DTXMania2.Language</CustomToolNamespace>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

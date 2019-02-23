@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FDK;
 using DTXMania.API;
+using DTXMania2.Language;
 
 namespace DTXMania
 {
@@ -177,7 +178,8 @@ namespace DTXMania
             catch( AddressAlreadyInUseException )
             {
                 // エンドポイントが使用中なら、アプリの二重起動とみなして終了。
-                MessageBox.Show( "DTXMania はすでに起動しています。多重起動はできません。", "DTXMania Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                MessageBox.Show("DTXMania "+Resources.AllreadyRunning+"。"+Resources.NoMultipleRuns+"。", "DTXMania Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show( "DTXMania はすでに起動しています。多重起動はできません。", "DTXMania Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
                 return false;
             }
 

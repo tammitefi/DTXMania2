@@ -10,16 +10,16 @@ namespace DTXMania
         public readonly string Usage =
             "DTXMania " + App.リリース番号.ToString( "000" ) + "\n" +
             "Usage: dtxmania.exe [options] [filename]\n" +
-            "-Vvvv,ppp,\"soundfilename\"    サウンドファイルの再生 vvv=volume, ppp=pan \n" +
-            "-S                           DTXV再生停止 \n" +
-            "-D(サウンドモード)(YかNが3文字続く) Viewerの設定 \n" +
-            "                             (サウンドモード) WE=WASAPI Exclusive, WS=WASAPI Shared, A1=ASIO(数値はデバイス番号), D=DSound \n" +
-            "                             YYY, YNYなど  1文字目=GRmode, 2文字目=TmeStretch, 3文字目=VSyncWait \n" +
-            "-N[xxx]                      再生開始 xxx=再生開始小節番号 \n" +
+            "-Vvvv,ppp,\"soundfilename\"    Play sound file vvv=volume, ppp=pan \n" +
+            "-S                           DTXV Regeneration stops \n" +
+            "-D(Sound mode)(Y or N last 3 characters) Viewer settings \n" +
+            "                             (Sound mode) WE=WASAPI Exclusive, WS=WASAPI Shared, A1=ASIO(Numbers are device numbers), D=DSound \n" +
+            "                             YYY, YNY etc  1. Letter=GRmode, 2. Letter=TmeStretch, 3. Letter=VSyncWait \n" +
+            "-N[xxx]                      Start of regeneration xxx=Playback start measure number \n" +
             "-Etype,freq,bitrate,volBGM,volSE,volDrums,volGuitar,volBassmvolMaster,\"outfilename\",\"dtxfilename\" \n"+
-            "                             DTX2WAVとして使用 type=\"WAV\"or\"MP3\"or\"OGG\", freq=48000など, bitrate=192 (kHzなど)" +
-            "-B                           BGMのみ（ドラムサウンドを発声しない）"+
-            "filename                     演奏するファイル。";
+            "                             Used as DTX2WAV type=\"WAV\"or\"MP3\"or\"OGG\", freq=48000 etc., bitrate=192 (kHz etc)" +
+            "-B                           BGM only（Do not play drum sound）"+
+            "filename                     File to play。";
 
         // -V 系
         public bool サウンドファイルの再生 { get; set; } = false;

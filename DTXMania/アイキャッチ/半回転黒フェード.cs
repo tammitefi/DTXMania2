@@ -6,6 +6,7 @@ using SharpDX;
 using SharpDX.Animation;
 using SharpDX.Direct2D1;
 using FDK;
+using DTXMania2.Language;
 
 namespace DTXMania.アイキャッチ
 {

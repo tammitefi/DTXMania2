@@ -39,7 +39,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(163, 12);
             this.label1.TabIndex = 0;
-            this.label1.Text = "未処理の例外が検出されました。";
+            this.label1.Text = "An unhandled exception was detected. ";//"未処理の例外が検出されました。";
             // 
             // linkLabel1
             // 
@@ -49,7 +49,7 @@
             this.linkLabel1.Size = new System.Drawing.Size(149, 12);
             this.linkLabel1.TabIndex = 1;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "ログファイルを確認してください。";
+            this.linkLabel1.Text = "Pleace check the log file";//"ログファイルを確認してください。";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // 未処理例外検出ダイアログ

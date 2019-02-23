@@ -7,6 +7,7 @@ using SharpDX.DirectInput;
 using FDK;
 using DTXMania.設定;
 using DTXMania.入力;
+using DTXMania2.Language;
 
 namespace DTXMania.ステージ.オプション設定
 {
@@ -73,21 +74,29 @@ namespace DTXMania.ステージ.オプション設定
 						this._変更あり = false;
 
 
-						// 初期メッセージを出力。
+                        // 初期メッセージを出力。
 
-						this.listView入力リスト.Items.Add( $"KEYBOARD \"{入力管理.Keyboard.DeviceName}\" の受付を開始しました。" );
-						for( int i = 0; i < 入力管理.MidiIn.DeviceName.Count; i++ )
-							this.listView入力リスト.Items.Add( $"MIDI IN [{i}] \"{入力管理.MidiIn.DeviceName[ i ]}\" の受付を開始しました。" );
-						this.listView入力リスト.Items.Add( "" );
-						this.listView入力リスト.Items.Add( "* タイミングクロック信号、アクティブ信号は無視します。" );
-						this.listView入力リスト.Items.Add( "* 入力と入力の間が500ミリ秒以上開いた場合は、間に空行を表示します。" );
-						this.listView入力リスト.Items.Add( "" );
-						this.listView入力リスト.Items.Add( "キーボードまたはMIDI信号を入力してください。" );
-						//----------------
-						#endregion
+                        this.listView入力リスト.Items.Add($"KEYBOARD \"{入力管理.Keyboard.DeviceName}\" "+Resources.StartedAccepting+ "。" /* の受付を開始しました。"*/);
+                        for (int i = 0; i < 入力管理.MidiIn.DeviceName.Count; i++)
+                            this.listView入力リスト.Items.Add($"MIDI IN [{i}] \"{入力管理.MidiIn.DeviceName[i]}\" " + Resources.StartedAccepting); // の受付を開始しました。");
+                        this.listView入力リスト.Items.Add("");
+                        this.listView入力リスト.Items.Add("* "+Resources.TimingClock+", "+Resources.IgnoreActive+ "。");//"* タイミングクロック信号、アクティブ信号は無視します。");
+                        this.listView入力リスト.Items.Add("* 入力と入力の間が500ミリ秒以上開いた場合は、間に空行を表示します。");
+                        this.listView入力リスト.Items.Add("");
+                        this.listView入力リスト.Items.Add(Resources.EnterKeyboardOrMidi+ "。");// "キーボードまたはMIDI信号を入力してください。");
+/*                        this.listView入力リスト.Items.Add($"KEYBOARD \"{入力管理.Keyboard.DeviceName}\" の受付を開始しました。");
+                        for (int i = 0; i < 入力管理.MidiIn.DeviceName.Count; i++)
+                            this.listView入力リスト.Items.Add($"MIDI IN [{i}] \"{入力管理.MidiIn.DeviceName[i]}\" の受付を開始しました。");
+                        this.listView入力リスト.Items.Add("");
+                        this.listView入力リスト.Items.Add("* タイミングクロック信号、アクティブ信号は無視します。");
+                        this.listView入力リスト.Items.Add("* 入力と入力の間が500ミリ秒以上開いた場合は、間に空行を表示します。");
+                        this.listView入力リスト.Items.Add("");
+                        this.listView入力リスト.Items.Add("キーボードまたはMIDI信号を入力してください。");*/
+                        //----------------
+                        #endregion
 
-						// タイマーイベントを使って、定期的に、入力値の表示とフットペダル開度ゲージの描画を行う。
-						timer.Interval = 100;
+                        // タイマーイベントを使って、定期的に、入力値の表示とフットペダル開度ゲージの描画を行う。
+                        timer.Interval = 100;
 						timer.Tick += ( sender, arg ) => {
 
 							#region " キーボードをポーリングし、入力値を入力リストへ出力。"
@@ -112,7 +121,8 @@ namespace DTXMania.ステージ.オプション設定
                                         .Where( ( kvp ) => ( kvp.Key.deviceId == item.inputEvent.DeviceID && kvp.Key.key == item.inputEvent.Key ) )
                                         .Select( ( kvp ) => kvp.Value );
                                     if( 0 < drumType.Count() )
-                                        item.Text += $" （現在の割り当て: {drumType.ElementAt( 0 )}）";
+                                        item.Text += $" （"+Resources.CurrentAllocation+": {drumType.ElementAt( 0 )}）";
+    //                                    item.Text += $" （現在の割り当て: {drumType.ElementAt(0)}）";
 
                                     this._一定時間が経っていれば空行を挿入する();
 
@@ -175,7 +185,8 @@ namespace DTXMania.ステージ.オプション設定
                                         .Where( ( kvp ) => ( kvp.Key.deviceId == item.inputEvent.DeviceID && kvp.Key.key == item.inputEvent.Key ) )
                                         .Select( ( kvp ) => kvp.Value );
                                     if( 0 < drumType.Count() )
-                                        item.Text += $" （現在の割り当て: {drumType.ElementAt( 0 )}）";
+                                        item.Text += $" （"+Resources.CurrentAllocation+": {drumType.ElementAt( 0 )}）";
+//                                    item.Text += $" （現在の割り当て: {drumType.ElementAt(0)}）";
 
                                     this._一定時間が経っていれば空行を挿入する();
 
@@ -302,7 +313,7 @@ namespace DTXMania.ステージ.オプション設定
                         break;
 
                     default:
-                        throw new ArgumentException( "未対応のデバイスです。" );
+                        throw new ArgumentException(Resources.UnsupportedDevice);// "未対応のデバイスです。" );
                 }
             }
         }
@@ -334,7 +345,7 @@ namespace DTXMania.ステージ.オプション設定
                         break;
 
                     default:
-                        throw new ArgumentException( "未対応のデバイスです。" );
+                        throw new ArgumentException(Resources.UnsupportedDevice);// "未対応のデバイスです。" );
                 }
             }
         }
@@ -496,9 +507,10 @@ namespace DTXMania.ステージ.オプション設定
             // ※ウィンドウを閉じようとした時も Cancel になる。
             if( this.DialogResult == DialogResult.Cancel && this._変更あり )
             {
-                var dr = MessageBoxEx.Show( "変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
+                var dr = MessageBoxEx.Show( Resources.DiscardChanges, Resources.Confirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2 );
+//                var dr = MessageBoxEx.Show("変更を破棄していいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
 
-                if( dr == DialogResult.No )
+                if ( dr == DialogResult.No )
                     e.Cancel = true;
             }
         }
